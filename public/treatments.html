@@ -4,13 +4,58 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>진료 안내 | 서울가온치과</title>
-<meta name="description" content="서울가온치과 진료 안내 - 가이드 임플란트 100%, 앞니 심미치료, 서울대 보존과 전문의 신경치료">
+<meta name="description" content="서울가온치과 전체 진료 안내 - 임플란트, 심미치료, 신경치료, 충치, 사랑니, 스케일링, 보철, 교정, 잇몸치료, 소아치과, 턱관절, 미백">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
 <link href="style.css" rel="stylesheet">
 <link href="pages.css" rel="stylesheet">
+<style>
+/* ===== TREATMENTS PAGE EXTENDED ===== */
+
+/* General Treatments Grid */
+.general-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;max-width:1200px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem)}
+.gen-card{background:var(--ink-4);border:1px solid var(--line);border-radius:16px;padding:2rem;transition:border-color .4s,transform .3s,box-shadow .4s;position:relative;overflow:hidden}
+.gen-card:hover{border-color:rgba(191,164,106,.3);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.3),0 0 30px rgba(191,164,106,.04)}
+.gen-card-icon{font-size:2rem;margin-bottom:1rem;display:inline-block;filter:grayscale(.3)}
+.gen-card-num{position:absolute;top:1.25rem;right:1.5rem;font-family:var(--ff-en);font-size:2.5rem;color:var(--gold);opacity:.08;line-height:1;font-weight:700}
+.gen-card h3{font-family:var(--ff-title);font-size:1.25rem;margin-bottom:.3rem}
+.gen-card-en{font-family:var(--ff-en);font-size:.7rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:.75rem;display:block}
+.gen-card p{font-size:.85rem;color:var(--stone-l);line-height:1.65;margin-bottom:1rem}
+.gen-card-tags{display:flex;flex-wrap:wrap;gap:.35rem}
+.gen-card-tag{padding:.2rem .6rem;border:1px solid var(--line);border-radius:100px;font-size:.68rem;color:var(--stone-l);transition:border-color .3s,color .3s}
+.gen-card:hover .gen-card-tag{border-color:rgba(191,164,106,.2);color:var(--stone)}
+
+/* Section divider */
+.tx-divider{text-align:center;padding:clamp(3rem,6vh,5rem) 2rem;position:relative}
+.tx-divider::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.tx-divider-label{font-family:var(--ff-en);font-size:.75rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;position:relative;background:var(--ink);padding:0 1.5rem;display:inline-block}
+
+/* General section header */
+.general-header{text-align:center;padding:clamp(4rem,8vh,6rem) clamp(1.5rem,4vw,4rem) clamp(2rem,4vh,3rem);max-width:800px;margin:0 auto}
+.general-header .sec-label{font-family:var(--ff-en);font-size:.8rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:.75rem}
+.general-header h2{font-family:var(--ff-title);font-size:clamp(1.8rem,4vw,3rem);margin-bottom:1rem}
+.general-header p{font-size:clamp(.88rem,1.1vw,.95rem);color:var(--stone-l);line-height:1.7}
+
+/* CTA section */
+.tx-cta-section{text-align:center;padding:clamp(3rem,6vh,5rem) 2rem clamp(4rem,8vh,6rem)}
+.tx-cta-section h3{font-family:var(--ff-title);font-size:clamp(1.3rem,2.5vw,1.8rem);margin-bottom:.75rem}
+.tx-cta-section p{font-size:.9rem;color:var(--stone-l);margin-bottom:2rem}
+.tx-cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+/* Updated page tabs to include general */
+.page-tabs{flex-wrap:wrap;gap:.5rem}
+
+@media(max-width:768px){
+  .general-grid{grid-template-columns:1fr;padding:0 1.25rem}
+  .tx-cta-btns{flex-direction:column;align-items:stretch;max-width:320px;margin:0 auto}
+}
+@media(max-width:480px){
+  .general-grid{gap:1rem}
+  .gen-card{padding:1.5rem}
+}
+</style>
 </head>
 <body>
 
@@ -28,6 +73,7 @@
         <a href="#implant">임플란트</a>
         <a href="#aesthetics">앞니 심미치료</a>
         <a href="#endodontics">신경치료</a>
+        <a href="#general">일반진료</a>
       </div>
     </div>
     <div class="nav-link-drop">
@@ -47,26 +93,30 @@
 <div class="mob-menu">
   <a href="/">Home</a>
   <a href="#implant">임플란트</a>
-  <a href="#aesthetics">앞니 심미치료</a>
+  <a href="#aesthetics">심미치료</a>
   <a href="#endodontics">신경치료</a>
+  <a href="#general">일반진료</a>
   <a href="blog.html">Blog</a>
   <a href="notice.html">Notice</a>
 </div>
 
 <!-- HERO -->
 <section class="page-hero">
-  <div class="page-hero-bg">TREAT</div>
+  <div class="page-hero-bg">TREATMENTS</div>
   <span class="page-hero-label">Treatments</span>
-  <h1>세 가지 핵심 진료</h1>
-  <p class="page-hero-sub">임플란트 · 앞니 심미치료 · 신경치료</p>
+  <h1>전체 진료 안내</h1>
+  <p class="page-hero-sub">전문 진료부터 일반 진료까지, 가온치과의 모든 치료를 안내합니다.</p>
   <div class="page-tabs">
     <a href="#implant" class="page-tab active" data-target="#implant">임플란트</a>
-    <a href="#aesthetics" class="page-tab" data-target="#aesthetics">앞니 심미치료</a>
+    <a href="#aesthetics" class="page-tab" data-target="#aesthetics">심미치료</a>
     <a href="#endodontics" class="page-tab" data-target="#endodontics">신경치료</a>
+    <a href="#general" class="page-tab" data-target="#general">일반진료</a>
   </div>
 </section>
 
-<!-- ===== IMPLANT ===== -->
+<!-- ═══════════════════════════════════════════
+     SECTION 1: IMPLANT
+     ═══════════════════════════════════════════ -->
 <div class="tx-section" id="implant">
   <span class="tx-sec-label" data-reveal>Implant</span>
   <h2 class="tx-sec-title" data-reveal>100% 가이드 임플란트</h2>
@@ -130,7 +180,9 @@
   <a href="tel:0507-1325-3377" class="tx-cta" data-magnet>임플란트 상담 예약 →</a>
 </div>
 
-<!-- ===== AESTHETICS ===== -->
+<!-- ═══════════════════════════════════════════
+     SECTION 2: AESTHETICS
+     ═══════════════════════════════════════════ -->
 <div class="tx-section" id="aesthetics">
   <span class="tx-sec-label" data-reveal>Aesthetic Dentistry</span>
   <h2 class="tx-sec-title" data-reveal>앞니 심미치료</h2>
@@ -168,7 +220,9 @@
   <a href="tel:0507-1325-3377" class="tx-cta" data-magnet>심미치료 상담 예약 →</a>
 </div>
 
-<!-- ===== ENDODONTICS ===== -->
+<!-- ═══════════════════════════════════════════
+     SECTION 3: ENDODONTICS
+     ═══════════════════════════════════════════ -->
 <div class="tx-section" id="endodontics">
   <span class="tx-sec-label" data-reveal>Endodontics</span>
   <h2 class="tx-sec-title" data-reveal>신경치료</h2>
@@ -205,6 +259,211 @@
   </div>
 
   <a href="tel:0507-1325-3377" class="tx-cta" data-magnet>신경치료 상담 예약 →</a>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     DIVIDER
+     ═══════════════════════════════════════════ -->
+<div class="tx-divider">
+  <span class="tx-divider-label">General Dentistry</span>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 4: GENERAL TREATMENTS
+     ═══════════════════════════════════════════ -->
+<div id="general">
+  <div class="general-header">
+    <span class="sec-label" data-reveal>General Dentistry</span>
+    <h2 data-reveal>일반 진료 안내</h2>
+    <p data-reveal>전문 진료뿐 아니라, 치과에서 필요한 모든 일반 진료를 꼼꼼하게 제공합니다.<br>어떤 치료든 설명이 먼저입니다.</p>
+  </div>
+
+  <div class="general-grid">
+
+    <!-- 01. 충치 치료 -->
+    <div class="gen-card" data-reveal data-tilt>
+      <div class="gen-card-num">01</div>
+      <div class="gen-card-icon">🦷</div>
+      <h3>충치 치료</h3>
+      <span class="gen-card-en">Cavity Treatment</span>
+      <p>초기 충치부터 깊은 충치까지, 보존적 치료를 우선합니다. 레진·인레이·온레이로 자연치아를 최대한 살립니다.</p>
+      <div class="gen-card-tags">
+        <span class="gen-card-tag">레진</span>
+        <span class="gen-card-tag">인레이</span>
+        <span class="gen-card-tag">온레이</span>
+        <span class="gen-card-tag">세라믹</span>
+      </div>
+    </div>
+
+    <!-- 02. 사랑니 발치 -->
+    <div class="gen-card" data-reveal data-tilt>
+      <div class="gen-card-num">02</div>
+      <div class="gen-card-icon">🔧</div>
+      <h3>사랑니 발치</h3>
+      <span class="gen-card-en">Wisdom Tooth Extraction</span>
+      <p>매복 사랑니, 누운 사랑니도 안전하게. CT 촬영으로 신경 위치를 정밀 확인 후 최소 절개로 발치합니다.</p>
+      <div class="gen-card-tags">
+        <span class="gen-card-tag">매복 사랑니</span>
+        <span class="gen-card-tag">CT 정밀진단</span>
+        <span class="gen-card-tag">최소절개</span>
+      </div>
+    </div>
+
+    <!-- 03. 스케일링 -->
+    <div class="gen-card" data-reveal data-tilt>
+      <div class="gen-card-num">03</div>
+      <div class="gen-card-icon">✨</div>
+      <h3>스케일링</h3>
+      <span class="gen-card-en">Dental Scaling</span>
+      <p>치석과 치태를 제거하여 잇몸 건강을 지킵니다. 연 1회 건강보험 적용. 정기적인 스케일링은 치주질환 예방의 첫걸음입니다.</p>
+      <div class="gen-card-tags">
+        <span class="gen-card-tag">건강보험</span>
+        <span class="gen-card-tag">치석제거</span>
+        <span class="gen-card-tag">예방치료</span>
+      </div>
+    </div>
+
+    <!-- 04. 잇몸 치료 -->
+    <div class="gen-card" data-reveal data-tilt>
+      <div class="gen-card-num">04</div>
+      <div class="gen-card-icon">🩺</div>
+      <h3>잇몸 치료 (치주치료)</h3>
+      <span class="gen-card-en">Periodontal Treatment</span>
+      <p>잇몸 출혈, 붓기, 구취의 원인인 치주질환을 체계적으로 치료합니다. 스케일링·치근활택술·잇몸수술까지 단계별로 관리합니다.</p>
+      <div class="gen-card-tags">
+        <span class="gen-card-tag">치근활택술</span>
+        <span class="gen-card-tag">잇몸수술</span>
+        <span class="gen-card-tag">치주관리</span>
+      </div>
+    </div>
+
+    <!-- 05. 보철 치료 -->
+    <div class="gen-card" data-reveal data-tilt>
+      <div class="gen-card-num">05</div>
+      <div class="gen-card-icon">👑</div>
+      <h3>보철 치료</h3>
+      <span class="gen-card-en">Prosthetic Dentistry</span>
+      <p>크라운, 브릿지, 틀니 등 손상되거나 빠진 치아를 회복합니다. 기능과 심미성 모두를 고려한 맞춤 보철을 제작합니다.</p>
+      <div class="gen-card-tags">
+        <span class="gen-card-tag">크라운</span>
+        <span class="gen-card-tag">브릿지</span>
+        <span class="gen-card-tag">틀니</span>
+        <span class="gen-card-tag">지르코니아</span>
+      </div>
+    </div>
+
+    <!-- 06. 치아 미백 -->
+    <div class="gen-card" data-reveal data-tilt>
+      <div class="gen-card-num">06</div>
+      <div class="gen-card-icon">💎</div>
+      <h3>치아 미백</h3>
+      <span class="gen-card-en">Teeth Whitening</span>
+      <p>전문가 미백으로 밝고 자연스러운 치아색을 되찾습니다. 자가 미백·전문 미백 중 상태에 맞는 방법을 제안합니다.</p>
+      <div class="gen-card-tags">
+        <span class="gen-card-tag">전문미백</span>
+        <span class="gen-card-tag">자가미백</span>
+        <span class="gen-card-tag">듀얼미백</span>
+      </div>
+    </div>
+
+    <!-- 07. 교정 치료 -->
+    <div class="gen-card" data-reveal data-tilt>
+      <div class="gen-card-num">07</div>
+      <div class="gen-card-icon">😁</div>
+      <h3>교정 치료</h3>
+      <span class="gen-card-en">Orthodontics</span>
+      <p>삐뚤어진 치아, 부정교합을 바로잡습니다. 투명 교정(인비절라인)부터 부분 교정까지 다양한 옵션을 제공합니다.</p>
+      <div class="gen-card-tags">
+        <span class="gen-card-tag">투명교정</span>
+        <span class="gen-card-tag">부분교정</span>
+        <span class="gen-card-tag">인비절라인</span>
+      </div>
+    </div>
+
+    <!-- 08. 소아·청소년 치과 -->
+    <div class="gen-card" data-reveal data-tilt>
+      <div class="gen-card-num">08</div>
+      <div class="gen-card-icon">👶</div>
+      <h3>소아·청소년 치과</h3>
+      <span class="gen-card-en">Pediatric Dentistry</span>
+      <p>아이들의 첫 치과 경험을 좋은 기억으로 만듭니다. 불소도포, 실란트, 충치 치료를 아이 눈높이에서 진행합니다.</p>
+      <div class="gen-card-tags">
+        <span class="gen-card-tag">불소도포</span>
+        <span class="gen-card-tag">실란트</span>
+        <span class="gen-card-tag">유치관리</span>
+        <span class="gen-card-tag">예방치료</span>
+      </div>
+    </div>
+
+    <!-- 09. 턱관절 치료 -->
+    <div class="gen-card" data-reveal data-tilt>
+      <div class="gen-card-num">09</div>
+      <div class="gen-card-icon">🦴</div>
+      <h3>턱관절 치료</h3>
+      <span class="gen-card-en">TMJ Treatment</span>
+      <p>입을 벌릴 때 소리가 나거나 통증이 있다면. 턱관절 장애의 원인을 진단하고 스플린트·물리치료 등으로 개선합니다.</p>
+      <div class="gen-card-tags">
+        <span class="gen-card-tag">스플린트</span>
+        <span class="gen-card-tag">턱관절장애</span>
+        <span class="gen-card-tag">이갈이</span>
+      </div>
+    </div>
+
+    <!-- 10. 발치 -->
+    <div class="gen-card" data-reveal data-tilt>
+      <div class="gen-card-num">10</div>
+      <div class="gen-card-icon">⚕️</div>
+      <h3>일반 발치</h3>
+      <span class="gen-card-en">Tooth Extraction</span>
+      <p>보존이 어려운 치아는 정확한 진단 후 발치를 진행합니다. 발치 후 후속 치료 계획까지 함께 설명드립니다.</p>
+      <div class="gen-card-tags">
+        <span class="gen-card-tag">단순발치</span>
+        <span class="gen-card-tag">잔존치근</span>
+        <span class="gen-card-tag">후속계획</span>
+      </div>
+    </div>
+
+    <!-- 11. 구강검진 -->
+    <div class="gen-card" data-reveal data-tilt>
+      <div class="gen-card-num">11</div>
+      <div class="gen-card-icon">🔍</div>
+      <h3>구강검진</h3>
+      <span class="gen-card-en">Oral Examination</span>
+      <p>정기적인 구강검진으로 문제를 조기에 발견합니다. 파노라마·구내 촬영으로 전체 구강 상태를 꼼꼼히 확인합니다.</p>
+      <div class="gen-card-tags">
+        <span class="gen-card-tag">정기검진</span>
+        <span class="gen-card-tag">파노라마</span>
+        <span class="gen-card-tag">조기발견</span>
+      </div>
+    </div>
+
+    <!-- 12. 응급 치과 -->
+    <div class="gen-card" data-reveal data-tilt>
+      <div class="gen-card-num">12</div>
+      <div class="gen-card-icon">🚨</div>
+      <h3>응급 치과 치료</h3>
+      <span class="gen-card-en">Emergency Dental Care</span>
+      <p>갑작스러운 치통, 치아 파절, 탈구 등 응급 상황에 신속히 대응합니다. 진료 시간 내 연락 주시면 빠르게 안내해드립니다.</p>
+      <div class="gen-card-tags">
+        <span class="gen-card-tag">급성통증</span>
+        <span class="gen-card-tag">치아파절</span>
+        <span class="gen-card-tag">당일진료</span>
+      </div>
+    </div>
+
+  </div><!-- /general-grid -->
+</div><!-- /general -->
+
+<!-- ═══════════════════════════════════════════
+     CTA
+     ═══════════════════════════════════════════ -->
+<div class="tx-cta-section" data-reveal>
+  <h3>어떤 치료가 필요한지 모르겠다면</h3>
+  <p>먼저 편하게 상담받으세요. 설명이 먼저입니다.</p>
+  <div class="tx-cta-btns">
+    <a href="tel:0507-1325-3377" class="tx-cta" data-magnet>📞 전화 상담</a>
+    <a href="https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&ackey=2cykehjt" target="_blank" rel="noopener" class="tx-cta" style="background:#03c75a" data-magnet>네이버 예약</a>
+  </div>
 </div>
 
 <!-- FOOTER -->
