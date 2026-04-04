@@ -579,7 +579,11 @@ function initCountUp(){
    14. SCROLL REVEAL — Multi-Style
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function initScrollReveal(){
+  // Only target data-reveal that aren't handled by other specific functions
   document.querySelectorAll('[data-reveal]').forEach((el,i)=>{
+    // Skip elements that have their own entrance animations
+    if(el.classList.contains('value-card') || el.classList.contains('tx-panel') || el.classList.contains('stat')) return;
+    
     const style = el.dataset.reveal || 'up';
     let from = {opacity:0, filter:'blur(3px)'};
     
@@ -587,15 +591,15 @@ function initScrollReveal(){
       case 'left': from.x = -60; break;
       case 'right': from.x = 60; break;
       case 'scale': from.scale = .85; from.y = 20; break;
-      default: from.y = 50;
+      default: from.y = 40;
     }
     
     gsap.fromTo(el, from,
       {opacity:1, x:0, y:0, scale:1, filter:'blur(0px)',
         duration:1,
         ease:'power3.out',
-        scrollTrigger:{trigger:el,start:'top 88%',once:true},
-        delay:(i%4)*.1
+        scrollTrigger:{trigger:el,start:'top 92%',once:true},
+        delay:(i%4)*.08
       }
     );
   });
@@ -607,14 +611,20 @@ function initScrollReveal(){
 function initLineSlideUp(){
   document.querySelectorAll('.sec-title').forEach(title=>{
     title.querySelectorAll('.line span').forEach((span,lineIdx)=>{
+      // Reset parent span transform (CSS sets translateY(110%))
+      span.style.transform = 'translateY(0)';
+      span.style.opacity = '1';
+      
       const chars = splitChars(span);
-      gsap.fromTo(chars,
-        {y:'120%', opacity:0, rotateZ:rand(-5,5), scale:.7},
-        {y:'0%', opacity:1, rotateZ:0, scale:1,
+      // Hide chars initially
+      gsap.set(chars, {y:'120%', opacity:0});
+      
+      gsap.to(chars,
+        {y:'0%', opacity:1,
           duration:.8,
           stagger:{each:.04, ease:'power2.out'},
           ease:'back.out(1.2)',
-          scrollTrigger:{trigger:title,start:'top 85%',once:true},
+          scrollTrigger:{trigger:title,start:'top 88%',once:true},
           delay:lineIdx*.2
         }
       );
@@ -859,12 +869,14 @@ function initRevTilt(){
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function initTxPanelEntrance(){
   document.querySelectorAll('.tx-panel').forEach((panel,i)=>{
+    // Clear CSS-set hidden state
+    panel.style.opacity = '0';
     gsap.fromTo(panel,
-      {x:i%2===0?-100:100, opacity:0, rotateY:i%2===0?-6:6, scale:.95},
+      {x:i%2===0?-80:80, opacity:0, rotateY:i%2===0?-4:4, scale:.96},
       {x:0, opacity:1, rotateY:0, scale:1,
-        duration:1.4,
+        duration:1.2,
         ease:'power3.out',
-        scrollTrigger:{trigger:panel,start:'top 85%',once:true},
+        scrollTrigger:{trigger:panel,start:'top 88%',once:true},
         transformPerspective:1000
       }
     );
@@ -876,14 +888,16 @@ function initTxPanelEntrance(){
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function initValueCards(){
   const cards = document.querySelectorAll('.value-card');
+  // Clear CSS-set hidden state
+  cards.forEach(c => { c.style.opacity = '0'; c.style.transform = 'none'; });
   cards.forEach((card,i)=>{
     gsap.fromTo(card,
-      {y:80, opacity:0, scale:.85, rotateX:8},
+      {y:60, opacity:0, scale:.9, rotateX:5},
       {y:0, opacity:1, scale:1, rotateX:0,
         duration:.9,
         delay:i*.15,
         ease:'back.out(1.8)',
-        scrollTrigger:{trigger:card,start:'top 90%',once:true}
+        scrollTrigger:{trigger:card.parentElement,start:'top 88%',once:true}
       }
     );
   });

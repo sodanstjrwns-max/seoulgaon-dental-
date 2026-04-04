@@ -117,7 +117,7 @@ section{padding:clamp(4rem,10vh,8rem) clamp(1.5rem,4vw,6rem);position:relative;o
 .sec-label{font-family:var(--ff-en);font-size:clamp(.75rem,1vw,.85rem);letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:inline-block}
 .sec-title{font-family:var(--ff-title);font-size:clamp(1.8rem,4vw,3.2rem);line-height:1.25;margin-bottom:2rem}
 .sec-title .line{display:block;overflow:hidden}
-.sec-title .line span{display:inline-block;transform:translateY(110%)}
+.sec-title .line span{display:inline-block}
 .sec-title .char{backface-visibility:hidden}
 
 /* ===== PHILOSOPHY (#s-intro) ===== */
@@ -238,8 +238,7 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
 .ft-copy{font-size:.7rem;color:var(--stone)}
 
 /* ===== DATA-REVEAL ===== */
-[data-reveal]{opacity:0;transform:translateY(30px)}
-[data-reveal].revealed{opacity:1;transform:translateY(0)}
+/* GSAP handles all reveal animations — no CSS opacity/transform needed */
 [data-tilt]{transform-style:preserve-3d}
 
 /* ===== RIPPLE ANIMATION ===== */
