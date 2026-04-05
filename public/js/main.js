@@ -337,82 +337,61 @@ function initHeroText(){
   const h1 = document.querySelector('#top h1');
   if(!h1) return;
   
-  // Split each line into chars with staggered wave
+  // Calm line-by-line fade-up reveal
   h1.querySelectorAll('.line span').forEach((lineSpan, lineIdx) => {
     const chars = splitChars(lineSpan);
     gsap.fromTo(chars,
       { 
-        y: 120, 
+        y: 40, 
         opacity: 0, 
-        rotateX: -90,
-        rotateZ: rand(-8,8),
-        scale: 0.3,
-        filter: 'blur(8px)'
+        filter: 'blur(3px)'
       },
       { 
         y: 0, 
         opacity: 1, 
-        rotateX: 0,
-        rotateZ: 0,
-        scale: 1,
         filter: 'blur(0px)',
-        duration: 1.4,
+        duration: 1,
         stagger: {
-          each: .05,
+          each: .04,
           ease: 'power2.out'
         },
-        ease: 'elastic.out(1,.4)',
-        delay: .2 + lineIdx * .3,
+        ease: 'power3.out',
+        delay: .3 + lineIdx * .4,
         transformOrigin: 'bottom center'
       }
     );
   });
 
-  // Sub text — word-by-word blur-in
+  // Sub text — gentle word fade-in
   const sub = document.querySelector('.hero-sub');
   if(sub){
     const words = splitWords(sub);
     gsap.fromTo(words,
-      {opacity:0, y:30, filter:'blur(6px)', scale:.8},
-      {opacity:1, y:0, filter:'blur(0px)', scale:1, duration:.7, stagger:.08, delay:1.4, ease:'power3.out'}
+      {opacity:0, y:15, filter:'blur(2px)'},
+      {opacity:1, y:0, filter:'blur(0px)', duration:.8, stagger:.12, delay:1.6, ease:'power2.out'}
     );
   }
 
-  // CTA buttons — dramatic pop + bounce
+  // CTA buttons — quiet fade-in
   const heroBtns = document.querySelector('.hero-btns');
   if(heroBtns){
     gsap.fromTo(heroBtns,
-      {opacity:0, y:40},
-      {opacity:1, y:0, duration:1, delay:1.6, ease:'power3.out'}
+      {opacity:0, y:20},
+      {opacity:1, y:0, duration:1.2, delay:2.2, ease:'power2.out'}
     );
-    heroBtns.querySelectorAll('.hero-cta').forEach((btn,i) => {
-      gsap.fromTo(btn,
-        {scale:0, rotateZ:-5},
-        {scale:1, rotateZ:0, duration:.8, delay:1.8 + i*0.15, ease:'elastic.out(1,.5)'}
-      );
-    });
   }
-  
-  // H1 continuous float
-  gsap.to(h1,{
-    y:'-=8',
-    duration:3.5,
-    ease:'sine.inOut',
-    yoyo:true,
-    repeat:-1
-  });
 
-  // 3D tilt on mouse
+  // Subtle 3D tilt on mouse (restrained)
   if(window.innerWidth>768){
     const hero = document.getElementById('top');
     hero.addEventListener('mousemove',e=>{
       const r=hero.getBoundingClientRect();
       const x=(e.clientX-r.left)/r.width-.5;
       const y=(e.clientY-r.top)/r.height-.5;
-      gsap.to(h1,{rotateY:x*18,rotateX:-y*12,duration:.5,ease:'power2.out'});
+      gsap.to(h1,{rotateY:x*6,rotateX:-y*4,duration:.8,ease:'power2.out'});
     });
     hero.addEventListener('mouseleave',()=>{
-      gsap.to(h1,{rotateY:0,rotateX:0,duration:1.2,ease:'elastic.out(1,.3)'});
+      gsap.to(h1,{rotateY:0,rotateX:0,duration:1.5,ease:'power3.out'});
     });
   }
 }
@@ -424,20 +403,10 @@ function initHeroCharsParallax(){
   const chars = document.querySelectorAll('.hero-bg-char');
   chars.forEach((ch,i)=>{
     const dir = i%2===0?-1:1;
+    // Gentle parallax on scroll only
     gsap.to(ch,{
-      y:dir*200,
-      rotation:dir*20,
-      scrollTrigger:{trigger:'#top',start:'top top',end:'bottom top',scrub:1.5}
-    });
-    // Independent float
-    gsap.to(ch,{
-      y:`+=${10+i*3}`,
-      rotation:`+=${2+i}`,
-      duration:3+i*.6,
-      ease:'sine.inOut',
-      yoyo:true,
-      repeat:-1,
-      delay:i*.4
+      y:dir*80,
+      scrollTrigger:{trigger:'#top',start:'top top',end:'bottom top',scrub:2}
     });
   });
 }
@@ -451,7 +420,7 @@ function initGoldDust(){
   const ctx = canvas.getContext('2d');
   let W,H;
   const particles = [];
-  const PARTICLE_COUNT = 50;
+  const PARTICLE_COUNT = 20;
   let mouseX = 0, mouseY = 0;
 
   function resize(){
