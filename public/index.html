@@ -152,7 +152,7 @@ section{padding:clamp(4rem,10vh,8rem) clamp(1.5rem,4vw,6rem);position:relative;o
 .story-banner img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 6s}
 .story-banner:hover img{transform:scale(1.05)}
 .story-banner-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--ink) 0%,transparent 60%);display:flex;align-items:flex-end;padding:3rem}
-.story-banner-quote{font-family:var(--ff-title);font-size:clamp(1.8rem,4vw,3rem);max-width:700px;line-height:1.3;text-shadow:0 2px 20px rgba(0,0,0,.6)}
+.story-banner-quote{font-family:var(--ff-title);font-size:clamp(1.4rem,3vw,2.4rem);line-height:1.3;text-shadow:0 2px 20px rgba(0,0,0,.6);white-space:nowrap}
 .story-body{max-width:800px;margin:0 auto;position:relative;z-index:1;text-align:left}
 .story-body p{font-size:clamp(.9rem,1.1vw,1rem);color:var(--stone-l);line-height:1.8;margin-bottom:1.5rem}
 .story-bg-text{position:absolute;top:50%;right:-5%;font-family:var(--ff-title);font-size:clamp(8rem,20vw,16rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;white-space:nowrap;will-change:transform}
@@ -375,7 +375,7 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
       <span class="line"><span>될 수 있도록.</span></span>
     </h1>
     <p class="hero-sub">아프지 않게. 무섭지 않게. 이해되게.</p>
-    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+    <div class="hero-btns" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;opacity:0">
       <a href="#s-contact" class="hero-cta" data-magnet>상담 예약 →</a>
       <a href="https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&ackey=2cykehjt" target="_blank" rel="noopener" class="hero-cta" style="background:#03c75a" data-magnet>네이버 예약</a>
     </div>

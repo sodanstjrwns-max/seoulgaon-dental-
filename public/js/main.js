@@ -378,13 +378,19 @@ function initHeroText(){
     );
   }
 
-  // CTA button — dramatic pop + bounce
-  const cta = document.querySelector('.hero-cta');
-  if(cta){
-    gsap.fromTo(cta,
-      {scale:0, opacity:0, rotateZ:-8, y:40},
-      {scale:1, opacity:1, rotateZ:0, y:0, duration:1, delay:1.8, ease:'elastic.out(1,.5)'}
+  // CTA buttons — dramatic pop + bounce
+  const heroBtns = document.querySelector('.hero-btns');
+  if(heroBtns){
+    gsap.fromTo(heroBtns,
+      {opacity:0, y:40},
+      {opacity:1, y:0, duration:1, delay:1.6, ease:'power3.out'}
     );
+    heroBtns.querySelectorAll('.hero-cta').forEach((btn,i) => {
+      gsap.fromTo(btn,
+        {scale:0, rotateZ:-5},
+        {scale:1, rotateZ:0, duration:.8, delay:1.8 + i*0.15, ease:'elastic.out(1,.5)'}
+      );
+    });
   }
   
   // H1 continuous float
