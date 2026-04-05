@@ -35,94 +35,10 @@
   <span class="page-hero-label">Notice</span>
   <h1>공지 사항</h1>
   <p class="page-hero-sub">서울가온치과의 소식을 전합니다</p>
-  <div class="page-tabs">
-    <a href="treatments.html#implant" class="page-tab">임플란트</a>
-    <a href="treatments.html#aesthetics" class="page-tab">앞니 심미치료</a>
-    <a href="treatments.html#endodontics" class="page-tab">신경치료</a>
-  </div>
 </section>
 
-<div class="notice-list">
-  <div class="notice-item">
-    <button class="notice-q" data-open>
-      <span><span class="notice-badge">필독</span>진료시간 안내</span>
-      <span class="plus">+</span>
-    </button>
-    <div class="notice-a">
-      <div class="notice-a-inner">
-        <strong>서울가온치과 진료시간</strong><br><br>
-        · 월·화·수·금 : 09:30 – 18:30<br>
-        · 목요일 (야간) : 09:30 – <strong style="color:var(--gold)">20:30</strong><br>
-        · 토요일 : 09:30 – 14:00<br>
-        · 점심시간 : 12:30 – 14:00<br>
-        · 일요일·공휴일 : 휴진<br><br>
-        <span style="color:var(--stone)">※ 임플란트 상담은 사전 예약이 필요합니다 (약 1시간 소요)</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="notice-item">
-    <button class="notice-q" data-open>
-      <span><span class="notice-badge">필독</span>주차 안내</span>
-      <span class="plus">+</span>
-    </button>
-    <div class="notice-a">
-      <div class="notice-a-inner">
-        <strong>주차장 안내</strong><br><br>
-        · 위치 : 맞은편 제일식자재마트 지하주차장<br>
-        · 비용 : 진료 후 <strong style="color:var(--gold)">무료 주차쿠폰</strong> 제공<br><br>
-        <span style="color:var(--stone)">※ 건물 주소: 경기 의정부시 용민로 22 골드자이프라자 4층<br>
-        (탑석센트럴자이 정문 배스킨라빈스 건물)</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="notice-item">
-    <button class="notice-q">
-      <span><span class="notice-badge">안내</span>목요일 야간진료 20:30까지</span>
-      <span class="plus">+</span>
-    </button>
-    <div class="notice-a">
-      <div class="notice-a-inner">
-        매주 목요일은 야간진료를 운영합니다.<br>
-        평일 시간이 어려우신 분들은 목요일 야간시간을 이용해 주세요.<br><br>
-        · 목요일 진료시간 : 09:30 – <strong style="color:var(--gold)">20:30</strong><br>
-        · 마지막 접수 : 20:00까지<br><br>
-        <span style="color:var(--stone)">※ 야간진료 시 사전 예약을 권장합니다.</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="notice-item">
-    <button class="notice-q">
-      <span><span class="notice-badge">안내</span>임플란트 상담 예약 필요 (1시간 소요)</span>
-      <span class="plus">+</span>
-    </button>
-    <div class="notice-a">
-      <div class="notice-a-inner">
-        임플란트 상담은 CT 촬영, 구강 검사, 치료 계획 설명 등 약 <strong>1시간</strong>이 소요됩니다.<br><br>
-        충분한 시간을 확보하여 꼼꼼하게 상담받으실 수 있도록, 사전 예약을 부탁드립니다.<br><br>
-        · 예약 전화 : <strong style="color:var(--gold)">0507-1325-3377</strong><br>
-        · 네이버 예약도 가능합니다.
-      </div>
-    </div>
-  </div>
-
-  <div class="notice-item">
-    <button class="notice-q">
-      <span><span class="notice-badge event">이벤트</span>네이버 예약 시 초진 상담료 무료</span>
-      <span class="plus">+</span>
-    </button>
-    <div class="notice-a">
-      <div class="notice-a-inner">
-        네이버를 통해 예약하시는 초진 환자분께 <strong style="color:var(--gold)">상담료를 무료</strong>로 제공합니다.<br><br>
-        · 대상 : 네이버 예약으로 방문하시는 초진 환자<br>
-        · 적용 : 초진 상담료 면제<br>
-        · 기간 : 별도 공지 시까지<br><br>
-        <a href="https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&ackey=2cykehjt" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline">네이버 예약 바로가기 →</a>
-      </div>
-    </div>
-  </div>
+<div class="notice-list" id="notice-list">
+  <!-- DB notices injected here first, then static notices -->
 </div>
 
 <footer>
@@ -132,5 +48,106 @@
 </footer>
 
 <script src="pages.js"></script>
+<script>
+// Static notices (always shown)
+const staticNotices = [
+  {title:'진료시간 안내', badge:'필독', open:true, content:`<strong>서울가온치과 진료시간</strong><br><br>
+    · 월·화·수·금 : 09:30 – 18:30<br>
+    · 목요일 (야간) : 09:30 – <strong style="color:var(--gold)">20:30</strong><br>
+    · 토요일 : 09:30 – 14:00<br>
+    · 점심시간 : 12:30 – 14:00<br>
+    · 일요일·공휴일 : 휴진<br><br>
+    <span style="color:var(--stone)">※ 임플란트 상담은 사전 예약이 필요합니다 (약 1시간 소요)</span>`},
+  {title:'주차 안내', badge:'필독', open:true, content:`<strong>주차장 안내</strong><br><br>
+    · 위치 : 맞은편 제일식자재마트 지하주차장<br>
+    · 비용 : 진료 후 <strong style="color:var(--gold)">무료 주차쿠폰</strong> 제공<br><br>
+    <span style="color:var(--stone)">※ 건물 주소: 경기 의정부시 용민로 22 골드자이프라자 4층<br>
+    (탑석센트럴자이 정문 배스킨라빈스 건물)</span>`},
+  {title:'목요일 야간진료 20:30까지', badge:'안내', content:`매주 목요일은 야간진료를 운영합니다.<br>
+    평일 시간이 어려우신 분들은 목요일 야간시간을 이용해 주세요.<br><br>
+    · 목요일 진료시간 : 09:30 – <strong style="color:var(--gold)">20:30</strong><br>
+    · 마지막 접수 : 20:00까지<br><br>
+    <span style="color:var(--stone)">※ 야간진료 시 사전 예약을 권장합니다.</span>`},
+  {title:'임플란트 상담 예약 필요 (1시간 소요)', badge:'안내', content:`임플란트 상담은 CT 촬영, 구강 검사, 치료 계획 설명 등 약 <strong>1시간</strong>이 소요됩니다.<br><br>
+    충분한 시간을 확보하여 꼼꼼하게 상담받으실 수 있도록, 사전 예약을 부탁드립니다.<br><br>
+    · 예약 전화 : <strong style="color:var(--gold)">0507-1325-3377</strong><br>
+    · 네이버 예약도 가능합니다.`},
+  {title:'네이버 예약 시 초진 상담료 무료', badge:'이벤트', badgeClass:'event', content:`네이버를 통해 예약하시는 초진 환자분께 <strong style="color:var(--gold)">상담료를 무료</strong>로 제공합니다.<br><br>
+    · 대상 : 네이버 예약으로 방문하시는 초진 환자<br>
+    · 적용 : 초진 상담료 면제<br>
+    · 기간 : 별도 공지 시까지<br><br>
+    <a href="https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&ackey=2cykehjt" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline">네이버 예약 바로가기 →</a>`},
+];
+
+function makeNoticeHTML(n, isDB){
+  const badgeClass = n.badgeClass ? ' '+n.badgeClass : '';
+  const badge = n.badge ? `<span class="notice-badge${badgeClass}">${n.badge}</span>` : '';
+  const openAttr = n.open ? ' data-open' : '';
+  const content = isDB ? (n.content||'').replace(/\n/g,'<br>') : n.content;
+  
+  return `<div class="notice-item">
+    <button class="notice-q"${openAttr}>
+      <span>${badge}${n.title}</span>
+      <span class="plus">+</span>
+    </button>
+    <div class="notice-a"><div class="notice-a-inner">${content}</div></div>
+  </div>`;
+}
+
+// Load and render
+(async function(){
+  const list = document.getElementById('notice-list');
+  let dbNotices = [];
+  
+  try {
+    const res = await fetch('/api/notices');
+    const data = await res.json();
+    dbNotices = data.notices || [];
+  } catch(e){}
+
+  let html = '';
+  // DB notices first (pinned on top, recent first)
+  dbNotices.forEach(n => {
+    html += makeNoticeHTML({
+      title: n.title,
+      badge: n.is_pinned ? '공지' : '새 글',
+      content: n.content,
+      open: n.is_pinned ? true : false
+    }, true);
+  });
+  // Then static notices
+  staticNotices.forEach(n => html += makeNoticeHTML(n, false));
+  list.innerHTML = html;
+
+  // Init accordion for all notice items
+  initAllAccordion();
+})();
+
+function initAllAccordion(){
+  const qs = document.querySelectorAll('.notice-q');
+  qs.forEach(q=>{
+    q.addEventListener('click',function(){
+      const wasActive = this.classList.contains('active');
+      // Close all
+      qs.forEach(oq=>{
+        oq.classList.remove('active');
+        oq.nextElementSibling.style.maxHeight='0';
+      });
+      // Open if wasn't open
+      if(!wasActive){
+        this.classList.add('active');
+        const a=this.nextElementSibling;
+        a.style.maxHeight=a.scrollHeight+'px';
+      }
+    });
+  });
+  // Auto-open items with data-open
+  document.querySelectorAll('.notice-q[data-open]').forEach(q=>{
+    q.classList.add('active');
+    const a=q.nextElementSibling;
+    a.style.maxHeight=a.scrollHeight+'px';
+  });
+}
+</script>
 </body>
 </html>

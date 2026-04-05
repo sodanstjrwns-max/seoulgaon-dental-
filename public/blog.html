@@ -11,6 +11,30 @@
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
 <link href="style.css" rel="stylesheet">
 <link href="pages.css" rel="stylesheet">
+<style>
+/* Blog detail modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:none;align-items:center;justify-content:center;padding:2rem;opacity:0;transition:opacity .3s}
+.modal-overlay.show{display:flex;opacity:1}
+.modal-box{background:var(--ink-2,#141413);border:1px solid #333;border-radius:16px;max-width:720px;width:100%;max-height:85vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:1rem;right:1rem;width:36px;height:36px;background:rgba(255,255,255,.1);border:none;border-radius:50%;color:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;transition:background .2s}
+.modal-close:hover{background:rgba(191,164,106,.3)}
+.modal-header{padding:2rem 2rem 1rem}
+.modal-tag{font-family:var(--ff-en,'Bebas Neue');font-size:.7rem;letter-spacing:2px;color:var(--gold,#BFA46A);text-transform:uppercase}
+.modal-date{font-size:.75rem;color:#888;margin-top:.3rem}
+.modal-title{font-family:var(--ff-title,'Black Han Sans');font-size:1.5rem;margin-top:.8rem;line-height:1.35}
+.modal-body{padding:0 2rem 2rem}
+.modal-content{font-size:.9rem;line-height:1.75;color:#ccc;white-space:pre-wrap}
+.modal-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.8rem;margin-top:1.5rem}
+.modal-images img{width:100%;border-radius:8px;cursor:pointer;transition:transform .3s;aspect-ratio:4/3;object-fit:cover}
+.modal-images img:hover{transform:scale(1.03)}
+/* Lightbox for full image */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10000;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox.show{display:flex}
+.lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:4px}
+/* Empty state */
+.empty-state{text-align:center;padding:4rem 2rem;color:#666;font-size:.9rem}
+.empty-state i{font-size:3rem;margin-bottom:1rem;display:block;color:#444}
+</style>
 </head>
 <body>
 
@@ -35,11 +59,6 @@
   <span class="page-hero-label">Blog</span>
   <h1>서울가온 블로그</h1>
   <p class="page-hero-sub">치과 치료에 대한 유용한 정보와 이야기</p>
-  <div class="page-tabs">
-    <a href="treatments.html#implant" class="page-tab">임플란트</a>
-    <a href="treatments.html#aesthetics" class="page-tab">앞니 심미치료</a>
-    <a href="treatments.html#endodontics" class="page-tab">신경치료</a>
-  </div>
 </section>
 
 <div class="filter-bar">
@@ -50,66 +69,34 @@
   <button class="filter-btn" data-filter="info">치과정보</button>
 </div>
 
-<div class="card-grid">
-  <a href="https://blog.naver.com/stokgw1" target="_blank" rel="noopener" class="blog-card" data-category="implant" data-tilt>
-    <div class="blog-card-body">
-      <div class="blog-card-tag">Implant</div>
-      <div class="blog-card-date">2026.03.21</div>
-      <h3>임플란트 연자? 달인? 가이드 임플란트의 진짜 차이</h3>
-      <p>수백 건의 임플란트 경험이 아닌, 한 건 한 건의 정밀함이 결과를 만듭니다.</p>
-      <span class="blog-card-link">네이버 블로그에서 보기 →</span>
-    </div>
-  </a>
+<div class="card-grid" id="blog-grid">
+  <!-- DB posts will be injected here first, then static cards -->
+</div>
 
-  <a href="https://blog.naver.com/stokgw1" target="_blank" rel="noopener" class="blog-card" data-category="implant" data-tilt>
-    <div class="blog-card-body">
-      <div class="blog-card-tag">Implant</div>
-      <div class="blog-card-date">2025.12.24</div>
-      <h3>70대 여자환자분 가이드 임플란트 후기</h3>
-      <p>고령이라 걱정했지만, 무절개 가이드 수술로 빠른 회복을 경험한 이야기.</p>
-      <span class="blog-card-link">네이버 블로그에서 보기 →</span>
-    </div>
-  </a>
+<div id="empty-msg" class="empty-state" style="display:none">
+  <i class="fas fa-pen-fancy"></i>
+  아직 등록된 블로그 글이 없습니다.
+</div>
 
-  <a href="https://blog.naver.com/stokgw1" target="_blank" rel="noopener" class="blog-card" data-category="implant" data-tilt>
-    <div class="blog-card-body">
-      <div class="blog-card-tag">Implant</div>
-      <div class="blog-card-date">2025.12.24</div>
-      <h3>윗턱 전체 임플란트 뼈이식 케이스</h3>
-      <p>뼈가 부족한 상악에서도 정밀 뼈이식으로 성공적인 임플란트 결과를 만든 사례.</p>
-      <span class="blog-card-link">네이버 블로그에서 보기 →</span>
+<!-- Blog detail modal -->
+<div class="modal-overlay" id="blog-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeBlogModal()">&times;</button>
+    <div class="modal-header">
+      <div class="modal-tag" id="modal-tag"></div>
+      <div class="modal-date" id="modal-date"></div>
+      <h2 class="modal-title" id="modal-title"></h2>
     </div>
-  </a>
+    <div class="modal-body">
+      <div class="modal-content" id="modal-content"></div>
+      <div class="modal-images" id="modal-images"></div>
+    </div>
+  </div>
+</div>
 
-  <a href="https://blog.naver.com/stokgw1" target="_blank" rel="noopener" class="blog-card" data-category="info" data-tilt>
-    <div class="blog-card-body">
-      <div class="blog-card-tag">Info</div>
-      <div class="blog-card-date">2026.01.15</div>
-      <h3>임플란트 수명은 관리에 달려있습니다</h3>
-      <p>임플란트는 영구적이지 않습니다. 올바른 관리법과 정기검진의 중요성.</p>
-      <span class="blog-card-link">네이버 블로그에서 보기 →</span>
-    </div>
-  </a>
-
-  <a href="https://blog.naver.com/stokgw1" target="_blank" rel="noopener" class="blog-card" data-category="aesthetic" data-tilt>
-    <div class="blog-card-body">
-      <div class="blog-card-tag">Aesthetic</div>
-      <div class="blog-card-date">2026.02.03</div>
-      <h3>라미네이트와 크라운, 어떤 차이가 있을까?</h3>
-      <p>앞니 치료를 고민할 때 알아야 할 라미네이트와 크라운의 차이점과 선택 기준.</p>
-      <span class="blog-card-link">네이버 블로그에서 보기 →</span>
-    </div>
-  </a>
-
-  <a href="https://blog.naver.com/stokgw1" target="_blank" rel="noopener" class="blog-card" data-category="endo" data-tilt>
-    <div class="blog-card-body">
-      <div class="blog-card-tag">Endodontics</div>
-      <div class="blog-card-date">2026.01.28</div>
-      <h3>신경치료, 왜 여러 번 와야 하나요?</h3>
-      <p>한 번에 끝나지 않는 신경치료. 그 이유와 각 단계에서 일어나는 일.</p>
-      <span class="blog-card-link">네이버 블로그에서 보기 →</span>
-    </div>
-  </a>
+<!-- Image lightbox -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
+  <img id="lightbox-img" src="" alt="">
 </div>
 
 <footer>
@@ -118,6 +105,165 @@
   <p class="ft-copy">© 2026 서울가온치과의원. All rights reserved.</p>
 </footer>
 
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
 <script src="pages.js"></script>
+<script>
+const catMap = {'임플란트':'implant','심미치료':'aesthetic','신경치료':'endo','치과상식':'info','일반':'info'};
+const catLabel = {'임플란트':'Implant','심미치료':'Aesthetic','신경치료':'Endodontics','치과상식':'Info','일반':'Info'};
+
+// Static blog cards (네이버 블로그)
+const staticCards = [
+  {title:'임플란트 연자? 달인? 가이드 임플란트의 진짜 차이', desc:'수백 건의 임플란트 경험이 아닌, 한 건 한 건의 정밀함이 결과를 만듭니다.', category:'implant', tag:'Implant', date:'2026.03.21', url:'https://blog.naver.com/stokgw1'},
+  {title:'70대 여자환자분 가이드 임플란트 후기', desc:'고령이라 걱정했지만, 무절개 가이드 수술로 빠른 회복을 경험한 이야기.', category:'implant', tag:'Implant', date:'2025.12.24', url:'https://blog.naver.com/stokgw1'},
+  {title:'윗턱 전체 임플란트 뼈이식 케이스', desc:'뼈가 부족한 상악에서도 정밀 뼈이식으로 성공적인 임플란트 결과를 만든 사례.', category:'implant', tag:'Implant', date:'2025.12.24', url:'https://blog.naver.com/stokgw1'},
+  {title:'임플란트 수명은 관리에 달려있습니다', desc:'임플란트는 영구적이지 않습니다. 올바른 관리법과 정기검진의 중요성.', category:'info', tag:'Info', date:'2026.01.15', url:'https://blog.naver.com/stokgw1'},
+  {title:'라미네이트와 크라운, 어떤 차이가 있을까?', desc:'앞니 치료를 고민할 때 알아야 할 라미네이트와 크라운의 차이점과 선택 기준.', category:'aesthetic', tag:'Aesthetic', date:'2026.02.03', url:'https://blog.naver.com/stokgw1'},
+  {title:'신경치료, 왜 여러 번 와야 하나요?', desc:'한 번에 끝나지 않는 신경치료. 그 이유와 각 단계에서 일어나는 일.', category:'endo', tag:'Endodontics', date:'2026.01.28', url:'https://blog.naver.com/stokgw1'},
+];
+
+function makeStaticCard(s){
+  return `<a href="${s.url}" target="_blank" rel="noopener" class="blog-card" data-category="${s.category}" data-tilt>
+    <div class="blog-card-body">
+      <div class="blog-card-tag">${s.tag}</div>
+      <div class="blog-card-date">${s.date}</div>
+      <h3>${s.title}</h3>
+      <p>${s.desc}</p>
+      <span class="blog-card-link">네이버 블로그에서 보기 →</span>
+    </div>
+  </a>`;
+}
+
+function makeDBCard(p){
+  const cat = catMap[p.category]||'info';
+  const tag = catLabel[p.category]||p.category;
+  const date = new Date(p.created_at).toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\. /g,'.').replace(/\.$/,'');
+  const excerpt = p.content.substring(0,100)+(p.content.length>100?'...':'');
+  return `<div class="blog-card" data-category="${cat}" data-tilt onclick="openBlogDetail(${p.id})" style="cursor:pointer">
+    ${p.thumbnail ? '<div style="width:100%;height:200px;overflow:hidden;border-radius:12px 12px 0 0"><img src="'+p.thumbnail+'" style="width:100%;height:100%;object-fit:cover" alt=""></div>' : ''}
+    <div class="blog-card-body">
+      <div class="blog-card-tag">${tag}</div>
+      <div class="blog-card-date">${date}</div>
+      <h3>${p.title}</h3>
+      <p>${excerpt}</p>
+      <span class="blog-card-link">자세히 보기 →</span>
+    </div>
+  </div>`;
+}
+
+// Load and render
+(async function(){
+  const grid = document.getElementById('blog-grid');
+  let dbPosts = [];
+  
+  try {
+    const res = await fetch('/api/blog');
+    const data = await res.json();
+    dbPosts = data.posts || [];
+  } catch(e){}
+
+  // Render DB posts first, then static
+  let html = '';
+  dbPosts.forEach(p => html += makeDBCard(p));
+  staticCards.forEach(s => html += makeStaticCard(s));
+  grid.innerHTML = html;
+
+  // Re-init card entrance and tilt (pages.js runs early)
+  document.querySelectorAll('.blog-card').forEach(c=>{
+    c.style.opacity='0';
+    c.style.transform='translateY(30px)';
+  });
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){
+        setTimeout(()=>{
+          e.target.style.transition='opacity .6s ease, transform .6s ease';
+          e.target.style.opacity='1';
+          e.target.style.transform='translateY(0)';
+        },i*80);
+        observer.unobserve(e.target);
+      }
+    });
+  },{threshold:.05});
+  document.querySelectorAll('.blog-card').forEach(c=>observer.observe(c));
+
+  // Re-init filter
+  initBlogFilter();
+})();
+
+function initBlogFilter(){
+  const btns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('#blog-grid [data-category]');
+  btns.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      btns.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.filter;
+      cards.forEach(card=>{
+        if(cat==='all'||card.dataset.category===cat){
+          card.style.display='';
+          card.style.opacity='0';
+          card.style.transform='translateY(20px)';
+          requestAnimationFrame(()=>{
+            card.style.transition='opacity .5s ease, transform .5s ease';
+            card.style.opacity='1';
+            card.style.transform='translateY(0)';
+          });
+        } else {
+          card.style.opacity='0';
+          card.style.transform='translateY(20px)';
+          setTimeout(()=>card.style.display='none',300);
+        }
+      });
+    });
+  });
+}
+
+// Blog detail modal
+async function openBlogDetail(id){
+  try {
+    const res = await fetch('/api/blog/'+id);
+    const data = await res.json();
+    if(!data.post) return;
+    
+    document.getElementById('modal-tag').textContent = catLabel[data.post.category]||data.post.category;
+    document.getElementById('modal-date').textContent = new Date(data.post.created_at).toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
+    document.getElementById('modal-title').textContent = data.post.title;
+    document.getElementById('modal-content').textContent = data.post.content;
+    
+    const imgsEl = document.getElementById('modal-images');
+    const images = data.images || [];
+    imgsEl.innerHTML = images.map(img => 
+      `<img src="${img.image_data}" alt="${img.filename||''}" onclick="openLightbox(this.src)">`
+    ).join('');
+    
+    const modal = document.getElementById('blog-modal');
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  } catch(e){ console.error(e); }
+}
+
+function closeBlogModal(){
+  document.getElementById('blog-modal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function openLightbox(src){
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('show');
+}
+
+// Close modal on overlay click
+document.getElementById('blog-modal').addEventListener('click', function(e){
+  if(e.target === this) closeBlogModal();
+});
+
+// Esc key
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape'){
+    closeBlogModal();
+    document.getElementById('lightbox').classList.remove('show');
+  }
+});
+</script>
 </body>
 </html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 | 서울가온치과</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Noto Sans KR',sans-serif;background:#0a0a0a;color:#e5e5e5;min-height:100vh}
+  :root{--gold:#BFA46A;--gold-b:#D4BA82;--ink:#0a0a0a;--ink-2:#141413;--ink-3:#1a1a19;--ink-4:#222221}
+  
+  /* Auth screens */
+  .auth-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
+  .auth-card{background:var(--ink-2);border:1px solid #333;border-radius:16px;padding:3rem;width:100%;max-width:420px}
+  .auth-logo{font-size:1.5rem;font-weight:700;text-align:center;margin-bottom:.5rem}
+  .auth-logo span{color:var(--gold)}
+  .auth-sub{text-align:center;color:#888;font-size:.85rem;margin-bottom:2rem}
+  .field{margin-bottom:1.2rem}
+  .field label{display:block;font-size:.8rem;color:#999;margin-bottom:.4rem;font-weight:500}
+  .field input{width:100%;padding:.75rem 1rem;background:var(--ink-3);border:1px solid #333;border-radius:8px;color:#fff;font-size:.9rem;outline:none;transition:border .2s}
+  .field input:focus{border-color:var(--gold)}
+  .btn-gold{width:100%;padding:.85rem;background:var(--gold);color:var(--ink);border:none;border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;transition:background .2s}
+  .btn-gold:hover{background:var(--gold-b)}
+  .auth-switch{text-align:center;margin-top:1.5rem;font-size:.85rem;color:#888}
+  .auth-switch a{color:var(--gold);cursor:pointer;text-decoration:none}
+  .error-msg{background:#3a1515;border:1px solid #6b2d2d;color:#ff6b6b;padding:.6rem 1rem;border-radius:8px;font-size:.8rem;margin-bottom:1rem;display:none}
+
+  /* Dashboard layout */
+  .dash{display:none;min-height:100vh}
+  .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:var(--ink-2);border-right:1px solid #222;padding:1.5rem 0;z-index:100}
+  .side-logo{padding:0 1.5rem;font-size:1.1rem;font-weight:700;margin-bottom:.3rem}
+  .side-logo span{color:var(--gold)}
+  .side-sub{padding:0 1.5rem;font-size:.7rem;color:#666;margin-bottom:2rem}
+  .side-nav a{display:flex;align-items:center;gap:.8rem;padding:.75rem 1.5rem;color:#999;font-size:.85rem;text-decoration:none;transition:all .2s;border-left:3px solid transparent}
+  .side-nav a:hover,.side-nav a.active{color:#fff;background:var(--ink-3);border-left-color:var(--gold)}
+  .side-nav a i{width:18px;text-align:center;font-size:.9rem}
+  .side-bottom{position:absolute;bottom:1.5rem;left:0;right:0;padding:0 1.5rem}
+  .side-user{display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:#888;margin-bottom:.8rem}
+  .side-user i{color:var(--gold)}
+  .btn-logout{width:100%;padding:.5rem;background:transparent;border:1px solid #333;border-radius:6px;color:#888;font-size:.8rem;cursor:pointer;transition:all .2s}
+  .btn-logout:hover{border-color:var(--gold);color:var(--gold)}
+
+  .main{margin-left:240px;padding:2rem 2.5rem}
+  .page-title{font-size:1.5rem;font-weight:700;margin-bottom:.3rem}
+  .page-desc{color:#888;font-size:.85rem;margin-bottom:2rem}
+
+  /* Cards */
+  .stat-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:2.5rem}
+  .stat-card{background:var(--ink-2);border:1px solid #222;border-radius:12px;padding:1.5rem}
+  .stat-card .num{font-size:2rem;font-weight:700;color:var(--gold)}
+  .stat-card .label{font-size:.8rem;color:#888;margin-top:.3rem}
+
+  /* Form panel */
+  .panel{background:var(--ink-2);border:1px solid #222;border-radius:12px;padding:2rem;margin-bottom:2rem}
+  .panel-title{font-size:1.1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}
+  .panel-title i{color:var(--gold)}
+  textarea{width:100%;padding:.75rem 1rem;background:var(--ink-3);border:1px solid #333;border-radius:8px;color:#fff;font-size:.9rem;outline:none;resize:vertical;min-height:120px;font-family:inherit;transition:border .2s}
+  textarea:focus{border-color:var(--gold)}
+  select{width:100%;padding:.75rem 1rem;background:var(--ink-3);border:1px solid #333;border-radius:8px;color:#fff;font-size:.9rem;outline:none}
+
+  /* Dropzone */
+  .dropzone{border:2px dashed #333;border-radius:12px;padding:2.5rem;text-align:center;cursor:pointer;transition:all .3s;position:relative}
+  .dropzone:hover,.dropzone.drag-over{border-color:var(--gold);background:rgba(191,164,106,.05)}
+  .dropzone i{font-size:2rem;color:#555;margin-bottom:.5rem}
+  .dropzone p{color:#888;font-size:.85rem}
+  .dropzone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+  .preview-grid{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1rem}
+  .preview-item{position:relative;width:100px;height:100px;border-radius:8px;overflow:hidden;border:1px solid #333}
+  .preview-item img{width:100%;height:100%;object-fit:cover}
+  .preview-item .remove{position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,.7);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;color:#ff6b6b}
+
+  /* BA upload */
+  .ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+  .ba-slot{border:2px dashed #333;border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;position:relative;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .3s}
+  .ba-slot:hover{border-color:var(--gold)}
+  .ba-slot input{position:absolute;inset:0;opacity:0;cursor:pointer}
+  .ba-slot img{max-width:100%;max-height:120px;object-fit:contain;border-radius:6px}
+  .ba-slot .slot-label{font-size:.75rem;color:var(--gold);font-weight:600;margin-bottom:.5rem}
+  .ba-slot p{font-size:.8rem;color:#666}
+
+  /* Table list */
+  .item-list{border:1px solid #222;border-radius:12px;overflow:hidden}
+  .item-row{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid #1a1a1a;transition:background .2s}
+  .item-row:last-child{border-bottom:none}
+  .item-row:hover{background:var(--ink-3)}
+  .item-title{font-size:.9rem;font-weight:500}
+  .item-meta{font-size:.75rem;color:#666;margin-top:.2rem}
+  .item-actions{display:flex;gap:.5rem}
+  .btn-sm{padding:.4rem .8rem;border-radius:6px;font-size:.75rem;cursor:pointer;border:1px solid #333;background:transparent;color:#888;transition:all .2s}
+  .btn-sm:hover{border-color:var(--gold);color:var(--gold)}
+  .btn-sm.danger:hover{border-color:#ff6b6b;color:#ff6b6b}
+
+  .toast{position:fixed;top:2rem;right:2rem;background:#1a3a1a;border:1px solid #2d6b2d;color:#6bff6b;padding:.8rem 1.5rem;border-radius:8px;font-size:.85rem;transform:translateX(120%);transition:transform .3s;z-index:9999}
+  .toast.show{transform:translateX(0)}
+  .toast.error{background:#3a1515;border-color:#6b2d2d;color:#ff6b6b}
+
+  .tab-bar{display:flex;gap:.5rem;margin-bottom:1.5rem}
+  .tab-btn{padding:.5rem 1.2rem;border-radius:8px;font-size:.8rem;cursor:pointer;border:1px solid #333;background:transparent;color:#888;transition:all .2s}
+  .tab-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(191,164,106,.1)}
+
+  .check-row{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem}
+  .check-row input[type=checkbox]{accent-color:var(--gold);width:16px;height:16px}
+  .check-row label{font-size:.85rem;color:#ccc}
+
+  @media(max-width:768px){
+    .sidebar{display:none}
+    .main{margin-left:0}
+    .stat-cards{grid-template-columns:1fr}
+    .ba-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- Toast notification -->
+<div id="toast" class="toast"></div>
+
+<!-- ===== AUTH SCREEN ===== -->
+<div id="auth-screen" class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo">서울가온치과<span>.</span></div>
+    <div class="auth-sub" id="auth-title">관리자 로그인</div>
+    <div class="error-msg" id="auth-error"></div>
+    
+    <!-- Login form -->
+    <form id="login-form" onsubmit="return handleLogin(event)">
+      <div class="field">
+        <label>이메일</label>
+        <input type="email" id="login-email" placeholder="admin@example.com" required>
+      </div>
+      <div class="field">
+        <label>비밀번호</label>
+        <input type="password" id="login-pw" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn-gold">로그인</button>
+    </form>
+    
+    <!-- Register form -->
+    <form id="register-form" style="display:none" onsubmit="return handleRegister(event)">
+      <div class="field">
+        <label>이름</label>
+        <input type="text" id="reg-name" placeholder="홍길동" required>
+      </div>
+      <div class="field">
+        <label>이메일</label>
+        <input type="email" id="reg-email" placeholder="admin@example.com" required>
+      </div>
+      <div class="field">
+        <label>비밀번호</label>
+        <input type="password" id="reg-pw" placeholder="6자 이상" minlength="6" required>
+      </div>
+      <button type="submit" class="btn-gold">회원가입</button>
+    </form>
+    
+    <div class="auth-switch" id="auth-switch">
+      계정이 없으신가요? <a onclick="toggleAuth()">회원가입</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="dashboard" class="dash">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="side-logo">서울가온치과<span>.</span></div>
+    <div class="side-sub">Admin Dashboard</div>
+    <nav class="side-nav">
+      <a href="#" class="active" onclick="showPage('home')"><i class="fas fa-home"></i>대시보드</a>
+      <a href="#" onclick="showPage('blog')"><i class="fas fa-pen-fancy"></i>블로그</a>
+      <a href="#" onclick="showPage('ba')"><i class="fas fa-images"></i>비포&애프터</a>
+      <a href="#" onclick="showPage('notice')"><i class="fas fa-bullhorn"></i>공지사항</a>
+    </nav>
+    <div class="side-bottom">
+      <div class="side-user"><i class="fas fa-user-circle"></i><span id="user-name">관리자</span></div>
+      <button class="btn-logout" onclick="logout()">로그아웃</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <!-- ===== HOME ===== -->
+    <div id="page-home">
+      <h1 class="page-title">대시보드</h1>
+      <p class="page-desc">서울가온치과 관리자 페이지입니다.</p>
+      <div class="stat-cards">
+        <div class="stat-card"><div class="num" id="cnt-blog">0</div><div class="label">블로그 게시글</div></div>
+        <div class="stat-card"><div class="num" id="cnt-ba">0</div><div class="label">비포&애프터</div></div>
+        <div class="stat-card"><div class="num" id="cnt-notice">0</div><div class="label">공지사항</div></div>
+      </div>
+    </div>
+
+    <!-- ===== BLOG ===== -->
+    <div id="page-blog" style="display:none">
+      <h1 class="page-title">블로그 관리</h1>
+      <p class="page-desc">블로그 게시글을 작성하고 관리합니다.</p>
+      
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="showBlogTab('write')">새 글 작성</button>
+        <button class="tab-btn" onclick="showBlogTab('list')">게시글 목록</button>
+      </div>
+
+      <div id="blog-write" class="panel">
+        <div class="panel-title"><i class="fas fa-edit"></i>새 블로그 작성</div>
+        <div class="field">
+          <label>제목</label>
+          <input type="text" id="blog-title" placeholder="블로그 제목을 입력하세요">
+        </div>
+        <div class="field">
+          <label>카테고리</label>
+          <select id="blog-category">
+            <option>일반</option>
+            <option>임플란트</option>
+            <option>심미치료</option>
+            <option>신경치료</option>
+            <option>치과상식</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>내용</label>
+          <textarea id="blog-content" placeholder="블로그 내용을 입력하세요" rows="8"></textarea>
+        </div>
+        <div class="field">
+          <label>사진 업로드 (여러 장 드래그 & 드롭)</label>
+          <div class="dropzone" id="blog-dropzone">
+            <input type="file" multiple accept="image/*" onchange="handleBlogImages(event)">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>클릭하거나 이미지를 드래그하세요</p>
+          </div>
+          <div class="preview-grid" id="blog-previews"></div>
+        </div>
+        <button class="btn-gold" onclick="submitBlog()">게시글 등록</button>
+      </div>
+
+      <div id="blog-list" style="display:none">
+        <div class="item-list" id="blog-items"></div>
+      </div>
+    </div>
+
+    <!-- ===== BEFORE & AFTER ===== -->
+    <div id="page-ba" style="display:none">
+      <h1 class="page-title">비포&애프터 관리</h1>
+      <p class="page-desc">치료 전후 사진을 업로드합니다. 올린 사진만 표시됩니다.</p>
+      
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="showBATab('write')">새 케이스 등록</button>
+        <button class="tab-btn" onclick="showBATab('list')">케이스 목록</button>
+      </div>
+
+      <div id="ba-write" class="panel">
+        <div class="panel-title"><i class="fas fa-camera"></i>새 비포&애프터 등록</div>
+        <div class="field">
+          <label>케이스 제목</label>
+          <input type="text" id="ba-title" placeholder="예: 상악 임플란트 2개 식립">
+        </div>
+        <div class="field">
+          <label>카테고리</label>
+          <select id="ba-category">
+            <option>임플란트</option>
+            <option>심미치료</option>
+            <option>신경치료</option>
+            <option>교정</option>
+            <option>기타</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>설명 (선택)</label>
+          <textarea id="ba-desc" placeholder="케이스 설명" rows="3"></textarea>
+        </div>
+        <div class="field">
+          <label>구내사진 (전후)</label>
+          <div class="ba-grid">
+            <div class="ba-slot" id="slot-intra-before">
+              <input type="file" accept="image/*" onchange="handleBASlot(event,'intra-before')">
+              <div class="slot-label">BEFORE</div>
+              <i class="fas fa-tooth" style="font-size:1.5rem;color:#555;margin-bottom:.3rem"></i>
+              <p>구내 사진 (전)</p>
+            </div>
+            <div class="ba-slot" id="slot-intra-after">
+              <input type="file" accept="image/*" onchange="handleBASlot(event,'intra-after')">
+              <div class="slot-label">AFTER</div>
+              <i class="fas fa-tooth" style="font-size:1.5rem;color:#555;margin-bottom:.3rem"></i>
+              <p>구내 사진 (후)</p>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>파노라마 (전후)</label>
+          <div class="ba-grid">
+            <div class="ba-slot" id="slot-pano-before">
+              <input type="file" accept="image/*" onchange="handleBASlot(event,'pano-before')">
+              <div class="slot-label">BEFORE</div>
+              <i class="fas fa-x-ray" style="font-size:1.5rem;color:#555;margin-bottom:.3rem"></i>
+              <p>파노라마 (전)</p>
+            </div>
+            <div class="ba-slot" id="slot-pano-after">
+              <input type="file" accept="image/*" onchange="handleBASlot(event,'pano-after')">
+              <div class="slot-label">AFTER</div>
+              <i class="fas fa-x-ray" style="font-size:1.5rem;color:#555;margin-bottom:.3rem"></i>
+              <p>파노라마 (후)</p>
+            </div>
+          </div>
+        </div>
+        <button class="btn-gold" onclick="submitBA()">케이스 등록</button>
+      </div>
+
+      <div id="ba-list" style="display:none">
+        <div class="item-list" id="ba-items"></div>
+      </div>
+    </div>
+
+    <!-- ===== NOTICES ===== -->
+    <div id="page-notice" style="display:none">
+      <h1 class="page-title">공지사항 관리</h1>
+      <p class="page-desc">공지사항을 작성하고 관리합니다.</p>
+      
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="showNoticeTab('write')">새 공지 작성</button>
+        <button class="tab-btn" onclick="showNoticeTab('list')">공지 목록</button>
+      </div>
+
+      <div id="notice-write" class="panel">
+        <div class="panel-title"><i class="fas fa-bullhorn"></i>새 공지사항 작성</div>
+        <div class="field">
+          <label>제목</label>
+          <input type="text" id="notice-title" placeholder="공지사항 제목">
+        </div>
+        <div class="field">
+          <label>내용</label>
+          <textarea id="notice-content" placeholder="공지 내용을 입력하세요" rows="8"></textarea>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="notice-pin">
+          <label for="notice-pin">상단 고정</label>
+        </div>
+        <button class="btn-gold" onclick="submitNotice()">공지 등록</button>
+      </div>
+
+      <div id="notice-list" style="display:none">
+        <div class="item-list" id="notice-items"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════
+let token = localStorage.getItem('gaon_token') || '';
+let blogImages = [];
+let baSlots = { 'intra-before':null, 'intra-after':null, 'pano-before':null, 'pano-after':null };
+
+const API = '';
+
+function headers(){ return { 'Content-Type':'application/json', 'Authorization':'Bearer '+token } }
+
+// ══════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════
+function toast(msg, isError=false){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isError ? ' error' : '');
+  setTimeout(()=> t.className='toast', 3000);
+}
+
+// ══════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════
+let isRegister = false;
+function toggleAuth(){
+  isRegister = !isRegister;
+  document.getElementById('login-form').style.display = isRegister ? 'none' : 'block';
+  document.getElementById('register-form').style.display = isRegister ? 'block' : 'none';
+  document.getElementById('auth-title').textContent = isRegister ? '관리자 회원가입' : '관리자 로그인';
+  document.getElementById('auth-switch').innerHTML = isRegister 
+    ? '이미 계정이 있으신가요? <a onclick="toggleAuth()">로그인</a>'
+    : '계정이 없으신가요? <a onclick="toggleAuth()">회원가입</a>';
+  document.getElementById('auth-error').style.display = 'none';
+}
+
+function showError(msg){ 
+  const el = document.getElementById('auth-error');
+  el.textContent = msg; el.style.display = 'block'; 
+}
+
+async function handleLogin(e){
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-pw').value;
+  try {
+    const res = await fetch(API+'/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email,password}) });
+    const data = await res.json();
+    if(!res.ok) return showError(data.error);
+    token = data.token;
+    localStorage.setItem('gaon_token', token);
+    enterDashboard(data.user);
+  } catch(e){ showError('서버 연결에 실패했습니다'); }
+  return false;
+}
+
+async function handleRegister(e){
+  e.preventDefault();
+  const name = document.getElementById('reg-name').value;
+  const email = document.getElementById('reg-email').value;
+  const password = document.getElementById('reg-pw').value;
+  try {
+    const res = await fetch(API+'/api/auth/register', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email,password,name}) });
+    const data = await res.json();
+    if(!res.ok) return showError(data.error);
+    token = data.token;
+    localStorage.setItem('gaon_token', token);
+    enterDashboard(data.user);
+  } catch(e){ showError('서버 연결에 실패했습니다'); }
+  return false;
+}
+
+function enterDashboard(user){
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('user-name').textContent = user.name || user.email;
+  loadDashboard();
+}
+
+function logout(){
+  token = '';
+  localStorage.removeItem('gaon_token');
+  location.reload();
+}
+
+// Auto-login check
+async function checkAuth(){
+  if(!token) return;
+  try {
+    const res = await fetch(API+'/api/auth/me', { headers:headers() });
+    if(res.ok){
+      const data = await res.json();
+      enterDashboard(data.user);
+    } else { token=''; localStorage.removeItem('gaon_token'); }
+  } catch{ token=''; localStorage.removeItem('gaon_token'); }
+}
+
+// ══════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════
+function showPage(page){
+  ['home','blog','ba','notice'].forEach(p => document.getElementById('page-'+p).style.display = p===page?'block':'none');
+  document.querySelectorAll('.side-nav a').forEach(a => a.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  if(page==='blog') loadBlogList();
+  if(page==='ba') loadBAList();
+  if(page==='notice') loadNoticeList();
+}
+
+// ══════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════
+async function loadDashboard(){
+  try {
+    const [b,ba,n] = await Promise.all([
+      fetch(API+'/api/admin/blog',{headers:headers()}).then(r=>r.json()),
+      fetch(API+'/api/admin/before-after',{headers:headers()}).then(r=>r.json()),
+      fetch(API+'/api/admin/notices',{headers:headers()}).then(r=>r.json())
+    ]);
+    document.getElementById('cnt-blog').textContent = (b.posts||[]).length;
+    document.getElementById('cnt-ba').textContent = (ba.cases||[]).length;
+    document.getElementById('cnt-notice').textContent = (n.notices||[]).length;
+  } catch{}
+}
+
+// ══════════════════════════════════════
+//  BLOG
+// ══════════════════════════════════════
+function showBlogTab(tab){
+  document.getElementById('blog-write').style.display = tab==='write'?'block':'none';
+  document.getElementById('blog-list').style.display = tab==='list'?'block':'none';
+  document.querySelectorAll('#page-blog .tab-btn').forEach((b,i)=> b.classList.toggle('active', (tab==='write'?0:1)===i));
+  if(tab==='list') loadBlogList();
+}
+
+// Drag & drop
+const dz = document.getElementById('blog-dropzone');
+if(dz){
+  dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over')});
+  dz.addEventListener('dragleave',()=>dz.classList.remove('drag-over'));
+  dz.addEventListener('drop',e=>{
+    e.preventDefault(); dz.classList.remove('drag-over');
+    Array.from(e.dataTransfer.files).forEach(f=>{ if(f.type.startsWith('image/')) addBlogImage(f) });
+  });
+}
+
+function handleBlogImages(e){ Array.from(e.target.files).forEach(f=> addBlogImage(f)); e.target.value=''; }
+
+function addBlogImage(file){
+  const reader = new FileReader();
+  reader.onload = function(e){
+    blogImages.push({ name:file.name, data:e.target.result });
+    renderBlogPreviews();
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeBlogImage(idx){
+  blogImages.splice(idx,1);
+  renderBlogPreviews();
+}
+
+function renderBlogPreviews(){
+  const el = document.getElementById('blog-previews');
+  el.innerHTML = blogImages.map((img,i)=> `<div class="preview-item"><img src="${img.data}"><div class="remove" onclick="removeBlogImage(${i})"><i class="fas fa-times"></i></div></div>`).join('');
+}
+
+async function submitBlog(){
+  const title = document.getElementById('blog-title').value;
+  const content = document.getElementById('blog-content').value;
+  const category = document.getElementById('blog-category').value;
+  if(!title || !content) return toast('제목과 내용을 입력해주세요', true);
+  
+  try {
+    const res = await fetch(API+'/api/admin/blog', { method:'POST', headers:headers(), body:JSON.stringify({title,content,category,images:blogImages}) });
+    const data = await res.json();
+    if(!res.ok) return toast(data.error, true);
+    toast('블로그 게시글이 등록되었습니다!');
+    document.getElementById('blog-title').value='';
+    document.getElementById('blog-content').value='';
+    blogImages=[]; renderBlogPreviews();
+    loadDashboard();
+  } catch(e){ toast('등록에 실패했습니다', true); }
+}
+
+async function loadBlogList(){
+  try {
+    const res = await fetch(API+'/api/admin/blog',{headers:headers()});
+    const data = await res.json();
+    const el = document.getElementById('blog-items');
+    if(!(data.posts||[]).length){ el.innerHTML='<div style="padding:2rem;text-align:center;color:#666">등록된 블로그가 없습니다</div>'; return; }
+    el.innerHTML = data.posts.map(p=> `<div class="item-row">
+      <div><div class="item-title">${p.title}</div><div class="item-meta">${p.category} · ${new Date(p.created_at).toLocaleDateString('ko-KR')}</div></div>
+      <div class="item-actions"><button class="btn-sm danger" onclick="deleteBlog(${p.id})"><i class="fas fa-trash"></i></button></div>
+    </div>`).join('');
+  } catch{}
+}
+
+async function deleteBlog(id){
+  if(!confirm('정말 삭제하시겠습니까?')) return;
+  await fetch(API+'/api/admin/blog/'+id, {method:'DELETE',headers:headers()});
+  toast('삭제되었습니다'); loadBlogList(); loadDashboard();
+}
+
+// ══════════════════════════════════════
+//  BEFORE & AFTER
+// ══════════════════════════════════════
+function showBATab(tab){
+  document.getElementById('ba-write').style.display = tab==='write'?'block':'none';
+  document.getElementById('ba-list').style.display = tab==='list'?'block':'none';
+  document.querySelectorAll('#page-ba .tab-btn').forEach((b,i)=> b.classList.toggle('active', (tab==='write'?0:1)===i));
+  if(tab==='list') loadBAList();
+}
+
+function handleBASlot(e, slotId){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    baSlots[slotId] = ev.target.result;
+    const slot = document.getElementById('slot-'+slotId);
+    slot.innerHTML = `<input type="file" accept="image/*" onchange="handleBASlot(event,'${slotId}')"><img src="${ev.target.result}">`;
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
+}
+
+async function submitBA(){
+  const title = document.getElementById('ba-title').value;
+  const category = document.getElementById('ba-category').value;
+  const description = document.getElementById('ba-desc').value;
+  if(!title) return toast('케이스 제목을 입력해주세요', true);
+  
+  // Check if at least one image is uploaded
+  const hasAny = Object.values(baSlots).some(v=>v);
+  if(!hasAny) return toast('최소 한 장의 사진을 업로드해주세요', true);
+
+  try {
+    const res = await fetch(API+'/api/admin/before-after', { method:'POST', headers:headers(), body:JSON.stringify({
+      title, description, category,
+      intraoral_before: baSlots['intra-before'],
+      intraoral_after: baSlots['intra-after'],
+      panorama_before: baSlots['pano-before'],
+      panorama_after: baSlots['pano-after']
+    })});
+    const data = await res.json();
+    if(!res.ok) return toast(data.error, true);
+    toast('비포&애프터 케이스가 등록되었습니다!');
+    document.getElementById('ba-title').value='';
+    document.getElementById('ba-desc').value='';
+    baSlots = {'intra-before':null,'intra-after':null,'pano-before':null,'pano-after':null};
+    // Reset slots visual
+    ['intra-before','intra-after','pano-before','pano-after'].forEach(id=>{
+      const slot = document.getElementById('slot-'+id);
+      const isIntra = id.startsWith('intra');
+      const isBefore = id.endsWith('before');
+      slot.innerHTML = `<input type="file" accept="image/*" onchange="handleBASlot(event,'${id}')">
+        <div class="slot-label">${isBefore?'BEFORE':'AFTER'}</div>
+        <i class="fas fa-${isIntra?'tooth':'x-ray'}" style="font-size:1.5rem;color:#555;margin-bottom:.3rem"></i>
+        <p>${isIntra?'구내':'파노라마'} 사진 (${isBefore?'전':'후'})</p>`;
+    });
+    loadDashboard();
+  } catch(e){ toast('등록에 실패했습니다', true); }
+}
+
+async function loadBAList(){
+  try {
+    const res = await fetch(API+'/api/admin/before-after',{headers:headers()});
+    const data = await res.json();
+    const el = document.getElementById('ba-items');
+    if(!(data.cases||[]).length){ el.innerHTML='<div style="padding:2rem;text-align:center;color:#666">등록된 케이스가 없습니다</div>'; return; }
+    el.innerHTML = data.cases.map(c=>{
+      const imgs = [c.intraoral_before,c.intraoral_after,c.panorama_before,c.panorama_after].filter(Boolean).length;
+      return `<div class="item-row">
+        <div><div class="item-title">${c.title}</div><div class="item-meta">${c.category} · 사진 ${imgs}장 · ${new Date(c.created_at).toLocaleDateString('ko-KR')}</div></div>
+        <div class="item-actions"><button class="btn-sm danger" onclick="deleteBA(${c.id})"><i class="fas fa-trash"></i></button></div>
+      </div>`;
+    }).join('');
+  } catch{}
+}
+
+async function deleteBA(id){
+  if(!confirm('정말 삭제하시겠습니까?')) return;
+  await fetch(API+'/api/admin/before-after/'+id, {method:'DELETE',headers:headers()});
+  toast('삭제되었습니다'); loadBAList(); loadDashboard();
+}
+
+// ══════════════════════════════════════
+//  NOTICES
+// ══════════════════════════════════════
+function showNoticeTab(tab){
+  document.getElementById('notice-write').style.display = tab==='write'?'block':'none';
+  document.getElementById('notice-list').style.display = tab==='list'?'block':'none';
+  document.querySelectorAll('#page-notice .tab-btn').forEach((b,i)=> b.classList.toggle('active', (tab==='write'?0:1)===i));
+  if(tab==='list') loadNoticeList();
+}
+
+async function submitNotice(){
+  const title = document.getElementById('notice-title').value;
+  const content = document.getElementById('notice-content').value;
+  const is_pinned = document.getElementById('notice-pin').checked;
+  if(!title || !content) return toast('제목과 내용을 입력해주세요', true);
+
+  try {
+    const res = await fetch(API+'/api/admin/notices', { method:'POST', headers:headers(), body:JSON.stringify({title,content,is_pinned}) });
+    const data = await res.json();
+    if(!res.ok) return toast(data.error, true);
+    toast('공지사항이 등록되었습니다!');
+    document.getElementById('notice-title').value='';
+    document.getElementById('notice-content').value='';
+    document.getElementById('notice-pin').checked = false;
+    loadDashboard();
+  } catch(e){ toast('등록에 실패했습니다', true); }
+}
+
+async function loadNoticeList(){
+  try {
+    const res = await fetch(API+'/api/admin/notices',{headers:headers()});
+    const data = await res.json();
+    const el = document.getElementById('notice-items');
+    if(!(data.notices||[]).length){ el.innerHTML='<div style="padding:2rem;text-align:center;color:#666">등록된 공지가 없습니다</div>'; return; }
+    el.innerHTML = data.notices.map(n=> `<div class="item-row">
+      <div><div class="item-title">${n.is_pinned?'📌 ':''}${n.title}</div><div class="item-meta">${new Date(n.created_at).toLocaleDateString('ko-KR')}</div></div>
+      <div class="item-actions"><button class="btn-sm danger" onclick="deleteNotice(${n.id})"><i class="fas fa-trash"></i></button></div>
+    </div>`).join('');
+  } catch{}
+}
+
+async function deleteNotice(id){
+  if(!confirm('정말 삭제하시겠습니까?')) return;
+  await fetch(API+'/api/admin/notices/'+id, {method:'DELETE',headers:headers()});
+  toast('삭제되었습니다'); loadNoticeList(); loadDashboard();
+}
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+checkAuth();
+</script>
+</body>
+</html>
