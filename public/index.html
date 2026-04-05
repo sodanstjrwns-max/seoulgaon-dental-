@@ -239,7 +239,10 @@ section{padding:clamp(4rem,10vh,8rem) clamp(1.5rem,4vw,6rem);position:relative;o
 /* ===== FOOTER ===== */
 footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp(1.5rem,4vw,4rem);text-align:center}
 .ft-logo{font-family:var(--ff-title);font-size:1.1rem;margin-bottom:.5rem}
-.ft-slogan{font-size:.8rem;color:var(--stone);margin-bottom:1rem}
+.ft-slogan{font-size:.8rem;color:var(--stone);margin-bottom:1.5rem}
+.ft-biz{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:.4rem .8rem;font-size:.7rem;color:var(--stone);margin-bottom:1rem;padding-top:1rem;border-top:1px solid var(--line);max-width:700px;margin-left:auto;margin-right:auto}
+.ft-biz span{white-space:nowrap}
+.ft-biz .sep{color:var(--line)}
 .ft-copy{font-size:.7rem;color:var(--stone)}
 
 /* ===== DATA-REVEAL ===== */
@@ -715,7 +718,14 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
 <footer>
   <div class="ft-logo">서울가온치과<span style="color:var(--gold)">.</span></div>
   <p class="ft-slogan">치과 치료가 좋은 기억이 될 수 있도록.</p>
-  <p class="ft-copy">© 2026 서울가온치과의원. All rights reserved.</p>
+  <div class="ft-biz">
+    <span>서울가온치과의원</span><span class="sep">|</span>
+    <span>대표 현진호</span><span class="sep">|</span>
+    <span>사업자등록번호 898-03-02537</span><span class="sep">|</span>
+    <span>경기도 의정부시 용민로 22, 4층(용현동)</span><span class="sep">|</span>
+    <span>Tel. 0507-1325-3377</span>
+  </div>
+  <p class="ft-copy">© 2022–2026 서울가온치과의원. All rights reserved.</p>
 </footer>
 
 <!-- SCRIPTS -->
