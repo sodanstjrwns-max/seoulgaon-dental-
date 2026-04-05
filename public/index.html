@@ -43,12 +43,14 @@ ul{list-style:none}
 #progressBar{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:9997;width:0%;transition:none}
 
 /* ===== LOADER — CINEMATIC ===== */
-#loader{position:fixed;inset:0;background:var(--ink);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}
-.loader-txt{font-family:var(--ff-title);font-size:clamp(3rem,8vw,6rem);color:var(--ivory);overflow:hidden}
+#loader{position:fixed;inset:0;background:var(--ink);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;clip-path:polygon(0 0,100% 0,100% 100%,0 100%);overflow:hidden}
+#loader::before{content:'';position:absolute;inset:0;background:url('/images/loader-bg.jpg') center 20%/cover no-repeat;opacity:.15;filter:grayscale(.3)}
+#loader::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,transparent 20%,var(--ink) 75%)}
+.loader-txt{font-family:var(--ff-title);font-size:clamp(3rem,8vw,6rem);color:var(--ivory);overflow:hidden;position:relative;z-index:2}
 .loader-txt span{display:inline-block;transform:translateY(110%)}
-.loader-line{width:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.5rem 0}
-.loader-sub{font-family:var(--ff-en);font-size:14px;letter-spacing:8px;color:var(--stone);opacity:0;text-transform:uppercase}
-.loader-counter{position:fixed;bottom:3rem;right:3rem;font-family:var(--ff-en);font-size:clamp(2rem,5vw,4rem);color:var(--stone);opacity:.3;font-variant-numeric:tabular-nums}
+.loader-line{width:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.5rem 0;position:relative;z-index:2}
+.loader-sub{font-family:var(--ff-en);font-size:14px;letter-spacing:8px;color:var(--stone);opacity:0;text-transform:uppercase;position:relative;z-index:2}
+.loader-counter{position:fixed;bottom:3rem;right:3rem;font-family:var(--ff-en);font-size:clamp(2rem,5vw,4rem);color:var(--stone);opacity:.3;font-variant-numeric:tabular-nums;z-index:10001}
 
 /* ===== NAVIGATION ===== */
 #nav{position:fixed;top:0;left:0;width:100%;z-index:9000;padding:0 clamp(1.5rem,4vw,4rem);height:72px;display:flex;align-items:center;justify-content:space-between;transition:background .4s,backdrop-filter .4s}
