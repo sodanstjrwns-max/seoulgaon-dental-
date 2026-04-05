@@ -10,16 +10,22 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 // ──── UTILITIES ────
 function splitChars(el){
-  const text = el.textContent;
+  // Preserve <em class="gold"> tags during split
+  const nodes = Array.from(el.childNodes);
+  el.dataset.original = el.textContent;
   el.innerHTML = '';
-  el.dataset.original = text;
-  text.split('').forEach(c => {
-    const s = document.createElement('span');
-    s.className = 'char';
-    s.textContent = c === ' ' ? '\u00A0' : c;
-    s.style.display = 'inline-block';
-    s.style.willChange = 'transform, opacity';
-    el.appendChild(s);
+  nodes.forEach(node => {
+    const isGold = node.nodeType === 1 && node.classList && node.classList.contains('gold');
+    const text = node.textContent || '';
+    text.split('').forEach(c => {
+      const s = document.createElement('span');
+      s.className = 'char';
+      if(isGold) s.style.color = 'var(--gold)';
+      s.textContent = c === ' ' ? '\u00A0' : c;
+      s.style.display = 'inline-block';
+      s.style.willChange = 'transform, opacity';
+      el.appendChild(s);
+    });
   });
   return el.querySelectorAll('.char');
 }
