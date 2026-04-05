@@ -147,13 +147,13 @@ section{padding:clamp(4rem,10vh,8rem) clamp(1.5rem,4vw,6rem);position:relative;o
 .tx-link:hover{gap:.8rem}
 
 /* ===== STORY (#s-story) ===== */
-#s-story{background:var(--ink);position:relative;overflow:hidden}
-.story-banner{position:relative;aspect-ratio:3/2;border-radius:16px;overflow:hidden;margin-bottom:4rem;max-height:70vh}
+#s-story{background:var(--ink);position:relative;overflow:hidden;text-align:center}
+.story-banner{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;margin-bottom:4rem;max-height:70vh;max-width:1200px;margin-left:auto;margin-right:auto;margin-bottom:4rem}
 .story-banner img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 6s}
 .story-banner:hover img{transform:scale(1.05)}
 .story-banner-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--ink) 0%,transparent 60%);display:flex;align-items:flex-end;padding:3rem}
 .story-banner-quote{font-family:var(--ff-title);font-size:clamp(1.2rem,2.5vw,1.8rem);max-width:500px;line-height:1.4}
-.story-body{max-width:800px;position:relative;z-index:1}
+.story-body{max-width:800px;margin:0 auto;position:relative;z-index:1;text-align:left}
 .story-body p{font-size:clamp(.9rem,1.1vw,1rem);color:var(--stone-l);line-height:1.8;margin-bottom:1.5rem}
 .story-bg-text{position:absolute;top:50%;right:-5%;font-family:var(--ff-title);font-size:clamp(8rem,20vw,16rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;white-space:nowrap;will-change:transform}
 
