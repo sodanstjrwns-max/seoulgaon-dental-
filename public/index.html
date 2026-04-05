@@ -168,8 +168,10 @@ section{padding:clamp(4rem,10vh,8rem) clamp(1.5rem,4vw,6rem);position:relative;o
 .dr-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center 30%;transition:transform .6s}
 .dr-card:hover .dr-img-wrap img{transform:scale(1.05)}
 .dr-tag{position:absolute;top:1rem;left:1rem;background:var(--gold);color:var(--ink);padding:.3rem .8rem;border-radius:100px;font-size:.7rem;font-weight:700;letter-spacing:.05em}
+.dr-tag.head{font-size:.85rem;padding:.45rem 1.2rem;background:linear-gradient(135deg,var(--gold),var(--gold-b));box-shadow:0 4px 20px rgba(191,164,106,.4);letter-spacing:.1em}
 .dr-info{padding:1.5rem 2rem 2rem}
 .dr-name{font-family:var(--ff-title);font-size:1.5rem;margin-bottom:.15rem}
+.dr-name .head-label{color:var(--gold);font-size:.85rem;font-weight:700;margin-left:.5rem;letter-spacing:.05em}
 .dr-role{font-family:var(--ff-en);font-size:.8rem;letter-spacing:2px;color:var(--stone);margin-bottom:1rem}
 .dr-desc{font-size:.85rem;color:var(--stone-l);line-height:1.6;margin-bottom:1rem}
 .dr-chips{display:flex;flex-wrap:wrap;gap:.4rem}
@@ -559,18 +561,19 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
     <div class="dr-card" data-tilt>
       <div class="dr-img-wrap">
         <img src="/images/real-dr-hyun.jpg" alt="현진호 원장" loading="lazy">
-        <span class="dr-tag">대표원장</span>
+        <span class="dr-tag head">대표원장</span>
       </div>
       <div class="dr-info">
-        <h3 class="dr-name">현진호</h3>
+        <h3 class="dr-name">현진호 <span class="head-label">대표원장</span></h3>
         <p class="dr-role">Representative Director</p>
-        <p class="dr-desc">의정부 임플란트·심미치료 전문. 가이드 임플란트 100%. 꼼꼼한 설명과 정확한 진료로 신뢰받는 진료를 약속합니다.</p>
+        <p class="dr-desc">의정부 임플란트·심미치료 전문. <em class="gold">가이드 임플란트 100%</em>. 꼼꼼한 설명과 정확한 진료로 신뢰받는 진료를 약속합니다.</p>
         <div class="dr-chips">
-          <span class="dr-chip">임플란트</span>
+          <span class="dr-chip gold">임플란트</span>
           <span class="dr-chip">앞니심미</span>
           <span class="dr-chip">가이드수술</span>
           <span class="dr-chip">뼈이식</span>
         </div>
+        <div class="dr-badge">✦ 서울가온치과 대표원장 · 임플란트 & 심미치료 전문</div>
       </div>
     </div>
     <!-- 조은비 원장 -->
