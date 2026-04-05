@@ -337,6 +337,11 @@ function initHeroText(){
   const h1 = document.querySelector('#top h1');
   if(!h1) return;
   
+  // Prevent gold text flash before animation
+  h1.style.visibility = 'visible';
+  const sub = document.querySelector('.hero-sub');
+  if(sub) sub.style.visibility = 'visible';
+
   // Calm line-by-line fade-up reveal
   h1.querySelectorAll('.line span').forEach((lineSpan, lineIdx) => {
     const chars = splitChars(lineSpan);
