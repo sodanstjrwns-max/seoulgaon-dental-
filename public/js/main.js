@@ -368,7 +368,6 @@ function initHeroText(){
   });
 
   // Sub text — gentle word fade-in
-  const sub = document.querySelector('.hero-sub');
   if(sub){
     const words = splitWords(sub);
     gsap.fromTo(words,
