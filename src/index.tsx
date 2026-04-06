@@ -108,11 +108,28 @@ async function initDB(db: D1Database) {
       role TEXT DEFAULT 'admin',
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
+    `CREATE TABLE IF NOT EXISTS doctors (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      title TEXT DEFAULT '',
+      role TEXT DEFAULT '',
+      photo_url TEXT,
+      photo_key TEXT,
+      specialties TEXT DEFAULT '',
+      education TEXT DEFAULT '',
+      career TEXT DEFAULT '',
+      introduction TEXT DEFAULT '',
+      sort_order INTEGER DEFAULT 0,
+      is_active INTEGER DEFAULT 1,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
     `CREATE TABLE IF NOT EXISTS blog_posts (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
       content TEXT NOT NULL,
       category TEXT DEFAULT '일반',
+      doctor_id INTEGER,
       thumbnail_url TEXT,
       is_published INTEGER DEFAULT 1,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -133,6 +150,7 @@ async function initDB(db: D1Database) {
       title TEXT NOT NULL,
       description TEXT DEFAULT '',
       category TEXT DEFAULT '임플란트',
+      doctor_id INTEGER,
       intraoral_before_url TEXT,
       intraoral_before_key TEXT,
       intraoral_after_url TEXT,
@@ -173,6 +191,9 @@ async function initDB(db: D1Database) {
     `CREATE INDEX IF NOT EXISTS idx_notices_published ON notices(is_published, is_pinned, created_at)`,
     `CREATE INDEX IF NOT EXISTS idx_notice_images_notice ON notice_images(notice_id)`,
     `CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`,
+    `CREATE INDEX IF NOT EXISTS idx_doctors_active ON doctors(is_active, sort_order)`,
+    `CREATE INDEX IF NOT EXISTS idx_blog_doctor ON blog_posts(doctor_id)`,
+    `CREATE INDEX IF NOT EXISTS idx_ba_doctor ON before_after(doctor_id)`,
   ]
   for (const sql of tables) {
     try { await db.prepare(sql).run() } catch (e: any) {
@@ -362,10 +383,133 @@ app.put('/api/auth/password', auth, async (c) => {
 })
 
 // ══════════════════════════════════════════════════
+//  DOCTORS API — PUBLIC
+// ══════════════════════════════════════════════════
+
+app.get('/api/doctors', async (c) => {
+  try {
+    const db = c.env.DB
+    const doctors = await db.prepare('SELECT id, name, title, role, photo_url, specialties, education, career, introduction, sort_order FROM doctors WHERE is_active = 1 ORDER BY sort_order, id').all()
+    return c.json({ doctors: doctors.results || [] })
+  } catch (e: any) {
+    return c.json({ error: '의료진 목록 조회 실패: ' + e.message }, 500)
+  }
+})
+
+app.get('/api/doctors/:id', async (c) => {
+  try {
+    const db = c.env.DB
+    const id = c.req.param('id')
+    const doctor = await db.prepare('SELECT * FROM doctors WHERE id = ? AND is_active = 1').bind(id).first()
+    if (!doctor) return c.json({ error: '의료진을 찾을 수 없습니다' }, 404)
+    // Get their blog posts & cases
+    const blogs = await db.prepare('SELECT id, title, category, thumbnail_url, created_at FROM blog_posts WHERE doctor_id = ? AND is_published = 1 ORDER BY created_at DESC LIMIT 10').bind(id).all()
+    const cases = await db.prepare('SELECT id, title, category, intraoral_before_url, intraoral_after_url, panorama_before_url, panorama_after_url, created_at FROM before_after WHERE doctor_id = ? AND is_published = 1 ORDER BY created_at DESC LIMIT 10').bind(id).all()
+    return c.json({ doctor, blogs: blogs.results || [], cases: cases.results || [] })
+  } catch (e: any) {
+    return c.json({ error: '의료진 조회 실패: ' + e.message }, 500)
+  }
+})
+
+// ══════════════════════════════════════════════════
+//  DOCTORS API — ADMIN
+// ══════════════════════════════════════════════════
+
+app.post('/api/admin/doctors', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const body = await c.req.json<{
+      name: string; title?: string; role?: string;
+      photo?: { url: string; key: string };
+      specialties?: string; education?: string; career?: string; introduction?: string; sort_order?: number;
+    }>()
+    if (!body.name?.trim()) return c.json({ error: '이름을 입력해주세요' }, 400)
+    const result = await db.prepare(
+      `INSERT INTO doctors (name, title, role, photo_url, photo_key, specialties, education, career, introduction, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(
+      body.name.trim(), body.title || '', body.role || '',
+      body.photo?.url || null, body.photo?.key || null,
+      body.specialties || '', body.education || '', body.career || '', body.introduction || '',
+      body.sort_order ?? 0
+    ).run()
+    return c.json({ id: result.meta.last_row_id, message: '의료진이 등록되었습니다' }, 201)
+  } catch (e: any) {
+    return c.json({ error: '의료진 등록 실패: ' + e.message }, 500)
+  }
+})
+
+app.put('/api/admin/doctors/:id', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const r2 = c.env.R2
+    const id = c.req.param('id')
+    const body = await c.req.json<{
+      name?: string; title?: string; role?: string;
+      photo?: { url: string; key: string } | null;
+      specialties?: string; education?: string; career?: string; introduction?: string;
+      sort_order?: number; is_active?: number;
+    }>()
+    const existing: any = await db.prepare('SELECT * FROM doctors WHERE id = ?').bind(id).first()
+    if (!existing) return c.json({ error: '의료진을 찾을 수 없습니다' }, 404)
+
+    const sets: string[] = ['updated_at = CURRENT_TIMESTAMP']
+    const vals: any[] = []
+    if (body.name !== undefined) { sets.push('name = ?'); vals.push(body.name.trim()) }
+    if (body.title !== undefined) { sets.push('title = ?'); vals.push(body.title) }
+    if (body.role !== undefined) { sets.push('role = ?'); vals.push(body.role) }
+    if (body.specialties !== undefined) { sets.push('specialties = ?'); vals.push(body.specialties) }
+    if (body.education !== undefined) { sets.push('education = ?'); vals.push(body.education) }
+    if (body.career !== undefined) { sets.push('career = ?'); vals.push(body.career) }
+    if (body.introduction !== undefined) { sets.push('introduction = ?'); vals.push(body.introduction) }
+    if (body.sort_order !== undefined) { sets.push('sort_order = ?'); vals.push(body.sort_order) }
+    if (body.is_active !== undefined) { sets.push('is_active = ?'); vals.push(body.is_active) }
+    if (body.photo !== undefined) {
+      if (existing.photo_key && (!body.photo || body.photo.key !== existing.photo_key)) {
+        await deleteR2Image(r2, existing.photo_key)
+      }
+      sets.push('photo_url = ?'); vals.push(body.photo?.url || null)
+      sets.push('photo_key = ?'); vals.push(body.photo?.key || null)
+    }
+    vals.push(id)
+    await db.prepare(`UPDATE doctors SET ${sets.join(', ')} WHERE id = ?`).bind(...vals).run()
+    return c.json({ message: '의료진 정보가 수정되었습니다' })
+  } catch (e: any) {
+    return c.json({ error: '의료진 수정 실패: ' + e.message }, 500)
+  }
+})
+
+app.get('/api/admin/doctors', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const doctors = await db.prepare('SELECT * FROM doctors ORDER BY sort_order, id').all()
+    return c.json({ doctors: doctors.results || [] })
+  } catch (e: any) {
+    return c.json({ error: '목록 조회 실패: ' + e.message }, 500)
+  }
+})
+
+app.delete('/api/admin/doctors/:id', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const r2 = c.env.R2
+    const id = c.req.param('id')
+    const existing: any = await db.prepare('SELECT photo_key FROM doctors WHERE id = ?').bind(id).first()
+    if (existing?.photo_key) await deleteR2Image(r2, existing.photo_key)
+    // Nullify references
+    await db.prepare('UPDATE blog_posts SET doctor_id = NULL WHERE doctor_id = ?').bind(id).run()
+    await db.prepare('UPDATE before_after SET doctor_id = NULL WHERE doctor_id = ?').bind(id).run()
+    await db.prepare('DELETE FROM doctors WHERE id = ?').bind(id).run()
+    return c.json({ message: '삭제되었습니다' })
+  } catch (e: any) {
+    return c.json({ error: '삭제 실패: ' + e.message }, 500)
+  }
+})
+
+// ══════════════════════════════════════════════════
 //  BLOG API — PUBLIC
 // ══════════════════════════════════════════════════
 
-// List published blogs (with pagination + search)
+// List published blogs (with pagination + search + doctor join)
 app.get('/api/blog', async (c) => {
   try {
     const db = c.env.DB
@@ -373,27 +517,29 @@ app.get('/api/blog', async (c) => {
     const limit = Math.min(100, Math.max(1, parseInt(c.req.query('limit') || '20')))
     const category = c.req.query('category')
     const search = c.req.query('search')
+    const doctorId = c.req.query('doctor_id')
     const offset = (page - 1) * limit
 
-    let whereParts = ['is_published = 1']
+    let whereParts = ['b.is_published = 1']
     const binds: any[] = []
 
-    if (category) {
-      whereParts.push('category = ?')
-      binds.push(category)
-    }
-    if (search) {
-      whereParts.push('(title LIKE ? OR content LIKE ?)')
-      binds.push(`%${search}%`, `%${search}%`)
-    }
+    if (category) { whereParts.push('b.category = ?'); binds.push(category) }
+    if (search) { whereParts.push('(b.title LIKE ? OR b.content LIKE ?)'); binds.push(`%${search}%`, `%${search}%`) }
+    if (doctorId) { whereParts.push('b.doctor_id = ?'); binds.push(doctorId) }
 
     const where = whereParts.join(' AND ')
-    const dataSql = `SELECT id, title, content, category, thumbnail_url, created_at FROM blog_posts WHERE ${where} ORDER BY created_at DESC LIMIT ? OFFSET ?`
-    const countSql = `SELECT COUNT(*) as total FROM blog_posts WHERE ${where}`
+    const dataSql = `SELECT b.id, b.title, b.content, b.category, b.doctor_id, b.thumbnail_url, b.created_at, d.name as doctor_name, d.photo_url as doctor_photo FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id WHERE ${where} ORDER BY b.created_at DESC LIMIT ? OFFSET ?`
+    const countSql = `SELECT COUNT(*) as total FROM blog_posts b WHERE ${where.replace(/d\./g, '').replace(/LEFT JOIN.*?WHERE/, 'WHERE')}`
+    // Simpler count
+    let countWhereParts = ['is_published = 1']
+    const countBinds: any[] = []
+    if (category) { countWhereParts.push('category = ?'); countBinds.push(category) }
+    if (search) { countWhereParts.push('(title LIKE ? OR content LIKE ?)'); countBinds.push(`%${search}%`, `%${search}%`) }
+    if (doctorId) { countWhereParts.push('doctor_id = ?'); countBinds.push(doctorId) }
+    const countSqlClean = `SELECT COUNT(*) as total FROM blog_posts WHERE ${countWhereParts.join(' AND ')}`
 
-    const dataBinds = [...binds, limit, offset]
-    const posts = await runQuery(db, dataSql, dataBinds)
-    const countResult: any = await runFirst(db, countSql, binds)
+    const posts = await runQuery(db, dataSql, [...binds, limit, offset])
+    const countResult: any = await runFirst(db, countSqlClean, countBinds)
     const total = countResult?.total || 0
 
     return c.json({
@@ -405,12 +551,12 @@ app.get('/api/blog', async (c) => {
   }
 })
 
-// Get single blog with images
+// Get single blog with images + doctor info
 app.get('/api/blog/:id', async (c) => {
   try {
     const db = c.env.DB
     const id = c.req.param('id')
-    const post = await db.prepare('SELECT * FROM blog_posts WHERE id = ? AND is_published = 1').bind(id).first()
+    const post: any = await db.prepare('SELECT b.*, d.name as doctor_name, d.photo_url as doctor_photo, d.title as doctor_title, d.role as doctor_role FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id WHERE b.id = ? AND b.is_published = 1').bind(id).first()
     if (!post) return c.json({ error: '게시글을 찾을 수 없습니다' }, 404)
 
     const images = await db.prepare('SELECT id, image_url, r2_key, filename, sort_order FROM blog_images WHERE post_id = ? ORDER BY sort_order').bind(id).all()
@@ -428,8 +574,8 @@ app.get('/api/blog/:id', async (c) => {
 app.post('/api/admin/blog', auth, async (c) => {
   try {
     const db = c.env.DB
-    const { title, content, category, images } = await c.req.json<{
-      title: string; content: string; category?: string;
+    const { title, content, category, doctor_id, images } = await c.req.json<{
+      title: string; content: string; category?: string; doctor_id?: number | null;
       images?: { url: string; key: string; name: string }[]
     }>()
     if (!title?.trim()) return c.json({ error: '제목을 입력해주세요' }, 400)
@@ -437,8 +583,8 @@ app.post('/api/admin/blog', auth, async (c) => {
 
     const thumbnailUrl = images?.[0]?.url || null
     const result = await db.prepare(
-      'INSERT INTO blog_posts (title, content, category, thumbnail_url) VALUES (?, ?, ?, ?)'
-    ).bind(title.trim(), content.trim(), category || '일반', thumbnailUrl).run()
+      'INSERT INTO blog_posts (title, content, category, doctor_id, thumbnail_url) VALUES (?, ?, ?, ?, ?)'
+    ).bind(title.trim(), content.trim(), category || '일반', doctor_id || null, thumbnailUrl).run()
     const postId = result.meta.last_row_id
 
     if (images?.length) {
@@ -460,8 +606,8 @@ app.put('/api/admin/blog/:id', auth, async (c) => {
     const db = c.env.DB
     const r2 = c.env.R2
     const id = c.req.param('id')
-    const { title, content, category, is_published, images } = await c.req.json<{
-      title?: string; content?: string; category?: string; is_published?: number;
+    const { title, content, category, doctor_id, is_published, images } = await c.req.json<{
+      title?: string; content?: string; category?: string; doctor_id?: number | null; is_published?: number;
       images?: { url: string; key: string; name: string }[]
     }>()
 
@@ -473,6 +619,7 @@ app.put('/api/admin/blog/:id', auth, async (c) => {
     if (title !== undefined) { sets.push('title = ?'); vals.push(title.trim()) }
     if (content !== undefined) { sets.push('content = ?'); vals.push(content.trim()) }
     if (category !== undefined) { sets.push('category = ?'); vals.push(category) }
+    if (doctor_id !== undefined) { sets.push('doctor_id = ?'); vals.push(doctor_id) }
     if (is_published !== undefined) { sets.push('is_published = ?'); vals.push(is_published) }
 
     if (images !== undefined) {
@@ -526,7 +673,7 @@ app.get('/api/admin/blog', auth, async (c) => {
     }
 
     const where = whereParts.length ? 'WHERE ' + whereParts.join(' AND ') : ''
-    const dataSql = `SELECT * FROM blog_posts ${where} ORDER BY created_at DESC LIMIT ? OFFSET ?`
+    const dataSql = `SELECT b.*, d.name as doctor_name FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id ${where.replace(/\b(title|content|created_at|is_published|category)\b/g, 'b.$1')} ORDER BY b.created_at DESC LIMIT ? OFFSET ?`
     const countSql = `SELECT COUNT(*) as total FROM blog_posts ${where}`
 
     const posts = await runQuery(db, dataSql, [...binds, limit, offset])
@@ -588,19 +735,26 @@ app.get('/api/before-after', async (c) => {
     const limit = Math.min(100, Math.max(1, parseInt(c.req.query('limit') || '20')))
     const offset = (page - 1) * limit
 
-    let whereParts = ['is_published = 1']
+    let whereParts = ['ba.is_published = 1']
     const binds: any[] = []
+    const doctorId = c.req.query('doctor_id')
 
-    if (category) { whereParts.push('category = ?'); binds.push(category) }
+    if (category) { whereParts.push('ba.category = ?'); binds.push(category) }
+    if (doctorId) { whereParts.push('ba.doctor_id = ?'); binds.push(doctorId) }
 
     const where = whereParts.join(' AND ')
-    const dataSql = `SELECT id, title, description, category,
-      intraoral_before_url, intraoral_after_url, panorama_before_url, panorama_after_url,
-      created_at FROM before_after WHERE ${where} ORDER BY created_at DESC LIMIT ? OFFSET ?`
-    const countSql = `SELECT COUNT(*) as total FROM before_after WHERE ${where}`
+    const dataSql = `SELECT ba.id, ba.title, ba.description, ba.category, ba.doctor_id,
+      ba.intraoral_before_url, ba.intraoral_after_url, ba.panorama_before_url, ba.panorama_after_url,
+      ba.created_at, d.name as doctor_name, d.photo_url as doctor_photo
+      FROM before_after ba LEFT JOIN doctors d ON ba.doctor_id = d.id WHERE ${where} ORDER BY ba.created_at DESC LIMIT ? OFFSET ?`
+    let countWhereParts2 = ['is_published = 1']
+    const countBinds2: any[] = []
+    if (category) { countWhereParts2.push('category = ?'); countBinds2.push(category) }
+    if (doctorId) { countWhereParts2.push('doctor_id = ?'); countBinds2.push(doctorId) }
+    const countSql = `SELECT COUNT(*) as total FROM before_after WHERE ${countWhereParts2.join(' AND ')}`
 
     const cases = await runQuery(db, dataSql, [...binds, limit, offset])
-    const countResult: any = await runFirst(db, countSql, binds)
+    const countResult: any = await runFirst(db, countSql, countBinds2)
     const total = countResult?.total || 0
 
     return c.json({
@@ -617,9 +771,9 @@ app.get('/api/before-after/:id', async (c) => {
     const db = c.env.DB
     const id = c.req.param('id')
     const item = await db.prepare(
-      `SELECT id, title, description, category,
-        intraoral_before_url, intraoral_after_url, panorama_before_url, panorama_after_url,
-        created_at FROM before_after WHERE id = ? AND is_published = 1`
+      `SELECT ba.*, d.name as doctor_name, d.photo_url as doctor_photo, d.title as doctor_title
+        FROM before_after ba LEFT JOIN doctors d ON ba.doctor_id = d.id
+        WHERE ba.id = ? AND ba.is_published = 1`
     ).bind(id).first()
     if (!item) return c.json({ error: '케이스를 찾을 수 없습니다' }, 404)
     return c.json({ case: item })
@@ -636,7 +790,7 @@ app.post('/api/admin/before-after', auth, async (c) => {
   try {
     const db = c.env.DB
     const body = await c.req.json<{
-      title: string; description?: string; category?: string;
+      title: string; description?: string; category?: string; doctor_id?: number | null;
       intraoral_before?: { url: string; key: string };
       intraoral_after?: { url: string; key: string };
       panorama_before?: { url: string; key: string };
@@ -645,12 +799,12 @@ app.post('/api/admin/before-after', auth, async (c) => {
     if (!body.title?.trim()) return c.json({ error: '제목을 입력해주세요' }, 400)
 
     const result = await db.prepare(`
-      INSERT INTO before_after (title, description, category,
+      INSERT INTO before_after (title, description, category, doctor_id,
         intraoral_before_url, intraoral_before_key, intraoral_after_url, intraoral_after_key,
         panorama_before_url, panorama_before_key, panorama_after_url, panorama_after_key)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).bind(
-      body.title.trim(), body.description || '', body.category || '임플란트',
+      body.title.trim(), body.description || '', body.category || '임플란트', body.doctor_id || null,
       body.intraoral_before?.url || null, body.intraoral_before?.key || null,
       body.intraoral_after?.url || null, body.intraoral_after?.key || null,
       body.panorama_before?.url || null, body.panorama_before?.key || null,
@@ -669,7 +823,7 @@ app.put('/api/admin/before-after/:id', auth, async (c) => {
     const r2 = c.env.R2
     const id = c.req.param('id')
     const body = await c.req.json<{
-      title?: string; description?: string; category?: string; is_published?: number;
+      title?: string; description?: string; category?: string; doctor_id?: number | null; is_published?: number;
       intraoral_before?: { url: string; key: string } | null;
       intraoral_after?: { url: string; key: string } | null;
       panorama_before?: { url: string; key: string } | null;
@@ -685,6 +839,7 @@ app.put('/api/admin/before-after/:id', auth, async (c) => {
     if (body.title !== undefined) { sets.push('title = ?'); vals.push(body.title.trim()) }
     if (body.description !== undefined) { sets.push('description = ?'); vals.push(body.description) }
     if (body.category !== undefined) { sets.push('category = ?'); vals.push(body.category) }
+    if (body.doctor_id !== undefined) { sets.push('doctor_id = ?'); vals.push(body.doctor_id) }
     if (body.is_published !== undefined) { sets.push('is_published = ?'); vals.push(body.is_published) }
 
     // Handle image slot updates — delete old R2 if changed
@@ -936,11 +1091,12 @@ app.delete('/api/admin/notices/:id', auth, async (c) => {
 app.get('/api/admin/stats', auth, async (c) => {
   try {
     const db = c.env.DB
-    const [blogs, cases, notices, users] = await Promise.all([
+    const [blogs, cases, notices, users, doctors] = await Promise.all([
       db.prepare('SELECT COUNT(*) as count FROM blog_posts').first() as Promise<any>,
       db.prepare('SELECT COUNT(*) as count FROM before_after').first() as Promise<any>,
       db.prepare('SELECT COUNT(*) as count FROM notices').first() as Promise<any>,
       db.prepare('SELECT COUNT(*) as count FROM users').first() as Promise<any>,
+      db.prepare('SELECT COUNT(*) as count FROM doctors WHERE is_active = 1').first() as Promise<any>,
     ])
 
     // Recent activity

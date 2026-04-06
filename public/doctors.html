@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>의료진 소개 | 서울가온치과</title>
+<meta name="description" content="서울가온치과 의료진 소개 - 임플란트, 심미치료, 신경치료 전문의">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<link href="pages.css" rel="stylesheet">
+<style>
+/* Doctor list page */
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:2.5rem;max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem) clamp(4rem,8vh,6rem)}
+.doc-card{background:var(--ink-4,#1A1814);border:1px solid var(--line,rgba(191,164,106,.1));border-radius:16px;overflow:hidden;transition:border-color .4s,box-shadow .4s,transform .3s;cursor:pointer}
+.doc-card:hover{border-color:var(--gold,#BFA46A);box-shadow:0 20px 60px rgba(0,0,0,.3),0 0 40px rgba(191,164,106,.05);transform:translateY(-4px)}
+.doc-card-img{position:relative;height:400px;overflow:hidden}
+.doc-card-img img{width:100%;height:100%;object-fit:cover;object-position:center 30%;transition:transform .6s}
+.doc-card:hover .doc-card-img img{transform:scale(1.05)}
+.doc-card-tag{position:absolute;top:1rem;left:1rem;background:var(--gold,#BFA46A);color:#0a0a0a;padding:.3rem .8rem;border-radius:100px;font-size:.7rem;font-weight:700;letter-spacing:.05em}
+.doc-card-tag.head{font-size:.85rem;padding:.45rem 1.2rem;background:linear-gradient(135deg,#BFA46A,#D4BA82);box-shadow:0 4px 20px rgba(191,164,106,.4);letter-spacing:.1em}
+.doc-card-no-photo{height:400px;background:linear-gradient(135deg,#111009,#1A1814);display:flex;align-items:center;justify-content:center}
+.doc-card-no-photo i{font-size:5rem;color:#333}
+.doc-card-info{padding:1.5rem 2rem 2rem}
+.doc-card-name{font-family:var(--ff-title,'Black Han Sans');font-size:1.5rem;margin-bottom:.15rem}
+.doc-card-name .head-label{color:var(--gold,#BFA46A);font-size:.85rem;font-weight:700;margin-left:.5rem;letter-spacing:.05em}
+.doc-card-role{font-family:var(--ff-en,'Bebas Neue');font-size:.8rem;letter-spacing:2px;color:var(--stone,#8C8578);margin-bottom:1rem}
+.doc-card-desc{font-size:.85rem;color:var(--stone-l,#AFA79D);line-height:1.6;margin-bottom:1rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.doc-card-chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.doc-card-chip{padding:.25rem .75rem;border:1px solid var(--line,rgba(191,164,106,.1));border-radius:100px;font-size:.72rem;color:var(--stone-l,#AFA79D);transition:border-color .3s,color .3s}
+.doc-card-chip.gold{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.doc-card-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--gold,#BFA46A);font-size:.82rem;font-weight:600;margin-top:1rem;transition:gap .3s}
+.doc-card-link:hover{gap:.8rem}
+
+/* ===== DOCTOR PROFILE (detail) ===== */
+.profile-wrap{display:none;max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem) clamp(4rem,8vh,6rem)}
+.profile-wrap.show{display:block}
+.profile-back{display:inline-flex;align-items:center;gap:.5rem;color:var(--gold,#BFA46A);font-size:.85rem;cursor:pointer;margin-bottom:2rem;transition:gap .3s}
+.profile-back:hover{gap:.8rem}
+.profile-top{display:grid;grid-template-columns:300px 1fr;gap:3rem;margin-bottom:3rem}
+.profile-photo{width:300px;height:380px;border-radius:16px;overflow:hidden;border:1px solid var(--line,rgba(191,164,106,.1))}
+.profile-photo img{width:100%;height:100%;object-fit:cover}
+.profile-photo-empty{width:300px;height:380px;border-radius:16px;background:var(--ink-4,#1A1814);border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.profile-photo-empty i{font-size:6rem;color:#333}
+.profile-header .p-name{font-family:var(--ff-title,'Black Han Sans');font-size:clamp(2rem,4vw,2.8rem);margin-bottom:.3rem}
+.profile-header .p-name .head-label{color:var(--gold,#BFA46A);font-size:1rem;font-weight:700;margin-left:.5rem}
+.profile-header .p-role{font-family:var(--ff-en,'Bebas Neue');font-size:1rem;letter-spacing:3px;color:var(--stone,#8C8578);margin-bottom:1.5rem}
+.profile-header .p-intro{font-size:.95rem;color:var(--stone-l,#AFA79D);line-height:1.8;margin-bottom:1.5rem}
+.p-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem}
+.p-chip{padding:.35rem 1rem;border:1px solid var(--line);border-radius:100px;font-size:.8rem;color:var(--stone-l);transition:all .3s}
+.p-chip.gold{border-color:var(--gold);color:var(--gold)}
+.p-section{margin-bottom:2.5rem}
+.p-section-title{font-family:var(--ff-en,'Bebas Neue');font-size:.8rem;letter-spacing:3px;color:var(--gold,#BFA46A);text-transform:uppercase;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line)}
+.p-list{list-style:none;padding:0}
+.p-list li{padding:.5rem 0;font-size:.88rem;color:var(--stone-l,#AFA79D);border-bottom:1px solid rgba(191,164,106,.05);display:flex;align-items:flex-start;gap:.5rem}
+.p-list li::before{content:'✦';color:var(--gold,#BFA46A);font-size:.6rem;margin-top:.35rem;flex-shrink:0}
+
+/* Related content */
+.p-content-section{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--line)}
+.p-content-title{font-family:var(--ff-title,'Black Han Sans');font-size:1.3rem;margin-bottom:1.5rem}
+.p-content-title span{color:var(--gold,#BFA46A)}
+.p-content-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.2rem}
+.p-content-card{background:var(--ink-4,#1A1814);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .3s,transform .3s}
+.p-content-card:hover{border-color:var(--gold);transform:translateY(-3px)}
+.p-content-card-img{height:160px;overflow:hidden}
+.p-content-card-img img{width:100%;height:100%;object-fit:cover}
+.p-content-card-body{padding:1.2rem}
+.p-content-card-tag{font-family:var(--ff-en);font-size:.65rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:.3rem}
+.p-content-card-body h4{font-family:var(--ff-title);font-size:.95rem;margin-bottom:.3rem}
+.p-content-card-body p{font-size:.78rem;color:var(--stone);line-height:1.5}
+.p-empty{text-align:center;padding:2rem;color:#555;font-size:.85rem}
+
+@media(max-width:768px){
+  .doc-grid{grid-template-columns:1fr;padding:0 1.25rem 3rem}
+  .doc-card-img,.doc-card-no-photo{height:300px}
+  .profile-top{grid-template-columns:1fr;gap:1.5rem}
+  .profile-photo,.profile-photo-empty{width:100%;max-width:300px;margin:0 auto}
+  .p-content-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"><div id="cur-ring"></div><div id="cur-dot"></div></div>
+
+<nav id="nav">
+  <a href="/" class="nav-logo">서울가온치과<span>.</span></a>
+  <div class="nav-links">
+    <a href="/#s-intro">Philosophy</a>
+    <div class="nav-link-drop"><a href="treatments.html">Treatments ▾</a><div class="drop"><a href="treatments.html#implant">임플란트</a><a href="treatments.html#aesthetics">앞니 심미치료</a><a href="treatments.html#endodontics">신경치료</a><a href="treatments.html#general">일반진료</a></div></div>
+    <div class="nav-link-drop"><a href="#">Community ▾</a><div class="drop"><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a></div></div>
+    <a href="doctors.html">Doctors</a>
+    <a href="/#s-contact">Contact</a>
+  </div>
+  <a href="tel:0507-1325-3377" class="nav-cta" data-magnet>예약 상담</a>
+  <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu"><a href="/">Home</a><a href="treatments.html">Treatments</a><a href="blog.html">Blog</a><a href="before-after.html">Before & After</a><a href="doctors.html">Doctors</a><a href="notice.html">Notice</a></div>
+
+<section class="page-hero">
+  <div class="page-hero-bg">DOCTORS</div>
+  <span class="page-hero-label">Medical Team</span>
+  <h1>의료진 소개</h1>
+  <p class="page-hero-sub">전문성과 따뜻함을 갖춘 서울가온치과의 의료진입니다</p>
+</section>
+
+<!-- Doctor list view -->
+<div class="doc-grid" id="doc-grid"></div>
+
+<!-- Doctor profile detail view -->
+<div class="profile-wrap" id="profile-wrap">
+  <div class="profile-back" onclick="showDoctorsList()">← 의료진 목록으로</div>
+  <div class="profile-top">
+    <div id="profile-photo-area"></div>
+    <div class="profile-header">
+      <h2 class="p-name" id="p-name"></h2>
+      <div class="p-role" id="p-role"></div>
+      <div class="p-chips" id="p-chips"></div>
+      <div class="p-intro" id="p-intro"></div>
+    </div>
+  </div>
+  <div id="p-education" class="p-section" style="display:none">
+    <div class="p-section-title">Education</div>
+    <ul class="p-list" id="p-edu-list"></ul>
+  </div>
+  <div id="p-career" class="p-section" style="display:none">
+    <div class="p-section-title">Career</div>
+    <ul class="p-list" id="p-career-list"></ul>
+  </div>
+  
+  <!-- Related blog posts -->
+  <div id="p-blogs-section" class="p-content-section" style="display:none">
+    <div class="p-content-title"><span id="p-blog-name"></span> 원장의 블로그</div>
+    <div class="p-content-grid" id="p-blogs"></div>
+  </div>
+  
+  <!-- Related BA cases -->
+  <div id="p-cases-section" class="p-content-section" style="display:none">
+    <div class="p-content-title"><span id="p-case-name"></span> 원장의 치료 사례</div>
+    <div class="p-content-grid" id="p-cases"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-logo">서울가온치과<span style="color:var(--gold)">.</span></div>
+  <p class="ft-slogan">치과 치료가 좋은 기억이 될 수 있도록.</p>
+  <p class="ft-copy">&copy; 2026 서울가온치과의원. All rights reserved.</p>
+</footer>
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<script src="pages.js"></script>
+<script>
+let allDoctors = [];
+
+// Check URL params for direct doctor access
+function getQueryParam(name){
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
+}
+
+// Show list view
+function showDoctorsList(){
+  document.getElementById('doc-grid').style.display='';
+  document.getElementById('profile-wrap').classList.remove('show');
+  window.history.pushState({},'','doctors.html');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Render doctor cards
+function renderDoctorCards(doctors){
+  const grid = document.getElementById('doc-grid');
+  if(!doctors.length){
+    grid.innerHTML='<div style="text-align:center;padding:4rem 2rem;color:#666;font-size:.9rem;grid-column:1/-1"><i class="fas fa-user-md" style="font-size:3rem;display:block;margin-bottom:1rem;color:#444"></i>등록된 의료진 정보가 없습니다.</div>';
+    return;
+  }
+  grid.innerHTML = doctors.map(doc => {
+    const specs = (doc.specialties||'').split(',').map(s=>s.trim()).filter(Boolean);
+    const firstSpec = specs[0] || '';
+    return `<div class="doc-card" onclick="openProfile(${doc.id})" data-tilt>
+      ${doc.photo_url 
+        ? `<div class="doc-card-img"><img src="${doc.photo_url}" alt="${doc.name}" loading="lazy"><span class="doc-card-tag${doc.title&&doc.title.includes('대표')?' head':''}">${doc.title||''}</span></div>`
+        : `<div class="doc-card-no-photo"><i class="fas fa-user-md"></i></div>`}
+      <div class="doc-card-info">
+        <h3 class="doc-card-name">${doc.name}${doc.title&&doc.title.includes('대표')?'<span class="head-label">'+doc.title+'</span>':''}</h3>
+        <div class="doc-card-role">${doc.role||''}</div>
+        ${doc.introduction?'<p class="doc-card-desc">'+doc.introduction+'</p>':''}
+        <div class="doc-card-chips">
+          ${specs.map((s,i) => `<span class="doc-card-chip${i===0?' gold':''}">${s}</span>`).join('')}
+        </div>
+        <div class="doc-card-link">프로필 보기 →</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Animate cards
+  document.querySelectorAll('.doc-card').forEach(c=>{
+    c.style.opacity='0';c.style.transform='translateY(30px)';
+  });
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){
+        setTimeout(()=>{
+          e.target.style.transition='opacity .6s ease, transform .6s ease';
+          e.target.style.opacity='1';
+          e.target.style.transform='translateY(0)';
+        },i*120);
+        observer.unobserve(e.target);
+      }
+    });
+  },{threshold:.05});
+  document.querySelectorAll('.doc-card').forEach(c=>observer.observe(c));
+}
+
+// Open doctor profile
+async function openProfile(id){
+  try{
+    const res = await fetch('/api/doctors/'+id);
+    const data = await res.json();
+    if(!data.doctor) return;
+    const doc = data.doctor;
+    
+    // Hide list, show profile
+    document.getElementById('doc-grid').style.display='none';
+    const wrap = document.getElementById('profile-wrap');
+    wrap.classList.add('show');
+    
+    // Update URL
+    window.history.pushState({doctorId:id},'',`doctors.html?id=${id}`);
+    
+    // Photo
+    const photoArea = document.getElementById('profile-photo-area');
+    if(doc.photo_url){
+      photoArea.innerHTML=`<div class="profile-photo"><img src="${doc.photo_url}" alt="${doc.name}"></div>`;
+    } else {
+      photoArea.innerHTML=`<div class="profile-photo-empty"><i class="fas fa-user-md"></i></div>`;
+    }
+    
+    // Name & role
+    document.getElementById('p-name').innerHTML = doc.name + (doc.title ? '<span class="head-label">'+doc.title+'</span>' : '');
+    document.getElementById('p-role').textContent = doc.role || '';
+    
+    // Specialties as chips
+    const specs = (doc.specialties||'').split(',').map(s=>s.trim()).filter(Boolean);
+    document.getElementById('p-chips').innerHTML = specs.map((s,i) => `<span class="p-chip${i===0?' gold':''}">${s}</span>`).join('');
+    
+    // Introduction
+    document.getElementById('p-intro').textContent = doc.introduction || '';
+    
+    // Education
+    const eduLines = (doc.education||'').split('\n').map(s=>s.trim()).filter(Boolean);
+    const eduSec = document.getElementById('p-education');
+    if(eduLines.length){
+      eduSec.style.display='block';
+      document.getElementById('p-edu-list').innerHTML = eduLines.map(l=>`<li>${l}</li>`).join('');
+    } else eduSec.style.display='none';
+    
+    // Career
+    const careerLines = (doc.career||'').split('\n').map(s=>s.trim()).filter(Boolean);
+    const careerSec = document.getElementById('p-career');
+    if(careerLines.length){
+      careerSec.style.display='block';
+      document.getElementById('p-career-list').innerHTML = careerLines.map(l=>`<li>${l}</li>`).join('');
+    } else careerSec.style.display='none';
+    
+    // Related blogs
+    const blogs = data.blogs || [];
+    const blogsSec = document.getElementById('p-blogs-section');
+    if(blogs.length){
+      blogsSec.style.display='block';
+      document.getElementById('p-blog-name').textContent = doc.name;
+      document.getElementById('p-blogs').innerHTML = blogs.map(b => {
+        const date = new Date(b.created_at).toLocaleDateString('ko-KR');
+        return `<a href="blog.html" class="p-content-card">
+          ${b.thumbnail_url ? '<div class="p-content-card-img"><img src="'+b.thumbnail_url+'" alt=""></div>' : ''}
+          <div class="p-content-card-body">
+            <div class="p-content-card-tag">${b.category||'Blog'}</div>
+            <h4>${b.title}</h4>
+            <p>${date}</p>
+          </div>
+        </a>`;
+      }).join('');
+    } else blogsSec.style.display='none';
+    
+    // Related cases
+    const cases = data.cases || [];
+    const casesSec = document.getElementById('p-cases-section');
+    if(cases.length){
+      casesSec.style.display='block';
+      document.getElementById('p-case-name').textContent = doc.name;
+      document.getElementById('p-cases').innerHTML = cases.map(c => {
+        const img = c.intraoral_before_url || c.intraoral_after_url || c.panorama_before_url || c.panorama_after_url;
+        return `<a href="before-after.html" class="p-content-card">
+          ${img ? '<div class="p-content-card-img"><img src="'+img+'" alt=""></div>' : ''}
+          <div class="p-content-card-body">
+            <div class="p-content-card-tag">${c.category||'Case'}</div>
+            <h4>${c.title}</h4>
+          </div>
+        </a>`;
+      }).join('');
+    } else casesSec.style.display='none';
+    
+    window.scrollTo({top:0,behavior:'smooth'});
+  } catch(e){ console.error(e); }
+}
+
+// Handle browser back
+window.addEventListener('popstate', function(e){
+  if(e.state && e.state.doctorId){
+    openProfile(e.state.doctorId);
+  } else {
+    showDoctorsList();
+  }
+});
+
+// Init
+(async function(){
+  try{
+    const res = await fetch('/api/doctors');
+    const data = await res.json();
+    allDoctors = data.doctors || [];
+  } catch(e){ allDoctors = []; }
+  
+  renderDoctorCards(allDoctors);
+  
+  // Check if we need to show a specific doctor
+  const id = getQueryParam('id');
+  if(id) openProfile(parseInt(id));
+})();
+</script>
+</body>
+</html>

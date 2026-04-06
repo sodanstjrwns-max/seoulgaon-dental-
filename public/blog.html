@@ -34,6 +34,13 @@
 /* Empty state */
 .empty-state{text-align:center;padding:4rem 2rem;color:#666;font-size:.9rem}
 .empty-state i{font-size:3rem;margin-bottom:1rem;display:block;color:#444}
+/* Doctor badge */
+.blog-card-doctor{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;color:var(--stone-l,#AFA79D);margin-top:.6rem;padding:.3rem .8rem;background:rgba(191,164,106,.08);border:1px solid rgba(191,164,106,.15);border-radius:100px;transition:all .3s;cursor:pointer}
+.blog-card-doctor:hover{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.blog-card-doctor img{width:20px;height:20px;border-radius:50%;object-fit:cover}
+.modal-doctor{display:inline-flex;align-items:center;gap:.5rem;margin-top:.8rem;padding:.4rem 1rem;background:rgba(191,164,106,.08);border:1px solid rgba(191,164,106,.15);border-radius:100px;font-size:.82rem;color:var(--stone-l,#AFA79D);cursor:pointer;transition:all .3s;text-decoration:none}
+.modal-doctor:hover{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.modal-doctor img{width:24px;height:24px;border-radius:50%;object-fit:cover}
 </style>
 </head>
 <body>
@@ -46,7 +53,7 @@
     <a href="/#s-intro">Philosophy</a>
     <div class="nav-link-drop"><a href="treatments.html">Treatments ▾</a><div class="drop"><a href="treatments.html#implant">임플란트</a><a href="treatments.html#aesthetics">앞니 심미치료</a><a href="treatments.html#endodontics">신경치료</a><a href="treatments.html#general">일반진료</a></div></div>
     <div class="nav-link-drop"><a href="#">Community ▾</a><div class="drop"><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a></div></div>
-    <a href="/#s-dr">Doctors</a>
+    <a href="doctors.html">Doctors</a>
     <a href="/#s-contact">Contact</a>
   </div>
   <a href="tel:0507-1325-3377" class="nav-cta" data-magnet>예약 상담</a>
@@ -86,6 +93,7 @@
       <div class="modal-tag" id="modal-tag"></div>
       <div class="modal-date" id="modal-date"></div>
       <h2 class="modal-title" id="modal-title"></h2>
+      <a class="modal-doctor" id="modal-doctor" href="#" style="display:none"></a>
     </div>
     <div class="modal-body">
       <div class="modal-content" id="modal-content"></div>
@@ -139,6 +147,7 @@ function makeDBCard(p){
   const date = new Date(p.created_at).toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\. /g,'.').replace(/\.$/,'');
   const excerpt = p.content.substring(0,100)+(p.content.length>100?'...':'');
   const thumb = p.thumbnail_url || null;
+  const drBadge = p.doctor_name ? `<div class="blog-card-doctor" onclick="event.stopPropagation();location.href='doctors.html?id=${p.doctor_id}'">${p.doctor_photo?'<img src="'+p.doctor_photo+'" alt="">':'<i class="fas fa-user-md"></i>'} ${p.doctor_name}</div>` : '';
   return `<div class="blog-card" data-category="${cat}" data-tilt onclick="openBlogDetail(${p.id})" style="cursor:pointer">
     ${thumb ? '<div style="width:100%;height:200px;overflow:hidden;border-radius:12px 12px 0 0"><img src="'+thumb+'" style="width:100%;height:100%;object-fit:cover" alt=""></div>' : ''}
     <div class="blog-card-body">
@@ -146,6 +155,7 @@ function makeDBCard(p){
       <div class="blog-card-date">${date}</div>
       <h3>${p.title}</h3>
       <p>${excerpt}</p>
+      ${drBadge}
       <span class="blog-card-link">자세히 보기 →</span>
     </div>
   </div>`;
@@ -230,6 +240,16 @@ async function openBlogDetail(id){
     document.getElementById('modal-date').textContent = new Date(data.post.created_at).toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
     document.getElementById('modal-title').textContent = data.post.title;
     document.getElementById('modal-content').textContent = data.post.content;
+    
+    // Doctor info in modal
+    const drArea = document.getElementById('modal-doctor');
+    if(drArea){
+      if(data.post.doctor_name){
+        drArea.style.display='inline-flex';
+        drArea.href='doctors.html?id='+data.post.doctor_id;
+        drArea.innerHTML=(data.post.doctor_photo?'<img src="'+data.post.doctor_photo+'" alt="">':'<i class="fas fa-user-md"></i>')+' '+data.post.doctor_name+(data.post.doctor_title?' · '+data.post.doctor_title:'');
+      } else drArea.style.display='none';
+    }
     
     const imgsEl = document.getElementById('modal-images');
     const images = data.images || [];
