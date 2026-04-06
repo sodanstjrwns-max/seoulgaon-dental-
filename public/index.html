@@ -44,8 +44,8 @@ ul{list-style:none}
 
 /* ===== LOADER — CINEMATIC ===== */
 #loader{position:fixed;inset:0;background:var(--ink);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;clip-path:polygon(0 0,100% 0,100% 100%,0 100%);overflow:hidden}
-.loader-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:.2;filter:grayscale(.2);z-index:0}
-#loader::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,transparent 20%,var(--ink) 75%)}
+.loader-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:.35;filter:grayscale(.15) brightness(1.1);z-index:0}
+#loader::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,transparent 40%,var(--ink) 85%);z-index:1}
 .loader-txt{font-family:var(--ff-title);font-size:clamp(3rem,8vw,6rem);color:var(--ivory);overflow:hidden;position:relative;z-index:2}
 .loader-txt span{display:inline-block;transform:translateY(110%)}
 .loader-line{width:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.5rem 0;position:relative;z-index:2}
