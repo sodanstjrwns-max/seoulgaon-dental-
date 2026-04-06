@@ -167,10 +167,7 @@ section{padding:clamp(4rem,10vh,8rem) clamp(1.5rem,4vw,6rem);position:relative;o
 .story-body{position:relative;z-index:1;text-align:left}
 .story-body p{font-size:clamp(.9rem,1.1vw,1.05rem);color:var(--stone-l);line-height:2;margin-bottom:1.5rem}
 .story-body p:last-child{margin-bottom:0}
-.story-quote{margin-top:2rem;padding:1.5rem 2rem;background:rgba(191,164,106,.06);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;font-family:var(--ff-title);font-size:clamp(1.1rem,1.8vw,1.4rem);color:var(--ivory);line-height:1.6;position:relative}
-.story-quote::before{content:'\201C';position:absolute;top:-.3rem;left:.6rem;font-size:2.5rem;color:var(--gold);opacity:.4;font-family:Georgia,serif}
-.story-quote em{color:var(--gold);font-style:normal}
-.story-signature{margin-top:2rem;display:flex;align-items:center;gap:1rem;padding-top:1.5rem;border-top:1px solid rgba(191,164,106,.15)}
+.story-signature{margin-top:2.5rem;display:flex;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid rgba(191,164,106,.15)}
 .story-signature-name{font-family:var(--ff-title);font-size:1.1rem;color:var(--ivory)}
 .story-signature-role{font-size:.75rem;color:var(--stone);letter-spacing:.05em}
 .story-bg-text{position:absolute;top:50%;right:-5%;font-family:var(--ff-title);font-size:clamp(8rem,20vw,16rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;white-space:nowrap;will-change:transform}
@@ -181,7 +178,32 @@ section{padding:clamp(4rem,10vh,8rem) clamp(1.5rem,4vw,6rem);position:relative;o
 .story-body{text-align:center}
 .story-divider{margin-left:auto;margin-right:auto}
 .story-signature{justify-content:center}
-.story-quote{text-align:left}
+}
+
+/* ===== CONSULT PHILOSOPHY (#s-consult) ===== */
+#s-consult{background:var(--ink-3);position:relative;overflow:hidden}
+.consult-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:80vh}
+.consult-img{position:relative;overflow:hidden}
+.consult-img img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 8s cubic-bezier(.25,0,.15,1)}
+.consult-img:hover img{transform:scale(1.04)}
+.consult-img-overlay{position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,var(--ink-3) 100%)}
+.consult-text{display:flex;flex-direction:column;justify-content:center;padding:clamp(3rem,6vw,6rem);position:relative;z-index:1}
+.consult-quote{font-family:var(--ff-title);font-size:clamp(2rem,4vw,3.2rem);line-height:1.4;margin-bottom:2rem;position:relative;padding-left:1.5rem}
+.consult-quote::before{content:'';position:absolute;left:0;top:.3rem;bottom:.3rem;width:3px;background:var(--gold)}
+.consult-quote em{color:var(--gold);font-style:normal}
+.consult-desc{font-size:clamp(.88rem,1.1vw,1rem);color:var(--stone-l);line-height:2;margin-bottom:1.5rem}
+.consult-features{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.5rem}
+.consult-feat{display:flex;align-items:center;gap:.5rem;padding:.5rem 1.2rem;border:1px solid var(--line);border-radius:100px;font-size:.8rem;color:var(--stone-l);transition:border-color .3s,color .3s}
+.consult-feat i{color:var(--gold);font-size:.7rem}
+.consult-feat:hover{border-color:var(--gold);color:var(--gold)}
+@media(max-width:900px){
+.consult-wrap{grid-template-columns:1fr;min-height:auto}
+.consult-img{aspect-ratio:16/9;max-height:50vh}
+.consult-img-overlay{background:linear-gradient(to bottom,transparent 60%,var(--ink-3) 100%)}
+.consult-text{padding:2.5rem 1.5rem;text-align:center}
+.consult-quote{padding-left:0;text-align:center}
+.consult-quote::before{display:none}
+.consult-features{justify-content:center}
 }
 
 /* ===== DOCTORS (#s-dr) ===== */
@@ -581,14 +603,39 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
         <p data-reveal>아이의 이름을 치과에 붙인 이유는 단 하나 — 내 가족에게 <em class="gold">부끄럽지 않은 치료</em>를 하겠다는 약속입니다.</p>
         <p data-reveal><em class="gold">80세까지</em>, 가족처럼 곁에서 함께하는 치과. 그것이 <em class="gold">서울가온치과</em>가 존재하는 이유입니다.</p>
       </div>
-      <div class="story-quote">
-        <em>설명</em>이 먼저입니다. 치료는 그 다음입니다.
-      </div>
       <div class="story-signature">
         <div>
           <p class="story-signature-name">현진호 <em class="gold">대표원장</em></p>
           <p class="story-signature-role">서울가온치과</p>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONSULT PHILOSOPHY ===== -->
+<section id="s-consult">
+  <div class="consult-wrap">
+    <div class="consult-img">
+      <img src="/images/real-consult-scene.jpg" alt="현진호 원장 상담 장면" loading="lazy">
+      <div class="consult-img-overlay"></div>
+    </div>
+    <div class="consult-text">
+      <span class="sec-label" data-scramble-label>Our Promise</span>
+      <h2 class="consult-quote">
+        <em>설명</em>이 먼저입니다.<br>치료는 그 다음입니다.
+      </h2>
+      <p class="consult-desc" data-reveal>
+        서울가온치과는 환자분이 본인의 상태를 정확히 이해하실 때까지 충분히 설명드립니다. 파노라마, 구강 사진, 3D CT를 함께 보며 현재 상태와 치료 계획을 투명하게 공유합니다.
+      </p>
+      <p class="consult-desc" data-reveal>
+        이해 없는 동의는 받지 않습니다. 납득이 되셔야 치료를 시작합니다.
+      </p>
+      <div class="consult-features" data-reveal>
+        <span class="consult-feat"><i class="fas fa-x-ray"></i> 파노라마·CT 직접 확인</span>
+        <span class="consult-feat"><i class="fas fa-comments"></i> 충분한 상담 시간</span>
+        <span class="consult-feat"><i class="fas fa-file-medical"></i> 서면 치료계획서</span>
+        <span class="consult-feat"><i class="fas fa-won-sign"></i> 투명한 비용 안내</span>
       </div>
     </div>
   </div>
