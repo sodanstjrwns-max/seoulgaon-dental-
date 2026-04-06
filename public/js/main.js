@@ -98,7 +98,7 @@ function initLoader(){
       }
     }
   })
-  .to(chars,{y:0,duration:.9,stagger:{each:.18,ease:'power2.out'},ease:'elastic.out(1.2,.5)'},0.4)
+  .to(chars,{y:0,duration:.9,stagger:{each:.1,ease:'power2.out'},ease:'elastic.out(1.2,.5)'},0.4)
   .to(line,{width:'120px',duration:1,ease:'power3.out'},0.8)
   .fromTo(sub,{opacity:0,filter:'blur(10px)',letterSpacing:'8px'},{opacity:1,filter:'blur(0px)',letterSpacing:'4px',duration:1},1.2);
 }
