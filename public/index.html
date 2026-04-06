@@ -150,15 +150,35 @@ section{padding:clamp(4rem,10vh,8rem) clamp(1.5rem,4vw,6rem);position:relative;o
 .tx-link:hover{gap:.8rem}
 
 /* ===== STORY (#s-story) ===== */
-#s-story{background:var(--ink);position:relative;overflow:hidden;text-align:center}
-.story-banner{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;margin-bottom:4rem;max-height:70vh;max-width:1200px;margin-left:auto;margin-right:auto;margin-bottom:4rem}
-.story-banner img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 6s}
-.story-banner:hover img{transform:scale(1.05)}
-.story-banner-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--ink) 0%,transparent 60%);display:flex;align-items:flex-end;padding:3rem}
-.story-banner-quote{font-family:var(--ff-title);font-size:clamp(2.8rem,8vw,6rem);line-height:1.2;text-shadow:0 2px 30px rgba(0,0,0,.7)}
-.story-body{max-width:800px;margin:0 auto;position:relative;z-index:1;text-align:left}
-.story-body p{font-size:clamp(.9rem,1.1vw,1rem);color:var(--stone-l);line-height:1.8;margin-bottom:1.5rem}
+#s-story{background:var(--ink);position:relative;overflow:hidden;padding:clamp(4rem,10vw,8rem) clamp(1.5rem,5vw,4rem)}
+.story-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:center}
+.story-photo-side{position:relative}
+.story-photo-frame{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:3/4;box-shadow:0 30px 80px rgba(0,0,0,.4),0 0 60px rgba(191,164,106,.08)}
+.story-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:center top;transition:transform 8s cubic-bezier(.25,0,.15,1)}
+.story-photo-frame:hover img{transform:scale(1.06)}
+.story-photo-glow{position:absolute;bottom:-20%;left:-20%;width:140%;height:60%;background:radial-gradient(ellipse,rgba(191,164,106,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
+.story-photo-label{position:absolute;bottom:1.5rem;left:1.5rem;z-index:2;font-family:var(--ff-en);font-size:.7rem;letter-spacing:3px;color:var(--gold);opacity:.7;text-transform:uppercase}
+.story-text-side{position:relative;z-index:1}
+.story-text-side .sec-label{display:inline-block;margin-bottom:1rem}
+.story-headline{font-family:var(--ff-title);font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.3;margin-bottom:2.5rem;position:relative}
+.story-headline .line{display:block;overflow:hidden}
+.story-headline .line span{display:inline-block}
+.story-divider{width:60px;height:2px;background:var(--gold);margin-bottom:2rem;opacity:.6}
+.story-body{position:relative;z-index:1;text-align:left}
+.story-body p{font-size:clamp(.9rem,1.1vw,1.05rem);color:var(--stone-l);line-height:2;margin-bottom:1.5rem}
+.story-body p:last-child{margin-bottom:0}
+.story-signature{margin-top:2.5rem;display:flex;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid rgba(191,164,106,.15)}
+.story-signature-name{font-family:var(--ff-title);font-size:1.1rem;color:var(--ivory)}
+.story-signature-role{font-size:.75rem;color:var(--stone);letter-spacing:.05em}
 .story-bg-text{position:absolute;top:50%;right:-5%;font-family:var(--ff-title);font-size:clamp(8rem,20vw,16rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;white-space:nowrap;will-change:transform}
+@media(max-width:900px){
+.story-inner{grid-template-columns:1fr;gap:3rem}
+.story-photo-frame{max-width:420px;margin:0 auto;aspect-ratio:3/4}
+.story-text-side{text-align:center}
+.story-body{text-align:center}
+.story-divider{margin-left:auto;margin-right:auto}
+.story-signature{justify-content:center}
+}
 
 /* ===== DOCTORS (#s-dr) ===== */
 #s-dr{background:var(--ink-3)}
@@ -535,21 +555,35 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
 <!-- ===== STORY ===== -->
 <section id="s-story">
   <div class="story-bg-text">가온</div>
-  <div class="story-banner">
-    <img src="/images/real-consult-scene.jpg" alt="상담 장면" loading="lazy">
-    <div class="story-banner-overlay">
-      <p class="story-banner-quote">"<em class="gold">설명</em>이 먼저입니다.<br>치료는 그 다음입니다."</p>
+  <div class="story-inner">
+    <!-- 사진 영역 -->
+    <div class="story-photo-side">
+      <div class="story-photo-glow"></div>
+      <div class="story-photo-frame" data-reveal>
+        <img src="/images/story-daughter.jpg" alt="아버지와 딸 가온" loading="lazy">
+        <span class="story-photo-label">with 가온</span>
+      </div>
     </div>
-  </div>
-  <span class="sec-label" data-scramble-label>Our Story</span>
-  <h2 class="sec-title">
-    <span class="line"><span><em class="gold">딸 아이</em>의 이름이</span></span>
-    <span class="line"><span>부끄럽지 않게.</span></span>
-  </h2>
-  <div class="story-body">
-    <p data-reveal>'<em class="gold">가온</em>'은 제 딸 아이의 이름입니다. 순우리말로 '<em class="gold">세상의 중심</em>'이라는 뜻을 가지고 있습니다.</p>
-    <p data-reveal>아이의 이름을 치과에 붙인 이유는 단 하나 — 내 가족에게 <em class="gold">부끄럽지 않은 치료</em>를 하겠다는 약속입니다.</p>
-    <p data-reveal><em class="gold">80세까지</em>, 가족처럼 곁에서 함께하는 치과. 그것이 <em class="gold">서울가온치과</em>가 존재하는 이유입니다.</p>
+    <!-- 텍스트 영역 -->
+    <div class="story-text-side">
+      <span class="sec-label" data-scramble-label>Our Story</span>
+      <h2 class="story-headline">
+        <span class="line"><span><em class="gold">딸 아이</em>의 이름이</span></span>
+        <span class="line"><span>부끄럽지 않게.</span></span>
+      </h2>
+      <div class="story-divider"></div>
+      <div class="story-body">
+        <p data-reveal>'<em class="gold">가온</em>'은 제 딸 아이의 이름입니다. 순우리말로 '<em class="gold">세상의 중심</em>'이라는 뜻을 가지고 있습니다.</p>
+        <p data-reveal>아이의 이름을 치과에 붙인 이유는 단 하나 — 내 가족에게 <em class="gold">부끄럽지 않은 치료</em>를 하겠다는 약속입니다.</p>
+        <p data-reveal><em class="gold">80세까지</em>, 가족처럼 곁에서 함께하는 치과. 그것이 <em class="gold">서울가온치과</em>가 존재하는 이유입니다.</p>
+      </div>
+      <div class="story-signature" data-reveal>
+        <div>
+          <p class="story-signature-name">현진호 <em class="gold">대표원장</em></p>
+          <p class="story-signature-role">서울가온치과</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
