@@ -61,15 +61,14 @@ function initLoader(){
   const loaderVideo = document.querySelector('.loader-video');
   let count = {val:0};
 
-  // Video autoplay + fade-in
+  // Video: load → play → fade-in
   if(loaderVideo){
-    const playVideo = function(){
+    loaderVideo.addEventListener('canplay', function(){
       loaderVideo.play().then(function(){
         loaderVideo.classList.add('playing');
       }).catch(function(){});
-    };
-    if(loaderVideo.readyState >= 2) playVideo();
-    else loaderVideo.addEventListener('canplay', playVideo, {once:true});
+    }, {once:true});
+    loaderVideo.load();
   }
 
   document.body.style.overflow='hidden';

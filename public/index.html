@@ -44,8 +44,10 @@ ul{list-style:none}
 
 /* ===== LOADER — CINEMATIC ===== */
 #loader{position:fixed;inset:0;background:var(--ink);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;clip-path:polygon(0 0,100% 0,100% 100%,0 100%);overflow:hidden}
-.loader-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;filter:brightness(1.15);z-index:1;transition:opacity 1s ease}
-.loader-video.playing{opacity:.45}
+.loader-video-wrap{position:absolute;inset:0;z-index:1}
+.loader-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;filter:brightness(1.15);transition:opacity 1.2s ease}
+.loader-video.playing{opacity:.5}
+.loader-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;opacity:.3;filter:grayscale(.2)}
 #loader::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(5,5,4,.3) 0%,rgba(5,5,4,.85) 80%);z-index:2}
 .loader-txt{font-family:var(--ff-title);font-size:clamp(3rem,8vw,6rem);color:var(--ivory);overflow:hidden;position:relative;z-index:3}
 .loader-txt span{display:inline-block;transform:translateY(110%)}
@@ -368,9 +370,13 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
 
 <!-- LOADER -->
 <div id="loader">
-  <video class="loader-video" autoplay muted loop playsinline>
-    <source src="/videos/loader-bg.mp4" type="video/mp4">
-  </video>
+  <div class="loader-video-wrap">
+    <img class="loader-fallback" src="/images/story-daughter.jpg" alt="">
+    <video class="loader-video" autoplay muted loop playsinline preload="auto">
+      <source src="/videos/loader-bg.webm" type="video/webm">
+      <source src="/videos/loader-bg.mp4" type="video/mp4">
+    </video>
+  </div>
   <div class="loader-txt"><span>가</span><span>온</span></div>
   <div class="loader-line"></div>
   <div class="loader-sub">Seoul Gaon Dental Clinic</div>
