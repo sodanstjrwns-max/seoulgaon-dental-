@@ -58,7 +58,19 @@ function initLoader(){
   const line = document.querySelector('.loader-line');
   const sub = document.querySelector('.loader-sub');
   const loader = document.getElementById('loader');
+  const loaderVideo = document.querySelector('.loader-video');
   let count = {val:0};
+
+  // Video autoplay + fade-in
+  if(loaderVideo){
+    const playVideo = function(){
+      loaderVideo.play().then(function(){
+        loaderVideo.classList.add('playing');
+      }).catch(function(){});
+    };
+    if(loaderVideo.readyState >= 2) playVideo();
+    else loaderVideo.addEventListener('canplay', playVideo, {once:true});
+  }
 
   document.body.style.overflow='hidden';
 
@@ -78,7 +90,7 @@ function initLoader(){
     }
   });
 
-  tl.to(count,{val:100,duration:2.8,ease:'power3.inOut',
+  tl.to(count,{val:100,duration:3.5,ease:'power3.inOut',
     onUpdate(){
       const v = Math.round(count.val);
       counter.textContent = String(v).padStart(3,'0');
