@@ -248,6 +248,17 @@
         <input type="hidden" id="notice-edit-id" value="">
         <div class="field"><label>제목</label><input type="text" id="notice-title" placeholder="공지사항 제목"></div>
         <div class="field"><label>내용</label><textarea id="notice-content" placeholder="공지 내용을 입력하세요" rows="8"></textarea></div>
+        <div class="field">
+          <label>사진 첨부 (선택, 여러 장 드래그 & 드롭)</label>
+          <div class="dropzone" id="notice-dropzone">
+            <input type="file" multiple accept="image/*" onchange="handleNoticeFiles(event)">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>클릭하거나 이미지를 드래그하세요 (최대 10MB/장)</p>
+          </div>
+          <div class="progress-bar" id="notice-progress"><div class="bar" id="notice-progress-bar"></div></div>
+          <div class="upload-counter" id="notice-upload-counter"></div>
+          <div class="preview-grid" id="notice-previews"></div>
+        </div>
         <div class="check-row"><input type="checkbox" id="notice-pin"><label for="notice-pin">상단 고정</label></div>
         <div style="display:flex;gap:.5rem">
           <button class="btn-gold" id="notice-submit-btn" onclick="submitNotice()" style="flex:1">공지 등록</button>
@@ -263,8 +274,10 @@
 // ══════ STATE ══════
 let token = localStorage.getItem('gaon_token') || '';
 let blogImages = []; // {url, key, name, status:'uploaded'|'uploading', localPreview}
+let noticeImages = []; // same structure as blogImages
 let baSlots = {'intra-before':null,'intra-after':null,'pano-before':null,'pano-after':null};
 let uploadTotal = 0, uploadDone = 0;
+let noticeUploadTotal = 0, noticeUploadDone = 0;
 
 function authHeaders(){ return {'Content-Type':'application/json','Authorization':'Bearer '+token} }
 function uploadHeaders(){ return {'Authorization':'Bearer '+token} }
@@ -606,11 +619,51 @@ function showNoticeTab(t){
   if(t==='list')loadNoticeList();
 }
 
+// Notice dropzone drag & drop
+const ndz=document.getElementById('notice-dropzone');
+if(ndz){
+  ndz.addEventListener('dragover',e=>{e.preventDefault();ndz.classList.add('drag-over')});
+  ndz.addEventListener('dragleave',()=>ndz.classList.remove('drag-over'));
+  ndz.addEventListener('drop',e=>{e.preventDefault();ndz.classList.remove('drag-over');Array.from(e.dataTransfer.files).forEach(f=>{if(f.type.startsWith('image/'))uploadNoticeImage(f)})});
+}
+function handleNoticeFiles(e){Array.from(e.target.files).forEach(f=>uploadNoticeImage(f));e.target.value=''}
+
+async function uploadNoticeImage(file){
+  const idx=noticeImages.length;
+  noticeUploadTotal++;
+  noticeImages.push({url:'',key:'',name:file.name,status:'uploading',localPreview:URL.createObjectURL(file)});
+  renderNoticePreviews();
+  updateProgress('notice-progress',noticeUploadDone,noticeUploadTotal);
+  try{
+    const d=await uploadFileToR2(file);
+    noticeImages[idx]={url:d.url,key:d.key,name:d.filename,status:'uploaded'};
+    noticeUploadDone++;
+  }catch(err){
+    noticeImages.splice(idx,1);
+    noticeUploadDone++;
+    toast('이미지 업로드 실패: '+(err.message||''),true);
+  }
+  updateProgress('notice-progress',noticeUploadDone,noticeUploadTotal);
+  document.getElementById('notice-upload-counter').textContent=`업로드: ${noticeImages.filter(i=>i.status==='uploaded').length}장`;
+  renderNoticePreviews();
+}
+
+function removeNoticeImage(i){noticeImages.splice(i,1);renderNoticePreviews();document.getElementById('notice-upload-counter').textContent=`업로드: ${noticeImages.filter(x=>x.status==='uploaded').length}장`}
+function renderNoticePreviews(){
+  document.getElementById('notice-previews').innerHTML=noticeImages.map((img,i)=>{
+    const src=img.status==='uploading'?img.localPreview:img.url;
+    return `<div class="preview-item"><img src="${src}">${img.status==='uploading'?'<div class="uploading"><i class="fas fa-spinner"></i></div>':'<div class="remove" onclick="removeNoticeImage('+i+')"><i class="fas fa-times"></i></div>'}</div>`;
+  }).join('');
+}
+
 function resetNoticeForm(){
   document.getElementById('notice-edit-id').value='';
   document.getElementById('notice-title').value='';
   document.getElementById('notice-content').value='';
   document.getElementById('notice-pin').checked=false;
+  noticeImages=[];noticeUploadTotal=0;noticeUploadDone=0;
+  renderNoticePreviews();
+  document.getElementById('notice-upload-counter').textContent='';
   document.getElementById('notice-form-title').textContent='새 공지사항 작성';
   document.getElementById('notice-submit-btn').textContent='공지 등록';
   document.getElementById('notice-cancel-btn').style.display='none';
@@ -620,14 +673,19 @@ function cancelNoticeEdit(){resetNoticeForm()}
 
 async function editNotice(id){
   try{
-    const d=await fetch('/api/admin/notices',{headers:authHeaders()}).then(r=>r.json());
-    const n=(d.notices||[]).find(x=>x.id===id);
-    if(!n)return toast('공지를 불러올 수 없습니다',true);
+    const d=await fetch('/api/admin/notices/'+id,{headers:authHeaders()}).then(r=>r.json());
+    if(!d.notice)return toast('공지를 불러올 수 없습니다',true);
+    const n=d.notice;
     showNoticeTab('write');
     document.getElementById('notice-edit-id').value=id;
     document.getElementById('notice-title').value=n.title;
     document.getElementById('notice-content').value=n.content;
     document.getElementById('notice-pin').checked=!!n.is_pinned;
+    // Load existing images
+    noticeImages=(d.images||[]).map(img=>({url:img.image_url,key:img.r2_key,name:img.filename||'',status:'uploaded'}));
+    noticeUploadTotal=noticeImages.length;noticeUploadDone=noticeImages.length;
+    renderNoticePreviews();
+    document.getElementById('notice-upload-counter').textContent=noticeImages.length?`업로드: ${noticeImages.length}장`:'';
     document.getElementById('notice-form-title').textContent='공지사항 수정';
     document.getElementById('notice-submit-btn').textContent='수정 완료';
     document.getElementById('notice-cancel-btn').style.display='block';
@@ -641,11 +699,13 @@ async function submitNotice(){
   const content=document.getElementById('notice-content').value.trim();
   const is_pinned=document.getElementById('notice-pin').checked;
   if(!title||!content)return toast('제목과 내용을 입력해주세요',true);
+  if(noticeImages.some(i=>i.status==='uploading'))return toast('이미지 업로드 중입니다. 잠시 기다려주세요.',true);
   const btn=document.getElementById('notice-submit-btn');btn.disabled=true;btn.textContent=editId?'수정 중...':'등록 중...';
   try{
+    const images=noticeImages.filter(i=>i.status==='uploaded').map(i=>({url:i.url,key:i.key,name:i.name}));
     const url=editId?'/api/admin/notices/'+editId:'/api/admin/notices';
     const method=editId?'PUT':'POST';
-    const r=await fetch(url,{method,headers:authHeaders(),body:JSON.stringify({title,content,is_pinned})});
+    const r=await fetch(url,{method,headers:authHeaders(),body:JSON.stringify({title,content,is_pinned,images})});
     const d=await r.json();if(!r.ok)return toast(d.error,true);
     toast(editId?'공지사항이 수정되었습니다!':'공지사항이 등록되었습니다!');
     resetNoticeForm();loadDashboard();loadNoticeList();

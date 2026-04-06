@@ -41,6 +41,11 @@
   <!-- DB notices injected here first, then static notices -->
 </div>
 
+<!-- Image lightbox -->
+<div id="lightbox" style="position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10000;display:none;align-items:center;justify-content:center;cursor:zoom-out" onclick="this.style.display='none'">
+  <img id="lightbox-img" src="" alt="" style="max-width:90vw;max-height:90vh;object-fit:contain;border-radius:4px">
+</div>
+
 <footer>
   <div class="ft-logo">서울가온치과<span style="color:var(--gold)">.</span></div>
   <p class="ft-slogan">치과 치료가 좋은 기억이 될 수 있도록.</p>
@@ -79,19 +84,33 @@ const staticNotices = [
     <a href="https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&ackey=2cykehjt" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline">네이버 예약 바로가기 →</a>`},
 ];
 
-function makeNoticeHTML(n, isDB){
+function makeNoticeHTML(n, isDB, images){
   const badgeClass = n.badgeClass ? ' '+n.badgeClass : '';
   const badge = n.badge ? `<span class="notice-badge${badgeClass}">${n.badge}</span>` : '';
   const openAttr = n.open ? ' data-open' : '';
   const content = isDB ? (n.content||'').replace(/\n/g,'<br>') : n.content;
   
+  // Build images gallery if any
+  let imagesHTML = '';
+  if (images && images.length > 0) {
+    imagesHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:1rem">' +
+      images.map(img => `<img src="${img.image_url}" alt="${img.filename||''}" style="width:100%;border-radius:8px;cursor:pointer;aspect-ratio:4/3;object-fit:cover;transition:transform .3s" onclick="openNoticeImg(this.src)" onmouseenter="this.style.transform='scale(1.03)'" onmouseleave="this.style.transform='scale(1)'">`).join('') +
+      '</div>';
+  }
+  
   return `<div class="notice-item">
     <button class="notice-q"${openAttr}>
-      <span>${badge}${n.title}</span>
+      <span>${badge}${n.title}${images&&images.length?' <i class="fas fa-image" style="color:var(--gold,#BFA46A);font-size:.7rem;margin-left:.3rem"></i>':''}</span>
       <span class="plus">+</span>
     </button>
-    <div class="notice-a"><div class="notice-a-inner">${content}</div></div>
+    <div class="notice-a"><div class="notice-a-inner">${content}${imagesHTML}</div></div>
   </div>`;
+}
+
+function openNoticeImg(src){
+  const lb=document.getElementById('lightbox');
+  document.getElementById('lightbox-img').src=src;
+  lb.style.display='flex';
 }
 
 // Load and render
@@ -105,18 +124,29 @@ function makeNoticeHTML(n, isDB){
     dbNotices = data.notices || [];
   } catch(e){}
 
+  // Fetch images for each DB notice
+  const noticesWithImages = await Promise.all(dbNotices.map(async n => {
+    let images = [];
+    try {
+      const res = await fetch('/api/notices/' + n.id);
+      const data = await res.json();
+      images = data.images || [];
+    } catch(e){}
+    return { notice: n, images };
+  }));
+
   let html = '';
   // DB notices first (pinned on top, recent first)
-  dbNotices.forEach(n => {
+  noticesWithImages.forEach(({ notice: n, images }) => {
     html += makeNoticeHTML({
       title: n.title,
       badge: n.is_pinned ? '공지' : '새 글',
       content: n.content,
       open: n.is_pinned ? true : false
-    }, true);
+    }, true, images);
   });
   // Then static notices
-  staticNotices.forEach(n => html += makeNoticeHTML(n, false));
+  staticNotices.forEach(n => html += makeNoticeHTML(n, false, []));
   list.innerHTML = html;
 
   // Init accordion for all notice items
@@ -148,6 +178,11 @@ function initAllAccordion(){
     a.style.maxHeight=a.scrollHeight+'px';
   });
 }
+
+// Esc key closes lightbox
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape') document.getElementById('lightbox').style.display='none';
+});
 </script>
 </body>
 </html>

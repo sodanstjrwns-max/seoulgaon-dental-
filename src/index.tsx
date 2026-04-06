@@ -154,12 +154,24 @@ async function initDB(db: D1Database) {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
+    // Notice images (multiple per notice, stored in R2)
+    `CREATE TABLE IF NOT EXISTS notice_images (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      notice_id INTEGER NOT NULL,
+      image_url TEXT NOT NULL,
+      r2_key TEXT NOT NULL,
+      filename TEXT DEFAULT '',
+      sort_order INTEGER DEFAULT 0,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (notice_id) REFERENCES notices(id) ON DELETE CASCADE
+    )`,
     `CREATE INDEX IF NOT EXISTS idx_blog_published ON blog_posts(is_published, created_at)`,
     `CREATE INDEX IF NOT EXISTS idx_blog_category ON blog_posts(category)`,
     `CREATE INDEX IF NOT EXISTS idx_blog_images_post ON blog_images(post_id)`,
     `CREATE INDEX IF NOT EXISTS idx_ba_published ON before_after(is_published, created_at)`,
     `CREATE INDEX IF NOT EXISTS idx_ba_category ON before_after(category)`,
     `CREATE INDEX IF NOT EXISTS idx_notices_published ON notices(is_published, is_pinned, created_at)`,
+    `CREATE INDEX IF NOT EXISTS idx_notice_images_notice ON notice_images(notice_id)`,
     `CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`,
   ]
   for (const sql of tables) {
@@ -779,7 +791,8 @@ app.get('/api/notices/:id', async (c) => {
     const id = c.req.param('id')
     const notice = await db.prepare('SELECT * FROM notices WHERE id = ? AND is_published = 1').bind(id).first()
     if (!notice) return c.json({ error: '공지사항을 찾을 수 없습니다' }, 404)
-    return c.json({ notice })
+    const images = await db.prepare('SELECT id, image_url, r2_key, filename, sort_order FROM notice_images WHERE notice_id = ? ORDER BY sort_order').bind(id).all()
+    return c.json({ notice, images: images.results || [] })
   } catch (e: any) {
     return c.json({ error: '공지 조회 실패: ' + e.message }, 500)
   }
@@ -792,13 +805,27 @@ app.get('/api/notices/:id', async (c) => {
 app.post('/api/admin/notices', auth, async (c) => {
   try {
     const db = c.env.DB
-    const { title, content, is_pinned } = await c.req.json<{ title: string; content: string; is_pinned?: boolean }>()
+    const { title, content, is_pinned, images } = await c.req.json<{
+      title: string; content: string; is_pinned?: boolean;
+      images?: { url: string; key: string; name: string }[]
+    }>()
     if (!title?.trim()) return c.json({ error: '제목을 입력해주세요' }, 400)
     if (!content?.trim()) return c.json({ error: '내용을 입력해주세요' }, 400)
 
     const result = await db.prepare('INSERT INTO notices (title, content, is_pinned) VALUES (?, ?, ?)')
       .bind(title.trim(), content.trim(), is_pinned ? 1 : 0).run()
-    return c.json({ id: result.meta.last_row_id, message: '공지사항이 등록되었습니다' }, 201)
+    const noticeId = result.meta.last_row_id
+
+    // Link images to notice
+    if (images?.length) {
+      for (let i = 0; i < images.length; i++) {
+        await db.prepare(
+          'INSERT INTO notice_images (notice_id, image_url, r2_key, filename, sort_order) VALUES (?, ?, ?, ?, ?)'
+        ).bind(noticeId, images[i].url, images[i].key, images[i].name || '', i).run()
+      }
+    }
+
+    return c.json({ id: noticeId, message: '공지사항이 등록되었습니다' }, 201)
   } catch (e: any) {
     return c.json({ error: '공지 등록 실패: ' + e.message }, 500)
   }
@@ -807,9 +834,11 @@ app.post('/api/admin/notices', auth, async (c) => {
 app.put('/api/admin/notices/:id', auth, async (c) => {
   try {
     const db = c.env.DB
+    const r2 = c.env.R2
     const id = c.req.param('id')
-    const { title, content, is_pinned, is_published } = await c.req.json<{
-      title?: string; content?: string; is_pinned?: boolean; is_published?: number
+    const { title, content, is_pinned, is_published, images } = await c.req.json<{
+      title?: string; content?: string; is_pinned?: boolean; is_published?: number;
+      images?: { url: string; key: string; name: string }[]
     }>()
 
     const existing = await db.prepare('SELECT id FROM notices WHERE id = ?').bind(id).first()
@@ -824,6 +853,25 @@ app.put('/api/admin/notices/:id', auth, async (c) => {
 
     vals.push(id)
     await db.prepare(`UPDATE notices SET ${sets.join(', ')} WHERE id = ?`).bind(...vals).run()
+
+    // Replace images if provided
+    if (images !== undefined) {
+      const oldImages = await db.prepare('SELECT r2_key FROM notice_images WHERE notice_id = ?').bind(id).all()
+      const newKeys = new Set(images.map(i => i.key))
+      for (const img of (oldImages.results || []) as any[]) {
+        if (img.r2_key && !newKeys.has(img.r2_key)) {
+          await deleteR2Image(r2, img.r2_key)
+        }
+      }
+      await db.prepare('DELETE FROM notice_images WHERE notice_id = ?').bind(id).run()
+
+      for (let i = 0; i < images.length; i++) {
+        await db.prepare(
+          'INSERT INTO notice_images (notice_id, image_url, r2_key, filename, sort_order) VALUES (?, ?, ?, ?, ?)'
+        ).bind(id, images[i].url, images[i].key, images[i].name || '', i).run()
+      }
+    }
+
     return c.json({ message: '공지사항이 수정되었습니다' })
   } catch (e: any) {
     return c.json({ error: '공지 수정 실패: ' + e.message }, 500)
@@ -849,10 +897,33 @@ app.get('/api/admin/notices', auth, async (c) => {
   }
 })
 
+// Get single notice (admin — with images)
+app.get('/api/admin/notices/:id', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const id = c.req.param('id')
+    const notice = await db.prepare('SELECT * FROM notices WHERE id = ?').bind(id).first()
+    if (!notice) return c.json({ error: '공지사항을 찾을 수 없습니다' }, 404)
+    const images = await db.prepare('SELECT id, image_url, r2_key, filename, sort_order FROM notice_images WHERE notice_id = ? ORDER BY sort_order').bind(id).all()
+    return c.json({ notice, images: images.results || [] })
+  } catch (e: any) {
+    return c.json({ error: '공지 조회 실패: ' + e.message }, 500)
+  }
+})
+
 app.delete('/api/admin/notices/:id', auth, async (c) => {
   try {
     const db = c.env.DB
-    await db.prepare('DELETE FROM notices WHERE id = ?').bind(c.req.param('id')).run()
+    const r2 = c.env.R2
+    const id = c.req.param('id')
+
+    // Delete R2 images first
+    const images = await db.prepare('SELECT r2_key FROM notice_images WHERE notice_id = ?').bind(id).all()
+    for (const img of (images.results || []) as any[]) {
+      await deleteR2Image(r2, img.r2_key)
+    }
+    await db.prepare('DELETE FROM notice_images WHERE notice_id = ?').bind(id).run()
+    await db.prepare('DELETE FROM notices WHERE id = ?').bind(id).run()
     return c.json({ message: '삭제되었습니다' })
   } catch (e: any) {
     return c.json({ error: '삭제 실패: ' + e.message }, 500)
