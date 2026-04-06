@@ -146,10 +146,10 @@ function makeDBCard(c, idx){
   const tag = catLabel[c.category]||c.category;
   // Collect only uploaded images
   const imgs = [];
-  if(c.intraoral_before) imgs.push({src:c.intraoral_before, label:'구내 Before'});
-  if(c.intraoral_after) imgs.push({src:c.intraoral_after, label:'구내 After'});
-  if(c.panorama_before) imgs.push({src:c.panorama_before, label:'파노라마 Before'});
-  if(c.panorama_after) imgs.push({src:c.panorama_after, label:'파노라마 After'});
+  if(c.intraoral_before_url) imgs.push({src:c.intraoral_before_url, label:'구내 Before'});
+  if(c.intraoral_after_url) imgs.push({src:c.intraoral_after_url, label:'구내 After'});
+  if(c.panorama_before_url) imgs.push({src:c.panorama_before_url, label:'파노라마 Before'});
+  if(c.panorama_after_url) imgs.push({src:c.panorama_after_url, label:'파노라마 After'});
 
   let imgHTML = '';
   if(imgs.length > 0){
@@ -249,32 +249,32 @@ function openBADetail(idx){
   let photosHTML = '';
   
   // Intraoral section (only if at least one exists)
-  if(c.intraoral_before || c.intraoral_after){
+  if(c.intraoral_before_url || c.intraoral_after_url){
     photosHTML += '<div class="photo-section"><div class="photo-section-title">구내사진</div>';
-    if(c.intraoral_before && c.intraoral_after){
+    if(c.intraoral_before_url && c.intraoral_after_url){
       photosHTML += `<div class="photo-compare">
-        <div class="photo-item" onclick="openLightbox('${c.intraoral_before}')"><img src="${c.intraoral_before}" alt="구내 Before"><div class="photo-label">BEFORE</div></div>
-        <div class="photo-item" onclick="openLightbox('${c.intraoral_after}')"><img src="${c.intraoral_after}" alt="구내 After"><div class="photo-label after">AFTER</div></div>
+        <div class="photo-item" onclick="openLightbox('${c.intraoral_before_url}')"><img src="${c.intraoral_before_url}" alt="구내 Before"><div class="photo-label">BEFORE</div></div>
+        <div class="photo-item" onclick="openLightbox('${c.intraoral_after_url}')"><img src="${c.intraoral_after_url}" alt="구내 After"><div class="photo-label after">AFTER</div></div>
       </div>`;
     } else {
-      const img = c.intraoral_before || c.intraoral_after;
-      const label = c.intraoral_before ? 'BEFORE' : 'AFTER';
+      const img = c.intraoral_before_url || c.intraoral_after_url;
+      const label = c.intraoral_before_url ? 'BEFORE' : 'AFTER';
       photosHTML += `<div class="photo-item" style="max-width:400px" onclick="openLightbox('${img}')"><img src="${img}" alt="구내"><div class="photo-label">${label}</div></div>`;
     }
     photosHTML += '</div>';
   }
   
   // Panorama section (only if at least one exists)
-  if(c.panorama_before || c.panorama_after){
+  if(c.panorama_before_url || c.panorama_after_url){
     photosHTML += '<div class="photo-section"><div class="photo-section-title">파노라마</div>';
-    if(c.panorama_before && c.panorama_after){
+    if(c.panorama_before_url && c.panorama_after_url){
       photosHTML += `<div class="photo-compare">
-        <div class="photo-item" onclick="openLightbox('${c.panorama_before}')"><img src="${c.panorama_before}" alt="파노라마 Before"><div class="photo-label">BEFORE</div></div>
-        <div class="photo-item" onclick="openLightbox('${c.panorama_after}')"><img src="${c.panorama_after}" alt="파노라마 After"><div class="photo-label after">AFTER</div></div>
+        <div class="photo-item" onclick="openLightbox('${c.panorama_before_url}')"><img src="${c.panorama_before_url}" alt="파노라마 Before"><div class="photo-label">BEFORE</div></div>
+        <div class="photo-item" onclick="openLightbox('${c.panorama_after_url}')"><img src="${c.panorama_after_url}" alt="파노라마 After"><div class="photo-label after">AFTER</div></div>
       </div>`;
     } else {
-      const img = c.panorama_before || c.panorama_after;
-      const label = c.panorama_before ? 'BEFORE' : 'AFTER';
+      const img = c.panorama_before_url || c.panorama_after_url;
+      const label = c.panorama_before_url ? 'BEFORE' : 'AFTER';
       photosHTML += `<div class="photo-item" style="max-width:400px" onclick="openLightbox('${img}')"><img src="${img}" alt="파노라마"><div class="photo-label">${label}</div></div>`;
     }
     photosHTML += '</div>';

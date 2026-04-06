@@ -1,16 +1,24 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "webapp",
+  "name": "gaon-dental",
   "compatibility_date": "2026-04-04",
   "pages_build_output_dir": "./dist",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_flags": ["nodejs_compat"],
+
+  // D1 Database — 관계형 데이터 (유저, 블로그, 비포애프터, 공지)
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "gaon-dental-db",
       "database_id": "local-dev-db"
+    }
+  ],
+
+  // R2 Storage — 이미지 파일 저장소
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "gaon-dental-images"
     }
   ]
 }
