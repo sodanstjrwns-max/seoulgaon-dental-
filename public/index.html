@@ -167,7 +167,10 @@ section{padding:clamp(4rem,10vh,8rem) clamp(1.5rem,4vw,6rem);position:relative;o
 .story-body{position:relative;z-index:1;text-align:left}
 .story-body p{font-size:clamp(.9rem,1.1vw,1.05rem);color:var(--stone-l);line-height:2;margin-bottom:1.5rem}
 .story-body p:last-child{margin-bottom:0}
-.story-signature{margin-top:2.5rem;display:flex;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid rgba(191,164,106,.15)}
+.story-quote{margin-top:2rem;padding:1.5rem 2rem;background:rgba(191,164,106,.06);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;font-family:var(--ff-title);font-size:clamp(1.1rem,1.8vw,1.4rem);color:var(--ivory);line-height:1.6;position:relative}
+.story-quote::before{content:'\201C';position:absolute;top:-.3rem;left:.6rem;font-size:2.5rem;color:var(--gold);opacity:.4;font-family:Georgia,serif}
+.story-quote em{color:var(--gold);font-style:normal}
+.story-signature{margin-top:2rem;display:flex;align-items:center;gap:1rem;padding-top:1.5rem;border-top:1px solid rgba(191,164,106,.15)}
 .story-signature-name{font-family:var(--ff-title);font-size:1.1rem;color:var(--ivory)}
 .story-signature-role{font-size:.75rem;color:var(--stone);letter-spacing:.05em}
 .story-bg-text{position:absolute;top:50%;right:-5%;font-family:var(--ff-title);font-size:clamp(8rem,20vw,16rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;white-space:nowrap;will-change:transform}
@@ -178,6 +181,7 @@ section{padding:clamp(4rem,10vh,8rem) clamp(1.5rem,4vw,6rem);position:relative;o
 .story-body{text-align:center}
 .story-divider{margin-left:auto;margin-right:auto}
 .story-signature{justify-content:center}
+.story-quote{text-align:left}
 }
 
 /* ===== DOCTORS (#s-dr) ===== */
@@ -576,6 +580,9 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
         <p data-reveal>'<em class="gold">가온</em>'은 제 딸 아이의 이름입니다. 순우리말로 '<em class="gold">세상의 중심</em>'이라는 뜻을 가지고 있습니다.</p>
         <p data-reveal>아이의 이름을 치과에 붙인 이유는 단 하나 — 내 가족에게 <em class="gold">부끄럽지 않은 치료</em>를 하겠다는 약속입니다.</p>
         <p data-reveal><em class="gold">80세까지</em>, 가족처럼 곁에서 함께하는 치과. 그것이 <em class="gold">서울가온치과</em>가 존재하는 이유입니다.</p>
+      </div>
+      <div class="story-quote" data-reveal>
+        <em>설명</em>이 먼저입니다. 치료는 그 다음입니다.
       </div>
       <div class="story-signature" data-reveal>
         <div>
