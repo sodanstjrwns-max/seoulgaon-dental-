@@ -172,7 +172,6 @@
     <div class="side-sub">Admin Dashboard v3</div>
     <nav class="side-nav">
       <a href="#" class="active" onclick="showPage('home',this)"><i class="fas fa-home"></i>대시보드</a>
-      <a href="#" onclick="showPage('doctors',this)"><i class="fas fa-user-md"></i>의료진 관리</a>
       <a href="#" onclick="showPage('blog',this)"><i class="fas fa-pen-fancy"></i>블로그</a>
       <a href="#" onclick="showPage('ba',this)"><i class="fas fa-images"></i>비포&애프터</a>
       <a href="#" onclick="showPage('notice',this)"><i class="fas fa-bullhorn"></i>공지사항</a>
@@ -200,7 +199,6 @@
         <div class="stat-card"><div class="num" id="cnt-blog">0</div><div class="label">블로그 게시글</div><div class="sub" id="cnt-blog-pub">공개 0건</div></div>
         <div class="stat-card"><div class="num" id="cnt-ba">0</div><div class="label">비포&애프터</div><div class="sub" id="cnt-ba-pub">공개 0건</div></div>
         <div class="stat-card"><div class="num" id="cnt-notice">0</div><div class="label">공지사항</div><div class="sub" id="cnt-notice-pub">공개 0건</div></div>
-        <div class="stat-card"><div class="num" id="cnt-doctor">0</div><div class="label">의료진</div><div class="sub" id="cnt-doctor-active">활성 0명</div></div>
       </div>
 
       <!-- Quick links to frontend -->
@@ -211,7 +209,7 @@
           <a href="/blog.html" target="_blank" class="quick-link"><i class="fas fa-pen-fancy"></i> 블로그</a>
           <a href="/before-after.html" target="_blank" class="quick-link"><i class="fas fa-images"></i> 비포&애프터</a>
           <a href="/notice.html" target="_blank" class="quick-link"><i class="fas fa-bullhorn"></i> 공지사항</a>
-          <a href="/doctors.html" target="_blank" class="quick-link"><i class="fas fa-user-md"></i> 의료진</a>
+          <a href="/doctors.html" target="_blank" class="quick-link"><i class="fas fa-user-md"></i> 의료진 소개</a>
         </div>
       </div>
 
@@ -298,46 +296,6 @@
       <div id="ba-list" style="display:none"><div class="item-list" id="ba-items">로딩 중...</div></div>
     </div>
 
-    <!-- DOCTORS -->
-    <div id="page-doctors" style="display:none">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">
-        <h1 class="page-title" style="margin-bottom:0">의료진 관리</h1>
-        <a href="/doctors.html" target="_blank" class="btn-sm preview"><i class="fas fa-external-link-alt"></i> 사이트에서 보기</a>
-      </div>
-      <p class="page-desc">원장님 정보를 관리합니다. 블로그·비포애프터 작성 시 원장을 선택할 수 있습니다.</p>
-      <div class="tab-bar">
-        <button class="tab-btn active" onclick="showDoctorTab('write')">원장 등록/수정</button>
-        <button class="tab-btn" onclick="showDoctorTab('list')">원장 목록</button>
-      </div>
-      <div id="doctor-write" class="panel">
-        <div class="panel-title"><i class="fas fa-user-md"></i><span id="doctor-form-title">새 원장 등록</span></div>
-        <input type="hidden" id="doctor-edit-id" value="">
-        <div class="field"><label>이름 *</label><input type="text" id="doctor-name" placeholder="예: 현진호"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-          <div class="field"><label>직함</label><input type="text" id="doctor-title" placeholder="예: 대표원장"></div>
-          <div class="field"><label>영문 직책</label><input type="text" id="doctor-role" placeholder="예: Representative Director"></div>
-        </div>
-        <div class="field"><label>전문 분야 (쉼표로 구분)</label><input type="text" id="doctor-specialties" placeholder="예: 임플란트, 앞니심미, 가이드수술, 뼈이식"></div>
-        <div class="field"><label>학력</label><textarea id="doctor-education" placeholder="예: 서울대학교 치의학과 졸업&#10;서울대학교 치의학대학원 석사" rows="3"></textarea></div>
-        <div class="field"><label>경력</label><textarea id="doctor-career" placeholder="예: 서울가온치과 대표원장&#10;前 서울대학교 치과병원 수련" rows="3"></textarea></div>
-        <div class="field"><label>소개글</label><textarea id="doctor-introduction" placeholder="원장님 소개를 자유롭게 작성해주세요" rows="4"></textarea></div>
-        <div class="field"><label>정렬 순서 (작을수록 위에 표시)</label><input type="number" id="doctor-sort" value="0" min="0"></div>
-        <div class="field">
-          <label>프로필 사진</label>
-          <div class="ba-slot" id="slot-doctor-photo" style="max-width:200px">
-            <input type="file" accept="image/*" onchange="handleDoctorPhoto(event)">
-            <i class="fas fa-user-circle" style="font-size:2rem;color:#555;margin-bottom:.3rem"></i>
-            <p style="font-size:.8rem;color:#666">프로필 사진 업로드</p>
-          </div>
-        </div>
-        <div style="display:flex;gap:.5rem">
-          <button class="btn-gold" id="doctor-submit-btn" onclick="submitDoctor()" style="flex:1">원장 등록</button>
-          <button class="btn-gold" id="doctor-cancel-btn" onclick="cancelDoctorEdit()" style="flex:0 0 auto;background:#333;color:#ccc;display:none">취소</button>
-        </div>
-      </div>
-      <div id="doctor-list" style="display:none"><div class="item-list" id="doctor-items">로딩 중...</div></div>
-    </div>
-
     <!-- NOTICES -->
     <div id="page-notice" style="display:none">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">
@@ -384,7 +342,6 @@ let noticeImages = [];
 let baSlots = {'intra-before':null,'intra-after':null,'pano-before':null,'pano-after':null};
 let uploadTotal = 0, uploadDone = 0;
 let noticeUploadTotal = 0, noticeUploadDone = 0;
-let doctorPhoto = null;
 let doctorsList = [];
 
 function authHeaders(){ return {'Content-Type':'application/json','Authorization':'Bearer '+token} }
@@ -445,13 +402,12 @@ async function checkAuth(){
 
 // ══════ NAV ══════
 function showPage(p,el){
-  ['home','doctors','blog','ba','notice'].forEach(x=>document.getElementById('page-'+x).style.display=x===p?'block':'none');
+  ['home','blog','ba','notice'].forEach(x=>document.getElementById('page-'+x).style.display=x===p?'block':'none');
   document.querySelectorAll('.side-nav a').forEach(a=>a.classList.remove('active'));
   if(el)el.classList.add('active');
   // Close mobile sidebar
   document.querySelector('.sidebar').classList.remove('open');
   if(p==='home'){loadDashboard();loadSyncCheck()}
-  if(p==='doctors')loadDoctorList();
   if(p==='blog'){loadBlogList();loadDoctorsForSelect()}
   if(p==='ba'){loadBAList();loadDoctorsForSelect()}
   if(p==='notice')loadNoticeList();
@@ -467,7 +423,6 @@ async function loadSyncCheck(){
       <div class="sync-row"><span class="sync-label">블로그</span><span class="sync-value ${s.blog.published===s.blog.total?'sync-ok':'sync-warn'}"><i class="fas fa-${s.blog.published===s.blog.total?'check-circle':'exclamation-triangle'}"></i> 공개 ${s.blog.published}건 / 전체 ${s.blog.total}건</span></div>
       <div class="sync-row"><span class="sync-label">비포&애프터</span><span class="sync-value ${s.before_after.published===s.before_after.total?'sync-ok':'sync-warn'}"><i class="fas fa-${s.before_after.published===s.before_after.total?'check-circle':'exclamation-triangle'}"></i> 공개 ${s.before_after.published}건 / 전체 ${s.before_after.total}건</span></div>
       <div class="sync-row"><span class="sync-label">공지사항</span><span class="sync-value ${s.notices.published===s.notices.total?'sync-ok':'sync-warn'}"><i class="fas fa-${s.notices.published===s.notices.total?'check-circle':'exclamation-triangle'}"></i> 공개 ${s.notices.published}건 / 전체 ${s.notices.total}건</span></div>
-      <div class="sync-row"><span class="sync-label">의료진</span><span class="sync-value ${s.doctors.active===s.doctors.total?'sync-ok':'sync-warn'}"><i class="fas fa-${s.doctors.active===s.doctors.total?'check-circle':'exclamation-triangle'}"></i> 활성 ${s.doctors.active}명 / 전체 ${s.doctors.total}명</span></div>
       <div style="margin-top:.8rem;font-size:.7rem;color:#555">마지막 확인: ${new Date(d.timestamp).toLocaleString('ko-KR')}</div>
     `;
     document.getElementById('sync-body').innerHTML=html;
@@ -475,7 +430,6 @@ async function loadSyncCheck(){
     document.getElementById('cnt-blog-pub').textContent='공개 '+s.blog.published+'건';
     document.getElementById('cnt-ba-pub').textContent='공개 '+s.before_after.published+'건';
     document.getElementById('cnt-notice-pub').textContent='공개 '+s.notices.published+'건';
-    document.getElementById('cnt-doctor-active').textContent='활성 '+s.doctors.active+'명';
   }catch(err){
     document.getElementById('sync-body').innerHTML='<span style="color:#ff6b6b">동기화 확인 실패</span>';
   }
@@ -489,7 +443,6 @@ async function loadDashboard(){
     document.getElementById('cnt-blog').textContent=d.blogs||0;
     document.getElementById('cnt-ba').textContent=d.cases||0;
     document.getElementById('cnt-notice').textContent=d.notices||0;
-    document.getElementById('cnt-doctor').textContent=d.doctors||0;
     // Recent activity
     let html='';
     const all=[];
@@ -642,7 +595,7 @@ async function loadBlogList(){
     el.innerHTML=d.posts.map(p=>`<div class="item-row">
       <div style="flex:1;min-width:0">
         <div class="item-title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.title)}</div>
-        <div class="item-meta">${esc(p.category)} ${p.doctor_name?'· '+esc(p.doctor_name)+' 원장':''} · ${fmtDate(p.created_at)} <span class="badge ${p.is_published?'published':'draft'}">${p.is_published?'공개':'비공개'}</span></div>
+        <div class="item-meta">${esc(p.category)} ${p.doctor_name?'· '+esc(p.doctor_name)+' 원장':''} · ${fmtDate(p.created_at)} · <i class="fas fa-eye" style="font-size:.65rem;opacity:.6"></i> ${p.view_count||0} <span class="badge ${p.is_published?'published':'draft'}">${p.is_published?'공개':'비공개'}</span></div>
       </div>
       <div class="item-actions">
         <a href="/blog-post.html?id=${p.id}" target="_blank" class="btn-sm preview" title="사이트에서 보기"><i class="fas fa-eye"></i></a>
@@ -772,7 +725,7 @@ async function loadBAList(){
       return `<div class="item-row">
         <div style="flex:1;min-width:0">
           <div class="item-title">${esc(c.title)}</div>
-          <div class="item-meta">${esc(c.category)} · 사진 ${imgs}장 · ${fmtDate(c.created_at)} <span class="badge ${c.is_published?'published':'draft'}">${c.is_published?'공개':'비공개'}</span></div>
+          <div class="item-meta">${esc(c.category)} · 사진 ${imgs}장 · ${fmtDate(c.created_at)} · <i class="fas fa-eye" style="font-size:.65rem;opacity:.6"></i> ${c.view_count||0} <span class="badge ${c.is_published?'published':'draft'}">${c.is_published?'공개':'비공개'}</span></div>
         </div>
         <div class="item-actions">
           <button class="btn-sm edit" onclick="editBA(${c.id})" title="수정"><i class="fas fa-pen"></i></button>
@@ -902,7 +855,7 @@ async function loadNoticeList(){
     el.innerHTML=d.notices.map(n=>`<div class="item-row">
       <div style="flex:1;min-width:0">
         <div class="item-title">${n.is_pinned?'<i class="fas fa-thumbtack" style="color:var(--gold);margin-right:.3rem;font-size:.75rem"></i>':''}${esc(n.title)}</div>
-        <div class="item-meta">${fmtDate(n.created_at)} <span class="badge ${n.is_published?'published':'draft'}">${n.is_published?'공개':'비공개'}</span> ${n.is_pinned?'<span class="badge pinned">고정</span>':''}</div>
+        <div class="item-meta">${fmtDate(n.created_at)} · <i class="fas fa-eye" style="font-size:.65rem;opacity:.6"></i> ${n.view_count||0} <span class="badge ${n.is_published?'published':'draft'}">${n.is_published?'공개':'비공개'}</span> ${n.is_pinned?'<span class="badge pinned">고정</span>':''}</div>
       </div>
       <div class="item-actions">
         <button class="btn-sm edit" onclick="editNotice(${n.id})" title="수정"><i class="fas fa-pen"></i></button>
@@ -922,145 +875,7 @@ async function deleteNotice(id){
   }catch(err){toast('삭제 실패',true)}
 }
 
-// ══════ DOCTORS ══════
-function showDoctorTab(t){
-  document.getElementById('doctor-write').style.display=t==='write'?'block':'none';
-  document.getElementById('doctor-list').style.display=t==='list'?'block':'none';
-  document.querySelectorAll('#page-doctors .tab-btn').forEach((b,i)=>b.classList.toggle('active',(t==='write'?0:1)===i));
-  if(t==='list')loadDoctorList();
-}
-
-async function handleDoctorPhoto(e){
-  const file=e.target.files[0];if(!file)return;
-  const slot=document.getElementById('slot-doctor-photo');
-  slot.innerHTML=`<input type="file" accept="image/*" onchange="handleDoctorPhoto(event)"><div style="color:var(--gold);font-size:.8rem"><i class="fas fa-spinner fa-spin"></i> 업로드 중...</div>`;
-  try{
-    const d=await uploadFileToR2(file);
-    doctorPhoto={url:d.url,key:d.key};
-    slot.innerHTML=`<input type="file" accept="image/*" onchange="handleDoctorPhoto(event)"><img src="${d.url}" style="max-width:100%;max-height:160px;object-fit:contain;border-radius:8px" alt=""><div class="remove" onclick="clearDoctorPhoto()" style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,.7);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;color:#ff6b6b;z-index:2"><i class="fas fa-times"></i></div>`;
-  }catch(err){
-    toast('사진 업로드 실패',true);
-    resetDoctorPhotoSlot();
-  }
-}
-
-function clearDoctorPhoto(){doctorPhoto=null;resetDoctorPhotoSlot()}
-function resetDoctorPhotoSlot(){
-  document.getElementById('slot-doctor-photo').innerHTML=`<input type="file" accept="image/*" onchange="handleDoctorPhoto(event)"><i class="fas fa-user-circle" style="font-size:2rem;color:#555;margin-bottom:.3rem"></i><p style="font-size:.8rem;color:#666">프로필 사진 업로드</p>`;
-}
-
-function resetDoctorForm(){
-  document.getElementById('doctor-edit-id').value='';
-  document.getElementById('doctor-name').value='';
-  document.getElementById('doctor-title').value='';
-  document.getElementById('doctor-role').value='';
-  document.getElementById('doctor-specialties').value='';
-  document.getElementById('doctor-education').value='';
-  document.getElementById('doctor-career').value='';
-  document.getElementById('doctor-introduction').value='';
-  document.getElementById('doctor-sort').value='0';
-  doctorPhoto=null;resetDoctorPhotoSlot();
-  document.getElementById('doctor-form-title').textContent='새 원장 등록';
-  document.getElementById('doctor-submit-btn').textContent='원장 등록';
-  document.getElementById('doctor-cancel-btn').style.display='none';
-}
-function cancelDoctorEdit(){resetDoctorForm()}
-
-async function editDoctor(id){
-  try{
-    const d=await fetch('/api/admin/doctors/'+id,{headers:authHeaders()}).then(r=>r.json());
-    if(!d.doctor){toast('원장 정보를 불러올 수 없습니다',true);return}
-    const doc=d.doctor;
-    showDoctorTab('write');
-    document.getElementById('doctor-edit-id').value=id;
-    document.getElementById('doctor-name').value=doc.name||'';
-    document.getElementById('doctor-title').value=doc.title||'';
-    document.getElementById('doctor-role').value=doc.role||'';
-    document.getElementById('doctor-specialties').value=doc.specialties||'';
-    document.getElementById('doctor-education').value=doc.education||'';
-    document.getElementById('doctor-career').value=doc.career||'';
-    document.getElementById('doctor-introduction').value=doc.introduction||'';
-    document.getElementById('doctor-sort').value=doc.sort_order||0;
-    if(doc.photo_url){
-      doctorPhoto={url:doc.photo_url,key:doc.photo_key};
-      const slot=document.getElementById('slot-doctor-photo');
-      slot.innerHTML=`<input type="file" accept="image/*" onchange="handleDoctorPhoto(event)"><img src="${doc.photo_url}" style="max-width:100%;max-height:160px;object-fit:contain;border-radius:8px" alt=""><div class="remove" onclick="clearDoctorPhoto()" style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,.7);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;color:#ff6b6b;z-index:2"><i class="fas fa-times"></i></div>`;
-    }else{doctorPhoto=null;resetDoctorPhotoSlot()}
-    document.getElementById('doctor-form-title').textContent='원장 정보 수정';
-    document.getElementById('doctor-submit-btn').textContent='수정 완료';
-    document.getElementById('doctor-cancel-btn').style.display='block';
-    window.scrollTo({top:0,behavior:'smooth'});
-  }catch(err){toast('원장 로드 실패',true)}
-}
-
-async function submitDoctor(){
-  const editId=document.getElementById('doctor-edit-id').value;
-  const name=document.getElementById('doctor-name').value.trim();
-  if(!name)return toast('이름을 입력해주세요',true);
-  const btn=document.getElementById('doctor-submit-btn');btn.disabled=true;btn.textContent=editId?'수정 중...':'등록 중...';
-  try{
-    const body={
-      name, title:document.getElementById('doctor-title').value.trim(),
-      role:document.getElementById('doctor-role').value.trim(),
-      specialties:document.getElementById('doctor-specialties').value.trim(),
-      education:document.getElementById('doctor-education').value.trim(),
-      career:document.getElementById('doctor-career').value.trim(),
-      introduction:document.getElementById('doctor-introduction').value.trim(),
-      sort_order:parseInt(document.getElementById('doctor-sort').value)||0,
-      photo:doctorPhoto
-    };
-    const url=editId?'/api/admin/doctors/'+editId:'/api/admin/doctors';
-    const method=editId?'PUT':'POST';
-    const r=await fetch(url,{method,headers:authHeaders(),body:JSON.stringify(body)});
-    const d=await r.json();
-    if(!r.ok){toast(d.error||'저장 실패',true);return}
-    toast(editId?'원장 정보가 수정되었습니다!':'원장이 등록되었습니다!');
-    resetDoctorForm();loadDoctorList();loadDoctorsForSelect();loadSyncCheck();
-  }catch(err){toast('저장에 실패했습니다',true)}
-  finally{btn.disabled=false;btn.textContent=editId?'수정 완료':'원장 등록'}
-}
-
-async function loadDoctorList(){
-  try{
-    const d=await fetch('/api/admin/doctors',{headers:authHeaders()}).then(r=>r.json());
-    if(d.error){toast(d.error,true);return}
-    const el=document.getElementById('doctor-items');
-    const docs=d.doctors||[];
-    if(!docs.length){el.innerHTML='<div style="padding:2rem;text-align:center;color:#666">등록된 원장이 없습니다</div>';return}
-    el.innerHTML=docs.map(doc=>`<div class="item-row">
-      <div style="display:flex;align-items:center;gap:1rem;flex:1;min-width:0">
-        ${doc.photo_url?'<img src="'+doc.photo_url+'" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #333;flex-shrink:0" alt="">':'<div style="width:48px;height:48px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas fa-user" style="color:#555"></i></div>'}
-        <div style="min-width:0">
-          <div class="item-title">${esc(doc.name)} ${doc.title?'<span style="color:var(--gold);font-size:.75rem;margin-left:.3rem">'+esc(doc.title)+'</span>':''}</div>
-          <div class="item-meta">${esc(doc.specialties||'전문분야 미입력')} · 순서: ${doc.sort_order} <span class="badge ${doc.is_active?'published':'draft'}">${doc.is_active?'활성':'비활성'}</span></div>
-        </div>
-      </div>
-      <div class="item-actions">
-        <button class="btn-sm edit" onclick="editDoctor(${doc.id})" title="수정"><i class="fas fa-pen"></i></button>
-        <button class="btn-sm" onclick="toggleDoctorActive(${doc.id},${doc.is_active?0:1})" title="${doc.is_active?'비활성화':'활성화'}"><i class="fas fa-${doc.is_active?'eye-slash':'eye'}"></i></button>
-        <button class="btn-sm danger" onclick="deleteDoctor(${doc.id})" title="삭제"><i class="fas fa-trash"></i></button>
-      </div>
-    </div>`).join('');
-  }catch(err){document.getElementById('doctor-items').innerHTML='<div style="padding:2rem;text-align:center;color:#ff6b6b">목록 로드 실패</div>'}
-}
-
-async function deleteDoctor(id){
-  if(!confirm('정말 삭제하시겠습니까?\n이 원장과 연결된 블로그/비포애프터의 원장 정보가 해제됩니다.'))return;
-  try{
-    const r=await fetch('/api/admin/doctors/'+id,{method:'DELETE',headers:authHeaders()});
-    if(!r.ok){const d=await r.json();toast(d.error||'삭제 실패',true);return}
-    toast('삭제되었습니다');loadDoctorList();loadDoctorsForSelect();loadSyncCheck();
-  }catch(err){toast('삭제 실패',true)}
-}
-
-async function toggleDoctorActive(id,val){
-  try{
-    const r=await fetch('/api/admin/doctors/'+id,{method:'PUT',headers:authHeaders(),body:JSON.stringify({is_active:val})});
-    if(!r.ok){toast('변경 실패',true);return}
-    toast(val?'활성화 완료':'비활성화 완료');loadDoctorList();loadDoctorsForSelect();loadSyncCheck();
-  }catch(err){toast('변경 실패',true)}
-}
-
+// ══════ DOCTORS SELECT (for blog/ba forms) ══════
 async function loadDoctorsForSelect(){
   try{
     const d=await fetch('/api/doctors').then(r=>r.json());

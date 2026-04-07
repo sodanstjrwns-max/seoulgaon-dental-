@@ -194,6 +194,10 @@ async function initDB(db: D1Database) {
     `CREATE INDEX IF NOT EXISTS idx_doctors_active ON doctors(is_active, sort_order)`,
     `CREATE INDEX IF NOT EXISTS idx_blog_doctor ON blog_posts(doctor_id)`,
     `CREATE INDEX IF NOT EXISTS idx_ba_doctor ON before_after(doctor_id)`,
+    // view_count columns (safe ALTER — ignore if already exists)
+    `ALTER TABLE blog_posts ADD COLUMN view_count INTEGER DEFAULT 0`,
+    `ALTER TABLE before_after ADD COLUMN view_count INTEGER DEFAULT 0`,
+    `ALTER TABLE notices ADD COLUMN view_count INTEGER DEFAULT 0`,
   ]
   for (const sql of tables) {
     try { await db.prepare(sql).run() } catch (e: any) {
@@ -526,7 +530,7 @@ app.get('/api/blog', async (c) => {
     if (doctorId) { whereParts.push('b.doctor_id = ?'); binds.push(doctorId) }
 
     const where = whereParts.join(' AND ')
-    const dataSql = `SELECT b.id, b.title, b.content, b.category, b.doctor_id, b.thumbnail_url, b.created_at, d.name as doctor_name, d.photo_url as doctor_photo FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id WHERE ${where} ORDER BY b.created_at DESC LIMIT ? OFFSET ?`
+    const dataSql = `SELECT b.id, b.title, b.content, b.category, b.doctor_id, b.thumbnail_url, b.view_count, b.created_at, d.name as doctor_name, d.photo_url as doctor_photo FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id WHERE ${where} ORDER BY b.created_at DESC LIMIT ? OFFSET ?`
     const countSql = `SELECT COUNT(*) as total FROM blog_posts b WHERE ${where.replace(/d\./g, '').replace(/LEFT JOIN.*?WHERE/, 'WHERE')}`
     // Simpler count
     let countWhereParts = ['is_published = 1']
@@ -557,8 +561,11 @@ app.get('/api/blog/:id', async (c) => {
     const post: any = await db.prepare('SELECT b.*, d.name as doctor_name, d.photo_url as doctor_photo, d.title as doctor_title, d.role as doctor_role FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id WHERE b.id = ? AND b.is_published = 1').bind(id).first()
     if (!post) return c.json({ error: '게시글을 찾을 수 없습니다' }, 404)
 
+    // Increment view count
+    await db.prepare('UPDATE blog_posts SET view_count = COALESCE(view_count, 0) + 1 WHERE id = ?').bind(id).run()
+
     const images = await db.prepare('SELECT id, image_url, r2_key, filename, sort_order FROM blog_images WHERE post_id = ? ORDER BY sort_order').bind(id).all()
-    return c.json({ post, images: images.results || [] })
+    return c.json({ post: { ...post, view_count: (post.view_count || 0) + 1 }, images: images.results || [] })
   } catch (e: any) {
     return c.json({ error: '게시글 조회 실패: ' + e.message }, 500)
   }
@@ -774,7 +781,11 @@ app.get('/api/before-after/:id', async (c) => {
         WHERE ba.id = ? AND ba.is_published = 1`
     ).bind(id).first()
     if (!item) return c.json({ error: '케이스를 찾을 수 없습니다' }, 404)
-    return c.json({ case: item })
+
+    // Increment view count
+    await db.prepare('UPDATE before_after SET view_count = COALESCE(view_count, 0) + 1 WHERE id = ?').bind(id).run()
+
+    return c.json({ case: { ...(item as any), view_count: ((item as any).view_count || 0) + 1 } })
   } catch (e: any) {
     return c.json({ error: '케이스 조회 실패: ' + e.message }, 500)
   }
@@ -942,10 +953,14 @@ app.get('/api/notices/:id', async (c) => {
   try {
     const db = c.env.DB
     const id = c.req.param('id')
-    const notice = await db.prepare('SELECT * FROM notices WHERE id = ? AND is_published = 1').bind(id).first()
+    const notice: any = await db.prepare('SELECT * FROM notices WHERE id = ? AND is_published = 1').bind(id).first()
     if (!notice) return c.json({ error: '공지사항을 찾을 수 없습니다' }, 404)
+
+    // Increment view count
+    await db.prepare('UPDATE notices SET view_count = COALESCE(view_count, 0) + 1 WHERE id = ?').bind(id).run()
+
     const images = await db.prepare('SELECT id, image_url, r2_key, filename, sort_order FROM notice_images WHERE notice_id = ? ORDER BY sort_order').bind(id).all()
-    return c.json({ notice, images: images.results || [] })
+    return c.json({ notice: { ...notice, view_count: (notice.view_count || 0) + 1 }, images: images.results || [] })
   } catch (e: any) {
     return c.json({ error: '공지 조회 실패: ' + e.message }, 500)
   }
