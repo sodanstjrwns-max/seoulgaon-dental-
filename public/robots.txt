@@ -1,0 +1,35 @@
+# robots.txt — 서울가온치과 (www.seoulgaon.com)
+# Last updated: 2026-04-07
+
+# 모든 검색엔진 허용
+User-agent: *
+Allow: /
+
+# 관리자 페이지 차단
+Disallow: /admin.html
+Disallow: /api/
+
+# 정적 리소스 (크롤링 불필요)
+Disallow: /static/
+Disallow: /js/
+
+# 이미지 검색엔진은 이미지 허용
+User-agent: Googlebot-Image
+Allow: /images/
+Disallow: /admin.html
+Disallow: /api/
+
+# 네이버 검색봇
+User-agent: Yeti
+Allow: /
+
+# 다음 검색봇
+User-agent: Daum
+Allow: /
+
+# 빙 검색봇
+User-agent: Bingbot
+Allow: /
+
+# 사이트맵 위치
+Sitemap: https://www.seoulgaon.com/sitemap.xml
