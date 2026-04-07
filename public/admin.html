@@ -464,11 +464,47 @@ async function loadDashboard(){
 }
 
 // ══════ R2 UPLOAD HELPER ══════
+// 이미지 리사이즈 (대용량 치과 사진 대응: 최대 1600px, 품질 85%)
+function resizeImage(file, maxWidth=1600, quality=0.85){
+  return new Promise((resolve,reject)=>{
+    if(!file.type.startsWith('image/')){resolve(file);return}
+    // 2MB 이하면 리사이즈 불필요
+    if(file.size <= 2*1024*1024){resolve(file);return}
+    const img=new Image();
+    img.onload=()=>{
+      let w=img.width, h=img.height;
+      if(w <= maxWidth){resolve(file);return}
+      const ratio=maxWidth/w; w=maxWidth; h=Math.round(h*ratio);
+      const canvas=document.createElement('canvas');
+      canvas.width=w; canvas.height=h;
+      const ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      canvas.toBlob(blob=>{
+        if(!blob){resolve(file);return}
+        const resized=new File([blob], file.name, {type:'image/jpeg', lastModified:Date.now()});
+        console.log(`[Resize] ${file.name}: ${(file.size/1024/1024).toFixed(1)}MB → ${(resized.size/1024/1024).toFixed(1)}MB`);
+        resolve(resized);
+      },'image/jpeg',quality);
+    };
+    img.onerror=()=>resolve(file);
+    img.src=URL.createObjectURL(file);
+  });
+}
+
 async function uploadFileToR2(file){
-  const fd=new FormData();fd.append('file',file);
-  const r=await fetch('/api/upload',{method:'POST',headers:uploadHeaders(),body:fd});
-  if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.error||'Upload failed ('+r.status+')')}
-  return r.json();
+  try{
+    const resized=await resizeImage(file);
+    const fd=new FormData();fd.append('file',resized);
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),60000); // 60초 타임아웃
+    const r=await fetch('/api/upload',{method:'POST',headers:uploadHeaders(),body:fd,signal:controller.signal});
+    clearTimeout(timeout);
+    if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.error||'Upload failed ('+r.status+')')}
+    return r.json();
+  }catch(e){
+    if(e.name==='AbortError') throw new Error('업로드 시간 초과. 파일 크기를 확인해주세요.');
+    throw e;
+  }
 }
 
 function updateProgress(id,done,total){
