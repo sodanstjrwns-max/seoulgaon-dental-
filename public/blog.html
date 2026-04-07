@@ -135,27 +135,9 @@
 const catMap = {'임플란트':'implant','심미치료':'aesthetic','신경치료':'endo','치과상식':'info','일반':'info'};
 const catLabel = {'임플란트':'Implant','심미치료':'Aesthetic','신경치료':'Endodontics','치과상식':'Info','일반':'Info'};
 
-// Static blog cards (네이버 블로그)
-const staticCards = [
-  {title:'임플란트 연자? 달인? 가이드 임플란트의 진짜 차이', desc:'수백 건의 임플란트 경험이 아닌, 한 건 한 건의 정밀함이 결과를 만듭니다.', category:'implant', tag:'Implant', date:'2026.03.21', url:'https://blog.naver.com/stokgw1'},
-  {title:'70대 여자환자분 가이드 임플란트 후기', desc:'고령이라 걱정했지만, 무절개 가이드 수술로 빠른 회복을 경험한 이야기.', category:'implant', tag:'Implant', date:'2025.12.24', url:'https://blog.naver.com/stokgw1'},
-  {title:'윗턱 전체 임플란트 뼈이식 케이스', desc:'뼈가 부족한 상악에서도 정밀 뼈이식으로 성공적인 임플란트 결과를 만든 사례.', category:'implant', tag:'Implant', date:'2025.12.24', url:'https://blog.naver.com/stokgw1'},
-  {title:'임플란트 수명은 관리에 달려있습니다', desc:'임플란트는 영구적이지 않습니다. 올바른 관리법과 정기검진의 중요성.', category:'info', tag:'Info', date:'2026.01.15', url:'https://blog.naver.com/stokgw1'},
-  {title:'라미네이트와 크라운, 어떤 차이가 있을까?', desc:'앞니 치료를 고민할 때 알아야 할 라미네이트와 크라운의 차이점과 선택 기준.', category:'aesthetic', tag:'Aesthetic', date:'2026.02.03', url:'https://blog.naver.com/stokgw1'},
-  {title:'신경치료, 왜 여러 번 와야 하나요?', desc:'한 번에 끝나지 않는 신경치료. 그 이유와 각 단계에서 일어나는 일.', category:'endo', tag:'Endodontics', date:'2026.01.28', url:'https://blog.naver.com/stokgw1'},
-];
 
-function makeStaticCard(s){
-  return `<a href="${s.url}" target="_blank" rel="noopener" class="blog-card" data-category="${s.category}" data-tilt>
-    <div class="blog-card-body">
-      <div class="blog-card-tag">${s.tag}</div>
-      <div class="blog-card-date">${s.date}</div>
-      <h3>${s.title}</h3>
-      <p>${s.desc}</p>
-      <span class="blog-card-link">네이버 블로그에서 보기 →</span>
-    </div>
-  </a>`;
-}
+
+
 
 function makeDBCard(p){
   const cat = catMap[p.category]||'info';
@@ -188,11 +170,15 @@ function makeDBCard(p){
     dbPosts = data.posts || [];
   } catch(e){}
 
-  // Render DB posts first, then static
+  // Render DB posts only
   let html = '';
   dbPosts.forEach(p => html += makeDBCard(p));
-  staticCards.forEach(s => html += makeStaticCard(s));
   grid.innerHTML = html;
+
+  // Show empty state if no posts
+  if(dbPosts.length === 0){
+    document.getElementById('empty-msg').style.display = 'block';
+  }
 
   // Re-init card entrance and tilt (pages.js runs early)
   document.querySelectorAll('.blog-card').forEach(c=>{
