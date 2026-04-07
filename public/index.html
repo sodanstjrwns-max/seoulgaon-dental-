@@ -36,6 +36,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
 <style>
 /* ===== RESET & BASE ===== */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -98,6 +99,23 @@ ul{list-style:none}
 .drop a:hover{color:var(--gold)}
 .nav-cta{background:var(--gold);color:var(--ink);padding:.55rem 1.5rem;border-radius:100px;font-size:.82rem;font-weight:600;letter-spacing:.03em;transition:background .3s}
 .nav-cta:hover{background:var(--gold-b)}
+/* Nav Member Button */
+.nav-member{display:flex;align-items:center;gap:.6rem;margin-right:.8rem}
+.nav-member-btn{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--gold);color:var(--gold);padding:.45rem 1.2rem;border-radius:100px;font-size:.78rem;font-weight:500;letter-spacing:.02em;transition:all .3s;white-space:nowrap}
+.nav-member-btn:hover{background:var(--gold);color:var(--ink)}
+.nav-member-btn i{font-size:.72rem}
+.nav-member-name{display:inline-flex;align-items:center;gap:.4rem;color:var(--gold);font-size:.82rem;font-weight:500;white-space:nowrap}
+.nav-member-name i{font-size:.9rem}
+.nav-member-logout{font-size:.75rem;color:var(--stone-l);transition:color .3s;white-space:nowrap}
+.nav-member-logout:hover{color:var(--ivory)}
+.mob-member-divider{width:40px;height:1px;background:var(--line);margin:0 auto}
+.mob-member{display:flex;flex-direction:column;align-items:center;gap:.8rem}
+.mob-member-signup{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--gold);color:var(--gold);padding:.6rem 1.8rem;border-radius:100px;font-family:var(--ff-body);font-size:.9rem;font-weight:500;transition:all .3s}
+.mob-member-signup:hover{background:var(--gold);color:var(--ink)}
+.mob-member-name{color:var(--gold);font-size:.95rem;font-weight:500}
+.mob-member-name i{margin-right:.3rem}
+.mob-member-logout{font-size:.82rem;color:var(--stone-l);transition:color .3s}
+.mob-member-logout:hover{color:var(--ivory)}
 /* Hamburger */
 .hamburger{display:none;flex-direction:column;gap:6px;cursor:none;width:28px;z-index:9002}
 .hamburger span{display:block;height:2px;background:var(--ivory);transition:transform .4s,opacity .3s}
@@ -356,6 +374,7 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
   #cur{display:none!important}
   .nav-links{display:none}
   .nav-cta{display:none}
+  .nav-member{display:none}
   .hamburger{display:flex}
   #nav{height:60px;padding:0 1rem}
   .nav-logo{font-size:1.15rem}
@@ -677,6 +696,7 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
       </div>
     </div>
   </div>
+  <div class="nav-member" id="nav-member-desktop"></div>
   <a href="tel:0507-1325-3377" class="nav-cta" data-magnet>예약 상담</a>
   <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
 </nav>
@@ -690,6 +710,8 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
   <a href="before-after.html">비포 애프터</a>
   <a href="notice.html">공지사항</a>
   <a href="guide.html">안내</a>
+  <div class="mob-member-divider"></div>
+  <div class="mob-member" id="nav-member-mobile"></div>
 </div>
 <main id="main-content" role="main">
 
@@ -1173,5 +1195,34 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
 }
 </style>
 
+<script>
+/* ===== Member Nav (index.html) ===== */
+(function(){
+  function escHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+  function render(el,isMob){
+    var token=localStorage.getItem('gaon_member_token');
+    var uStr=localStorage.getItem('gaon_member_user');
+    var u=null; try{u=JSON.parse(uStr);}catch(e){}
+    if(token&&u){
+      if(isMob){
+        el.innerHTML='<span class="mob-member-name"><i class="fas fa-user-circle"></i> '+escHtml(u.name)+'님</span><a href="#" class="mob-member-logout" onclick="window.__memberLogout();return false">로그아웃</a>';
+      } else {
+        el.innerHTML='<span class="nav-member-name"><i class="fas fa-user-circle"></i> '+escHtml(u.name)+'</span><a href="#" class="nav-member-logout" onclick="window.__memberLogout();return false">로그아웃</a>';
+      }
+    } else {
+      if(isMob){
+        el.innerHTML='<a href="/signup.html" class="mob-member-signup"><i class="fas fa-user-plus"></i> 회원가입 / 로그인</a>';
+      } else {
+        el.innerHTML='<a href="/signup.html" class="nav-member-btn" data-magnet><i class="fas fa-user-plus"></i> 회원가입</a>';
+      }
+    }
+  }
+  window.__memberLogout=function(){localStorage.removeItem('gaon_member_token');localStorage.removeItem('gaon_member_user');location.reload();};
+  var d=document.getElementById('nav-member-desktop');
+  var m=document.getElementById('nav-member-mobile');
+  if(d) render(d,false);
+  if(m) render(m,true);
+})();
+</script>
 </body>
 </html>

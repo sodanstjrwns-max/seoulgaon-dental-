@@ -255,8 +255,76 @@ function initFooterEntrance(){
   observer.observe(footer);
 }
 
+/* ---------- 14. MEMBER NAV BUTTON ---------- */
+function initMemberNav(){
+  const nav = document.getElementById('nav');
+  if(!nav) return;
+
+  /* — 데스크톱: nav-cta(예약상담) 앞에 회원 버튼 삽입 — */
+  const cta = nav.querySelector('.nav-cta');
+  if(cta){
+    const wrap = document.createElement('div');
+    wrap.className = 'nav-member';
+    cta.parentNode.insertBefore(wrap, cta);
+    renderNavMember(wrap, false);
+  }
+
+  /* — 모바일 메뉴: mob-menu 맨 아래에 추가 — */
+  const mob = document.querySelector('.mob-menu');
+  if(mob){
+    const divider = document.createElement('div');
+    divider.className = 'mob-member-divider';
+    mob.appendChild(divider);
+    const wrap2 = document.createElement('div');
+    wrap2.className = 'mob-member';
+    mob.appendChild(wrap2);
+    renderNavMember(wrap2, true);
+  }
+}
+
+function renderNavMember(container, isMobile){
+  const token = localStorage.getItem('gaon_member_token');
+  const userStr = localStorage.getItem('gaon_member_user');
+  let user = null;
+  try{ user = JSON.parse(userStr); }catch(e){}
+
+  if(token && user){
+    /* 로그인 상태 */
+    if(isMobile){
+      container.innerHTML =
+        '<span class="mob-member-name"><i class="fas fa-user-circle"></i> '+escHtml(user.name)+'님</span>'+
+        '<a href="#" class="mob-member-logout" onclick="window.__memberLogout();return false">로그아웃</a>';
+    } else {
+      container.innerHTML =
+        '<span class="nav-member-name"><i class="fas fa-user-circle"></i> '+escHtml(user.name)+'</span>'+
+        '<a href="#" class="nav-member-logout" onclick="window.__memberLogout();return false">로그아웃</a>';
+    }
+  } else {
+    /* 비로그인 상태 */
+    if(isMobile){
+      container.innerHTML =
+        '<a href="/signup.html" class="mob-member-signup"><i class="fas fa-user-plus"></i> 회원가입 / 로그인</a>';
+    } else {
+      container.innerHTML =
+        '<a href="/signup.html" class="nav-member-btn" data-magnet><i class="fas fa-user-plus"></i> 회원가입</a>';
+    }
+  }
+}
+
+function escHtml(s){
+  const d=document.createElement('div'); d.textContent=s; return d.innerHTML;
+}
+
+/* 전역 로그아웃 함수 */
+window.__memberLogout = function(){
+  localStorage.removeItem('gaon_member_token');
+  localStorage.removeItem('gaon_member_user');
+  location.reload();
+};
+
 /* ---------- INIT ---------- */
 document.addEventListener('DOMContentLoaded',()=>{
+  initMemberNav();
   initCursor();
   initHamburger();
   initProgressBar();
