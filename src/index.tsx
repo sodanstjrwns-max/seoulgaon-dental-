@@ -317,41 +317,39 @@ async function deleteR2Image(r2: R2Bucket, key: string | null | undefined) {
 }
 
 // ══════════════════════════════════════════════════
-//  AUTH API
+//  AUTH API — 비밀번호만으로 관리자 인증
 // ══════════════════════════════════════════════════
-app.post('/api/auth/register', async (c) => {
-  try {
-    const db = c.env.DB
-    const body = await c.req.json<{ email: string; password: string; name: string }>()
-    const { email, password, name } = body
-    if (!email || !password || !name) return c.json({ error: '모든 필드를 입력해주세요' }, 400)
-    if (password.length < 6) return c.json({ error: '비밀번호는 6자 이상이어야 합니다' }, 400)
+const ADMIN_PASSWORD_HASH_KEY = 'admin_password'
 
-    const existing = await db.prepare('SELECT id FROM users WHERE email = ?').bind(email).first()
-    if (existing) return c.json({ error: '이미 등록된 이메일입니다' }, 409)
-
-    const hash = await hashPassword(password)
-    const result = await db.prepare('INSERT INTO users (email, password_hash, name) VALUES (?, ?, ?)').bind(email, hash, name).run()
-    const userId = result.meta.last_row_id
-    const token = await createToken({ id: userId, email, name, role: 'admin' })
-    return c.json({ token, user: { id: userId, email, name, role: 'admin' } })
-  } catch (e: any) {
-    return c.json({ error: '회원가입 실패: ' + e.message }, 500)
+// 관리자 비밀번호 초기 설정 (DB에 없으면 기본값 세팅)
+async function ensureAdminPassword(db: D1Database) {
+  await db.prepare(`CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run()
+  const existing = await db.prepare('SELECT value FROM settings WHERE key = ?').bind(ADMIN_PASSWORD_HASH_KEY).first()
+  if (!existing) {
+    // 기본 비밀번호: gaon2026!
+    const defaultHash = await hashPassword('gaon2026!')
+    await db.prepare('INSERT INTO settings (key, value) VALUES (?, ?)').bind(ADMIN_PASSWORD_HASH_KEY, defaultHash).run()
   }
-})
+}
 
+// 비밀번호만으로 로그인
 app.post('/api/auth/login', async (c) => {
   try {
     const db = c.env.DB
-    const { email, password } = await c.req.json<{ email: string; password: string }>()
-    if (!email || !password) return c.json({ error: '이메일과 비밀번호를 입력해주세요' }, 400)
+    await ensureAdminPassword(db)
+    const { password } = await c.req.json<{ password: string }>()
+    if (!password) return c.json({ error: '비밀번호를 입력해주세요' }, 400)
 
     const hash = await hashPassword(password)
-    const user: any = await db.prepare('SELECT id, email, name, role FROM users WHERE email = ? AND password_hash = ?').bind(email, hash).first()
-    if (!user) return c.json({ error: '이메일 또는 비밀번호가 올바르지 않습니다' }, 401)
+    const stored: any = await db.prepare('SELECT value FROM settings WHERE key = ?').bind(ADMIN_PASSWORD_HASH_KEY).first()
+    if (!stored || stored.value !== hash) return c.json({ error: '비밀번호가 올바르지 않습니다' }, 401)
 
-    const token = await createToken({ id: user.id, email: user.email, name: user.name, role: user.role })
-    return c.json({ token, user })
+    const token = await createToken({ id: 1, name: '관리자', role: 'admin' })
+    return c.json({ token, user: { id: 1, name: '관리자', role: 'admin' } })
   } catch (e: any) {
     return c.json({ error: '로그인 실패: ' + e.message }, 500)
   }
@@ -361,21 +359,21 @@ app.get('/api/auth/me', auth, async (c) => {
   return c.json({ user: c.get('user') })
 })
 
-// Change password
+// 비밀번호 변경
 app.put('/api/auth/password', auth, async (c) => {
   try {
     const db = c.env.DB
-    const user = c.get('user')
+    await ensureAdminPassword(db)
     const { current_password, new_password } = await c.req.json<{ current_password: string; new_password: string }>()
     if (!current_password || !new_password) return c.json({ error: '현재 비밀번호와 새 비밀번호를 입력해주세요' }, 400)
-    if (new_password.length < 6) return c.json({ error: '새 비밀번호는 6자 이상이어야 합니다' }, 400)
+    if (new_password.length < 4) return c.json({ error: '새 비밀번호는 4자 이상이어야 합니다' }, 400)
 
     const currentHash = await hashPassword(current_password)
-    const existing = await db.prepare('SELECT id FROM users WHERE id = ? AND password_hash = ?').bind(user.id, currentHash).first()
-    if (!existing) return c.json({ error: '현재 비밀번호가 올바르지 않습니다' }, 401)
+    const stored: any = await db.prepare('SELECT value FROM settings WHERE key = ?').bind(ADMIN_PASSWORD_HASH_KEY).first()
+    if (!stored || stored.value !== currentHash) return c.json({ error: '현재 비밀번호가 올바르지 않습니다' }, 401)
 
     const newHash = await hashPassword(new_password)
-    await db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').bind(newHash, user.id).run()
+    await db.prepare('UPDATE settings SET value = ?, updated_at = CURRENT_TIMESTAMP WHERE key = ?').bind(newHash, ADMIN_PASSWORD_HASH_KEY).run()
     return c.json({ message: '비밀번호가 변경되었습니다' })
   } catch (e: any) {
     return c.json({ error: '비밀번호 변경 실패: ' + e.message }, 500)

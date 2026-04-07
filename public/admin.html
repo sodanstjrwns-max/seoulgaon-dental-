@@ -133,6 +133,22 @@
 
 <div id="toast" class="toast"></div>
 
+<!-- 비밀번호 변경 모달 -->
+<div id="pw-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:1rem">
+  <div style="background:var(--ink-2);border:1px solid #333;border-radius:16px;padding:2rem;width:100%;max-width:380px">
+    <h3 style="color:var(--gold);margin:0 0 1.5rem;font-size:1.1rem"><i class="fas fa-key" style="margin-right:8px"></i>비밀번호 변경</h3>
+    <div class="error-msg" id="pw-error"></div>
+    <form onsubmit="return handleChangePw(event)">
+      <div class="field"><label>현재 비밀번호</label><input type="password" id="pw-current" placeholder="현재 비밀번호" required autocomplete="current-password"></div>
+      <div class="field"><label>새 비밀번호</label><input type="password" id="pw-new" placeholder="새 비밀번호 (4자 이상)" minlength="4" required autocomplete="new-password"></div>
+      <div style="display:flex;gap:8px;margin-top:1rem">
+        <button type="button" class="btn-gold" style="flex:1;background:transparent;border:1px solid #444;color:#aaa" onclick="closePwModal()">취소</button>
+        <button type="submit" class="btn-gold" style="flex:1" id="pw-btn">변경하기</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- Mobile sidebar toggle -->
 <button class="mob-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
 
@@ -140,20 +156,12 @@
 <div id="auth-screen" class="auth-wrap">
   <div class="auth-card">
     <div class="auth-logo">서울가온치과<span>.</span></div>
-    <div class="auth-sub" id="auth-title">관리자 로그인</div>
+    <div class="auth-sub" id="auth-title">관리자 인증</div>
     <div class="error-msg" id="auth-error"></div>
     <form id="login-form" onsubmit="return handleLogin(event)">
-      <div class="field"><label>이메일</label><input type="email" id="login-email" placeholder="admin@example.com" required></div>
-      <div class="field"><label>비밀번호</label><input type="password" id="login-pw" placeholder="••••••••" required></div>
-      <button type="submit" class="btn-gold" id="login-btn">로그인</button>
+      <div class="field"><label><i class="fas fa-lock" style="margin-right:6px;color:var(--gold)"></i>비밀번호</label><input type="password" id="login-pw" placeholder="관리자 비밀번호 입력" required autofocus autocomplete="current-password"></div>
+      <button type="submit" class="btn-gold" id="login-btn"><i class="fas fa-sign-in-alt" style="margin-right:6px"></i>접속하기</button>
     </form>
-    <form id="register-form" style="display:none" onsubmit="return handleRegister(event)">
-      <div class="field"><label>이름</label><input type="text" id="reg-name" placeholder="홍길동" required></div>
-      <div class="field"><label>이메일</label><input type="email" id="reg-email" placeholder="admin@example.com" required></div>
-      <div class="field"><label>비밀번호</label><input type="password" id="reg-pw" placeholder="6자 이상" minlength="6" required></div>
-      <button type="submit" class="btn-gold" id="reg-btn">회원가입</button>
-    </form>
-    <div class="auth-switch" id="auth-switch">계정이 없으신가요? <a onclick="toggleAuth()">회원가입</a></div>
   </div>
 </div>
 
@@ -171,7 +179,8 @@
     </nav>
     <div class="side-bottom">
       <div class="side-user"><i class="fas fa-user-circle"></i><span id="user-name">관리자</span></div>
-      <button class="btn-logout" onclick="logout()">로그아웃</button>
+      <button class="btn-logout" onclick="showChangePw()" style="margin-bottom:6px"><i class="fas fa-key" style="margin-right:4px"></i>비밀번호 변경</button>
+      <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt" style="margin-right:4px"></i>로그아웃</button>
     </div>
   </aside>
 
@@ -384,50 +393,47 @@ function uploadHeaders(){ return {'Authorization':'Bearer '+token} }
 // ══════ TOAST ══════
 function toast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(err?' error':'');setTimeout(()=>t.className='toast',3500)}
 
-// ══════ AUTH ══════
-let isRegister=false;
-function toggleAuth(){
-  isRegister=!isRegister;
-  document.getElementById('login-form').style.display=isRegister?'none':'block';
-  document.getElementById('register-form').style.display=isRegister?'block':'none';
-  document.getElementById('auth-title').textContent=isRegister?'관리자 회원가입':'관리자 로그인';
-  document.getElementById('auth-switch').innerHTML=isRegister?'이미 계정이 있으신가요? <a onclick="toggleAuth()">로그인</a>':'계정이 없으신가요? <a onclick="toggleAuth()">회원가입</a>';
-  document.getElementById('auth-error').style.display='none';
-}
+// ══════ AUTH — 비밀번호만으로 접근 ══════
 function showError(m){const e=document.getElementById('auth-error');e.textContent=m;e.style.display='block'}
 
 async function handleLogin(e){
   e.preventDefault();
-  const btn=document.getElementById('login-btn');btn.disabled=true;btn.textContent='로그인 중...';
+  const btn=document.getElementById('login-btn');btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin" style="margin-right:6px"></i>인증 중...';
   try{
-    const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:document.getElementById('login-email').value,password:document.getElementById('login-pw').value})});
+    const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:document.getElementById('login-pw').value})});
     const d=await r.json();
-    if(!r.ok){showError(d.error||'로그인 실패');return false}
+    if(!r.ok){showError(d.error||'인증 실패');return false}
     token=d.token;localStorage.setItem('gaon_token',token);enterDashboard(d.user);
   }catch(err){showError('서버 연결에 실패했습니다. 잠시 후 다시 시도해주세요.')}
-  finally{btn.disabled=false;btn.textContent='로그인'}
-  return false;
-}
-async function handleRegister(e){
-  e.preventDefault();
-  const btn=document.getElementById('reg-btn');btn.disabled=true;btn.textContent='가입 중...';
-  try{
-    const r=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:document.getElementById('reg-name').value,email:document.getElementById('reg-email').value,password:document.getElementById('reg-pw').value})});
-    const d=await r.json();
-    if(!r.ok){showError(d.error||'회원가입 실패');return false}
-    token=d.token;localStorage.setItem('gaon_token',token);enterDashboard(d.user);
-  }catch(err){showError('서버 연결에 실패했습니다.')}
-  finally{btn.disabled=false;btn.textContent='회원가입'}
+  finally{btn.disabled=false;btn.innerHTML='<i class="fas fa-sign-in-alt" style="margin-right:6px"></i>접속하기'}
   return false;
 }
 function enterDashboard(u){
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('dashboard').style.display='block';
-  document.getElementById('user-name').textContent=u.name||u.email;
+  document.getElementById('user-name').textContent=u.name||'관리자';
   loadDashboard();
   loadSyncCheck();
 }
 function logout(){token='';localStorage.removeItem('gaon_token');location.reload()}
+
+// ══════ 비밀번호 변경 ══════
+function showChangePw(){document.getElementById('pw-modal').style.display='flex';document.getElementById('pw-current').focus()}
+function closePwModal(){document.getElementById('pw-modal').style.display='none';document.getElementById('pw-error').style.display='none';document.getElementById('pw-current').value='';document.getElementById('pw-new').value=''}
+async function handleChangePw(e){
+  e.preventDefault();
+  const btn=document.getElementById('pw-btn');btn.disabled=true;btn.textContent='변경 중...';
+  const errEl=document.getElementById('pw-error');errEl.style.display='none';
+  try{
+    const r=await fetch('/api/auth/password',{method:'PUT',headers:authHeaders(),body:JSON.stringify({current_password:document.getElementById('pw-current').value,new_password:document.getElementById('pw-new').value})});
+    const d=await r.json();
+    if(!r.ok){errEl.textContent=d.error||'변경 실패';errEl.style.display='block';return false}
+    closePwModal();toast('비밀번호가 변경되었습니다!');
+  }catch{errEl.textContent='서버 오류';errEl.style.display='block'}
+  finally{btn.disabled=false;btn.textContent='변경하기'}
+  return false;
+}
+
 async function checkAuth(){
   if(!token)return;
   try{
