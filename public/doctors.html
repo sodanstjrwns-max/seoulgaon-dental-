@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>의료진 소개 | 서울가온치과</title>
-<meta name="description" content="서울가온치과 의료진 소개 — 서울대 수석 졸업, 10년 이상 강남·서울 봉직 경력. 현진호 대표원장이 직접 진단하고, 끝까지 책임집니다.">
+<meta name="description" content="서울가온치과 의료진 소개 — 현진호 대표원장(임플란트·심미치료)과 조은비 원장(치과보존과 전문의). 서울대 출신 전문의 두 분이 직접 진단하고 끝까지 책임집니다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -77,6 +77,32 @@
 .dir-cta-btn.primary:hover{background:#D4BA82}
 .dir-cta-btn.secondary{border:1px solid var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
 .dir-cta-btn.secondary:hover{background:rgba(191,164,106,.1)}
+
+/* ===== DOCTOR DIVIDER ===== */
+.dr-divider{max-width:1000px;margin:0 auto;padding:clamp(3rem,6vh,5rem) clamp(1.5rem,4vw,6rem);text-align:center}
+.dr-divider-line{width:60px;height:1px;background:var(--gold,#BFA46A);margin:0 auto 1.5rem;opacity:.4}
+.dr-divider-text{font-family:var(--ff-en,'Bebas Neue');font-size:.75rem;letter-spacing:4px;color:var(--stone,#8C8578);text-transform:uppercase}
+
+/* ===== DR CHO — accent color variant ===== */
+.cho-accent{--accent:#8BBFA4}
+.cho-accent .dir-hero-label,.cho-accent .dir-origin-label,.cho-accent .dir-badge.green{color:var(--accent)}
+.cho-accent .dir-badge.green{border-color:var(--accent)}
+.cho-accent .dir-hero-name em{color:var(--accent)}
+.cho-accent .dir-hero-quote strong{color:var(--accent)}
+.cho-accent .dir-hero-photo::after{border-color:var(--accent)}
+.cho-accent .dir-philo-card:hover{border-color:var(--accent)}
+.cho-accent .dir-philo-card .num{color:var(--accent)}
+.cho-accent .dir-philo-card .inner-voice{color:var(--accent)}
+.cho-accent .dir-cred-block h3{color:var(--accent)}
+.cho-accent .dir-cred-list li::before{color:var(--accent)}
+.cho-accent .dir-origin p em{color:var(--accent)}
+.cho-accent .dir-personal-text em{color:var(--accent)}
+
+/* stat highlight for cho */
+.cho-stat-row{display:flex;gap:1.5rem;flex-wrap:wrap;margin:2rem 0}
+.cho-stat{flex:1;min-width:160px;text-align:center;padding:1.5rem 1rem;background:var(--ink-4,#1A1814);border:1px solid var(--line,rgba(191,164,106,.1));border-radius:12px}
+.cho-stat .cho-stat-num{font-family:var(--ff-en,'Bebas Neue');font-size:clamp(2rem,4vw,2.8rem);color:#8BBFA4;line-height:1}
+.cho-stat .cho-stat-label{font-size:.78rem;color:var(--stone-l,#AFA79D);margin-top:.4rem}
 
 /* ===== TEAM SECTION (other doctors from DB) ===== */
 .team-section{padding:clamp(4rem,8vh,7rem) clamp(1.5rem,4vw,6rem);border-top:1px solid var(--line,rgba(191,164,106,.1))}
@@ -330,12 +356,198 @@
   </div>
 </section>
 
+<!-- (현진호 원장 개별 CTA 제거 — 하단 공통 CTA로 통합) -->
+
 <!-- ═══════════════════════════════════════════
-     6. CTA
+     DIVIDER
+     ═══════════════════════════════════════════ -->
+<div class="dr-divider" data-reveal-section>
+  <div class="dr-divider-line"></div>
+  <span class="dr-divider-text">Another Specialist</span>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     7. 조은비 원장 — HERO
+     ═══════════════════════════════════════════ -->
+<section class="dir-hero cho-accent" data-reveal-section style="padding-top:clamp(4rem,8vh,6rem)">
+  <div class="dir-hero-text">
+    <span class="dir-hero-label">Endodontics Specialist</span>
+    <h2 class="dir-hero-name">조은비 <em>원장</em></h2>
+    <p class="dir-hero-title">Conservative Dentistry · Endodontics &nbsp;|&nbsp; Seoul Gaon Dental</p>
+    <p class="dir-hero-quote">
+      <strong>"이 치아, 살릴 수 있을까요?"</strong><br>
+      저는 치아를 뽑지 않는 것을 가장 중요하게 생각하는 치과의사입니다. 
+      아무리 좋은 임플란트도, 아무리 정교한 보철물도 자연치아를 완벽하게 대체할 수 없습니다. 
+      그래서 오늘도 환자분의 치아를 <strong>단 하나라도 더 살릴 수 있는 방법</strong>을 먼저 고민합니다.
+    </p>
+    <div class="dir-hero-badges">
+      <span class="dir-badge green"><i class="fas fa-tooth"></i> 치과보존과 전문의</span>
+      <span class="dir-badge green"><i class="fas fa-award"></i> 서울대 우등 졸업</span>
+      <span class="dir-badge"><i class="fas fa-user-graduate"></i> 서울대 박사 수료</span>
+      <span class="dir-badge"><i class="fas fa-hospital"></i> 前 서울대 치과병원</span>
+    </div>
+  </div>
+  <div class="dir-hero-photo">
+    <img src="/images/real-dr-cho.jpg" alt="조은비 원장" loading="lazy">
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     8. 조은비 — 보존과란 무엇인가
+     ═══════════════════════════════════════════ -->
+<section class="dir-origin cho-accent" data-reveal-section>
+  <span class="dir-origin-label">Why Conservative Dentistry</span>
+  <h3 class="dir-origin-title">치과보존과, 치아를 살리는 전문 분야</h3>
+
+  <p>
+    치과보존과는 많은 분들에게 생소한 전문과목입니다. 쉽게 말씀드리면 충치, 신경치료, 치아 균열 등 
+    다양한 원인으로 손상된 치아를 <em>최대한 살려내는</em> 전문 분야입니다.
+  </p>
+  <p>
+    전국 치과의사 약 <strong>34,000명</strong> 중 치과보존과 전문의는 <strong>800명 남짓</strong>, 
+    전체의 <strong>2.5%</strong>에 불과합니다. 저는 서울대학교 치과병원에서 <em>4년간의 정식 전공의 수련 과정</em>을 
+    마친 치과보존과 전문의입니다.
+  </p>
+
+  <div class="cho-stat-row">
+    <div class="cho-stat">
+      <div class="cho-stat-num">34,000</div>
+      <div class="cho-stat-label">전국 치과의사 수</div>
+    </div>
+    <div class="cho-stat">
+      <div class="cho-stat-num">~800</div>
+      <div class="cho-stat-label">치과보존과 전문의</div>
+    </div>
+    <div class="cho-stat">
+      <div class="cho-stat-num">2.5%</div>
+      <div class="cho-stat-label">전체 대비 비율</div>
+    </div>
+    <div class="cho-stat">
+      <div class="cho-stat-num">4년</div>
+      <div class="cho-stat-label">서울대병원 전공의 수련</div>
+    </div>
+  </div>
+
+  <p>
+    왜 보존과를 선택했냐고 물어보시는 분들이 있습니다. 이유는 단순합니다. 
+    <em>자연치아는 한번 잃으면 절대 되돌릴 수 없기 때문</em>입니다. 
+    자연치아에는 <strong>치주인대</strong>라는 구조물이 있어 씹는 힘을 흡수하고, 세균 침입을 방어하며, 
+    뼈와 긴밀하게 소통합니다. 임플란트는 이 구조물이 없습니다.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     9. 조은비 — 진료 철학
+     ═══════════════════════════════════════════ -->
+<section class="dir-philo cho-accent" data-reveal-section>
+  <span class="dir-origin-label">My Principles</span>
+  <h3 class="dir-origin-title">조은비 원장의 진료 원칙</h3>
+  <div class="dir-philo-cards">
+
+    <div class="dir-philo-card">
+      <div class="num">01</div>
+      <h4>포기하지 않고 끝까지 답을 찾습니다</h4>
+      <p>다른 치과에서 "빼야 한다"는 말을 들으셨더라도 한번 더 확인해보시길 권합니다. 정밀한 진단과 적절한 치료로 살릴 수 있는 치아가 생각보다 많습니다.</p>
+      <div class="inner-voice">"'이 치아, 살릴 수 있을까요?' — 이 질문을 받을 때마다 나는 포기하지 않는다."</div>
+    </div>
+
+    <div class="dir-philo-card">
+      <div class="num">02</div>
+      <h4>자연치아를 최우선으로 보존합니다</h4>
+      <p>임플란트가 답이 아닌 경우가 많습니다. 자연치아 하나하나를 소중히 여기는 마음으로, 발치 전 모든 보존 가능성을 먼저 검토합니다.</p>
+      <div class="inner-voice">"빼는 것은 언제든 할 수 있다. 살리는 것은 지금 아니면 안 된다."</div>
+    </div>
+
+    <div class="dir-philo-card">
+      <div class="num">03</div>
+      <h4>절대 서두르지 않습니다</h4>
+      <p>치과가 무섭고 두려우신 분들도 걱정하지 않으셔도 됩니다. 치료 전 충분히 설명드리고, 환자분이 준비되셨을 때 시작합니다.</p>
+      <div class="inner-voice">"환자가 준비될 때까지 기다린다. 그것이 진짜 배려다."</div>
+    </div>
+
+    <div class="dir-philo-card">
+      <div class="num">04</div>
+      <h4>신경치료가 아프다는 편견을 바꿉니다</h4>
+      <p>검증된 술식과 정밀한 장비로 최대한 편안하게 치료해드리겠습니다. "신경치료가 이렇게 안 아팠어요?"라는 말이 가장 듣고 싶은 말입니다.</p>
+      <div class="inner-voice">"기술은 환자의 고통을 줄이기 위해 존재한다."</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     10. 조은비 — 학력 · 경력 · 자격
+     ═══════════════════════════════════════════ -->
+<section class="dir-credentials cho-accent" data-reveal-section>
+  <span class="dir-origin-label">Credentials</span>
+  <h3 class="dir-origin-title">학력 · 경력 · 자격</h3>
+  <div class="dir-cred-grid">
+    <div class="dir-cred-block">
+      <h3>Education</h3>
+      <ul class="dir-cred-list">
+        <li><strong>서울대학교 치의학과</strong> 우등 졸업</li>
+        <li>서울대학교 치의학대학원 <strong>박사 수료</strong></li>
+      </ul>
+    </div>
+    <div class="dir-cred-block">
+      <h3>Certification</h3>
+      <ul class="dir-cred-list">
+        <li>보건복지부 인증 <strong>치과보존과 전문의</strong></li>
+        <li>보건복지부 인증 <strong>통합치의학과 전문의</strong></li>
+        <li>대한치과보존학회 <strong>인정의</strong></li>
+      </ul>
+    </div>
+    <div class="dir-cred-block">
+      <h3>Career</h3>
+      <ul class="dir-cred-list">
+        <li>前 서울대학교 치과병원 <strong>치과보존과 전공의</strong> (4년)</li>
+        <li><strong>서울가온치과</strong> 원장 (현)</li>
+      </ul>
+    </div>
+    <div class="dir-cred-block">
+      <h3>Memberships</h3>
+      <ul class="dir-cred-list">
+        <li>대한치과보존학회 정회원</li>
+        <li>대한근관치료학회 정회원</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     11. 조은비 — PERSONAL NOTE
+     ═══════════════════════════════════════════ -->
+<section class="dir-personal cho-accent" data-reveal-section>
+  <div class="dir-personal-inner">
+    <div class="dir-personal-img">
+      <img src="/images/real-consult-room.jpg" alt="서울가온치과 상담실" loading="lazy">
+    </div>
+    <div class="dir-personal-text">
+      <span class="dir-origin-label">A Promise</span>
+      <h3>자연치아 하나하나를 소중히</h3>
+      <p>
+        자연치아에는 치주인대라는 구조물이 있습니다. 씹는 힘을 흡수하고, 세균 침입을 방어하며, 
+        뼈와 긴밀하게 소통하는 이 구조물 — 임플란트에는 없습니다.
+      </p>
+      <p>
+        그래서 저는 <em>발치를 마지막 선택지</em>로 둡니다. 
+        충치가 깊어도, 금이 가 있어도, 신경이 죽었어도 — 정밀 진단으로 가능성이 남아 있다면 
+        <em>끝까지 살려보는 것</em>이 제 역할입니다.
+      </p>
+      <p>
+        "빼야 한다"는 말을 들으셨다면, 한번 더 확인해보시길 권합니다. 
+        <em>살릴 수 있는 치아가 생각보다 많습니다.</em>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     12. 공통 CTA
      ═══════════════════════════════════════════ -->
 <section class="dir-cta" data-reveal-section>
-  <h2>궁금하신 점, 먼저 <em style="color:var(--gold)">설명</em> 들어보세요.</h2>
-  <p>현진호 대표원장이 직접 상담합니다. 전화 또는 네이버 예약으로 편하게 문의해 주세요.</p>
+  <h2>두 분의 전문의가 <em style="color:var(--gold)">함께</em> 진료합니다.</h2>
+  <p>임플란트·심미치료는 현진호 대표원장, 신경치료·치아보존은 조은비 원장이 직접 담당합니다.<br>전화 또는 네이버 예약으로 편하게 문의해 주세요.</p>
   <div class="dir-cta-btns">
     <a href="tel:0507-1325-3377" class="dir-cta-btn primary"><i class="fas fa-phone-alt"></i> 0507-1325-3377</a>
     <a href="https://m.search.naver.com/search.naver?sm=tab_hty.top&where=nexearch&ssc=tab.nx.all&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&oquery=&tqi=" target="_blank" class="dir-cta-btn secondary"><i class="fas fa-calendar-check"></i> 네이버 예약</a>
@@ -343,7 +555,7 @@
 </section>
 
 <!-- ═══════════════════════════════════════════
-     7. 함께하는 의료진 (DB에서 불러오기)
+     13. 함께하는 의료진 (DB에서 불러오기)
      ═══════════════════════════════════════════ -->
 <section class="team-section" data-reveal-section>
   <div class="sec-center">
@@ -384,7 +596,7 @@
   try {
     const res = await fetch('/api/doctors');
     const data = await res.json();
-    const doctors = (data.doctors || []).filter(d => d.name !== '현진호'); // 현진호는 위에 하드코딩
+    const doctors = (data.doctors || []).filter(d => d.name !== '현진호' && d.name !== '조은비'); // 하드코딩된 원장 제외
     const grid = document.getElementById('doc-grid');
     
     if(!doctors.length){
