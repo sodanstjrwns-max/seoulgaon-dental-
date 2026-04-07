@@ -161,8 +161,69 @@
 }
 @media(max-width:768px){
   .doc-grid{grid-template-columns:1fr;padding:0 1.25rem 3rem}
-  .doc-card-img,.doc-card-no-photo{height:400px}
+  .doc-card-img,.doc-card-no-photo{height:350px}
+  .doc-card-info{padding:1.25rem 1.5rem 1.5rem}
+  .doc-card-name{font-size:1.3rem}
+  .doc-card-desc{font-size:.82rem}
+  .doc-card-chip{font-size:.68rem;padding:.2rem .6rem}
   .dir-philo-cards{grid-template-columns:1fr}
+  .dir-philo-card{padding:1.5rem}
+  .dir-philo-card .num{font-size:2rem}
+  .dir-philo-card h4{font-size:1rem}
+  .dir-philo-card p{font-size:.82rem}
+  .dir-philo-card .inner-voice{font-size:.78rem}
+  /* Hero mobile */
+  .dir-hero{padding:6.5rem 1.25rem 3rem;gap:2rem}
+  .dir-hero-name{font-size:clamp(2rem,7vw,3rem)}
+  .dir-hero-title{font-size:.82rem;letter-spacing:2px;margin-bottom:1.2rem}
+  .dir-hero-quote{font-size:clamp(.88rem,3.5vw,1rem);line-height:1.7}
+  .dir-hero-photo{width:min(240px,65vw)}
+  .dir-hero-photo::after{inset:-8px;border-radius:20px}
+  .dir-badge{font-size:.7rem;padding:.35rem .8rem}
+  /* Origin story mobile */
+  .dir-origin{padding:3rem 1.25rem}
+  .dir-origin-title{font-size:clamp(1.2rem,4.5vw,1.6rem)}
+  .dir-origin p{font-size:.85rem;line-height:1.75}
+  /* Credentials mobile */
+  .dir-credentials{padding:3rem 1.25rem}
+  .dir-cred-block h4{font-size:.75rem;letter-spacing:2px}
+  .dir-cred-list li{font-size:.82rem;padding:.45rem 0}
+  /* Personal section mobile */
+  .dir-personal{padding:3rem 1.25rem}
+  .dir-personal-text h3{font-size:clamp(1.1rem,4vw,1.5rem)}
+  .dir-personal-text p{font-size:.85rem;line-height:1.7}
+  .dir-personal-img img{aspect-ratio:16/9}
+  /* CTA mobile */
+  .dir-cta{padding:3rem 1.25rem}
+  .dir-cta h2{font-size:clamp(1.2rem,4.5vw,1.7rem)}
+  .dir-cta p{font-size:.85rem}
+  .dir-cta-btn{padding:.75rem 1.5rem;font-size:.85rem;min-height:48px}
+  /* Cho stats mobile */
+  .cho-stat-row{gap:1rem}
+  .cho-stat{min-width:120px;padding:1.25rem .75rem}
+  .cho-stat .cho-stat-num{font-size:clamp(1.6rem,5vw,2.2rem)}
+  .cho-stat .cho-stat-label{font-size:.72rem}
+  /* Divider mobile */
+  .dr-divider{padding:2rem 1.25rem}
+  /* Team section mobile */
+  .team-section{padding:3rem 1.25rem}
+}
+@media(max-width:480px){
+  .dir-hero{padding:6rem 1rem 2.5rem;gap:1.5rem}
+  .dir-hero-name{font-size:clamp(1.8rem,7vw,2.5rem)}
+  .dir-hero-photo{width:min(200px,55vw)}
+  .dir-hero-badges{gap:.35rem}
+  .dir-badge{font-size:.65rem;padding:.3rem .7rem}
+  .dir-origin{padding:2.5rem 1rem}
+  .dir-credentials{padding:2.5rem 1rem}
+  .dir-personal{padding:2.5rem 1rem}
+  .dir-cta{padding:2.5rem 1rem}
+  .dir-cta-btns{flex-direction:column;align-items:stretch}
+  .dir-cta-btn{width:100%;justify-content:center}
+  .cho-stat-row{flex-direction:row;flex-wrap:wrap}
+  .cho-stat{min-width:calc(50% - .5rem);flex:0 0 calc(50% - .5rem)}
+  .doc-card-img,.doc-card-no-photo{height:300px}
+  .team-section{padding:2.5rem 1rem}
 }
 </style>
 <script type="application/ld+json">
@@ -411,7 +472,7 @@
 <section class="dir-credentials" data-reveal-section style="padding-top:0">
   <span class="dir-origin-label">Published Book</span>
   <h3 class="dir-origin-title">대표원장 저서</h3>
-  <div style="display:flex;align-items:center;gap:clamp(1.5rem,3vw,3rem);flex-wrap:wrap;max-width:900px;margin:0 auto;padding:2rem;border:1px solid var(--line,rgba(191,164,106,.1));border-radius:16px;background:rgba(26,24,20,.5)">
+  <div style="display:flex;align-items:center;gap:clamp(1.5rem,3vw,3rem);flex-wrap:wrap;max-width:900px;margin:0 auto;padding:clamp(1.25rem,3vw,2rem);border:1px solid var(--line,rgba(191,164,106,.1));border-radius:16px;background:rgba(26,24,20,.5)">
     <div style="flex:0 0 auto">
       <img src="/images/book-implant-guide.jpg" alt="임플란트 사용설명서 — 현진호 저" loading="lazy" style="width:clamp(120px,15vw,180px);border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.4)">
     </div>

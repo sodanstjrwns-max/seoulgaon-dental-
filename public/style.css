@@ -60,12 +60,33 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
 [data-reveal]{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
 [data-reveal].revealed{opacity:1;transform:translateY(0)}
 
+/* ===== MOBILE — GLOBAL ===== */
 @media(max-width:768px){
   html{cursor:auto}
-  body{cursor:auto}
+  body{cursor:auto;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
   a,button{cursor:pointer}
   #cur{display:none!important}
   .nav-links{display:none}
   .nav-cta{display:none}
   .hamburger{display:flex}
+  #nav{height:60px;padding:0 1rem}
+  .nav-logo{font-size:1.15rem}
+  footer{padding:2rem 1.25rem}
+  .ft-logo{font-size:1rem}
+  /* Touch-friendly tap targets — min 44px */
+  .mob-menu a{padding:.75rem 1rem;min-height:48px;display:flex;align-items:center;justify-content:center;font-size:clamp(1.3rem,4.5vw,2rem)}
+  .faq-q,.notice-q{min-height:48px;padding:1rem 0}
+  /* Safe area for bottom-notch devices */
+  footer{padding-bottom:max(2rem,env(safe-area-inset-bottom))}
+  /* Global overflow protection */
+  main,section{overflow-x:hidden}
+  img{max-width:100%;height:auto}
+  /* Better mobile menu spacing */
+  .mob-menu{gap:1rem;padding:0 2rem}
+}
+@media(max-width:480px){
+  #nav{height:56px}
+  footer{padding:1.5rem 1rem;padding-bottom:max(1.5rem,env(safe-area-inset-bottom))}
+  .ft-biz{font-size:.65rem}
+  .mob-menu a{font-size:1.2rem;min-height:44px}
 }

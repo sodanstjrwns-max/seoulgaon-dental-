@@ -73,10 +73,19 @@
 @media(max-width:768px){
   .general-grid{grid-template-columns:1fr;padding:0 1.25rem}
   .tx-cta-btns{flex-direction:column;align-items:stretch;max-width:320px;margin:0 auto}
+  .tx-cta-btns a,.tx-cta-btns button{min-height:48px;justify-content:center;display:flex;align-items:center}
+  .general-header{text-align:center;padding:0 1.25rem}
+  .tx-cta-section{padding:2.5rem 1.25rem 3rem}
+  .tx-cta-section h3{font-size:clamp(1.1rem,4vw,1.5rem)}
+  .tx-cta-section p{font-size:.85rem}
 }
 @media(max-width:480px){
   .general-grid{gap:1rem}
-  .gen-card{padding:1.5rem}
+  .gen-card{padding:1.25rem}
+  .gen-card h4{font-size:.95rem}
+  .gen-card p{font-size:.8rem}
+  .general-header h2{font-size:clamp(1.4rem,5vw,2rem)}
+  .tx-cta-section{padding:2rem 1rem 2.5rem}
 }
 </style>
 <script type="application/ld+json">

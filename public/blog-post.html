@@ -75,7 +75,25 @@
 .bp-error i{font-size:3rem;color:var(--stone,#8C8578);margin-bottom:1rem;display:block}
 .bp-error p{color:var(--stone-l,#AFA79D);margin-bottom:1.5rem}
 @media(max-width:768px){
+  .bp-wrap{padding:6.5rem 1.25rem 3rem}
+  .bp-title{font-size:clamp(1.3rem,5.5vw,1.8rem)}
+  .bp-content{font-size:.88rem;line-height:1.85}
   .bp-images{grid-template-columns:1fr}
+  .bp-images img{border-radius:8px}
+  .bp-meta{gap:.5rem}
+  .bp-tag{font-size:.68rem;padding:.25rem .7rem}
+  .bp-date{font-size:.72rem}
+  .bp-doctor{font-size:.78rem;padding:.4rem .8rem}
+  .bp-doctor img{width:24px;height:24px}
+  .bp-bottom{flex-direction:column;align-items:stretch;gap:.75rem}
+  .bp-btn{justify-content:center;padding:.7rem 1.25rem;min-height:44px}
+  .lb img{max-width:96vw;max-height:85vh}
+}
+@media(max-width:480px){
+  .bp-wrap{padding:6rem 1rem 2.5rem}
+  .bp-title{font-size:1.2rem}
+  .bp-content{font-size:.85rem;line-height:1.8}
+  .bp-back{font-size:.78rem}
 }
 </style>
 </head>

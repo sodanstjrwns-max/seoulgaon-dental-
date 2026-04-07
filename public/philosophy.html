@@ -189,6 +189,16 @@
   .ph-pm-num{text-align:center}
   .ph-turning-quote::before,.ph-turning-quote::after{display:none}
 }
+@media(max-width:768px){
+  .ph-cta-title{font-size:clamp(1.2rem,4.5vw,1.7rem)}
+  .ph-cta-sub{font-size:.85rem}
+  .ph-btn{padding:.75rem 1.5rem;font-size:.85rem;min-height:48px}
+  .ph-btns{gap:.75rem}
+}
+@media(max-width:480px){
+  .ph-btns{flex-direction:column;align-items:stretch;max-width:320px;margin:0 auto}
+  .ph-btn{width:100%;justify-content:center}
+}
 </style>
 <script type="application/ld+json">
 {
