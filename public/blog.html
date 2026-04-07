@@ -143,7 +143,11 @@ function makeDBCard(p){
   const cat = catMap[p.category]||'info';
   const tag = catLabel[p.category]||p.category;
   const date = new Date(p.created_at).toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\. /g,'.').replace(/\.$/,'');
-  const excerpt = p.content.substring(0,100)+(p.content.length>100?'...':'');
+  // Extract plain text from HTML content for excerpt
+  const tmpDiv = document.createElement('div');
+  tmpDiv.innerHTML = p.content;
+  const plainText = tmpDiv.textContent || tmpDiv.innerText || p.content;
+  const excerpt = plainText.substring(0,100)+(plainText.length>100?'...':'');
   const thumb = p.thumbnail_url || null;
   const drBadge = p.doctor_name ? `<div class="blog-card-doctor" onclick="event.stopPropagation();location.href='doctors.html?id=${p.doctor_id}'">${p.doctor_photo?'<img src="'+p.doctor_photo+'" alt="">':'<i class="fas fa-user-md"></i>'} ${p.doctor_name}</div>` : '';
   return `<a href="blog-post.html?id=${p.id}" class="blog-card" data-category="${cat}" data-tilt style="text-decoration:none;color:inherit;display:block">

@@ -198,6 +198,9 @@ async function initDB(db: D1Database) {
     `ALTER TABLE blog_posts ADD COLUMN view_count INTEGER DEFAULT 0`,
     `ALTER TABLE before_after ADD COLUMN view_count INTEGER DEFAULT 0`,
     `ALTER TABLE notices ADD COLUMN view_count INTEGER DEFAULT 0`,
+    // SEO columns for blog (safe ALTER)
+    `ALTER TABLE blog_posts ADD COLUMN meta_description TEXT DEFAULT ''`,
+    `ALTER TABLE blog_posts ADD COLUMN thumbnail_key TEXT DEFAULT ''`,
   ]
   for (const sql of tables) {
     try { await db.prepare(sql).run() } catch (e: any) {
@@ -575,30 +578,22 @@ app.get('/api/blog/:id', async (c) => {
 //  BLOG API — ADMIN
 // ══════════════════════════════════════════════════
 
-// Create blog
+// Create blog (HTML content from SEO block editor)
 app.post('/api/admin/blog', auth, async (c) => {
   try {
     const db = c.env.DB
-    const { title, content, category, doctor_id, images } = await c.req.json<{
+    const { title, content, category, doctor_id, thumbnail_url, meta_description } = await c.req.json<{
       title: string; content: string; category?: string; doctor_id?: number | null;
-      images?: { url: string; key: string; name: string }[]
+      thumbnail_url?: string | null; meta_description?: string;
     }>()
     if (!title?.trim()) return c.json({ error: '제목을 입력해주세요' }, 400)
     if (!content?.trim()) return c.json({ error: '내용을 입력해주세요' }, 400)
 
-    const thumbnailUrl = images?.[0]?.url || null
     const result = await db.prepare(
-      'INSERT INTO blog_posts (title, content, category, doctor_id, thumbnail_url) VALUES (?, ?, ?, ?, ?)'
-    ).bind(title.trim(), content.trim(), category || '일반', doctor_id || null, thumbnailUrl).run()
+      'INSERT INTO blog_posts (title, content, category, doctor_id, thumbnail_url, meta_description) VALUES (?, ?, ?, ?, ?, ?)'
+    ).bind(title.trim(), content.trim(), category || '일반', doctor_id || null, thumbnail_url || null, meta_description || '').run()
     const postId = result.meta.last_row_id
 
-    if (images?.length) {
-      for (let i = 0; i < images.length; i++) {
-        await db.prepare(
-          'INSERT INTO blog_images (post_id, image_url, r2_key, filename, sort_order) VALUES (?, ?, ?, ?, ?)'
-        ).bind(postId, images[i].url, images[i].key, images[i].name || '', i).run()
-      }
-    }
     return c.json({ id: postId, message: '블로그 게시글이 등록되었습니다' }, 201)
   } catch (e: any) {
     return c.json({ error: '블로그 등록 실패: ' + e.message }, 500)
@@ -611,9 +606,9 @@ app.put('/api/admin/blog/:id', auth, async (c) => {
     const db = c.env.DB
     const r2 = c.env.R2
     const id = c.req.param('id')
-    const { title, content, category, doctor_id, is_published, images } = await c.req.json<{
+    const { title, content, category, doctor_id, is_published, thumbnail_url, meta_description } = await c.req.json<{
       title?: string; content?: string; category?: string; doctor_id?: number | null; is_published?: number;
-      images?: { url: string; key: string; name: string }[]
+      thumbnail_url?: string | null; meta_description?: string;
     }>()
 
     const existing = await db.prepare('SELECT id FROM blog_posts WHERE id = ?').bind(id).first()
@@ -626,34 +621,11 @@ app.put('/api/admin/blog/:id', auth, async (c) => {
     if (category !== undefined) { sets.push('category = ?'); vals.push(category) }
     if (doctor_id !== undefined) { sets.push('doctor_id = ?'); vals.push(doctor_id) }
     if (is_published !== undefined) { sets.push('is_published = ?'); vals.push(is_published) }
-
-    if (images !== undefined) {
-      const thumbUrl = images[0]?.url || null
-      sets.push('thumbnail_url = ?')
-      vals.push(thumbUrl)
-    }
+    if (thumbnail_url !== undefined) { sets.push('thumbnail_url = ?'); vals.push(thumbnail_url) }
+    if (meta_description !== undefined) { sets.push('meta_description = ?'); vals.push(meta_description) }
 
     vals.push(id)
     await db.prepare(`UPDATE blog_posts SET ${sets.join(', ')} WHERE id = ?`).bind(...vals).run()
-
-    // Replace images if provided
-    if (images !== undefined) {
-      const oldImages = await db.prepare('SELECT r2_key FROM blog_images WHERE post_id = ?').bind(id).all()
-      // Collect new keys to avoid deleting re-used images
-      const newKeys = new Set(images.map(i => i.key))
-      for (const img of (oldImages.results || []) as any[]) {
-        if (img.r2_key && !newKeys.has(img.r2_key)) {
-          await deleteR2Image(r2, img.r2_key)
-        }
-      }
-      await db.prepare('DELETE FROM blog_images WHERE post_id = ?').bind(id).run()
-
-      for (let i = 0; i < images.length; i++) {
-        await db.prepare(
-          'INSERT INTO blog_images (post_id, image_url, r2_key, filename, sort_order) VALUES (?, ?, ?, ?, ?)'
-        ).bind(id, images[i].url, images[i].key, images[i].name || '', i).run()
-      }
-    }
 
     return c.json({ message: '게시글이 수정되었습니다' })
   } catch (e: any) {

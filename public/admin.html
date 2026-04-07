@@ -104,6 +104,46 @@
   .badge.draft{background:rgba(255,107,107,.1);color:#ff6b6b}
   .badge.pinned{background:rgba(191,164,106,.15);color:var(--gold)}
   .upload-counter{font-size:.75rem;color:#888;margin-top:.5rem}
+  /* ══ SEO Block Editor ══ */
+  .seo-editor{border:1px solid #333;border-radius:12px;overflow:hidden;background:var(--ink-3)}
+  .seo-toolbar{display:flex;gap:.3rem;flex-wrap:wrap;padding:.6rem .8rem;background:var(--ink-4);border-bottom:1px solid #333}
+  .seo-toolbar button{padding:.35rem .7rem;background:transparent;border:1px solid #444;border-radius:6px;color:#aaa;font-size:.75rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.3rem;white-space:nowrap}
+  .seo-toolbar button:hover{border-color:var(--gold);color:var(--gold);background:rgba(191,164,106,.08)}
+  .seo-toolbar button.active{border-color:var(--gold);color:var(--gold);background:rgba(191,164,106,.12)}
+  .seo-toolbar .sep{width:1px;height:22px;background:#444;margin:0 .3rem;align-self:center}
+  .seo-blocks{min-height:300px;padding:1rem}
+  .seo-block{position:relative;margin-bottom:.8rem;border:1px solid transparent;border-radius:8px;padding:.6rem;transition:border-color .2s}
+  .seo-block:hover,.seo-block.active{border-color:rgba(191,164,106,.25)}
+  .seo-block:hover .block-controls{opacity:1}
+  .block-controls{position:absolute;top:.3rem;right:.3rem;display:flex;gap:.2rem;opacity:0;transition:opacity .2s;z-index:5}
+  .block-controls button{width:24px;height:24px;background:rgba(0,0,0,.7);border:1px solid #444;border-radius:4px;color:#888;font-size:.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .block-controls button:hover{color:#ff6b6b;border-color:#ff6b6b}
+  .block-controls button.move:hover{color:var(--gold);border-color:var(--gold)}
+  .seo-block [contenteditable]{outline:none;color:#e5e5e5;width:100%}
+  .seo-block [contenteditable]:empty::before{content:attr(data-placeholder);color:#555;pointer-events:none}
+  .seo-block h2[contenteditable]{font-size:1.4rem;font-weight:700;line-height:1.5;padding:.3rem 0}
+  .seo-block h3[contenteditable]{font-size:1.15rem;font-weight:600;line-height:1.5;padding:.2rem 0}
+  .seo-block .block-paragraph{font-size:.92rem;line-height:1.9;min-height:1.5em}
+  .seo-block .block-list{font-size:.92rem;line-height:1.8;padding-left:1.5rem}
+  .seo-block .block-list li{margin-bottom:.3rem}
+  .seo-block .block-quote{font-size:.92rem;line-height:1.8;border-left:3px solid var(--gold);padding:.8rem 1.2rem;color:#bbb;font-style:italic;background:rgba(191,164,106,.04)}
+  .seo-block .block-img-wrap{text-align:center;padding:.5rem 0}
+  .seo-block .block-img-wrap img{max-width:100%;border-radius:8px;margin-bottom:.5rem}
+  .seo-block .block-img-wrap .img-caption{font-size:.78rem;color:#888;padding:.3rem;outline:none;text-align:center}
+  .seo-block .block-img-placeholder{border:2px dashed #444;border-radius:8px;padding:2rem;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+  .seo-block .block-img-placeholder:hover{border-color:var(--gold);background:rgba(191,164,106,.03)}
+  .seo-block .block-img-placeholder input{position:absolute;inset:0;opacity:0;cursor:pointer}
+  .seo-block .block-img-placeholder i{font-size:1.5rem;color:#555;margin-bottom:.4rem;display:block}
+  .seo-block .block-img-placeholder p{font-size:.8rem;color:#666}
+  .seo-block .block-img-uploading{text-align:center;padding:2rem;color:var(--gold);font-size:.85rem}
+  .seo-block .block-img-uploading i{animation:spin 1s linear infinite;margin-right:.5rem}
+  /* SEO score hint */
+  .seo-hints{padding:.8rem 1rem;border-top:1px solid #333;background:var(--ink-4);font-size:.75rem;color:#888;display:flex;flex-wrap:wrap;gap:1rem}
+  .seo-hint{display:flex;align-items:center;gap:.3rem}
+  .seo-hint .dot{width:8px;height:8px;border-radius:50%}
+  .seo-hint .dot.ok{background:var(--success)}
+  .seo-hint .dot.warn{background:#fbbf24}
+  .seo-hint .dot.bad{background:var(--danger)}
   /* Sync panel */
   .sync-panel{background:var(--ink-3);border:1px solid rgba(191,164,106,.2);border-radius:12px;padding:1.5rem;margin-bottom:2rem}
   .sync-panel h3{font-size:.9rem;font-weight:700;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
@@ -233,20 +273,41 @@
       <div id="blog-write" class="panel">
         <div class="panel-title"><i class="fas fa-edit"></i><span id="blog-form-title">새 블로그 작성</span></div>
         <input type="hidden" id="blog-edit-id" value="">
-        <div class="field"><label>제목 *</label><input type="text" id="blog-title" placeholder="블로그 제목을 입력하세요"></div>
-        <div class="field"><label>카테고리</label><select id="blog-category"><option value="일반">일반</option><option value="임플란트">임플란트</option><option value="심미치료">심미치료</option><option value="신경치료">신경치료</option><option value="치과상식">치과상식</option></select></div>
-        <div class="field"><label>담당 원장</label><select id="blog-doctor"><option value="">원장 선택 (선택사항)</option></select></div>
-        <div class="field"><label>내용 *</label><textarea id="blog-content" placeholder="블로그 내용을 입력하세요" rows="8"></textarea></div>
+        <div class="field"><label>제목 (H1) *</label><input type="text" id="blog-title" placeholder="SEO 키워드를 포함한 블로그 제목 (예: 임플란트 수명, 얼마나 갈까?)"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="field"><label>카테고리</label><select id="blog-category"><option value="일반">일반</option><option value="임플란트">임플란트</option><option value="심미치료">심미치료</option><option value="신경치료">신경치료</option><option value="치과상식">치과상식</option></select></div>
+          <div class="field"><label>담당 원장</label><select id="blog-doctor"><option value="">원장 선택 (선택사항)</option></select></div>
+        </div>
+        <div class="field"><label>메타 설명 (선택) — 검색 결과에 표시될 요약문</label><input type="text" id="blog-meta-desc" placeholder="160자 이내 요약 (비워두면 본문 앞부분 자동 추출)" maxlength="200"></div>
         <div class="field">
-          <label>사진 업로드 (여러 장 드래그 & 드롭) — 첫 번째 사진이 썸네일이 됩니다</label>
-          <div class="dropzone" id="blog-dropzone">
-            <input type="file" multiple accept="image/*" onchange="handleBlogFiles(event)">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <p>클릭하거나 이미지를 드래그하세요 (최대 10MB/장)</p>
+          <label>본문 내용 *</label>
+          <div class="seo-editor" id="seo-editor">
+            <div class="seo-toolbar" id="seo-toolbar">
+              <button type="button" onclick="addBlock('h2')" title="소제목 (H2)"><i class="fas fa-heading"></i> H2</button>
+              <button type="button" onclick="addBlock('h3')" title="중제목 (H3)"><i class="fas fa-heading" style="font-size:.65rem"></i> H3</button>
+              <div class="sep"></div>
+              <button type="button" onclick="addBlock('p')" title="본문 단락"><i class="fas fa-paragraph"></i> 본문</button>
+              <button type="button" onclick="addBlock('ul')" title="목록"><i class="fas fa-list-ul"></i> 목록</button>
+              <button type="button" onclick="addBlock('quote')" title="인용"><i class="fas fa-quote-left"></i> 인용</button>
+              <div class="sep"></div>
+              <button type="button" onclick="addBlock('image')" title="이미지 삽입"><i class="fas fa-image"></i> 이미지</button>
+              <div class="sep"></div>
+              <button type="button" onclick="execBold()" title="굵게 (Ctrl+B)"><i class="fas fa-bold"></i></button>
+              <button type="button" onclick="execLink()" title="링크 삽입"><i class="fas fa-link"></i></button>
+            </div>
+            <div class="seo-blocks" id="seo-blocks">
+              <!-- 블록들이 여기에 동적으로 추가됨 -->
+            </div>
+            <div class="seo-hints" id="seo-hints"></div>
           </div>
-          <div class="progress-bar" id="blog-progress"><div class="bar" id="blog-progress-bar"></div></div>
-          <div class="upload-counter" id="blog-upload-counter"></div>
-          <div class="preview-grid" id="blog-previews"></div>
+        </div>
+        <div class="field">
+          <label>썸네일 이미지 (선택) — 블로그 카드에 표시될 대표 이미지</label>
+          <div class="dropzone" id="thumb-dropzone" style="padding:1.5rem">
+            <input type="file" accept="image/*" onchange="handleThumbFile(event)">
+            <div id="thumb-preview" style="display:none"><img id="thumb-img" style="max-height:150px;border-radius:8px;margin-bottom:.5rem" alt=""><br><button type="button" onclick="removeThumb()" style="font-size:.75rem;background:#333;border:1px solid #444;color:#aaa;padding:.3rem .8rem;border-radius:4px;cursor:pointer">썸네일 제거</button></div>
+            <div id="thumb-placeholder"><i class="fas fa-image" style="font-size:1.5rem;color:#555;margin-bottom:.3rem"></i><p>대표 이미지를 선택하세요 (첫 번째 본문 이미지가 자동으로 사용됩니다)</p></div>
+          </div>
         </div>
         <div style="display:flex;gap:.5rem">
           <button class="btn-gold" id="blog-submit-btn" onclick="submitBlog()" style="flex:1">게시글 등록</button>
@@ -337,10 +398,9 @@
 <script>
 // ══════ STATE ══════
 let token = localStorage.getItem('gaon_token') || '';
-let blogImages = [];
+let blogThumb = null; // {url, key}
 let noticeImages = [];
 let baSlots = {'intra-before':null,'intra-after':null,'pano-before':null,'pano-after':null};
-let uploadTotal = 0, uploadDone = 0;
 let noticeUploadTotal = 0, noticeUploadDone = 0;
 let doctorsList = [];
 
@@ -517,7 +577,7 @@ function updateProgress(id,done,total){
   if(done>=total)setTimeout(()=>{wrap.classList.remove('active');bar.style.width='0%'},1000);
 }
 
-// ══════ BLOG ══════
+// ══════ BLOG — SEO BLOCK EDITOR ══════
 function showBlogTab(t){
   document.getElementById('blog-write').style.display=t==='write'?'block':'none';
   document.getElementById('blog-list').style.display=t==='list'?'block':'none';
@@ -525,55 +585,253 @@ function showBlogTab(t){
   if(t==='list')loadBlogList();
 }
 
-// Drag & drop
-const dz=document.getElementById('blog-dropzone');
-if(dz){
-  dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over')});
-  dz.addEventListener('dragleave',()=>dz.classList.remove('drag-over'));
-  dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag-over');Array.from(e.dataTransfer.files).forEach(f=>{if(f.type.startsWith('image/'))uploadBlogImage(f)})});
-}
-function handleBlogFiles(e){Array.from(e.target.files).forEach(f=>uploadBlogImage(f));e.target.value=''}
+// ── Block Editor Core ──
+let blockIdCounter = 0;
+function nextBlockId(){ return 'blk-'+(++blockIdCounter) }
 
-async function uploadBlogImage(file){
-  const idx=blogImages.length;
-  uploadTotal++;
-  blogImages.push({url:'',key:'',name:file.name,status:'uploading',localPreview:URL.createObjectURL(file)});
-  renderBlogPreviews();
-  updateProgress('blog-progress',uploadDone,uploadTotal);
-  try{
-    const d=await uploadFileToR2(file);
-    blogImages[idx]={url:d.url,key:d.key,name:d.filename,status:'uploaded'};
-    uploadDone++;
-  }catch(err){
-    blogImages.splice(idx,1);
-    uploadDone++;
-    toast('이미지 업로드 실패: '+(err.message||''),true);
+function addBlock(type, afterEl, data){
+  const container = document.getElementById('seo-blocks');
+  const id = nextBlockId();
+  const div = document.createElement('div');
+  div.className = 'seo-block';
+  div.id = id;
+  div.dataset.type = type;
+
+  const controls = `<div class="block-controls">
+    <button class="move" onclick="moveBlock('${id}',-1)" title="위로"><i class="fas fa-arrow-up"></i></button>
+    <button class="move" onclick="moveBlock('${id}',1)" title="아래로"><i class="fas fa-arrow-down"></i></button>
+    <button onclick="removeBlock('${id}')" title="삭제"><i class="fas fa-times"></i></button>
+  </div>`;
+
+  if(type==='h2'){
+    div.innerHTML = controls+`<h2 contenteditable="true" data-placeholder="소제목 (H2) — 핵심 키워드를 포함하세요">${data||''}</h2>`;
+  } else if(type==='h3'){
+    div.innerHTML = controls+`<h3 contenteditable="true" data-placeholder="중제목 (H3)">${data||''}</h3>`;
+  } else if(type==='p'){
+    div.innerHTML = controls+`<div class="block-paragraph" contenteditable="true" data-placeholder="본문 내용을 입력하세요. 줄바꿈은 Enter, 굵게는 Ctrl+B">${data||''}</div>`;
+  } else if(type==='ul'){
+    div.innerHTML = controls+`<ul class="block-list" contenteditable="true" data-placeholder="목록 항목"><li>${data||''}</li></ul>`;
+  } else if(type==='quote'){
+    div.innerHTML = controls+`<div class="block-quote" contenteditable="true" data-placeholder="인용문 또는 핵심 포인트">${data||''}</div>`;
+  } else if(type==='image'){
+    if(data && data.url){
+      div.innerHTML = controls+`<div class="block-img-wrap" data-url="${data.url}" data-key="${data.key||''}">
+        <img src="${data.url}" alt="${data.alt||''}" loading="lazy">
+        <div class="img-caption" contenteditable="true" data-placeholder="이미지 설명 (alt 텍스트 — SEO에 중요!)">${data.alt||''}</div>
+      </div>`;
+    } else {
+      div.innerHTML = controls+`<div class="block-img-placeholder">
+        <input type="file" accept="image/*" onchange="handleBlockImage(event,'${id}')">
+        <i class="fas fa-image"></i>
+        <p>클릭하여 이미지 업로드 (본문 중간에 삽입됩니다)</p>
+      </div>`;
+    }
   }
-  updateProgress('blog-progress',uploadDone,uploadTotal);
-  document.getElementById('blog-upload-counter').textContent=`업로드 완료: ${blogImages.filter(i=>i.status==='uploaded').length}장`;
-  renderBlogPreviews();
+
+  // Focus events
+  div.addEventListener('focusin',()=>{
+    document.querySelectorAll('.seo-block.active').forEach(b=>b.classList.remove('active'));
+    div.classList.add('active');
+  });
+
+  // Insert after specific element or append to end
+  if(afterEl && afterEl.nextSibling){ container.insertBefore(div, afterEl.nextSibling); }
+  else if(afterEl){ container.appendChild(div); }
+  else { container.appendChild(div); }
+
+  // Focus the editable element
+  const editable = div.querySelector('[contenteditable]');
+  if(editable){
+    setTimeout(()=>{
+      editable.focus();
+      // Move cursor to end
+      const range = document.createRange();
+      range.selectNodeContents(editable);
+      range.collapse(false);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    },50);
+  }
+  updateSeoHints();
+  return div;
 }
 
-function removeBlogImage(i){blogImages.splice(i,1);renderBlogPreviews();document.getElementById('blog-upload-counter').textContent=`업로드 완료: ${blogImages.filter(x=>x.status==='uploaded').length}장`}
-function renderBlogPreviews(){
-  document.getElementById('blog-previews').innerHTML=blogImages.map((img,i)=>{
-    const src=img.status==='uploading'?img.localPreview:img.url;
-    return `<div class="preview-item"><img src="${src}" alt="">${img.status==='uploading'?'<div class="uploading"><i class="fas fa-spinner"></i></div>':'<div class="remove" onclick="removeBlogImage('+i+')"><i class="fas fa-times"></i></div>'}</div>`;
-  }).join('');
+function moveBlock(id, dir){
+  const block = document.getElementById(id);
+  if(!block) return;
+  const container = block.parentNode;
+  if(dir === -1 && block.previousElementSibling){
+    container.insertBefore(block, block.previousElementSibling);
+  } else if(dir === 1 && block.nextElementSibling){
+    container.insertBefore(block.nextElementSibling, block);
+  }
+  updateSeoHints();
 }
 
+function removeBlock(id){
+  const block = document.getElementById(id);
+  if(block) block.remove();
+  updateSeoHints();
+}
+
+async function handleBlockImage(e, blockId){
+  const file = e.target.files[0];
+  if(!file) return;
+  const block = document.getElementById(blockId);
+  if(!block) return;
+  const wrap = block.querySelector('.block-img-placeholder');
+  if(wrap) wrap.innerHTML = '<div class="block-img-uploading"><i class="fas fa-spinner"></i> 이미지 업로드 중...</div>';
+  try{
+    const d = await uploadFileToR2(file);
+    const controls = block.querySelector('.block-controls').outerHTML;
+    block.innerHTML = controls+`<div class="block-img-wrap" data-url="${d.url}" data-key="${d.key}">
+      <img src="${d.url}" alt="" loading="lazy">
+      <div class="img-caption" contenteditable="true" data-placeholder="이미지 설명 (alt 텍스트 — SEO에 중요!)"></div>
+    </div>`;
+    // Set as thumb if none
+    if(!blogThumb){
+      blogThumb = {url:d.url, key:d.key};
+      document.getElementById('thumb-img').src = d.url;
+      document.getElementById('thumb-preview').style.display = 'block';
+      document.getElementById('thumb-placeholder').style.display = 'none';
+    }
+  }catch(err){
+    toast('이미지 업로드 실패: '+(err.message||''),true);
+    const controls = block.querySelector('.block-controls')?.outerHTML || '';
+    block.innerHTML = controls+`<div class="block-img-placeholder">
+      <input type="file" accept="image/*" onchange="handleBlockImage(event,'${blockId}')">
+      <i class="fas fa-image"></i>
+      <p>클릭하여 이미지 업로드</p>
+    </div>`;
+  }
+  updateSeoHints();
+}
+
+function execBold(){
+  document.execCommand('bold',false,null);
+}
+function execLink(){
+  const url = prompt('링크 URL을 입력하세요 (예: https://www.seoulgaon.com/treatments.html)');
+  if(url) document.execCommand('createLink',false,url);
+}
+
+// ── Thumbnail handling ──
+async function handleThumbFile(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  try{
+    const d = await uploadFileToR2(file);
+    blogThumb = {url:d.url, key:d.key};
+    document.getElementById('thumb-img').src = d.url;
+    document.getElementById('thumb-preview').style.display = 'block';
+    document.getElementById('thumb-placeholder').style.display = 'none';
+  }catch(err){ toast('썸네일 업로드 실패',true); }
+  e.target.value='';
+}
+function removeThumb(){
+  blogThumb = null;
+  document.getElementById('thumb-img').src = '';
+  document.getElementById('thumb-preview').style.display = 'none';
+  document.getElementById('thumb-placeholder').style.display = 'block';
+}
+
+// ── SEO Hints ──
+function updateSeoHints(){
+  const blocks = document.querySelectorAll('#seo-blocks .seo-block');
+  const h2Count = document.querySelectorAll('#seo-blocks .seo-block[data-type="h2"]').length;
+  const imgCount = document.querySelectorAll('#seo-blocks .seo-block[data-type="image"] .block-img-wrap').length;
+  const pBlocks = document.querySelectorAll('#seo-blocks .seo-block[data-type="p"] .block-paragraph');
+  let wordCount = 0;
+  pBlocks.forEach(p=>wordCount += (p.textContent||'').length);
+  document.querySelectorAll('#seo-blocks .seo-block[data-type="h2"] h2, #seo-blocks .seo-block[data-type="h3"] h3').forEach(el=>wordCount+=(el.textContent||'').length);
+
+  const hints = document.getElementById('seo-hints');
+  hints.innerHTML = `
+    <div class="seo-hint"><div class="dot ${h2Count>=1?'ok':'bad'}"></div> H2 소제목: ${h2Count}개 ${h2Count>=1?'':'(1개 이상 권장)'}</div>
+    <div class="seo-hint"><div class="dot ${imgCount>=1?'ok':'warn'}"></div> 이미지: ${imgCount}장 ${imgCount>=1?'':'(1장 이상 권장)'}</div>
+    <div class="seo-hint"><div class="dot ${wordCount>=300?'ok':wordCount>=100?'warn':'bad'}"></div> 본문: 약 ${wordCount}자 ${wordCount>=300?'':'(300자 이상 권장)'}</div>
+    <div class="seo-hint"><div class="dot ${blocks.length>=4?'ok':'warn'}"></div> 블록: ${blocks.length}개</div>
+  `;
+}
+
+// ── Editor → HTML 변환 ──
+function getEditorHTML(){
+  let html = '';
+  document.querySelectorAll('#seo-blocks .seo-block').forEach(block=>{
+    const type = block.dataset.type;
+    if(type==='h2'){
+      const el = block.querySelector('h2');
+      if(el && el.textContent.trim()) html += `<h2>${el.innerHTML}</h2>\n`;
+    } else if(type==='h3'){
+      const el = block.querySelector('h3');
+      if(el && el.textContent.trim()) html += `<h3>${el.innerHTML}</h3>\n`;
+    } else if(type==='p'){
+      const el = block.querySelector('.block-paragraph');
+      if(el && el.textContent.trim()) html += `<p>${el.innerHTML}</p>\n`;
+    } else if(type==='ul'){
+      const el = block.querySelector('.block-list');
+      if(el && el.textContent.trim()) html += `<ul>${el.innerHTML}</ul>\n`;
+    } else if(type==='quote'){
+      const el = block.querySelector('.block-quote');
+      if(el && el.textContent.trim()) html += `<blockquote>${el.innerHTML}</blockquote>\n`;
+    } else if(type==='image'){
+      const wrap = block.querySelector('.block-img-wrap');
+      if(wrap){
+        const url = wrap.dataset.url;
+        const caption = wrap.querySelector('.img-caption');
+        const alt = caption ? caption.textContent.trim() : '';
+        html += `<figure><img src="${url}" alt="${alt}" loading="lazy"><figcaption>${alt}</figcaption></figure>\n`;
+      }
+    }
+  });
+  return html;
+}
+
+// ── HTML → Editor 블록 복원 ──
+function loadEditorFromHTML(htmlStr){
+  const container = document.getElementById('seo-blocks');
+  container.innerHTML = '';
+  if(!htmlStr) return;
+  const parser = new DOMParser();
+  const doc = parser.parseFromString('<div>'+htmlStr+'</div>','text/html');
+  const nodes = doc.body.firstChild.childNodes;
+  nodes.forEach(node=>{
+    if(node.nodeType !== 1) return; // skip text nodes
+    const tag = node.tagName?.toLowerCase();
+    if(tag==='h2') addBlock('h2',null,node.innerHTML);
+    else if(tag==='h3') addBlock('h3',null,node.innerHTML);
+    else if(tag==='p') addBlock('p',null,node.innerHTML);
+    else if(tag==='ul') addBlock('ul',null,node.innerHTML);
+    else if(tag==='blockquote') addBlock('quote',null,node.innerHTML);
+    else if(tag==='figure'){
+      const img = node.querySelector('img');
+      const caption = node.querySelector('figcaption');
+      if(img) addBlock('image',null,{url:img.src, key:'', alt:caption?.textContent||img.alt||''});
+    }
+  });
+  updateSeoHints();
+}
+
+// ── Form actions ──
 function resetBlogForm(){
   document.getElementById('blog-edit-id').value='';
   document.getElementById('blog-title').value='';
-  document.getElementById('blog-content').value='';
+  document.getElementById('blog-meta-desc').value='';
   document.getElementById('blog-category').value='일반';
   document.getElementById('blog-doctor').value='';
-  blogImages=[];uploadTotal=0;uploadDone=0;
-  renderBlogPreviews();
-  document.getElementById('blog-upload-counter').textContent='';
+  document.getElementById('seo-blocks').innerHTML='';
+  blogThumb=null;
+  document.getElementById('thumb-img').src='';
+  document.getElementById('thumb-preview').style.display='none';
+  document.getElementById('thumb-placeholder').style.display='block';
   document.getElementById('blog-form-title').textContent='새 블로그 작성';
   document.getElementById('blog-submit-btn').textContent='게시글 등록';
   document.getElementById('blog-cancel-btn').style.display='none';
+  // Add default starter blocks
+  addBlock('h2');
+  addBlock('p');
+  updateSeoHints();
 }
 function cancelBlogEdit(){resetBlogForm()}
 
@@ -584,14 +842,19 @@ async function editBlog(id){
     showBlogTab('write');
     document.getElementById('blog-edit-id').value=id;
     document.getElementById('blog-title').value=d.post.title;
-    document.getElementById('blog-content').value=d.post.content;
+    document.getElementById('blog-meta-desc').value=d.post.meta_description||'';
     document.getElementById('blog-category').value=d.post.category||'일반';
     await loadDoctorsForSelect();
     document.getElementById('blog-doctor').value=d.post.doctor_id||'';
-    blogImages=(d.images||[]).map(img=>({url:img.image_url,key:img.r2_key,name:img.filename||'',status:'uploaded'}));
-    uploadTotal=blogImages.length;uploadDone=blogImages.length;
-    renderBlogPreviews();
-    document.getElementById('blog-upload-counter').textContent=blogImages.length?`업로드 완료: ${blogImages.length}장`:'';
+    // Load content into block editor
+    loadEditorFromHTML(d.post.content);
+    // Load thumbnail
+    if(d.post.thumbnail_url){
+      blogThumb={url:d.post.thumbnail_url, key:d.post.thumbnail_key||''};
+      document.getElementById('thumb-img').src=d.post.thumbnail_url;
+      document.getElementById('thumb-preview').style.display='block';
+      document.getElementById('thumb-placeholder').style.display='none';
+    } else { removeThumb(); }
     document.getElementById('blog-form-title').textContent='블로그 수정';
     document.getElementById('blog-submit-btn').textContent='수정 완료';
     document.getElementById('blog-cancel-btn').style.display='block';
@@ -602,25 +865,56 @@ async function editBlog(id){
 async function submitBlog(){
   const editId=document.getElementById('blog-edit-id').value;
   const title=document.getElementById('blog-title').value.trim();
-  const content=document.getElementById('blog-content').value.trim();
+  const content=getEditorHTML().trim();
   const category=document.getElementById('blog-category').value;
+  const meta_description=document.getElementById('blog-meta-desc').value.trim();
   if(!title)return toast('제목을 입력해주세요',true);
-  if(!content)return toast('내용을 입력해주세요',true);
-  if(blogImages.some(i=>i.status==='uploading'))return toast('이미지 업로드 중입니다. 잠시 기다려주세요.',true);
+  if(!content||content==='<h2></h2>\n<p></p>\n')return toast('본문 내용을 입력해주세요',true);
+  // Check for uploading images
+  if(document.querySelector('.block-img-uploading'))return toast('이미지 업로드 중입니다. 잠시 기다려주세요.',true);
+
   const btn=document.getElementById('blog-submit-btn');btn.disabled=true;btn.textContent=editId?'수정 중...':'등록 중...';
   try{
-    const images=blogImages.filter(i=>i.status==='uploaded').map(i=>({url:i.url,key:i.key,name:i.name}));
+    // Auto-detect thumbnail from first image block if not set
+    let thumbnailUrl = blogThumb?.url || null;
+    if(!thumbnailUrl){
+      const firstImgWrap = document.querySelector('#seo-blocks .block-img-wrap');
+      if(firstImgWrap) thumbnailUrl = firstImgWrap.dataset.url;
+    }
     const doctor_id=document.getElementById('blog-doctor').value||null;
     const url=editId?'/api/admin/blog/'+editId:'/api/admin/blog';
     const method=editId?'PUT':'POST';
-    const r=await fetch(url,{method,headers:authHeaders(),body:JSON.stringify({title,content,category,doctor_id:doctor_id?parseInt(doctor_id):null,images})});
+    const body={title,content,category,doctor_id:doctor_id?parseInt(doctor_id):null,thumbnail_url:thumbnailUrl,meta_description};
+    const r=await fetch(url,{method,headers:authHeaders(),body:JSON.stringify(body)});
     const d=await r.json();
     if(!r.ok){toast(d.error||'저장 실패',true);return}
-    toast(editId?'게시글이 수정되었습니다! 블로그 페이지에서 확인하세요.':'블로그 게시글이 등록되었습니다! 블로그 페이지에서 확인하세요.');
+    toast(editId?'게시글이 수정되었습니다!':'블로그 게시글이 등록되었습니다!');
     resetBlogForm();loadDashboard();loadBlogList();loadSyncCheck();
   }catch(err){toast('저장에 실패했습니다: '+(err.message||''),true)}
   finally{btn.disabled=false;btn.textContent=editId?'수정 완료':'게시글 등록'}
 }
+
+// ── init default blocks on page load ──
+setTimeout(()=>{
+  if(document.getElementById('seo-blocks') && !document.getElementById('seo-blocks').children.length){
+    addBlock('h2'); addBlock('p');
+    updateSeoHints();
+  }
+},200);
+
+// ── keyboard shortcuts ──
+document.addEventListener('keydown',e=>{
+  if(!e.target.closest('#seo-editor')) return;
+  if(e.ctrlKey && e.key==='b'){e.preventDefault(); execBold();}
+  // Enter in H2/H3 → add paragraph block
+  if(e.key==='Enter' && !e.shiftKey){
+    const block = e.target.closest('.seo-block');
+    if(block && (block.dataset.type==='h2'||block.dataset.type==='h3')){
+      e.preventDefault();
+      addBlock('p', block);
+    }
+  }
+});
 
 async function loadBlogList(){
   try{
@@ -628,10 +922,15 @@ async function loadBlogList(){
     if(d.error){toast(d.error,true);return}
     const el=document.getElementById('blog-items');
     if(!(d.posts||[]).length){el.innerHTML='<div style="padding:2rem;text-align:center;color:#666">등록된 블로그가 없습니다. 첫 번째 글을 작성해 보세요!</div>';return}
-    el.innerHTML=d.posts.map(p=>`<div class="item-row">
-      <div style="flex:1;min-width:0">
-        <div class="item-title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.title)}</div>
-        <div class="item-meta">${esc(p.category)} ${p.doctor_name?'· '+esc(p.doctor_name)+' 원장':''} · ${fmtDate(p.created_at)} · <i class="fas fa-eye" style="font-size:.65rem;opacity:.6"></i> ${p.view_count||0} <span class="badge ${p.is_published?'published':'draft'}">${p.is_published?'공개':'비공개'}</span></div>
+    el.innerHTML=d.posts.map(p=>{
+      const hasThumb = p.thumbnail_url ? `<img src="${p.thumbnail_url}" style="width:48px;height:48px;border-radius:6px;object-fit:cover;margin-right:.8rem;flex-shrink:0" alt="">` : '';
+      return `<div class="item-row">
+      <div style="flex:1;min-width:0;display:flex;align-items:center">
+        ${hasThumb}
+        <div style="min-width:0">
+          <div class="item-title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.title)}</div>
+          <div class="item-meta">${esc(p.category)} ${p.doctor_name?'· '+esc(p.doctor_name)+' 원장':''} · ${fmtDate(p.created_at)} · <i class="fas fa-eye" style="font-size:.65rem;opacity:.6"></i> ${p.view_count||0} <span class="badge ${p.is_published?'published':'draft'}">${p.is_published?'공개':'비공개'}</span></div>
+        </div>
       </div>
       <div class="item-actions">
         <a href="/blog-post.html?id=${p.id}" target="_blank" class="btn-sm preview" title="사이트에서 보기"><i class="fas fa-eye"></i></a>
@@ -639,7 +938,7 @@ async function loadBlogList(){
         <button class="btn-sm" onclick="togglePublish('blog',${p.id},${p.is_published?0:1})" title="${p.is_published?'비공개로':'공개로'}"><i class="fas fa-${p.is_published?'eye-slash':'globe'}"></i></button>
         <button class="btn-sm danger" onclick="deleteBlog(${p.id})" title="삭제"><i class="fas fa-trash"></i></button>
       </div>
-    </div>`).join('');
+    </div>`}).join('');
   }catch(err){document.getElementById('blog-items').innerHTML='<div style="padding:2rem;text-align:center;color:#ff6b6b">목록 로드 실패</div>'}
 }
 

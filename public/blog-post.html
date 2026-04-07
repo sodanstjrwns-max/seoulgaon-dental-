@@ -48,11 +48,26 @@
 .bp-doctor:hover{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
 .bp-doctor img{width:28px;height:28px;border-radius:50%;object-fit:cover}
 .bp-divider{width:60px;height:1px;background:linear-gradient(90deg,var(--gold,#BFA46A),transparent);margin-bottom:2.5rem}
-.bp-content{font-size:clamp(.88rem,1vw,.95rem);line-height:2;color:var(--stone-l,#AFA79D);white-space:pre-wrap;word-break:keep-all;margin-bottom:3rem}
+/* ===== SEO ARTICLE CONTENT ===== */
+.bp-content{font-size:clamp(.9rem,1vw,.98rem);line-height:2;color:var(--stone-l,#AFA79D);word-break:keep-all;margin-bottom:3rem}
+.bp-content h2{font-family:var(--ff-title,'Black Han Sans');font-size:clamp(1.25rem,2.5vw,1.6rem);color:var(--ivory,#F2EDE4);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid rgba(191,164,106,.12);line-height:1.4}
+.bp-content h3{font-size:clamp(1.05rem,2vw,1.2rem);color:var(--ivory,#F2EDE4);margin:2rem 0 .8rem;font-weight:600;line-height:1.4}
+.bp-content p{margin-bottom:1.2rem;line-height:2}
+.bp-content strong,.bp-content b{color:var(--ivory,#F2EDE4);font-weight:600}
+.bp-content a{color:var(--gold,#BFA46A);text-decoration:underline;text-underline-offset:3px;transition:color .2s}
+.bp-content a:hover{color:var(--gold-b,#D4BA82)}
+.bp-content ul,.bp-content ol{margin:1rem 0 1.5rem 1.2rem;line-height:1.9}
+.bp-content li{margin-bottom:.4rem}
+.bp-content li::marker{color:var(--gold,#BFA46A)}
+.bp-content blockquote{border-left:3px solid var(--gold,#BFA46A);padding:.8rem 1.5rem;margin:1.5rem 0;font-style:italic;color:#bbb;background:rgba(191,164,106,.04);border-radius:0 8px 8px 0}
+.bp-content figure{margin:2rem 0;text-align:center}
+.bp-content figure img{max-width:100%;border-radius:12px;cursor:pointer;transition:transform .3s,box-shadow .3s;border:1px solid rgba(191,164,106,.08)}
+.bp-content figure img:hover{transform:scale(1.01);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.bp-content figcaption{font-size:.78rem;color:var(--stone,#8C8578);margin-top:.6rem;font-style:italic}
+/* Legacy image grid (backward compat) */
 .bp-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:3rem}
 .bp-images img{width:100%;border-radius:12px;cursor:pointer;transition:transform .3s,box-shadow .3s;aspect-ratio:4/3;object-fit:cover;border:1px solid rgba(191,164,106,.08)}
 .bp-images img:hover{transform:scale(1.02);box-shadow:0 8px 30px rgba(0,0,0,.3)}
-/* Single image — full width */
 .bp-images.single{grid-template-columns:1fr}
 .bp-images.single img{aspect-ratio:auto;max-height:500px;object-fit:contain;background:var(--ink-3,#111009);border-radius:12px}
 /* Lightbox */
@@ -78,6 +93,11 @@
   .bp-wrap{padding:6.5rem 1.25rem 3rem}
   .bp-title{font-size:clamp(1.3rem,5.5vw,1.8rem)}
   .bp-content{font-size:.88rem;line-height:1.85}
+  .bp-content h2{font-size:1.2rem;margin:2rem 0 .8rem}
+  .bp-content h3{font-size:1.05rem;margin:1.5rem 0 .6rem}
+  .bp-content figure{margin:1.5rem -0.5rem}
+  .bp-content figure img{border-radius:8px}
+  .bp-content blockquote{padding:.6rem 1rem;margin:1rem 0}
   .bp-images{grid-template-columns:1fr}
   .bp-images img{border-radius:8px}
   .bp-meta{gap:.5rem}
@@ -194,7 +214,11 @@ const catLabel = {'임플란트':'Implant','심미치료':'Aesthetic','신경치
 
     // 페이지 타이틀 동적 업데이트
     document.title = post.title + ' | 서울가온치과 블로그';
-    const metaDesc = post.content.substring(0, 150).replace(/\n/g,' ') + '...';
+    // meta_description이 있으면 사용, 없으면 content에서 텍스트 추출
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = post.content;
+    const plainText = tempDiv.textContent || tempDiv.innerText || '';
+    const metaDesc = (post.meta_description || plainText.substring(0, 150)) + (plainText.length > 150 ? '...' : '');
     document.querySelector('meta[name="description"]').content = metaDesc;
     document.querySelector('meta[property="og:title"]').content = post.title + ' | 서울가온치과';
     document.querySelector('meta[property="og:description"]').content = metaDesc;
@@ -214,13 +238,22 @@ const catLabel = {'임플란트':'Implant','심미치료':'Aesthetic','신경치
       </a>`;
     }
 
-    // 이미지 HTML
-    let imgHtml = '';
-    if(images.length){
-      const cls = images.length === 1 ? 'bp-images single' : 'bp-images';
-      imgHtml = `<div class="${cls}">
-        ${images.map(img => `<img src="${img.image_url}" alt="${img.filename||post.title}" loading="lazy" onclick="openLB(this.src)">`).join('')}
-      </div>`;
+    // Detect if content is HTML (from SEO editor) or plain text (legacy)
+    const isHtml = post.content.trim().startsWith('<');
+    let contentHtml;
+    if(isHtml){
+      // SEO HTML content — render directly with sanitization
+      contentHtml = sanitizeHtml(post.content);
+    } else {
+      // Legacy plain text — convert to paragraphs
+      contentHtml = post.content.split('\n').filter(l=>l.trim()).map(l=>`<p>${escHtml(l)}</p>`).join('\n');
+      // Legacy images
+      if(images.length){
+        const cls = images.length === 1 ? 'bp-images single' : 'bp-images';
+        contentHtml += `<div class="${cls}">
+          ${images.map(img => `<img src="${img.image_url}" alt="${img.filename||post.title}" loading="lazy" onclick="openLB(this.src)">`).join('')}
+        </div>`;
+      }
     }
 
     wrap.innerHTML = `
@@ -237,9 +270,7 @@ const catLabel = {'임플란트':'Implant','심미치료':'Aesthetic','신경치
 
       <div class="bp-divider"></div>
 
-      ${imgHtml}
-
-      <div class="bp-content">${escHtml(post.content)}</div>
+      <article class="bp-content">${contentHtml}</article>
 
       <div class="bp-bottom">
         <a href="blog.html" class="bp-btn bp-btn-back"><i class="fas fa-arrow-left"></i> 목록으로</a>
@@ -266,6 +297,24 @@ const catLabel = {'임플란트':'Implant','심미치료':'Aesthetic','신경치
     d.textContent = str;
     return d.innerHTML;
   }
+
+  function sanitizeHtml(html){
+    // Allow only safe tags for SEO blog content
+    const allowed = ['h2','h3','p','ul','ol','li','strong','b','em','i','a','figure','img','figcaption','blockquote','br','span'];
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    // Remove script/style tags
+    tmp.querySelectorAll('script,style,iframe,object,embed').forEach(el=>el.remove());
+    return tmp.innerHTML;
+  }
+
+  // Lightbox for images inside article content
+  setTimeout(()=>{
+    document.querySelectorAll('.bp-content figure img, .bp-content img').forEach(img=>{
+      img.style.cursor='pointer';
+      img.addEventListener('click',()=>openLB(img.src));
+    });
+  },100);
 })();
 
 function openLB(src){
