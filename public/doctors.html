@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>의료진 소개 | 서울가온치과</title>
-<meta name="description" content="서울가온치과 의료진 소개 - 임플란트, 심미치료, 신경치료 전문의">
+<meta name="description" content="서울가온치과 의료진 소개 — 서울대 수석 졸업, 10년 이상 강남·서울 봉직 경력. 현진호 대표원장이 직접 진단하고, 끝까지 책임집니다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -12,16 +12,85 @@
 <link href="style.css" rel="stylesheet">
 <link href="pages.css" rel="stylesheet">
 <style>
-/* Doctor list page */
-.doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:2.5rem;max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem) clamp(4rem,8vh,6rem)}
+/* ===== DIRECTOR DEDICATED SECTION ===== */
+
+/* Hero — director intro */
+.dir-hero{position:relative;padding:clamp(10rem,22vh,14rem) clamp(1.5rem,4vw,6rem) clamp(4rem,8vh,6rem);overflow:hidden;display:flex;align-items:center;gap:clamp(2rem,5vw,5rem);max-width:1200px;margin:0 auto}
+.dir-hero-text{flex:1;min-width:0}
+.dir-hero-label{font-family:var(--ff-en,'Bebas Neue');font-size:.75rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold,#BFA46A);margin-bottom:1rem;display:block}
+.dir-hero-name{font-family:var(--ff-title,'Black Han Sans');font-size:clamp(2.8rem,6vw,4.5rem);line-height:1.1;margin-bottom:.3rem}
+.dir-hero-name em{color:var(--gold,#BFA46A)}
+.dir-hero-title{font-family:var(--ff-en,'Bebas Neue');font-size:clamp(.85rem,1.2vw,1rem);letter-spacing:3px;color:var(--stone,#8C8578);margin-bottom:1.8rem}
+.dir-hero-quote{font-size:clamp(1rem,1.4vw,1.15rem);color:var(--ivory,#F5F0E8);line-height:1.8;max-width:580px;margin-bottom:2rem;word-break:keep-all}
+.dir-hero-quote strong{color:var(--gold,#BFA46A);font-weight:700}
+.dir-hero-badges{display:flex;flex-wrap:wrap;gap:.5rem}
+.dir-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.4rem 1rem;border:1px solid var(--line,rgba(191,164,106,.1));border-radius:100px;font-size:.75rem;color:var(--stone-l,#AFA79D);transition:border-color .3s}
+.dir-badge.gold{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.dir-badge i{font-size:.65rem}
+.dir-hero-photo{flex:0 0 clamp(280px,28vw,400px);position:relative}
+.dir-hero-photo img{width:100%;border-radius:20px;aspect-ratio:3/4;object-fit:cover;border:1px solid var(--line,rgba(191,164,106,.1))}
+.dir-hero-photo::after{content:'';position:absolute;inset:-12px;border:1px solid var(--gold,#BFA46A);border-radius:24px;opacity:.15;pointer-events:none}
+
+/* ===== ORIGIN STORY ===== */
+.dir-origin{padding:clamp(4rem,8vh,7rem) clamp(1.5rem,4vw,6rem);max-width:1000px;margin:0 auto;border-top:1px solid var(--line,rgba(191,164,106,.1))}
+.dir-origin-label{font-family:var(--ff-en,'Bebas Neue');font-size:.75rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold,#BFA46A);margin-bottom:1rem}
+.dir-origin-title{font-family:var(--ff-title,'Black Han Sans');font-size:clamp(1.5rem,3vw,2.2rem);margin-bottom:2rem;line-height:1.35}
+.dir-origin p{font-size:clamp(.88rem,1.05vw,.95rem);color:var(--stone-l,#AFA79D);line-height:1.85;margin-bottom:1.5rem;word-break:keep-all}
+.dir-origin p strong{color:var(--ivory,#F5F0E8);font-weight:600}
+.dir-origin p em{color:var(--gold,#BFA46A);font-style:normal;font-weight:600}
+
+/* ===== CREDENTIALS ===== */
+.dir-credentials{padding:clamp(4rem,8vh,7rem) clamp(1.5rem,4vw,6rem);max-width:1000px;margin:0 auto;border-top:1px solid var(--line,rgba(191,164,106,.1))}
+.dir-cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;margin-top:2rem}
+.dir-cred-block h3{font-family:var(--ff-en,'Bebas Neue');font-size:.8rem;letter-spacing:3px;color:var(--gold,#BFA46A);text-transform:uppercase;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line,rgba(191,164,106,.1))}
+.dir-cred-list{list-style:none;padding:0}
+.dir-cred-list li{padding:.55rem 0;font-size:.88rem;color:var(--stone-l,#AFA79D);border-bottom:1px solid rgba(191,164,106,.04);display:flex;align-items:flex-start;gap:.5rem;line-height:1.5}
+.dir-cred-list li::before{content:'✦';color:var(--gold,#BFA46A);font-size:.55rem;margin-top:.4rem;flex-shrink:0}
+.dir-cred-list li strong{color:var(--ivory,#F5F0E8);font-weight:600}
+
+/* ===== PHILOSOPHY (inner voice) ===== */
+.dir-philo{padding:clamp(4rem,8vh,7rem) clamp(1.5rem,4vw,6rem);max-width:1000px;margin:0 auto;border-top:1px solid var(--line,rgba(191,164,106,.1))}
+.dir-philo-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin-top:2rem}
+.dir-philo-card{background:var(--ink-4,#1A1814);border:1px solid var(--line,rgba(191,164,106,.1));border-radius:16px;padding:2rem;transition:border-color .4s,transform .3s}
+.dir-philo-card:hover{border-color:var(--gold,#BFA46A);transform:translateY(-3px)}
+.dir-philo-card .num{font-family:var(--ff-en,'Bebas Neue');font-size:2.5rem;color:var(--gold,#BFA46A);opacity:.35;line-height:1;margin-bottom:.75rem}
+.dir-philo-card h4{font-family:var(--ff-title,'Black Han Sans');font-size:1.1rem;margin-bottom:.6rem}
+.dir-philo-card p{font-size:.85rem;color:var(--stone-l,#AFA79D);line-height:1.7;word-break:keep-all}
+.dir-philo-card .inner-voice{font-style:italic;color:var(--gold,#BFA46A);font-size:.8rem;margin-top:.75rem;padding-top:.75rem;border-top:1px solid rgba(191,164,106,.08);line-height:1.55}
+
+/* ===== PERSONAL ===== */
+.dir-personal{padding:clamp(4rem,8vh,7rem) clamp(1.5rem,4vw,6rem);max-width:1000px;margin:0 auto;border-top:1px solid var(--line,rgba(191,164,106,.1))}
+.dir-personal-inner{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center}
+.dir-personal-text h3{font-family:var(--ff-title,'Black Han Sans');font-size:clamp(1.3rem,2.5vw,1.8rem);margin-bottom:1rem;line-height:1.35}
+.dir-personal-text p{font-size:.88rem;color:var(--stone-l,#AFA79D);line-height:1.8;margin-bottom:1rem;word-break:keep-all}
+.dir-personal-text em{color:var(--gold,#BFA46A);font-style:normal}
+.dir-personal-img{position:relative}
+.dir-personal-img img{width:100%;border-radius:16px;aspect-ratio:4/3;object-fit:cover;border:1px solid var(--line,rgba(191,164,106,.1))}
+
+/* ===== CTA ===== */
+.dir-cta{text-align:center;padding:clamp(4rem,8vh,6rem) clamp(1.5rem,4vw,6rem);border-top:1px solid var(--line,rgba(191,164,106,.1))}
+.dir-cta h2{font-family:var(--ff-title,'Black Han Sans');font-size:clamp(1.5rem,3vw,2.2rem);margin-bottom:.75rem}
+.dir-cta p{font-size:.9rem;color:var(--stone-l,#AFA79D);margin-bottom:2rem;line-height:1.65}
+.dir-cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.dir-cta-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:100px;font-weight:600;font-size:.9rem;transition:all .3s}
+.dir-cta-btn.primary{background:var(--gold,#BFA46A);color:var(--ink,#0a0a08)}
+.dir-cta-btn.primary:hover{background:#D4BA82}
+.dir-cta-btn.secondary{border:1px solid var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.dir-cta-btn.secondary:hover{background:rgba(191,164,106,.1)}
+
+/* ===== TEAM SECTION (other doctors from DB) ===== */
+.team-section{padding:clamp(4rem,8vh,7rem) clamp(1.5rem,4vw,6rem);border-top:1px solid var(--line,rgba(191,164,106,.1))}
+.team-section .sec-center{text-align:center;margin-bottom:2.5rem}
+.team-section .sec-label{font-family:var(--ff-en,'Bebas Neue');font-size:.75rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold,#BFA46A);display:block;margin-bottom:.5rem}
+.team-section .sec-title{font-family:var(--ff-title,'Black Han Sans');font-size:clamp(1.5rem,3vw,2.2rem)}
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:2.5rem;max-width:1100px;margin:0 auto}
 .doc-card{background:var(--ink-4,#1A1814);border:1px solid var(--line,rgba(191,164,106,.1));border-radius:16px;overflow:hidden;transition:border-color .4s,box-shadow .4s,transform .3s;cursor:pointer}
 .doc-card:hover{border-color:var(--gold,#BFA46A);box-shadow:0 20px 60px rgba(0,0,0,.3),0 0 40px rgba(191,164,106,.05);transform:translateY(-4px)}
-.doc-card-img{position:relative;height:672px;overflow:hidden}
+.doc-card-img{position:relative;height:500px;overflow:hidden}
 .doc-card-img img{width:100%;height:100%;object-fit:cover;object-position:center 30%;transition:transform .6s}
 .doc-card:hover .doc-card-img img{transform:scale(1.05)}
 .doc-card-tag{position:absolute;top:1rem;left:1rem;background:var(--gold,#BFA46A);color:#0a0a0a;padding:.3rem .8rem;border-radius:100px;font-size:.7rem;font-weight:700;letter-spacing:.05em}
-.doc-card-tag.head{font-size:.85rem;padding:.45rem 1.2rem;background:linear-gradient(135deg,#BFA46A,#D4BA82);box-shadow:0 4px 20px rgba(191,164,106,.4);letter-spacing:.1em}
-.doc-card-no-photo{height:672px;background:linear-gradient(135deg,#111009,#1A1814);display:flex;align-items:center;justify-content:center}
+.doc-card-no-photo{height:500px;background:linear-gradient(135deg,#111009,#1A1814);display:flex;align-items:center;justify-content:center}
 .doc-card-no-photo i{font-size:5rem;color:#333}
 .doc-card-info{padding:1.5rem 2rem 2rem}
 .doc-card-name{font-family:var(--ff-title,'Black Han Sans');font-size:1.5rem;margin-bottom:.15rem}
@@ -31,53 +100,20 @@
 .doc-card-chips{display:flex;flex-wrap:wrap;gap:.4rem}
 .doc-card-chip{padding:.25rem .75rem;border:1px solid var(--line,rgba(191,164,106,.1));border-radius:100px;font-size:.72rem;color:var(--stone-l,#AFA79D);transition:border-color .3s,color .3s}
 .doc-card-chip.gold{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
-.doc-card-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--gold,#BFA46A);font-size:.82rem;font-weight:600;margin-top:1rem;transition:gap .3s}
-.doc-card-link:hover{gap:.8rem}
 
-/* ===== DOCTOR PROFILE (detail) ===== */
-.profile-wrap{display:none;max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem) clamp(4rem,8vh,6rem)}
-.profile-wrap.show{display:block}
-.profile-back{display:inline-flex;align-items:center;gap:.5rem;color:var(--gold,#BFA46A);font-size:.85rem;cursor:pointer;margin-bottom:2rem;transition:gap .3s}
-.profile-back:hover{gap:.8rem}
-.profile-top{display:grid;grid-template-columns:300px 1fr;gap:3rem;margin-bottom:3rem}
-.profile-photo{width:300px;height:380px;border-radius:16px;overflow:hidden;border:1px solid var(--line,rgba(191,164,106,.1))}
-.profile-photo img{width:100%;height:100%;object-fit:cover}
-.profile-photo-empty{width:300px;height:380px;border-radius:16px;background:var(--ink-4,#1A1814);border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
-.profile-photo-empty i{font-size:6rem;color:#333}
-.profile-header .p-name{font-family:var(--ff-title,'Black Han Sans');font-size:clamp(2rem,4vw,2.8rem);margin-bottom:.3rem}
-.profile-header .p-name .head-label{color:var(--gold,#BFA46A);font-size:1rem;font-weight:700;margin-left:.5rem}
-.profile-header .p-role{font-family:var(--ff-en,'Bebas Neue');font-size:1rem;letter-spacing:3px;color:var(--stone,#8C8578);margin-bottom:1.5rem}
-.profile-header .p-intro{font-size:.95rem;color:var(--stone-l,#AFA79D);line-height:1.8;margin-bottom:1.5rem}
-.p-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem}
-.p-chip{padding:.35rem 1rem;border:1px solid var(--line);border-radius:100px;font-size:.8rem;color:var(--stone-l);transition:all .3s}
-.p-chip.gold{border-color:var(--gold);color:var(--gold)}
-.p-section{margin-bottom:2.5rem}
-.p-section-title{font-family:var(--ff-en,'Bebas Neue');font-size:.8rem;letter-spacing:3px;color:var(--gold,#BFA46A);text-transform:uppercase;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line)}
-.p-list{list-style:none;padding:0}
-.p-list li{padding:.5rem 0;font-size:.88rem;color:var(--stone-l,#AFA79D);border-bottom:1px solid rgba(191,164,106,.05);display:flex;align-items:flex-start;gap:.5rem}
-.p-list li::before{content:'✦';color:var(--gold,#BFA46A);font-size:.6rem;margin-top:.35rem;flex-shrink:0}
-
-/* Related content */
-.p-content-section{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--line)}
-.p-content-title{font-family:var(--ff-title,'Black Han Sans');font-size:1.3rem;margin-bottom:1.5rem}
-.p-content-title span{color:var(--gold,#BFA46A)}
-.p-content-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.2rem}
-.p-content-card{background:var(--ink-4,#1A1814);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .3s,transform .3s}
-.p-content-card:hover{border-color:var(--gold);transform:translateY(-3px)}
-.p-content-card-img{height:160px;overflow:hidden}
-.p-content-card-img img{width:100%;height:100%;object-fit:cover}
-.p-content-card-body{padding:1.2rem}
-.p-content-card-tag{font-family:var(--ff-en);font-size:.65rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:.3rem}
-.p-content-card-body h4{font-family:var(--ff-title);font-size:.95rem;margin-bottom:.3rem}
-.p-content-card-body p{font-size:.78rem;color:var(--stone);line-height:1.5}
-.p-empty{text-align:center;padding:2rem;color:#555;font-size:.85rem}
-
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .dir-hero{flex-direction:column-reverse;text-align:center;padding-top:8rem}
+  .dir-hero-photo{flex:0 0 auto;width:min(280px,70vw)}
+  .dir-hero-badges{justify-content:center}
+  .dir-hero-quote{margin-left:auto;margin-right:auto}
+  .dir-cred-grid{grid-template-columns:1fr}
+  .dir-personal-inner{grid-template-columns:1fr}
+}
 @media(max-width:768px){
   .doc-grid{grid-template-columns:1fr;padding:0 1.25rem 3rem}
-  .doc-card-img,.doc-card-no-photo{height:500px}
-  .profile-top{grid-template-columns:1fr;gap:1.5rem}
-  .profile-photo,.profile-photo-empty{width:100%;max-width:300px;margin:0 auto}
-  .p-content-grid{grid-template-columns:1fr}
+  .doc-card-img,.doc-card-no-photo{height:400px}
+  .dir-philo-cards{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -91,7 +127,7 @@
     <a href="philosophy.html">진료 철학</a>
     <div class="nav-link-drop"><a href="treatments.html">진료 안내 ▾</a><div class="drop"><a href="treatments.html#implant">임플란트</a><a href="treatments.html#aesthetics">앞니 심미치료</a><a href="treatments.html#endodontics">신경치료</a><a href="treatments.html#general">일반진료</a></div></div>
     <div class="nav-link-drop"><a href="#">커뮤니티 ▾</a><div class="drop"><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a></div></div>
-    <a href="doctors.html">의료진</a>
+    <a href="doctors.html" style="color:var(--gold)">의료진</a>
     <div class="nav-link-drop"><a href="guide.html">안내 ▾</a><div class="drop"><a href="guide.html#visit">오시는 길</a><a href="guide.html#fee">수가 안내</a><a href="guide.html#faq">자주 묻는 질문</a></div></div>
   </div>
   <a href="tel:0507-1325-3377" class="nav-cta" data-magnet>예약 상담</a>
@@ -99,6 +135,9 @@
 </nav>
 <div class="mob-menu"><a href="/">홈</a><a href="philosophy.html">진료 철학</a><a href="treatments.html">진료 안내</a><a href="doctors.html">의료진</a><a href="guide.html">안내</a><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a></div>
 
+<!-- ═══════════════════════════════════════════
+     PAGE HERO
+     ═══════════════════════════════════════════ -->
 <section class="page-hero">
   <div class="page-hero-bg">DOCTORS</div>
   <span class="page-hero-label">Medical Team</span>
@@ -106,42 +145,213 @@
   <p class="page-hero-sub">전문성과 따뜻함을 갖춘 서울가온치과의 의료진입니다</p>
 </section>
 
-<!-- Doctor list view -->
-<div class="doc-grid" id="doc-grid"></div>
-
-<!-- Doctor profile detail view -->
-<div class="profile-wrap" id="profile-wrap">
-  <div class="profile-back" onclick="showDoctorsList()">← 의료진 목록으로</div>
-  <div class="profile-top">
-    <div id="profile-photo-area"></div>
-    <div class="profile-header">
-      <h2 class="p-name" id="p-name"></h2>
-      <div class="p-role" id="p-role"></div>
-      <div class="p-chips" id="p-chips"></div>
-      <div class="p-intro" id="p-intro"></div>
+<!-- ═══════════════════════════════════════════
+     1. 현진호 대표원장 — HERO
+     ═══════════════════════════════════════════ -->
+<section class="dir-hero" data-reveal-section>
+  <div class="dir-hero-text">
+    <span class="dir-hero-label">Representative Director</span>
+    <h2 class="dir-hero-name">현진호 <em>대표원장</em></h2>
+    <p class="dir-hero-title">Implant · Aesthetic Specialist &nbsp;|&nbsp; Seoul Gaon Dental</p>
+    <p class="dir-hero-quote">
+      <strong>"내 가족에게 부끄럽지 않은 치료."</strong><br>
+      저는 서울대학교 치의학과를 수석으로 졸업하고, 서울대학교 치과병원에서 통합치의학과 전문의 과정을 마쳤습니다. 이후 10년 넘게 강남과 서울 곳곳의 치과에서 봉직하며 수천 명의 환자를 만났습니다.<br>
+      그 시간 동안 깨달은 한 가지 — 환자분들이 진짜 원하는 건 화려한 장비가 아니라 <strong>솔직한 설명과 진심 어린 치료</strong>였습니다.
+    </p>
+    <div class="dir-hero-badges">
+      <span class="dir-badge gold"><i class="fas fa-award"></i> 서울대 수석 졸업</span>
+      <span class="dir-badge gold"><i class="fas fa-certificate"></i> 통합치의학과 전문의</span>
+      <span class="dir-badge"><i class="fas fa-trophy"></i> 오스템 임플란트 증례 금상</span>
+      <span class="dir-badge"><i class="fas fa-clock"></i> 10년+ 강남·서울 임상</span>
     </div>
   </div>
-  <div id="p-education" class="p-section" style="display:none">
-    <div class="p-section-title">Education</div>
-    <ul class="p-list" id="p-edu-list"></ul>
+  <div class="dir-hero-photo">
+    <img src="/images/real-dr-hyun.jpg" alt="현진호 대표원장" loading="lazy">
   </div>
-  <div id="p-career" class="p-section" style="display:none">
-    <div class="p-section-title">Career</div>
-    <ul class="p-list" id="p-career-list"></ul>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     2. ORIGIN STORY — 봉직의 시절과 개원
+     ═══════════════════════════════════════════ -->
+<section class="dir-origin" data-reveal-section>
+  <span class="dir-origin-label">Why I Opened This Clinic</span>
+  <h3 class="dir-origin-title">봉직의 시절, 수천 명의 환자가 가르쳐준 것</h3>
+
+  <p>
+    강남의 대형 치과, 서울 각지의 네트워크 치과를 거치면서 저는 정말 많은 분들을 만났습니다. 
+    <strong>강남365치과</strong>, <strong>서울수려한치과</strong> 등 여러 곳에서 대표원장과 봉직의로 일하며 
+    임플란트, 심미보철, 복합 치료를 맡았습니다.
+  </p>
+  <p>
+    그 과정에서 특히 기억에 남는 환자분들이 있었습니다. 
+    <em>"왜 이 치료를 해야 하는지 아무도 설명해주지 않았어요."</em> 
+    — 다른 병원에서 임플란트를 했는데 6개월 만에 빠진 분. 
+    <em>"이가 아파서 갔더니 갑자기 발치를 하더라고요."</em> 
+    — 무섭고, 화나고, 치과가 싫어진 분. 
+    그리고 어르신 환자분의 한마디. <em>"선생님, 방금 뭐 한 거예요?"</em>
+  </p>
+  <p>
+    그때 결심했습니다. <strong>설명이 먼저인 치과</strong>를 만들자. 
+    화려한 인테리어보다 <em>환자분이 자기 이를 직접 모니터로 보고, 이해하고, 스스로 선택할 수 있는 곳</em>을 만들자.
+  </p>
+  <p>
+    그래서 딸 <em>가온</em>이의 이름을 걸고 의정부 용현동에 문을 열었습니다. 
+    가온(가온)은 순우리말로 <strong>"세상의 중심"</strong>이라는 뜻입니다. 
+    내 아이의 이름을 간판에 달아놓은 이유는 단 하나 — <strong>내 가족에게 할 수 없는 치료는 환자분에게도 하지 않겠다</strong>는 약속입니다.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     3. CREDENTIALS — 학력 · 경력 · 수상
+     ═══════════════════════════════════════════ -->
+<section class="dir-credentials" data-reveal-section>
+  <span class="dir-origin-label">Credentials</span>
+  <h3 class="dir-origin-title">학력 · 경력 · 자격</h3>
+  <div class="dir-cred-grid">
+    <div class="dir-cred-block">
+      <h3>Education & Certification</h3>
+      <ul class="dir-cred-list">
+        <li><strong>서울대학교 치의학과</strong> 수석 졸업</li>
+        <li>서울대학교 치의학대학원 <strong>석사</strong></li>
+        <li>서울대학교 치과병원 <strong>통합치의학과 전문의</strong> (보건복지부 인증)</li>
+        <li>대한치과보철학회 정회원</li>
+        <li>대한치과보존학회 정회원</li>
+      </ul>
+    </div>
+    <div class="dir-cred-block">
+      <h3>Career</h3>
+      <ul class="dir-cred-list">
+        <li>서울대학교 치과병원 근무</li>
+        <li><strong>강남365치과</strong> 대표원장</li>
+        <li><strong>서울수려한치과</strong> 대표원장</li>
+        <li>강남·서울 다수 치과 봉직 (10년+)</li>
+        <li><strong>서울가온치과</strong> 대표원장 (현)</li>
+      </ul>
+    </div>
+    <div class="dir-cred-block">
+      <h3>Awards & Specialties</h3>
+      <ul class="dir-cred-list">
+        <li><strong>오스템 임플란트 증례 금상</strong> 수상</li>
+        <li>가이드 임플란트 100% 시행</li>
+        <li>복합 뼈이식 · 상악동거상술 전문</li>
+        <li>전치부 심미보철 (라미네이트·지르코니아)</li>
+        <li>풀마우스 임플란트 재건</li>
+      </ul>
+    </div>
+    <div class="dir-cred-block">
+      <h3>Memberships</h3>
+      <ul class="dir-cred-list">
+        <li>대한치과보철학회</li>
+        <li>대한치과보존학회</li>
+        <li>대한구강악안면임플란트학회</li>
+        <li>오스템 임플란트 공인 인스트럭터</li>
+      </ul>
+    </div>
   </div>
-  
-  <!-- Related blog posts -->
-  <div id="p-blogs-section" class="p-content-section" style="display:none">
-    <div class="p-content-title"><span id="p-blog-name"></span> 원장의 블로그</div>
-    <div class="p-content-grid" id="p-blogs"></div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     4. PHILOSOPHY — 진료 철학 (내면의 목소리)
+     ═══════════════════════════════════════════ -->
+<section class="dir-philo" data-reveal-section>
+  <span class="dir-origin-label">My Principles</span>
+  <h3 class="dir-origin-title">현진호 원장의 진료 원칙</h3>
+  <div class="dir-philo-cards">
+
+    <div class="dir-philo-card">
+      <div class="num">01</div>
+      <h4>과잉진료를 하지 않겠습니다</h4>
+      <p>필요 없는 치료를 권유하지 않습니다. 경과관찰이 답이면 "지켜봅시다"라고 말씀드립니다. 매출보다 환자분의 치아 수명이 더 중요합니다.</p>
+      <div class="inner-voice">"내 가족이라면 이 치료를 권할까? 아니라면 하지 않는다."</div>
+    </div>
+
+    <div class="dir-philo-card">
+      <div class="num">02</div>
+      <h4>원장이 직접 진단하고 끝까지 책임집니다</h4>
+      <p>진단, 치료계획, 설명, 수술, 사후관리까지 — 대표원장인 제가 직접 합니다. 중간에 담당이 바뀌는 일은 없습니다.</p>
+      <div class="inner-voice">"처음부터 끝까지, 한 사람이 책임지는 것이 원칙이다."</div>
+    </div>
+
+    <div class="dir-philo-card">
+      <div class="num">03</div>
+      <h4>설명이 먼저, 치료는 그 다음입니다</h4>
+      <p>파노라마, CT, 구강사진을 함께 모니터로 보며 현재 상태를 설명드립니다. 이해하신 후에 동의를 받고, 그 다음 치료를 시작합니다.</p>
+      <div class="inner-voice">"납득 없는 동의는 동의가 아니다."</div>
+    </div>
+
+    <div class="dir-philo-card">
+      <div class="num">04</div>
+      <h4>비용을 투명하게 안내합니다</h4>
+      <p>치료 전 서면 치료계획서와 항목별 비용을 안내드립니다. 추가 비용이 발생할 수 있는 경우에도 미리 설명드립니다.</p>
+      <div class="inner-voice">"나중에 '몰랐다'고 말씀하시는 일이 없도록."</div>
+    </div>
+
+    <div class="dir-philo-card">
+      <div class="num">05</div>
+      <h4>오래 쓸 수 있는 치료를 합니다</h4>
+      <p>가이드 임플란트 100%, 정밀 기공, 꼼꼼한 뼈이식. 처음에 시간이 더 걸리더라도 5년, 10년 후를 생각합니다.</p>
+      <div class="inner-voice">"80세까지 함께하겠다고 약속한 이상, 대충 할 수 없다."</div>
+    </div>
+
+    <div class="dir-philo-card">
+      <div class="num">06</div>
+      <h4>아프지 않게 — 마취에 진심입니다</h4>
+      <p>표면마취 → 1차 마취 → 2차 마취, 3단계 마취 프로토콜을 지킵니다. "안 아팠다"는 말이 저에게는 최고의 칭찬입니다.</p>
+      <div class="inner-voice">"무서워서 치과를 못 오시는 분이 없도록."</div>
+    </div>
+
   </div>
-  
-  <!-- Related BA cases -->
-  <div id="p-cases-section" class="p-content-section" style="display:none">
-    <div class="p-content-title"><span id="p-case-name"></span> 원장의 치료 사례</div>
-    <div class="p-content-grid" id="p-cases"></div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     5. PERSONAL NOTE — 딸 가온, 그리고 운동
+     ═══════════════════════════════════════════ -->
+<section class="dir-personal" data-reveal-section>
+  <div class="dir-personal-inner">
+    <div class="dir-personal-text">
+      <span class="dir-origin-label">Personal Note</span>
+      <h3>치과의사이자 아빠, 그리고 운동인</h3>
+      <p>
+        저는 두 가지를 좋아합니다. 하나는 환자분의 치아를 오래 쓸 수 있게 만드는 것. 
+        또 하나는 <em>운동</em>입니다. 보디빌딩을 좋아하는데, 헬스장에서의 태도가 진료실에서도 그대로 적용됩니다.
+      </p>
+      <p>
+        자세가 정확해야 부상이 없듯, <em>진단이 정확해야 재치료가 없습니다</em>. 
+        1RM을 올리기 위해 루틴을 지키듯, 임플란트 하나를 위해 <em>가이드 제작, CT 분석, 뼈이식 판단</em>의 루틴을 반드시 지킵니다.
+      </p>
+      <p>
+        대충 하면 결국 다시 해야 합니다. 운동도, 치료도, 인생도. 
+        그래서 <em>처음부터 제대로 하는 것</em>에 집착합니다.
+      </p>
+    </div>
+    <div class="dir-personal-img">
+      <img src="/images/real-consult-scene.jpg" alt="현진호 원장 상담 장면" loading="lazy">
+    </div>
   </div>
-</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     6. CTA
+     ═══════════════════════════════════════════ -->
+<section class="dir-cta" data-reveal-section>
+  <h2>궁금하신 점, 먼저 <em style="color:var(--gold)">설명</em> 들어보세요.</h2>
+  <p>현진호 대표원장이 직접 상담합니다. 전화 또는 네이버 예약으로 편하게 문의해 주세요.</p>
+  <div class="dir-cta-btns">
+    <a href="tel:0507-1325-3377" class="dir-cta-btn primary"><i class="fas fa-phone-alt"></i> 0507-1325-3377</a>
+    <a href="https://m.search.naver.com/search.naver?sm=tab_hty.top&where=nexearch&ssc=tab.nx.all&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&oquery=&tqi=" target="_blank" class="dir-cta-btn secondary"><i class="fas fa-calendar-check"></i> 네이버 예약</a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     7. 함께하는 의료진 (DB에서 불러오기)
+     ═══════════════════════════════════════════ -->
+<section class="team-section" data-reveal-section>
+  <div class="sec-center">
+    <span class="sec-label">Our Team</span>
+    <h2 class="sec-title">함께하는 <em style="color:var(--gold)">의료진</em></h2>
+  </div>
+  <div class="doc-grid" id="doc-grid"></div>
+</section>
 
 <footer>
   <div class="ft-logo">서울가온치과<span style="color:var(--gold)">.</span></div>
@@ -152,181 +362,67 @@
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
 <script src="pages.js"></script>
 <script>
-let allDoctors = [];
-
-// Check URL params for direct doctor access
-function getQueryParam(name){
-  const params = new URLSearchParams(window.location.search);
-  return params.get(name);
-}
-
-// Show list view
-function showDoctorsList(){
-  document.getElementById('doc-grid').style.display='';
-  document.getElementById('profile-wrap').classList.remove('show');
-  window.history.pushState({},'','doctors.html');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-// Render doctor cards
-function renderDoctorCards(doctors){
-  const grid = document.getElementById('doc-grid');
-  if(!doctors.length){
-    grid.innerHTML='<div style="text-align:center;padding:4rem 2rem;color:#666;font-size:.9rem;grid-column:1/-1"><i class="fas fa-user-md" style="font-size:3rem;display:block;margin-bottom:1rem;color:#444"></i>등록된 의료진 정보가 없습니다.</div>';
-    return;
-  }
-  grid.innerHTML = doctors.map(doc => {
-    const specs = (doc.specialties||'').split(',').map(s=>s.trim()).filter(Boolean);
-    const firstSpec = specs[0] || '';
-    return `<div class="doc-card" onclick="openProfile(${doc.id})" data-tilt>
-      ${doc.photo_url 
-        ? `<div class="doc-card-img"><img src="${doc.photo_url}" alt="${doc.name}" loading="lazy"><span class="doc-card-tag${doc.title&&doc.title.includes('대표')?' head':''}">${doc.title||''}</span></div>`
-        : `<div class="doc-card-no-photo"><i class="fas fa-user-md"></i></div>`}
-      <div class="doc-card-info">
-        <h3 class="doc-card-name">${doc.name}${doc.title&&doc.title.includes('대표')?'<span class="head-label">'+doc.title+'</span>':''}</h3>
-        <div class="doc-card-role">${doc.role||''}</div>
-        ${doc.introduction?'<p class="doc-card-desc">'+doc.introduction+'</p>':''}
-        <div class="doc-card-chips">
-          ${specs.map((s,i) => `<span class="doc-card-chip${i===0?' gold':''}">${s}</span>`).join('')}
-        </div>
-        <div class="doc-card-link">프로필 보기 →</div>
-      </div>
-    </div>`;
-  }).join('');
-
-  // Animate cards
-  document.querySelectorAll('.doc-card').forEach(c=>{
-    c.style.opacity='0';c.style.transform='translateY(30px)';
-  });
-  const observer = new IntersectionObserver(entries=>{
-    entries.forEach((e,i)=>{
+/* ====== Scroll Reveal for sections ====== */
+(function(){
+  const sections = document.querySelectorAll('[data-reveal-section]');
+  if(!sections.length) return;
+  sections.forEach(s => { s.style.opacity = '0'; s.style.transform = 'translateY(30px)'; s.style.transition = 'opacity .7s ease, transform .7s ease'; });
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
       if(e.isIntersecting){
-        setTimeout(()=>{
-          e.target.style.transition='opacity .6s ease, transform .6s ease';
-          e.target.style.opacity='1';
-          e.target.style.transform='translateY(0)';
-        },i*120);
-        observer.unobserve(e.target);
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        obs.unobserve(e.target);
       }
     });
-  },{threshold:.05});
-  document.querySelectorAll('.doc-card').forEach(c=>observer.observe(c));
-}
+  }, {threshold: 0.08});
+  sections.forEach(s => obs.observe(s));
+})();
 
-// Open doctor profile
-async function openProfile(id){
-  try{
-    const res = await fetch('/api/doctors/'+id);
-    const data = await res.json();
-    if(!data.doctor) return;
-    const doc = data.doctor;
-    
-    // Hide list, show profile
-    document.getElementById('doc-grid').style.display='none';
-    const wrap = document.getElementById('profile-wrap');
-    wrap.classList.add('show');
-    
-    // Update URL
-    window.history.pushState({doctorId:id},'',`doctors.html?id=${id}`);
-    
-    // Photo
-    const photoArea = document.getElementById('profile-photo-area');
-    if(doc.photo_url){
-      photoArea.innerHTML=`<div class="profile-photo"><img src="${doc.photo_url}" alt="${doc.name}"></div>`;
-    } else {
-      photoArea.innerHTML=`<div class="profile-photo-empty"><i class="fas fa-user-md"></i></div>`;
-    }
-    
-    // Name & role
-    document.getElementById('p-name').innerHTML = doc.name + (doc.title ? '<span class="head-label">'+doc.title+'</span>' : '');
-    document.getElementById('p-role').textContent = doc.role || '';
-    
-    // Specialties as chips
-    const specs = (doc.specialties||'').split(',').map(s=>s.trim()).filter(Boolean);
-    document.getElementById('p-chips').innerHTML = specs.map((s,i) => `<span class="p-chip${i===0?' gold':''}">${s}</span>`).join('');
-    
-    // Introduction
-    document.getElementById('p-intro').textContent = doc.introduction || '';
-    
-    // Education
-    const eduLines = (doc.education||'').split('\n').map(s=>s.trim()).filter(Boolean);
-    const eduSec = document.getElementById('p-education');
-    if(eduLines.length){
-      eduSec.style.display='block';
-      document.getElementById('p-edu-list').innerHTML = eduLines.map(l=>`<li>${l}</li>`).join('');
-    } else eduSec.style.display='none';
-    
-    // Career
-    const careerLines = (doc.career||'').split('\n').map(s=>s.trim()).filter(Boolean);
-    const careerSec = document.getElementById('p-career');
-    if(careerLines.length){
-      careerSec.style.display='block';
-      document.getElementById('p-career-list').innerHTML = careerLines.map(l=>`<li>${l}</li>`).join('');
-    } else careerSec.style.display='none';
-    
-    // Related blogs
-    const blogs = data.blogs || [];
-    const blogsSec = document.getElementById('p-blogs-section');
-    if(blogs.length){
-      blogsSec.style.display='block';
-      document.getElementById('p-blog-name').textContent = doc.name;
-      document.getElementById('p-blogs').innerHTML = blogs.map(b => {
-        const date = new Date(b.created_at).toLocaleDateString('ko-KR');
-        return `<a href="blog.html" class="p-content-card">
-          ${b.thumbnail_url ? '<div class="p-content-card-img"><img src="'+b.thumbnail_url+'" alt=""></div>' : ''}
-          <div class="p-content-card-body">
-            <div class="p-content-card-tag">${b.category||'Blog'}</div>
-            <h4>${b.title}</h4>
-            <p>${date}</p>
-          </div>
-        </a>`;
-      }).join('');
-    } else blogsSec.style.display='none';
-    
-    // Related cases
-    const cases = data.cases || [];
-    const casesSec = document.getElementById('p-cases-section');
-    if(cases.length){
-      casesSec.style.display='block';
-      document.getElementById('p-case-name').textContent = doc.name;
-      document.getElementById('p-cases').innerHTML = cases.map(c => {
-        const img = c.intraoral_before_url || c.intraoral_after_url || c.panorama_before_url || c.panorama_after_url;
-        return `<a href="before-after.html" class="p-content-card">
-          ${img ? '<div class="p-content-card-img"><img src="'+img+'" alt=""></div>' : ''}
-          <div class="p-content-card-body">
-            <div class="p-content-card-tag">${c.category||'Case'}</div>
-            <h4>${c.title}</h4>
-          </div>
-        </a>`;
-      }).join('');
-    } else casesSec.style.display='none';
-    
-    window.scrollTo({top:0,behavior:'smooth'});
-  } catch(e){ console.error(e); }
-}
-
-// Handle browser back
-window.addEventListener('popstate', function(e){
-  if(e.state && e.state.doctorId){
-    openProfile(e.state.doctorId);
-  } else {
-    showDoctorsList();
-  }
-});
-
-// Init
+/* ====== Team cards from DB ====== */
 (async function(){
-  try{
+  try {
     const res = await fetch('/api/doctors');
     const data = await res.json();
-    allDoctors = data.doctors || [];
-  } catch(e){ allDoctors = []; }
-  
-  renderDoctorCards(allDoctors);
-  
-  // Check if we need to show a specific doctor
-  const id = getQueryParam('id');
-  if(id) openProfile(parseInt(id));
+    const doctors = (data.doctors || []).filter(d => d.name !== '현진호'); // 현진호는 위에 하드코딩
+    const grid = document.getElementById('doc-grid');
+    
+    if(!doctors.length){
+      grid.innerHTML='<div style="text-align:center;padding:3rem 2rem;color:#666;font-size:.88rem;grid-column:1/-1"><i class="fas fa-user-md" style="font-size:2.5rem;display:block;margin-bottom:.75rem;color:#444"></i>추가 의료진 정보는 준비 중입니다.</div>';
+      return;
+    }
+    
+    grid.innerHTML = doctors.map(doc => {
+      const specs = (doc.specialties||'').split(',').map(s=>s.trim()).filter(Boolean);
+      return `<div class="doc-card" data-tilt>
+        ${doc.photo_url 
+          ? `<div class="doc-card-img"><img src="${doc.photo_url}" alt="${doc.name}" loading="lazy"><span class="doc-card-tag">${doc.title||''}</span></div>`
+          : `<div class="doc-card-no-photo"><i class="fas fa-user-md"></i></div>`}
+        <div class="doc-card-info">
+          <h3 class="doc-card-name">${doc.name}${doc.title&&doc.title.includes('대표')?'<span class="head-label">'+doc.title+'</span>':''}</h3>
+          <div class="doc-card-role">${doc.role||''}</div>
+          ${doc.introduction?'<p class="doc-card-desc">'+doc.introduction+'</p>':''}
+          <div class="doc-card-chips">
+            ${specs.map((s,i) => `<span class="doc-card-chip${i===0?' gold':''}">${s}</span>`).join('')}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+    
+    // Animate cards
+    document.querySelectorAll('.doc-card').forEach(c=>{
+      c.style.opacity='0';c.style.transform='translateY(25px)';c.style.transition='opacity .6s ease,transform .6s ease';
+    });
+    const cardObs = new IntersectionObserver(entries=>{
+      entries.forEach((e,i)=>{
+        if(e.isIntersecting){
+          setTimeout(()=>{ e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; },i*100);
+          cardObs.unobserve(e.target);
+        }
+      });
+    },{threshold:.05});
+    document.querySelectorAll('.doc-card').forEach(c=>cardObs.observe(c));
+  } catch(e){ console.error(e); }
 })();
 </script>
 </body>
