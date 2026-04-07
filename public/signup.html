@@ -56,9 +56,44 @@
 .auth-footer{text-align:center;margin-top:1.5rem;font-size:.8rem;color:var(--stone)}
 .auth-footer a{color:var(--gold);font-weight:600;transition:color .2s}
 .auth-footer a:hover{color:var(--gold-b)}
-/* Privacy */
-.auth-privacy{font-size:.72rem;color:var(--stone);text-align:center;line-height:1.5;margin-top:1rem}
-.auth-privacy a{color:var(--gold);text-decoration:underline}
+/* Consent checkboxes */
+.consent-group{display:flex;flex-direction:column;gap:.65rem;margin-top:.3rem}
+.consent-all{padding:.7rem 1rem;background:rgba(191,164,106,.06);border:1px solid rgba(191,164,106,.2);border-radius:10px}
+.consent-item{display:flex;align-items:flex-start;gap:.6rem;cursor:pointer;position:relative}
+.consent-item input[type=checkbox]{display:none}
+.consent-item .cbox{width:20px;height:20px;min-width:20px;border:1.5px solid var(--line);border-radius:5px;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px;background:var(--ink-4)}
+.consent-item input:checked+.cbox{background:var(--gold);border-color:var(--gold)}
+.consent-item input:checked+.cbox::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;font-size:.65rem;color:var(--ink)}
+.consent-item .clabel{font-size:.78rem;color:var(--stone-l);line-height:1.45}
+.consent-item .clabel strong{color:var(--ivory);font-weight:600}
+.consent-item .clabel .required{color:#ff5252;font-weight:700;font-size:.7rem}
+.consent-item .clabel .optional{color:var(--gold);font-weight:600;font-size:.7rem}
+.consent-item .view-terms{color:var(--gold);font-size:.7rem;text-decoration:underline;cursor:pointer;margin-left:auto;white-space:nowrap;padding-top:2px;min-width:40px;text-align:right}
+.consent-divider{height:1px;background:var(--line);margin:.2rem 0}
+/* Terms modal */
+.terms-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10000;display:none;align-items:center;justify-content:center;padding:1.5rem}
+.terms-overlay.show{display:flex}
+.terms-box{background:var(--ink-3);border:1px solid rgba(191,164,106,.2);border-radius:14px;max-width:560px;width:100%;max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+.terms-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid var(--line)}
+.terms-header h3{font-size:.95rem;font-weight:700;color:var(--ivory)}
+.terms-close{background:none;border:none;color:var(--stone);font-size:1.2rem;cursor:pointer;transition:color .2s;padding:4px}
+.terms-close:hover{color:var(--ivory)}
+.terms-body{padding:1.5rem;overflow-y:auto;font-size:.8rem;color:var(--stone-l);line-height:1.7}
+.terms-body h4{color:var(--ivory);font-size:.85rem;margin:1.2rem 0 .5rem;font-weight:700}
+.terms-body h4:first-child{margin-top:0}
+.terms-body p{margin-bottom:.6rem}
+.terms-body ul{padding-left:1.2rem;margin-bottom:.6rem}
+.terms-body ul li{margin-bottom:.3rem}
+.terms-body table{width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.75rem}
+.terms-body table th,.terms-body table td{border:1px solid var(--line);padding:.5rem .6rem;text-align:left}
+.terms-body table th{background:var(--ink-4);color:var(--ivory);font-weight:600}
+@media(max-width:480px){
+  .terms-overlay{padding:.75rem}
+  .terms-box{max-height:88vh;border-radius:10px}
+  .terms-header{padding:1rem}
+  .terms-body{padding:1rem;font-size:.78rem}
+  .consent-item .clabel{font-size:.75rem}
+}
 /* Already logged in */
 .auth-logged-in{text-align:center;padding:2rem 0}
 .auth-logged-in .user-icon{width:64px;height:64px;background:rgba(191,164,106,.15);border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem;color:var(--gold)}
@@ -171,18 +206,54 @@
           <i class="fas fa-shield-halved field-icon"></i>
           <input type="password" id="signup-pw2" placeholder="비밀번호 재입력" required minlength="4" autocomplete="new-password">
         </div>
+
+        <!-- ===== CONSENT CHECKBOXES ===== -->
+        <div class="consent-group">
+          <label class="consent-item consent-all">
+            <input type="checkbox" id="agree-all">
+            <span class="cbox"></span>
+            <span class="clabel"><strong>전체 동의</strong></span>
+          </label>
+          <div class="consent-divider"></div>
+          <label class="consent-item" style="padding:0 .5rem">
+            <input type="checkbox" id="agree-privacy" required>
+            <span class="cbox"></span>
+            <span class="clabel"><span class="required">[필수]</span> 개인정보 수집 및 이용 동의</span>
+            <span class="view-terms" onclick="event.preventDefault();openTerms('privacy')">보기</span>
+          </label>
+          <label class="consent-item" style="padding:0 .5rem">
+            <input type="checkbox" id="agree-terms" required>
+            <span class="cbox"></span>
+            <span class="clabel"><span class="required">[필수]</span> 이용약관 동의</span>
+            <span class="view-terms" onclick="event.preventDefault();openTerms('terms')">보기</span>
+          </label>
+          <label class="consent-item" style="padding:0 .5rem">
+            <input type="checkbox" id="agree-marketing">
+            <span class="cbox"></span>
+            <span class="clabel"><span class="optional">[선택]</span> 마케팅 정보 수신 동의</span>
+            <span class="view-terms" onclick="event.preventDefault();openTerms('marketing')">보기</span>
+          </label>
+        </div>
+
         <button type="submit" class="auth-submit" id="signup-btn">
           <span>회원가입</span>
           <div class="spinner"></div>
         </button>
-        <div class="auth-privacy">
-          가입 시 <a href="#">이용약관</a> 및 <a href="#">개인정보 처리방침</a>에 동의하는 것으로 간주합니다.
-        </div>
       </form>
     </div>
   </div>
 </div>
 
+<!-- ===== TERMS MODAL ===== -->
+<div class="terms-overlay" id="terms-overlay">
+  <div class="terms-box">
+    <div class="terms-header">
+      <h3 id="terms-title">약관</h3>
+      <button class="terms-close" onclick="closeTerms()">&times;</button>
+    </div>
+    <div class="terms-body" id="terms-body"></div>
+  </div>
+</div>
 <script src="pages.js"></script>
 <script>
 const TOKEN_KEY = 'gaon_member_token';
@@ -306,6 +377,13 @@ async function handleSignup(e){
   if(!password || password.length < 4){ showError('비밀번호는 4자 이상이어야 합니다'); return; }
   if(password !== password2){ showError('비밀번호가 일치하지 않습니다'); return; }
 
+  // Consent validation
+  const privacyAgreed = document.getElementById('agree-privacy').checked;
+  const termsAgreed = document.getElementById('agree-terms').checked;
+  const marketingAgreed = document.getElementById('agree-marketing').checked;
+  if(!privacyAgreed){ showError('개인정보 수집 및 이용에 동의해주세요'); return; }
+  if(!termsAgreed){ showError('이용약관에 동의해주세요'); return; }
+
   const btn = document.getElementById('signup-btn');
   setLoading(btn, true);
 
@@ -313,7 +391,7 @@ async function handleSignup(e){
     const res = await fetch('/api/member/signup', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ name, phone, password })
+      body: JSON.stringify({ name, phone, password, privacy_agreed: privacyAgreed, terms_agreed: termsAgreed, marketing_agreed: marketingAgreed })
     });
     const data = await res.json();
     if(!res.ok){ showError(data.error || '회원가입 실패'); setLoading(btn,false); return; }
@@ -349,6 +427,133 @@ function logout(){
     this.value = v;
   });
 });
+
+// ===== CONSENT: 전체 동의 체크박스 =====
+const agreeAll = document.getElementById('agree-all');
+const subs = ['agree-privacy','agree-terms','agree-marketing'];
+agreeAll.addEventListener('change', function(){
+  subs.forEach(id => document.getElementById(id).checked = this.checked);
+});
+subs.forEach(id => {
+  document.getElementById(id).addEventListener('change', function(){
+    agreeAll.checked = subs.every(s => document.getElementById(s).checked);
+  });
+});
+
+// ===== TERMS MODAL =====
+const TERMS = {
+  privacy: {
+    title: '개인정보 수집 및 이용 동의',
+    html: `
+      <h4>1. 개인정보 수집 항목</h4>
+      <table>
+        <tr><th>수집 항목</th><th>수집 목적</th><th>보유 기간</th></tr>
+        <tr><td>이름, 전화번호</td><td>회원 식별 및 서비스 제공</td><td>회원 탈퇴 시까지</td></tr>
+        <tr><td>비밀번호 (암호화 저장)</td><td>회원 인증</td><td>회원 탈퇴 시까지</td></tr>
+        <tr><td>서비스 이용 기록, 접속 로그</td><td>서비스 개선 및 통계 분석</td><td>3년</td></tr>
+      </table>
+      <h4>2. 개인정보 수집 및 이용 목적</h4>
+      <ul>
+        <li>회원제 서비스 이용에 따른 본인 확인</li>
+        <li>비포·애프터 치료 사례 등 회원 전용 콘텐츠 제공</li>
+        <li>서비스 이용 관련 안내 및 고객 문의 대응</li>
+        <li>불량 회원의 부정 이용 방지</li>
+      </ul>
+      <h4>3. 개인정보 보유 및 이용 기간</h4>
+      <p>회원 탈퇴 시 지체 없이 파기합니다. 다만, 관계 법령에 따라 보존이 필요한 경우 해당 법령에서 정한 기간 동안 보관합니다.</p>
+      <ul>
+        <li>계약 또는 청약철회 등에 관한 기록: 5년 (전자상거래 등에서의 소비자보호에 관한 법률)</li>
+        <li>소비자의 불만 또는 분쟁처리에 관한 기록: 3년</li>
+        <li>웹사이트 방문 기록: 3개월 (통신비밀보호법)</li>
+      </ul>
+      <h4>4. 동의 거부 권리</h4>
+      <p>귀하는 개인정보 수집 및 이용에 대한 동의를 거부할 권리가 있습니다. 다만, 필수 항목에 대한 동의를 거부할 경우 회원가입이 제한됩니다.</p>
+      <h4>5. 개인정보 처리 위탁</h4>
+      <p>서울가온치과의원은 원활한 서비스 제공을 위해 개인정보 처리를 위탁하고 있지 않습니다. 향후 위탁이 필요한 경우 사전에 고지하겠습니다.</p>
+      <h4>6. 개인정보 보호 책임자</h4>
+      <p>성명: 서울가온치과의원 원장<br>연락처: 0507-1325-3377<br>이메일: info@seoulgaon.com</p>
+    `
+  },
+  terms: {
+    title: '이용약관',
+    html: `
+      <h4>제1조 (목적)</h4>
+      <p>이 약관은 서울가온치과의원(이하 "병원")이 운영하는 웹사이트(이하 "사이트")에서 제공하는 서비스의 이용과 관련하여, 병원과 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.</p>
+      <h4>제2조 (정의)</h4>
+      <ul>
+        <li>"서비스"란 병원이 사이트를 통해 제공하는 회원 전용 콘텐츠(비포·애프터 사례 열람 등) 및 기타 정보를 말합니다.</li>
+        <li>"회원"이란 이 약관에 동의하고 회원가입을 완료한 자를 말합니다.</li>
+      </ul>
+      <h4>제3조 (약관의 효력)</h4>
+      <p>이 약관은 사이트에 공시하고, 회원이 동의함으로써 효력이 발생합니다. 병원은 필요 시 약관을 변경할 수 있으며, 변경 시 사이트를 통해 공지합니다.</p>
+      <h4>제4조 (회원가입)</h4>
+      <ul>
+        <li>이용자는 병원이 정한 양식에 따라 정보를 기입하고, 이 약관에 동의함으로써 회원가입을 신청합니다.</li>
+        <li>병원은 다음 사유에 해당하는 경우 회원가입을 거절할 수 있습니다: 타인의 정보를 도용한 경우, 허위 정보를 기재한 경우, 기타 부정한 목적의 경우</li>
+      </ul>
+      <h4>제5조 (서비스 이용)</h4>
+      <p>회원은 로그인 후 병원이 제공하는 회원 전용 콘텐츠를 열람할 수 있습니다. 서비스 내용은 병원의 사정에 의해 변경될 수 있습니다.</p>
+      <h4>제6조 (회원의 의무)</h4>
+      <ul>
+        <li>회원은 자신의 계정 정보를 관리할 책임이 있습니다.</li>
+        <li>회원은 서비스를 통해 취득한 정보(특히 환자 치료 사진)를 병원의 서면 동의 없이 제3자에게 제공하거나 외부에 공개할 수 없습니다.</li>
+        <li>병원의 치료 사례 사진은 학술·홍보 목적으로 환자 동의 하에 게시된 것이며, 무단 복제·배포·상업적 이용을 금지합니다.</li>
+      </ul>
+      <h4>제7조 (서비스 중단)</h4>
+      <p>병원은 시스템 점검, 교체, 천재지변 등 불가피한 사유로 서비스를 일시 중단할 수 있으며, 이 경우 사이트를 통해 사전 공지합니다.</p>
+      <h4>제8조 (탈퇴 및 자격 상실)</h4>
+      <ul>
+        <li>회원은 병원에 탈퇴를 요청할 수 있으며, 병원은 지체 없이 처리합니다.</li>
+        <li>회원이 다음 사유에 해당하는 경우 병원은 사전 통보 없이 자격을 제한하거나 정지시킬 수 있습니다: 가입 시 허위 정보를 기재한 경우, 서비스 이용 목적에 반하는 행위를 한 경우, 타인의 서비스 이용을 방해한 경우</li>
+      </ul>
+      <h4>제9조 (면책)</h4>
+      <p>병원은 천재지변 또는 이에 준하는 불가항력으로 서비스를 제공할 수 없는 경우 책임이 면제됩니다. 사이트에 게시된 치료 사례는 개인차가 있으며, 동일한 결과를 보장하지 않습니다.</p>
+      <h4>제10조 (분쟁 해결)</h4>
+      <p>서비스 이용과 관련한 분쟁은 병원의 소재지를 관할하는 법원을 관할 법원으로 합니다.</p>
+      <p style="margin-top:1.5rem;color:#888;font-size:.75rem">시행일: 2026년 4월 1일</p>
+    `
+  },
+  marketing: {
+    title: '마케팅 정보 수신 동의',
+    html: `
+      <h4>마케팅 정보 수신 동의 (선택)</h4>
+      <p>서울가온치과의원은 아래와 같이 마케팅 목적으로 개인정보를 이용하고자 합니다.</p>
+      <table>
+        <tr><th>이용 항목</th><th>이용 목적</th><th>이용 수단</th><th>보유 기간</th></tr>
+        <tr><td>이름, 전화번호</td><td>병원 이벤트, 할인 혜택, 진료 관련 안내</td><td>SMS, 카카오톡 알림톡</td><td>동의 철회 시까지</td></tr>
+      </table>
+      <h4>수신 동의 관련 안내</h4>
+      <ul>
+        <li>마케팅 정보 수신에 동의하지 않아도 회원가입 및 서비스 이용이 가능합니다.</li>
+        <li>동의 후에도 언제든지 수신을 거부할 수 있으며, 수신 거부 시 더 이상 마케팅 정보를 발송하지 않습니다.</li>
+        <li>수신 거부 방법: 병원 전화(0507-1325-3377) 또는 문자로 "수신거부" 요청</li>
+      </ul>
+      <h4>주요 안내 내용 예시</h4>
+      <ul>
+        <li>임플란트, 심미치료 등 특별 할인 이벤트 안내</li>
+        <li>정기 검진 알림 서비스</li>
+        <li>신규 진료 서비스 및 장비 도입 소식</li>
+        <li>계절별 구강 건강 관리 팁</li>
+      </ul>
+      <p style="margin-top:1rem;color:#888;font-size:.75rem">※ 본 동의는 선택사항이며, 동의하지 않아도 서비스 이용에 불이익은 없습니다.</p>
+    `
+  }
+};
+
+function openTerms(type){
+  const t = TERMS[type];
+  if(!t) return;
+  document.getElementById('terms-title').textContent = t.title;
+  document.getElementById('terms-body').innerHTML = t.html;
+  document.getElementById('terms-overlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeTerms(){
+  document.getElementById('terms-overlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+document.getElementById('terms-overlay').addEventListener('click', function(e){ if(e.target===this) closeTerms(); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeTerms(); });
 
 // Hamburger menu
 document.addEventListener('DOMContentLoaded', function(){

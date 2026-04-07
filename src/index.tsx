@@ -207,6 +207,10 @@ async function initDB(db: D1Database) {
       name TEXT NOT NULL,
       phone TEXT UNIQUE NOT NULL,
       password_hash TEXT NOT NULL,
+      privacy_agreed INTEGER DEFAULT 0,
+      terms_agreed INTEGER DEFAULT 0,
+      marketing_agreed INTEGER DEFAULT 0,
+      agreed_at DATETIME,
       is_active INTEGER DEFAULT 1,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
@@ -405,10 +409,15 @@ app.put('/api/auth/password', auth, async (c) => {
 app.post('/api/member/signup', async (c) => {
   try {
     const db = c.env.DB
-    const { name, phone, password } = await c.req.json<{ name: string; phone: string; password: string }>()
+    const { name, phone, password, privacy_agreed, terms_agreed, marketing_agreed } = await c.req.json<{
+      name: string; phone: string; password: string;
+      privacy_agreed?: boolean; terms_agreed?: boolean; marketing_agreed?: boolean;
+    }>()
     if (!name?.trim()) return c.json({ error: '이름을 입력해주세요' }, 400)
     if (!phone?.trim()) return c.json({ error: '전화번호를 입력해주세요' }, 400)
     if (!password || password.length < 4) return c.json({ error: '비밀번호는 4자 이상이어야 합니다' }, 400)
+    if (!privacy_agreed) return c.json({ error: '개인정보 수집 및 이용에 동의해주세요' }, 400)
+    if (!terms_agreed) return c.json({ error: '이용약관에 동의해주세요' }, 400)
 
     // 전화번호 정규화 (숫자만 추출)
     const cleanPhone = phone.replace(/[^0-9]/g, '')
@@ -420,8 +429,8 @@ app.post('/api/member/signup', async (c) => {
 
     const hash = await hashPassword(password)
     const result = await db.prepare(
-      'INSERT INTO members (name, phone, password_hash) VALUES (?, ?, ?)'
-    ).bind(name.trim(), cleanPhone, hash).run()
+      'INSERT INTO members (name, phone, password_hash, privacy_agreed, terms_agreed, marketing_agreed, agreed_at) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)'
+    ).bind(name.trim(), cleanPhone, hash, privacy_agreed ? 1 : 0, terms_agreed ? 1 : 0, marketing_agreed ? 1 : 0).run()
 
     const memberId = result.meta.last_row_id
     const token = await createToken({ id: memberId, name: name.trim(), phone: cleanPhone, role: 'member' })
@@ -460,6 +469,92 @@ app.get('/api/member/me', auth, async (c) => {
   const user = c.get('user')
   if (user.role !== 'member') return c.json({ error: '회원 전용 API입니다' }, 403)
   return c.json({ user })
+})
+
+// ══════════════════════════════════════════════════
+//  ADMIN: MEMBER MANAGEMENT API
+// ══════════════════════════════════════════════════
+
+// 회원 목록 (관리자)
+app.get('/api/admin/members', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const page = Math.max(1, parseInt(c.req.query('page') || '1'))
+    const limit = Math.min(100, Math.max(1, parseInt(c.req.query('limit') || '50')))
+    const search = c.req.query('search')
+    const marketing = c.req.query('marketing') // 'yes' or 'no'
+    const offset = (page - 1) * limit
+
+    let whereParts: string[] = []
+    const binds: any[] = []
+    if (search) {
+      whereParts.push('(name LIKE ? OR phone LIKE ?)')
+      binds.push(`%${search}%`, `%${search}%`)
+    }
+    if (marketing === 'yes') { whereParts.push('marketing_agreed = 1') }
+    else if (marketing === 'no') { whereParts.push('marketing_agreed = 0') }
+
+    const where = whereParts.length ? 'WHERE ' + whereParts.join(' AND ') : ''
+    const dataSql = `SELECT id, name, phone, privacy_agreed, terms_agreed, marketing_agreed, agreed_at, is_active, created_at FROM members ${where} ORDER BY created_at DESC LIMIT ? OFFSET ?`
+    const countSql = `SELECT COUNT(*) as total FROM members ${where}`
+
+    const members = await runQuery(db, dataSql, [...binds, limit, offset])
+    const countResult: any = await runFirst(db, countSql, binds)
+    const total = countResult?.total || 0
+
+    // Stats
+    const stats: any = await db.prepare(`SELECT
+      COUNT(*) as total,
+      SUM(CASE WHEN marketing_agreed = 1 THEN 1 ELSE 0 END) as marketing_yes,
+      SUM(CASE WHEN is_active = 1 THEN 1 ELSE 0 END) as active
+    FROM members`).first()
+
+    return c.json({
+      members: members.results || [],
+      pagination: { page, limit, total, pages: Math.ceil(total / limit) },
+      stats: { total: stats?.total || 0, marketing_yes: stats?.marketing_yes || 0, active: stats?.active || 0 }
+    })
+  } catch (e: any) {
+    return c.json({ error: '회원 목록 조회 실패: ' + e.message }, 500)
+  }
+})
+
+// 회원 상세 (관리자)
+app.get('/api/admin/members/:id', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const id = c.req.param('id')
+    const member = await db.prepare('SELECT id, name, phone, privacy_agreed, terms_agreed, marketing_agreed, agreed_at, is_active, created_at FROM members WHERE id = ?').bind(id).first()
+    if (!member) return c.json({ error: '회원을 찾을 수 없습니다' }, 404)
+    return c.json({ member })
+  } catch (e: any) {
+    return c.json({ error: '회원 조회 실패: ' + e.message }, 500)
+  }
+})
+
+// 회원 상태 변경 (활성/비활성)
+app.put('/api/admin/members/:id', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const id = c.req.param('id')
+    const { is_active } = await c.req.json<{ is_active: number }>()
+    await db.prepare('UPDATE members SET is_active = ? WHERE id = ?').bind(is_active, id).run()
+    return c.json({ message: is_active ? '회원이 활성화되었습니다' : '회원이 비활성화되었습니다' })
+  } catch (e: any) {
+    return c.json({ error: '회원 상태 변경 실패: ' + e.message }, 500)
+  }
+})
+
+// 회원 삭제 (관리자)
+app.delete('/api/admin/members/:id', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const id = c.req.param('id')
+    await db.prepare('DELETE FROM members WHERE id = ?').bind(id).run()
+    return c.json({ message: '회원이 삭제되었습니다' })
+  } catch (e: any) {
+    return c.json({ error: '회원 삭제 실패: ' + e.message }, 500)
+  }
 })
 
 // ══════════════════════════════════════════════════
@@ -1151,12 +1246,13 @@ app.delete('/api/admin/notices/:id', auth, async (c) => {
 app.get('/api/admin/stats', auth, async (c) => {
   try {
     const db = c.env.DB
-    const [blogs, cases, notices, users, doctors] = await Promise.all([
+    const [blogs, cases, notices, users, doctors, members] = await Promise.all([
       db.prepare('SELECT COUNT(*) as count FROM blog_posts').first() as Promise<any>,
       db.prepare('SELECT COUNT(*) as count FROM before_after').first() as Promise<any>,
       db.prepare('SELECT COUNT(*) as count FROM notices').first() as Promise<any>,
       db.prepare('SELECT COUNT(*) as count FROM users').first() as Promise<any>,
       db.prepare('SELECT COUNT(*) as count FROM doctors WHERE is_active = 1').first() as Promise<any>,
+      db.prepare('SELECT COUNT(*) as count FROM members WHERE is_active = 1').first() as Promise<any>,
     ])
 
     // Recent activity
@@ -1169,6 +1265,7 @@ app.get('/api/admin/stats', auth, async (c) => {
       cases: cases?.count || 0,
       notices: notices?.count || 0,
       users: users?.count || 0,
+      members: members?.count || 0,
       recent: {
         blogs: recentBlogs.results || [],
         cases: recentCases.results || [],

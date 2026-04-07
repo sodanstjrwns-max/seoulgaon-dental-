@@ -47,7 +47,7 @@
   .main{margin-left:240px;padding:2rem 2.5rem}
   .page-title{font-size:1.5rem;font-weight:700;margin-bottom:.3rem}
   .page-desc{color:#888;font-size:.85rem;margin-bottom:2rem}
-  .stat-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:2.5rem}
+  .stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1.2rem;margin-bottom:2.5rem}
   .stat-card{background:var(--ink-2);border:1px solid #222;border-radius:12px;padding:1.5rem;transition:border-color .3s}
   .stat-card:hover{border-color:var(--gold)}
   .stat-card .num{font-size:2rem;font-weight:700;color:var(--gold)}
@@ -253,6 +253,7 @@
       <a href="#" onclick="showPage('blog',this)"><i class="fas fa-pen-fancy"></i>블로그</a>
       <a href="#" onclick="showPage('ba',this)"><i class="fas fa-images"></i>비포&애프터</a>
       <a href="#" onclick="showPage('notice',this)"><i class="fas fa-bullhorn"></i>공지사항</a>
+      <a href="#" onclick="showPage('members',this)"><i class="fas fa-users"></i>회원관리</a>
     </nav>
     <div class="side-bottom">
       <div class="side-user"><i class="fas fa-user-circle"></i><span id="user-name">관리자</span></div>
@@ -277,6 +278,7 @@
         <div class="stat-card"><div class="num" id="cnt-blog">0</div><div class="label">블로그 게시글</div><div class="sub" id="cnt-blog-pub">공개 0건</div></div>
         <div class="stat-card"><div class="num" id="cnt-ba">0</div><div class="label">비포&애프터</div><div class="sub" id="cnt-ba-pub">공개 0건</div></div>
         <div class="stat-card"><div class="num" id="cnt-notice">0</div><div class="label">공지사항</div><div class="sub" id="cnt-notice-pub">공개 0건</div></div>
+        <div class="stat-card" style="cursor:pointer" onclick="showPage('members',document.querySelector('.side-nav a:last-child'))"><div class="num" id="cnt-members">0</div><div class="label">회원</div><div class="sub" id="cnt-members-mkt">마케팅 동의 0명</div></div>
       </div>
 
       <!-- Quick links to frontend -->
@@ -434,6 +436,72 @@
       </div>
       <div id="notice-list" style="display:none"><div class="item-list" id="notice-items">로딩 중...</div></div>
     </div>
+
+    <!-- MEMBERS -->
+    <div id="page-members" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">
+        <h1 class="page-title" style="margin-bottom:0">회원 관리</h1>
+        <a href="/signup.html" target="_blank" class="btn-sm preview"><i class="fas fa-external-link-alt"></i> 가입 페이지</a>
+      </div>
+      <p class="page-desc">가입한 회원 명단을 확인하고 관리할 수 있습니다.</p>
+
+      <!-- Stats -->
+      <div style="display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap">
+        <div style="flex:1;min-width:140px;background:var(--ink-3);border:1px solid #333;border-radius:10px;padding:1rem;text-align:center">
+          <div style="font-size:1.5rem;font-weight:700;color:var(--gold)" id="m-stat-total">0</div>
+          <div style="font-size:.75rem;color:#888;margin-top:.2rem">전체 회원</div>
+        </div>
+        <div style="flex:1;min-width:140px;background:var(--ink-3);border:1px solid #333;border-radius:10px;padding:1rem;text-align:center">
+          <div style="font-size:1.5rem;font-weight:700;color:#4ade80" id="m-stat-marketing">0</div>
+          <div style="font-size:.75rem;color:#888;margin-top:.2rem">마케팅 동의</div>
+        </div>
+        <div style="flex:1;min-width:140px;background:var(--ink-3);border:1px solid #333;border-radius:10px;padding:1rem;text-align:center">
+          <div style="font-size:1.5rem;font-weight:700;color:#60a5fa" id="m-stat-active">0</div>
+          <div style="font-size:.75rem;color:#888;margin-top:.2rem">활성 회원</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div style="display:flex;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center">
+        <div style="flex:1;min-width:200px;position:relative">
+          <i class="fas fa-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#666;font-size:.8rem"></i>
+          <input type="text" id="member-search" placeholder="이름 또는 전화번호 검색" style="width:100%;padding:.6rem .8rem .6rem 2.2rem;background:var(--ink-3);border:1px solid #333;border-radius:8px;color:#fff;font-size:.85rem;outline:none" oninput="debounceLoadMembers()">
+        </div>
+        <select id="member-filter-mkt" style="padding:.6rem .8rem;background:var(--ink-3);border:1px solid #333;border-radius:8px;color:#fff;font-size:.82rem;outline:none" onchange="loadMemberList()">
+          <option value="">전체</option>
+          <option value="yes">마케팅 동의</option>
+          <option value="no">마케팅 미동의</option>
+        </select>
+        <button onclick="exportMembers()" style="padding:.6rem 1rem;background:var(--ink-3);border:1px solid var(--gold);border-radius:8px;color:var(--gold);font-size:.82rem;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.background='rgba(191,164,106,.1)'" onmouseout="this.style.background='var(--ink-3)'"><i class="fas fa-download" style="margin-right:4px"></i>CSV 다운로드</button>
+      </div>
+
+      <!-- Member List -->
+      <div class="panel" style="padding:0;overflow:hidden">
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:.82rem" id="member-table">
+            <thead>
+              <tr style="background:var(--ink-3);border-bottom:1px solid #333">
+                <th style="padding:.7rem 1rem;text-align:left;color:var(--gold);font-weight:600;white-space:nowrap">이름</th>
+                <th style="padding:.7rem 1rem;text-align:left;color:var(--gold);font-weight:600;white-space:nowrap">전화번호</th>
+                <th style="padding:.7rem .6rem;text-align:center;color:var(--gold);font-weight:600;white-space:nowrap">개인정보</th>
+                <th style="padding:.7rem .6rem;text-align:center;color:var(--gold);font-weight:600;white-space:nowrap">이용약관</th>
+                <th style="padding:.7rem .6rem;text-align:center;color:var(--gold);font-weight:600;white-space:nowrap">마케팅</th>
+                <th style="padding:.7rem 1rem;text-align:left;color:var(--gold);font-weight:600;white-space:nowrap">가입일</th>
+                <th style="padding:.7rem .6rem;text-align:center;color:var(--gold);font-weight:600;white-space:nowrap">상태</th>
+                <th style="padding:.7rem .6rem;text-align:center;color:var(--gold);font-weight:600;white-space:nowrap">관리</th>
+              </tr>
+            </thead>
+            <tbody id="member-tbody">
+              <tr><td colspan="8" style="padding:2rem;text-align:center;color:#666">로딩 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div style="display:flex;justify-content:center;gap:.5rem;margin-top:1rem" id="member-pagination"></div>
+    </div>
+
   </div>
 </div>
 
@@ -504,7 +572,7 @@ async function checkAuth(){
 
 // ══════ NAV ══════
 function showPage(p,el){
-  ['home','blog','ba','notice'].forEach(x=>document.getElementById('page-'+x).style.display=x===p?'block':'none');
+  ['home','blog','ba','notice','members'].forEach(x=>{const e=document.getElementById('page-'+x);if(e)e.style.display=x===p?'block':'none'});
   document.querySelectorAll('.side-nav a').forEach(a=>a.classList.remove('active'));
   if(el)el.classList.add('active');
   // Close mobile sidebar
@@ -513,6 +581,7 @@ function showPage(p,el){
   if(p==='blog'){loadBlogList();loadDoctorsForSelect()}
   if(p==='ba'){loadBAList();loadDoctorsForSelect()}
   if(p==='notice')loadNoticeList();
+  if(p==='members')loadMemberList();
 }
 
 // ══════ SYNC CHECK ══════
@@ -545,6 +614,7 @@ async function loadDashboard(){
     document.getElementById('cnt-blog').textContent=d.blogs||0;
     document.getElementById('cnt-ba').textContent=d.cases||0;
     document.getElementById('cnt-notice').textContent=d.notices||0;
+    document.getElementById('cnt-members').textContent=d.members||0;
     // Recent activity
     let html='';
     const all=[];
@@ -1451,6 +1521,116 @@ async function togglePublish(type,id,val){
 // ══════ UTILS ══════
 function esc(s){if(!s)return '';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function fmtDate(d){try{return new Date(d).toLocaleDateString('ko-KR')}catch{return d||''}}
+
+// ══════ MEMBERS MANAGEMENT ══════
+let memberDebounce = null;
+function debounceLoadMembers(){ clearTimeout(memberDebounce); memberDebounce = setTimeout(loadMemberList, 400); }
+
+async function loadMemberList(page=1){
+  try {
+    const search = document.getElementById('member-search')?.value?.trim() || '';
+    const marketing = document.getElementById('member-filter-mkt')?.value || '';
+    let url = `/api/admin/members?page=${page}&limit=30`;
+    if(search) url += '&search=' + encodeURIComponent(search);
+    if(marketing) url += '&marketing=' + marketing;
+    const d = await fetch(url, {headers:authHeaders()}).then(r=>r.json());
+    if(d.error){ toast(d.error, true); return; }
+
+    // Update stats
+    if(d.stats){
+      const s = d.stats;
+      document.getElementById('m-stat-total').textContent = s.total;
+      document.getElementById('m-stat-marketing').textContent = s.marketing_yes;
+      document.getElementById('m-stat-active').textContent = s.active;
+      document.getElementById('cnt-members-mkt').textContent = '마케팅 동의 ' + s.marketing_yes + '명';
+    }
+
+    const tbody = document.getElementById('member-tbody');
+    if(!d.members?.length){
+      tbody.innerHTML = '<tr><td colspan="8" style="padding:2rem;text-align:center;color:#666"><i class="fas fa-user-slash" style="font-size:1.5rem;margin-bottom:.5rem;display:block"></i>등록된 회원이 없습니다</td></tr>';
+      document.getElementById('member-pagination').innerHTML = '';
+      return;
+    }
+
+    tbody.innerHTML = d.members.map(m => {
+      const phone = m.phone ? m.phone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3') : '-';
+      const date = m.created_at ? new Date(m.created_at).toLocaleDateString('ko-KR', {year:'numeric',month:'2-digit',day:'2-digit'}) : '-';
+      const yesIcon = '<i class="fas fa-check-circle" style="color:#4ade80"></i>';
+      const noIcon = '<i class="fas fa-times-circle" style="color:#555"></i>';
+      const statusBadge = m.is_active
+        ? '<span style="background:rgba(74,222,128,.1);color:#4ade80;padding:2px 8px;border-radius:4px;font-size:.72rem;font-weight:600">활성</span>'
+        : '<span style="background:rgba(248,113,113,.1);color:#f87171;padding:2px 8px;border-radius:4px;font-size:.72rem;font-weight:600">비활성</span>';
+      return `<tr style="border-bottom:1px solid #1a1a1a;transition:background .15s" onmouseover="this.style.background='var(--ink-3)'" onmouseout="this.style.background=''">
+        <td style="padding:.65rem 1rem;font-weight:500;white-space:nowrap">${esc(m.name)}</td>
+        <td style="padding:.65rem 1rem;color:#ccc;font-family:monospace;font-size:.8rem;white-space:nowrap">${phone}</td>
+        <td style="padding:.65rem .6rem;text-align:center">${m.privacy_agreed ? yesIcon : noIcon}</td>
+        <td style="padding:.65rem .6rem;text-align:center">${m.terms_agreed ? yesIcon : noIcon}</td>
+        <td style="padding:.65rem .6rem;text-align:center">${m.marketing_agreed ? yesIcon : noIcon}</td>
+        <td style="padding:.65rem 1rem;color:#888;font-size:.78rem;white-space:nowrap">${date}</td>
+        <td style="padding:.65rem .6rem;text-align:center">${statusBadge}</td>
+        <td style="padding:.65rem .6rem;text-align:center">
+          <button onclick="toggleMember(${m.id},${m.is_active?0:1})" style="background:none;border:1px solid #333;border-radius:4px;color:#ccc;font-size:.7rem;padding:3px 8px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='#333';this.style.color='#ccc'">${m.is_active?'비활성화':'활성화'}</button>
+          <button onclick="deleteMember(${m.id},'${esc(m.name)}')" style="background:none;border:1px solid #3a1515;border-radius:4px;color:#f87171;font-size:.7rem;padding:3px 8px;cursor:pointer;margin-left:2px;transition:all .2s" onmouseover="this.style.background='rgba(248,113,113,.1)'" onmouseout="this.style.background='none'"><i class="fas fa-trash-alt"></i></button>
+        </td>
+      </tr>`;
+    }).join('');
+
+    // Pagination
+    const pg = d.pagination;
+    if(pg.pages > 1){
+      let pgHtml = '';
+      for(let i = 1; i <= pg.pages; i++){
+        pgHtml += `<button onclick="loadMemberList(${i})" style="padding:.35rem .7rem;border-radius:6px;border:1px solid ${i===pg.page?'var(--gold)':'#333'};background:${i===pg.page?'var(--gold)':'transparent'};color:${i===pg.page?'var(--ink)':'#888'};font-size:.78rem;cursor:pointer;font-weight:${i===pg.page?'700':'400'}">${i}</button>`;
+      }
+      document.getElementById('member-pagination').innerHTML = pgHtml;
+    } else {
+      document.getElementById('member-pagination').innerHTML = '';
+    }
+  } catch(e){ toast('회원 목록 로딩 실패', true); }
+}
+
+async function toggleMember(id, newState){
+  if(!confirm(newState ? '이 회원을 활성화하시겠습니까?' : '이 회원을 비활성화하시겠습니까? (로그인이 차단됩니다)')) return;
+  try {
+    const r = await fetch(`/api/admin/members/${id}`, {method:'PUT',headers:authHeaders(),body:JSON.stringify({is_active:newState})});
+    const d = await r.json();
+    if(!r.ok){ toast(d.error||'실패',true); return; }
+    toast(d.message); loadMemberList();
+  } catch(e){ toast('회원 상태 변경 실패',true); }
+}
+
+async function deleteMember(id, name){
+  if(!confirm(`"${name}" 회원을 정말 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) return;
+  try {
+    const r = await fetch(`/api/admin/members/${id}`, {method:'DELETE',headers:authHeaders()});
+    const d = await r.json();
+    if(!r.ok){ toast(d.error||'삭제 실패',true); return; }
+    toast(d.message); loadMemberList(); loadDashboard();
+  } catch(e){ toast('회원 삭제 실패',true); }
+}
+
+async function exportMembers(){
+  try {
+    const d = await fetch('/api/admin/members?limit=9999',{headers:authHeaders()}).then(r=>r.json());
+    if(!d.members?.length){ toast('다운로드할 회원이 없습니다',true); return; }
+    
+    // BOM for Korean characters in Excel
+    let csv = '\uFEFF이름,전화번호,개인정보동의,이용약관동의,마케팅동의,가입일,상태\n';
+    d.members.forEach(m => {
+      const phone = m.phone ? m.phone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3') : '';
+      csv += `"${m.name}","${phone}",${m.privacy_agreed?'O':'X'},${m.terms_agreed?'O':'X'},${m.marketing_agreed?'O':'X'},"${m.created_at||''}",${m.is_active?'활성':'비활성'}\n`;
+    });
+    
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '서울가온치과_회원목록_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('CSV 파일 다운로드 완료');
+  } catch(e){ toast('CSV 다운로드 실패',true); }
+}
 
 // ══════ INIT ══════
 checkAuth();
