@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <title>공지사항 | 서울가온치과 — 진료시간·휴진·이벤트 안내</title>
 <meta name="description" content="서울가온치과 공지사항. 진료시간 변경, 휴진 안내, 주차 정보, 이벤트 소식을 확인하세요.">
 <meta name="keywords" content="서울가온치과 공지, 서울가온치과 휴진, 서울가온치과 진료시간, 의정부치과 공지사항">
@@ -238,5 +242,27 @@ document.addEventListener('keydown',function(e){
   if(e.key==='Escape') document.getElementById('lightbox').style.display='none';
 });
 </script>
+
+<!-- ===== KAKAO FLOATING CTA ===== -->
+<div id="kakao-float" onclick="window.open('https://pf.kakao.com/_LLxhwG/chat','_blank')" title="카카오톡 상담">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="32" height="32">
+    <path fill="#3C1E1E" d="M128 36C70.6 36 24 72.8 24 118c0 29.2 19.4 54.8 48.8 69.6l-10 36.8c-.4 1.6.4 2.4 1.6 1.6L106 198c7 1.2 14.4 2 22 2 57.4 0 104-36.8 104-82S185.4 36 128 36z"/>
+  </svg>
+  <span class="kakao-float-label">상담하기</span>
+</div>
+<style>
+#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s}
+#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(0,0,0,.4)}
+#kakao-float:active{transform:scale(.95)}
+.kakao-float-label{position:absolute;right:72px;background:rgba(5,5,4,.9);color:#F2EDE4;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;letter-spacing:.02em;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(191,164,106,.15)}
+.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(5,5,4,.9)}
+#kakao-float:hover .kakao-float-label{opacity:1;transform:translateX(0)}
+@media(max-width:768px){
+#kakao-float{width:52px;height:52px;bottom:1.2rem;right:1.2rem}
+#kakao-float svg{width:26px;height:26px}
+.kakao-float-label{display:none}
+}
+</style>
+
 </body>
 </html>
