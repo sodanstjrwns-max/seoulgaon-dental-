@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>진료 철학 | 서울가온치과</title>
-<meta name="description" content="서울가온치과의 진료 철학 - 설명이 먼저입니다. 치료는 그 다음입니다. 딸 가온의 이름을 건 약속.">
+<meta name="description" content="서울가온치과의 진료 철학 — 딸 가온의 이름을 건 치과, 설명이 먼저입니다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -13,115 +13,158 @@
 <link href="style.css" rel="stylesheet">
 <link href="pages.css" rel="stylesheet">
 <style>
-/* ===== PHILOSOPHY HERO — CINEMATIC ===== */
-.phil-hero{position:relative;min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:clamp(8rem,18vh,12rem) clamp(1.5rem,4vw,6rem) clamp(4rem,8vh,6rem)}
-.phil-hero-bg{position:absolute;inset:0;z-index:0}
-.phil-hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:brightness(.3) grayscale(.3)}
-.phil-hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(5,5,4,.4) 0%,rgba(5,5,4,.9) 80%);z-index:1}
-.phil-hero-content{position:relative;z-index:2;max-width:700px}
-.phil-hero-label{font-family:var(--ff-en);font-size:clamp(.7rem,.9vw,.8rem);letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;display:inline-block;opacity:0;transform:translateY(10px)}
-.phil-hero h1{font-family:var(--ff-title);font-size:clamp(2.5rem,7vw,4.5rem);line-height:1.2;margin-bottom:1.5rem;opacity:0;transform:translateY(20px)}
-.phil-hero-sub{font-size:clamp(.9rem,1.2vw,1.05rem);color:var(--stone-l);line-height:1.8;max-width:500px;margin:0 auto;opacity:0;transform:translateY(15px)}
+/* ===== HERO — LETTER (deep, intimate) ===== */
+.ph-hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:clamp(10rem,22vh,16rem) clamp(1.5rem,4vw,6rem) clamp(5rem,10vh,8rem)}
+.ph-hero-bg{position:absolute;inset:0;z-index:0}
+.ph-hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:brightness(.18) grayscale(.5)}
+.ph-hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(5,5,4,.15) 0%,rgba(5,5,4,.94) 70%);z-index:1}
+.ph-hero-content{position:relative;z-index:2;max-width:720px}
+.ph-hero-label{font-family:var(--ff-en);font-size:.72rem;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:2.5rem;display:inline-block;opacity:0;transform:translateY(12px)}
+.ph-hero h1{font-family:var(--ff-title);font-size:clamp(2rem,5vw,3.4rem);line-height:1.45;margin-bottom:2rem;opacity:0;transform:translateY(20px)}
+.ph-hero-body{font-size:clamp(.88rem,1.08vw,.98rem);color:var(--stone-l);line-height:2.2;max-width:580px;margin:0 auto 3rem;opacity:0;transform:translateY(15px)}
+.ph-hero-sig{font-family:var(--ff-title);font-size:1rem;color:var(--ivory);opacity:0;transform:translateY(10px)}
+.ph-hero-sig span{font-size:.78rem;color:var(--stone);font-family:var(--ff-body);margin-left:.5rem}
+.ph-hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0}
+.ph-hero-scroll-bar{width:1px;height:35px;background:var(--gold);animation:scrollPulse 2s ease infinite}
+.ph-hero-scroll-txt{font-family:var(--ff-en);font-size:10px;letter-spacing:3px;color:var(--stone)}
+@keyframes scrollPulse{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}50.1%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
-/* ===== CORE VALUES ===== */
-.phil-values{max-width:1200px;margin:0 auto;padding:clamp(4rem,8vh,7rem) clamp(1.5rem,4vw,4rem)}
-.phil-values-header{text-align:center;margin-bottom:clamp(3rem,6vh,5rem)}
-.pv-label{font-family:var(--ff-en);font-size:.72rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:.5rem}
-.pv-title{font-family:var(--ff-title);font-size:clamp(1.8rem,4vw,3rem);margin-bottom:1rem}
-.pv-quote{font-size:clamp(.88rem,1.1vw,1rem);color:var(--stone-l);font-style:italic;max-width:550px;margin:0 auto}
+/* ===== SECTION COMMON ===== */
+.ph-sec{max-width:1000px;margin:0 auto;padding:clamp(5rem,10vh,8rem) clamp(1.5rem,4vw,4rem)}
+.ph-sec-wide{padding:clamp(5rem,10vh,8rem) clamp(1.5rem,4vw,4rem)}
+.ph-label{font-family:var(--ff-en);font-size:.72rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:.75rem}
+.ph-title{font-family:var(--ff-title);font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.3;margin-bottom:1rem}
+.ph-sub{font-size:clamp(.88rem,1.1vw,.95rem);color:var(--stone-l);line-height:1.8;max-width:600px}
 
-.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
-.v-card{background:var(--ink-4);border:1px solid var(--line);border-radius:16px;padding:2.5rem 2rem;transition:border-color .4s,box-shadow .4s,transform .3s;position:relative;overflow:hidden}
-.v-card:hover{border-color:rgba(191,164,106,.3);box-shadow:0 20px 60px rgba(0,0,0,.3);transform:translateY(-4px)}
-.v-card-bg{position:absolute;top:-1rem;right:-1rem;font-family:var(--ff-en);font-size:6rem;color:var(--gold);opacity:.04;line-height:1;font-weight:700;pointer-events:none}
-.v-card-num{font-family:var(--ff-en);font-size:2rem;color:var(--gold);opacity:.5;line-height:1;margin-bottom:.75rem}
-.v-card h3{font-family:var(--ff-title);font-size:1.2rem;margin-bottom:.6rem}
-.v-card p{font-size:.88rem;color:var(--stone-l);line-height:1.65}
+/* ===== ORIGIN — 왜 이 치과를 열었는가 ===== */
+.ph-origin{background:var(--ink)}
+.ph-origin-inner{max-width:1100px;margin:0 auto}
+.ph-origin-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(3rem,6vw,6rem);align-items:center;margin-top:3rem}
+.ph-origin-text p{font-size:clamp(.9rem,1.1vw,1rem);color:var(--stone-l);line-height:2.1;margin-bottom:1.5rem}
+.ph-origin-text p:last-child{margin-bottom:0}
+.ph-origin-text .origin-highlight{background:rgba(191,164,106,.06);border-left:3px solid var(--gold);padding:1.5rem 2rem;border-radius:0 12px 12px 0;margin:2rem 0;font-style:italic;color:var(--ivory);line-height:1.9}
+.ph-origin-photo{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:4/5;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.ph-origin-photo img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 8s cubic-bezier(.25,0,.15,1)}
+.ph-origin-photo:hover img{transform:scale(1.05)}
+.ph-origin-caption{position:absolute;bottom:1.5rem;left:1.5rem;font-family:var(--ff-en);font-size:.68rem;letter-spacing:3px;color:var(--gold);opacity:.7;text-transform:uppercase}
 
-/* ===== STORY SECTION ===== */
-.phil-story{background:var(--ink-3);position:relative;overflow:hidden;padding:clamp(5rem,10vh,8rem) clamp(1.5rem,5vw,4rem)}
-.phil-story-bg{position:absolute;top:50%;right:-5%;font-family:var(--ff-title);font-size:clamp(8rem,20vw,16rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;white-space:nowrap;transform:translateY(-50%)}
-.phil-story-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(3rem,6vw,6rem);align-items:center}
-.phil-photo-side{position:relative}
-.phil-photo-glow{position:absolute;bottom:-20%;left:-20%;width:140%;height:60%;background:radial-gradient(ellipse,rgba(191,164,106,.12) 0%,transparent 70%);pointer-events:none}
-.phil-photo-frame{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:3/4;box-shadow:0 30px 80px rgba(0,0,0,.4),0 0 60px rgba(191,164,106,.08)}
-.phil-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:center top;transition:transform 8s cubic-bezier(.25,0,.15,1)}
-.phil-photo-frame:hover img{transform:scale(1.06)}
-.phil-photo-label{position:absolute;bottom:1.5rem;left:1.5rem;z-index:2;font-family:var(--ff-en);font-size:.7rem;letter-spacing:3px;color:var(--gold);opacity:.7;text-transform:uppercase}
-.phil-text-side{position:relative;z-index:1}
-.phil-text-label{font-family:var(--ff-en);font-size:.72rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:1rem}
-.phil-headline{font-family:var(--ff-title);font-size:clamp(2rem,5vw,3.5rem);line-height:1.3;margin-bottom:2rem}
-.phil-divider{width:60px;height:2px;background:var(--gold);margin-bottom:2rem;opacity:.6}
-.phil-text-body p{font-size:clamp(.9rem,1.1vw,1.05rem);color:var(--stone-l);line-height:2;margin-bottom:1.5rem}
-.phil-text-body p:last-child{margin-bottom:0}
-.phil-signature{margin-top:2.5rem;display:flex;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid rgba(191,164,106,.15)}
-.phil-sig-name{font-family:var(--ff-title);font-size:1.1rem;color:var(--ivory)}
-.phil-sig-role{font-size:.75rem;color:var(--stone);letter-spacing:.05em}
+/* ===== TURNING POINT — 전환점 ===== */
+.ph-turning{background:var(--ink-3);position:relative;overflow:hidden}
+.ph-turning-inner{max-width:800px;margin:0 auto;text-align:center;padding:clamp(5rem,10vh,8rem) clamp(1.5rem,4vw,4rem)}
+.ph-turning-quote{font-family:var(--ff-title);font-size:clamp(1.4rem,3vw,2.2rem);line-height:1.5;margin-bottom:2rem;position:relative}
+.ph-turning-quote::before,.ph-turning-quote::after{content:'"';font-family:var(--ff-en);font-size:4rem;color:var(--gold);opacity:.2;line-height:1;position:absolute}
+.ph-turning-quote::before{top:-1rem;left:-1.5rem}
+.ph-turning-quote::after{content:'"';bottom:-2rem;right:-1rem}
+.ph-turning-body{font-size:clamp(.88rem,1.1vw,.95rem);color:var(--stone-l);line-height:2;max-width:600px;margin:0 auto}
+.ph-turning-body p{margin-bottom:1.2rem}
+.ph-turning-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--ff-en);font-size:clamp(8rem,18vw,14rem);color:var(--gold);opacity:.02;pointer-events:none;white-space:nowrap;font-weight:700}
 
-/* ===== CONSULT PROMISE ===== */
-.phil-consult{background:var(--ink);position:relative;overflow:hidden}
-.phil-consult-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:75vh}
-.phil-consult-img{position:relative;overflow:hidden}
-.phil-consult-img img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 8s cubic-bezier(.25,0,.15,1)}
-.phil-consult-img:hover img{transform:scale(1.04)}
-.phil-consult-overlay{position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,var(--ink) 100%)}
-.phil-consult-text{display:flex;flex-direction:column;justify-content:center;padding:clamp(3rem,6vw,6rem);position:relative;z-index:1}
-.phil-consult-label{font-family:var(--ff-en);font-size:.72rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:1.5rem}
-.phil-consult-quote{font-family:var(--ff-title);font-size:clamp(2rem,4vw,3.2rem);line-height:1.4;margin-bottom:2rem;position:relative;padding-left:1.5rem}
-.phil-consult-quote::before{content:'';position:absolute;left:0;top:.3rem;bottom:.3rem;width:3px;background:var(--gold)}
-.phil-consult-quote em{color:var(--gold);font-style:normal}
-.phil-consult-desc{font-size:clamp(.88rem,1.1vw,1rem);color:var(--stone-l);line-height:2;margin-bottom:1.5rem}
-.phil-consult-features{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.5rem}
-.phil-consult-feat{display:flex;align-items:center;gap:.5rem;padding:.5rem 1.2rem;border:1px solid var(--line);border-radius:100px;font-size:.8rem;color:var(--stone-l);transition:border-color .3s,color .3s}
-.phil-consult-feat i{color:var(--gold);font-size:.7rem}
-.phil-consult-feat:hover{border-color:var(--gold);color:var(--gold)}
+/* ===== FOR YOU — 이런 분들에게 ===== */
+.ph-for{background:var(--ink)}
+.ph-for-header{text-align:center;margin-bottom:clamp(3rem,6vh,4rem)}
+.ph-for-grid{display:flex;flex-direction:column;gap:1.5rem;max-width:820px;margin:0 auto}
+.ph-for-card{display:grid;grid-template-columns:56px 1fr;gap:1.5rem;align-items:start;background:var(--ink-4);border:1px solid var(--line);border-radius:16px;padding:2.2rem 2.5rem;transition:border-color .4s,transform .3s}
+.ph-for-card:hover{border-color:rgba(191,164,106,.25);transform:translateY(-2px)}
+.ph-for-num{font-family:var(--ff-en);font-size:2.5rem;color:var(--gold);opacity:.3;line-height:1}
+.ph-for-text h3{font-family:var(--ff-title);font-size:clamp(1rem,1.3vw,1.15rem);margin-bottom:.6rem}
+.ph-for-text p{font-size:.88rem;color:var(--stone-l);line-height:1.85}
+.ph-for-text .voice{font-style:italic;color:var(--stone);font-size:.82rem;margin-top:.5rem;display:block}
 
-/* ===== TIMELINE ===== */
-.phil-timeline{max-width:800px;margin:0 auto;padding:clamp(4rem,8vh,7rem) clamp(1.5rem,4vw,4rem)}
-.phil-timeline-header{text-align:center;margin-bottom:clamp(3rem,6vh,4rem)}
-.timeline{position:relative;padding-left:3rem}
-.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold),rgba(191,164,106,.1))}
-.tl-item{position:relative;margin-bottom:3rem;padding-left:1.5rem}
-.tl-item:last-child{margin-bottom:0}
-.tl-item::before{content:'';position:absolute;left:-3.35rem;top:.3rem;width:12px;height:12px;border-radius:50%;background:var(--gold);box-shadow:0 0 20px rgba(191,164,106,.3)}
-.tl-year{font-family:var(--ff-en);font-size:1.5rem;color:var(--gold);opacity:.7;margin-bottom:.3rem}
-.tl-title{font-family:var(--ff-title);font-size:1.1rem;margin-bottom:.3rem}
-.tl-desc{font-size:.85rem;color:var(--stone-l);line-height:1.6}
+/* ===== PROMISE — 약속 ===== */
+.ph-promise{background:var(--ink-3)}
+.ph-promise-header{text-align:center;margin-bottom:clamp(3rem,6vh,5rem)}
+.ph-promise-list{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:0}
+.ph-pm-item{display:grid;grid-template-columns:80px 1fr;gap:1.5rem;padding:2.5rem 0;border-bottom:1px solid var(--line);align-items:start}
+.ph-pm-item:last-child{border-bottom:none}
+.ph-pm-num{font-family:var(--ff-en);font-size:3rem;color:var(--gold);opacity:.3;line-height:1;text-align:center;padding-top:.2rem}
+.ph-pm-content h3{font-family:var(--ff-title);font-size:clamp(1.1rem,1.5vw,1.3rem);margin-bottom:.6rem}
+.ph-pm-content p{font-size:.9rem;color:var(--stone-l);line-height:1.9}
+.ph-pm-content p+p{margin-top:.75rem}
+.ph-pm-content .inner-voice{font-size:.84rem;color:var(--stone);font-style:italic;margin-top:.5rem;padding-left:1rem;border-left:2px solid rgba(191,164,106,.15)}
 
-/* ===== CTA BOTTOM ===== */
-.phil-cta{text-align:center;padding:clamp(4rem,8vh,6rem) 1.5rem;position:relative;overflow:hidden;background:var(--ink-3)}
-.phil-cta-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--ff-en);font-size:clamp(6rem,18vw,14rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;font-weight:700;white-space:nowrap}
-.phil-cta-content{position:relative;z-index:1}
-.phil-cta-title{font-family:var(--ff-title);font-size:clamp(1.5rem,4vw,2.5rem);margin-bottom:1rem}
-.phil-cta-sub{font-size:.9rem;color:var(--stone-l);margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.6}
-.phil-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
-.phil-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:100px;font-weight:600;font-size:.9rem;transition:transform .2s,box-shadow .2s}
-.phil-btn.gold{background:var(--gold);color:var(--ink)}
-.phil-btn.green{background:#03c75a;color:#fff}
-.phil-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(191,164,106,.2)}
+/* ===== CONSULT — 상담 프로세스 ===== */
+.ph-consult{background:var(--ink);position:relative;overflow:hidden}
+.ph-consult-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:75vh}
+.ph-consult-img{position:relative;overflow:hidden}
+.ph-consult-img img{width:100%;height:100%;object-fit:cover;transition:transform 8s cubic-bezier(.25,0,.15,1)}
+.ph-consult-img:hover img{transform:scale(1.04)}
+.ph-consult-overlay{position:absolute;inset:0;background:linear-gradient(to right,transparent 55%,var(--ink) 100%)}
+.ph-consult-text{display:flex;flex-direction:column;justify-content:center;padding:clamp(3rem,6vw,5rem);position:relative;z-index:1}
+.ph-consult-title{font-family:var(--ff-title);font-size:clamp(1.6rem,3vw,2.4rem);line-height:1.45;margin-bottom:2rem;position:relative;padding-left:1.5rem}
+.ph-consult-title::before{content:'';position:absolute;left:0;top:.2rem;bottom:.2rem;width:3px;background:var(--gold)}
+.ph-consult-title em{color:var(--gold);font-style:normal}
+.ph-consult-p{font-size:clamp(.88rem,1.05vw,.95rem);color:var(--stone-l);line-height:2;margin-bottom:1.25rem}
+.ph-consult-process{margin-top:2.5rem;display:flex;flex-direction:column;gap:0}
+.ph-cp-step{display:flex;align-items:flex-start;gap:1.2rem;padding:1.2rem 0;position:relative}
+.ph-cp-step:not(:last-child)::after{content:'';position:absolute;left:15px;top:calc(1.2rem + 32px);bottom:0;width:1px;background:rgba(191,164,106,.15)}
+.ph-cp-dot{width:32px;height:32px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--ff-en);font-size:.72rem;color:var(--gold)}
+.ph-cp-text h4{font-size:.9rem;font-weight:600;margin-bottom:.2rem}
+.ph-cp-text p{font-size:.82rem;color:var(--stone-l);line-height:1.6}
+
+/* ===== STORY — 가온 (깊은 버전) ===== */
+.ph-story{background:var(--ink-3);position:relative;overflow:hidden;padding:clamp(5rem,10vh,8rem) clamp(1.5rem,5vw,4rem)}
+.ph-story-bg{position:absolute;top:50%;right:-5%;font-family:var(--ff-title);font-size:clamp(8rem,20vw,16rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;white-space:nowrap;transform:translateY(-50%)}
+.ph-story-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(3rem,6vw,6rem);align-items:center}
+.ph-story-photo{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:3/4;box-shadow:0 30px 80px rgba(0,0,0,.4),0 0 60px rgba(191,164,106,.08)}
+.ph-story-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;transition:transform 8s cubic-bezier(.25,0,.15,1)}
+.ph-story-photo:hover img{transform:scale(1.06)}
+.ph-story-photo-label{position:absolute;bottom:1.5rem;left:1.5rem;z-index:2;font-family:var(--ff-en);font-size:.7rem;letter-spacing:3px;color:var(--gold);opacity:.7;text-transform:uppercase}
+.ph-story-glow{position:absolute;bottom:-20%;left:-20%;width:140%;height:60%;background:radial-gradient(ellipse,rgba(191,164,106,.12) 0%,transparent 70%);pointer-events:none}
+.ph-story-text{position:relative;z-index:1}
+.ph-story-headline{font-family:var(--ff-title);font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.4;margin-bottom:2rem}
+.ph-story-divider{width:60px;height:2px;background:var(--gold);margin-bottom:2rem;opacity:.6}
+.ph-story-body p{font-size:clamp(.9rem,1.08vw,1rem);color:var(--stone-l);line-height:2.1;margin-bottom:1.5rem}
+.ph-story-body p:last-child{margin-bottom:0}
+.ph-story-quote{background:rgba(191,164,106,.05);border-left:3px solid var(--gold);padding:1.5rem 2rem;border-radius:0 12px 12px 0;margin-top:2.5rem;font-size:clamp(.92rem,1.1vw,1rem);color:var(--ivory);line-height:1.9;font-style:italic}
+.ph-story-sig{margin-top:2rem;font-family:var(--ff-title);font-size:1rem;color:var(--ivory)}
+.ph-story-sig span{font-size:.78rem;color:var(--stone);font-family:var(--ff-body);margin-left:.5rem}
+
+/* ===== CLOSING — 마무리 문장 ===== */
+.ph-closing{background:var(--ink);text-align:center;padding:clamp(6rem,12vh,10rem) clamp(1.5rem,4vw,4rem);position:relative;overflow:hidden}
+.ph-closing-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--ff-en);font-size:clamp(8rem,20vw,16rem);color:var(--gold);opacity:.02;pointer-events:none;white-space:nowrap;font-weight:700}
+.ph-closing-content{position:relative;z-index:1;max-width:600px;margin:0 auto}
+.ph-closing-title{font-family:var(--ff-title);font-size:clamp(1.6rem,4vw,2.6rem);line-height:1.4;margin-bottom:1.5rem}
+.ph-closing-body{font-size:clamp(.88rem,1.08vw,.95rem);color:var(--stone-l);line-height:2;margin-bottom:3rem}
+
+/* ===== CTA ===== */
+.ph-cta{text-align:center;padding:clamp(4rem,8vh,6rem) 1.5rem;position:relative;overflow:hidden;background:var(--ink-3)}
+.ph-cta-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--ff-en);font-size:clamp(6rem,18vw,14rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;font-weight:700;white-space:nowrap}
+.ph-cta-content{position:relative;z-index:1}
+.ph-cta-title{font-family:var(--ff-title);font-size:clamp(1.4rem,3.5vw,2.2rem);margin-bottom:.75rem}
+.ph-cta-sub{font-size:.9rem;color:var(--stone-l);margin-bottom:2.5rem;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.7}
+.ph-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.ph-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:100px;font-weight:600;font-size:.9rem;transition:transform .2s,box-shadow .2s}
+.ph-btn.gold{background:var(--gold);color:var(--ink)}
+.ph-btn.green{background:#03c75a;color:#fff}
+.ph-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(191,164,106,.2)}
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:900px){
-  .phil-story-inner{grid-template-columns:1fr;gap:3rem}
-  .phil-photo-frame{max-width:420px;margin:0 auto}
-  .phil-text-side{text-align:center}
-  .phil-text-body{text-align:center}
-  .phil-divider{margin-left:auto;margin-right:auto}
-  .phil-signature{justify-content:center}
-  .phil-consult-wrap{grid-template-columns:1fr;min-height:auto}
-  .phil-consult-img{aspect-ratio:16/9;max-height:50vh}
-  .phil-consult-overlay{background:linear-gradient(to bottom,transparent 60%,var(--ink) 100%)}
-  .phil-consult-text{padding:2.5rem 1.5rem;text-align:center}
-  .phil-consult-quote{padding-left:0;text-align:center}
-  .phil-consult-quote::before{display:none}
-  .phil-consult-features{justify-content:center}
-  .values-grid{grid-template-columns:1fr}
+  .ph-origin-grid{grid-template-columns:1fr;gap:2.5rem}
+  .ph-origin-photo{max-width:400px;margin:0 auto}
+  .ph-for-card{grid-template-columns:1fr;gap:.8rem;text-align:center}
+  .ph-for-num{text-align:center}
+  .ph-consult-wrap{grid-template-columns:1fr;min-height:auto}
+  .ph-consult-img{aspect-ratio:16/9;max-height:45vh}
+  .ph-consult-overlay{background:linear-gradient(to bottom,transparent 55%,var(--ink) 100%)}
+  .ph-consult-text{padding:2.5rem 1.5rem;text-align:center}
+  .ph-consult-title{padding-left:0;text-align:center}
+  .ph-consult-title::before{display:none}
+  .ph-consult-process{align-items:center}
+  .ph-cp-step::after{display:none}
+  .ph-story-inner{grid-template-columns:1fr;gap:3rem}
+  .ph-story-photo{max-width:420px;margin:0 auto}
+  .ph-story-text{text-align:center}
+  .ph-story-body{text-align:center}
+  .ph-story-divider{margin-left:auto;margin-right:auto}
+  .ph-story-quote{text-align:left}
+  .ph-pm-item{grid-template-columns:60px 1fr;gap:1rem}
+  .ph-pm-num{font-size:2.2rem}
 }
-@media(max-width:768px){
-  .values-grid{grid-template-columns:1fr}
-  .phil-hero{min-height:60vh}
-  .timeline{padding-left:2.5rem}
-  .tl-item::before{left:-2.85rem}
+@media(max-width:600px){
+  .ph-pm-item{grid-template-columns:1fr;gap:.5rem;text-align:center}
+  .ph-pm-num{text-align:center}
+  .ph-turning-quote::before,.ph-turning-quote::after{display:none}
 }
 </style>
 </head>
@@ -144,104 +187,171 @@
 <div class="mob-menu"><a href="/">홈</a><a href="philosophy.html">진료 철학</a><a href="treatments.html">진료 안내</a><a href="doctors.html">의료진</a><a href="guide.html">안내</a><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a></div>
 
 
-<!-- ===== HERO — CINEMATIC ===== -->
-<section class="phil-hero">
-  <div class="phil-hero-bg">
-    <img src="/images/story-daughter.jpg" alt="서울가온치과 진료 철학" loading="eager">
+<!-- ========================================
+     1. HERO — 원장의 편지 (메인과 완전히 다른 톤)
+     개원의의 내면 독백. 화려한 슬로건이 아닌 진짜 고민.
+     ======================================== -->
+<section class="ph-hero">
+  <div class="ph-hero-bg">
+    <img src="/images/story-daughter.jpg" alt="아버지와 딸 가온" loading="eager">
   </div>
-  <div class="phil-hero-overlay"></div>
-  <div class="phil-hero-content">
-    <span class="phil-hero-label">Our Philosophy</span>
+  <div class="ph-hero-overlay"></div>
+  <div class="ph-hero-content">
+    <span class="ph-hero-label">A Letter from the Director</span>
     <h1>
-      <em class="gold">딸 아이</em>의 이름을 건<br>
-      치과의 <em class="gold">약속</em>.
+      처음 오시는 분들에게<br>드리고 싶은 <em class="gold">솔직한</em> 이야기.
     </h1>
-    <p class="phil-hero-sub">
-      내 가족에게 부끄럽지 않은 치료.<br>
-      그것이 서울가온치과의 모든 진료의 기준입니다.
+    <p class="ph-hero-body">
+      치과에 좋은 기억이 없으시다는 거, 압니다.<br>
+      말도 없이 치료가 시작됐고, 무슨 치료를 받는지도 몰랐고,<br>
+      끝나고 나서야 비용을 들었던 경험.<br><br>
+      그런 치과를 하나 더 만들고 싶지 않았습니다.<br>
+      이 페이지는 저희가 <em class="gold">어떤 생각으로 진료하는지</em>,<br>
+      그 이야기를 좀 길게 드려보려고 합니다.
     </p>
+    <div class="ph-hero-sig">현진호 <span>서울가온치과 대표원장</span></div>
+  </div>
+  <div class="ph-hero-scroll">
+    <div class="ph-hero-scroll-bar"></div>
+    <span class="ph-hero-scroll-txt">SCROLL</span>
   </div>
 </section>
 
 
-<!-- ===== CORE VALUES ===== -->
-<section class="phil-values">
-  <div class="phil-values-header">
-    <span class="pv-label">Core Values</span>
-    <h2 class="pv-title">좋은 치과는 <em class="gold">설명부터</em> 다릅니다.</h2>
-    <p class="pv-quote">"다른 치과에서는 무슨 말인지 모르겠었는데, 여기서 처음으로 이해했어요."</p>
-  </div>
+<!-- ========================================
+     2. ORIGIN — 왜 이 치과를 열었는가
+     메인 페이지에는 없는 이야기. 수련 시절의 구체적 경험.
+     ======================================== -->
+<section class="ph-origin ph-sec-wide">
+  <div class="ph-origin-inner">
+    <span class="ph-label">Why We Exist</span>
+    <h2 class="ph-title">수련 시절,<br>한 환자분이 하신 <em class="gold">말</em>.</h2>
 
-  <div class="values-grid">
-    <div class="v-card">
-      <div class="v-card-bg">01</div>
-      <div class="v-card-num">01</div>
-      <h3><em class="gold">편안한</em> 진료</h3>
-      <p>통증과 불안을 최소화합니다. <em class="gold">무서운 마음</em>부터 이해하고, 시작합니다. 충분한 마취와 세심한 진행으로 "생각보다 괜찮았어요"라는 말을 가장 많이 듣습니다.</p>
-    </div>
-    <div class="v-card">
-      <div class="v-card-bg">02</div>
-      <div class="v-card-num">02</div>
-      <h3><em class="gold">명확한</em> 설명</h3>
-      <p><em class="gold">이해</em>될 때까지 말씀드립니다. 파노라마, CT, 구강 사진을 함께 보며 현재 상태와 치료 방향을 투명하게 공유합니다. 궁금한 게 없을 때까지, 천천히.</p>
-    </div>
-    <div class="v-card">
-      <div class="v-card-bg">03</div>
-      <div class="v-card-num">03</div>
-      <h3><em class="gold">오래가는</em> 결과</h3>
-      <p>빠름보다 <em class="gold">정확함</em>을 선택합니다. 한 번의 치료가 오래가도록. 가이드 수술 100%, 정밀한 보철 설계로 예측 가능한 결과를 만듭니다.</p>
-    </div>
-    <div class="v-card">
-      <div class="v-card-bg">04</div>
-      <div class="v-card-num">04</div>
-      <h3>한 단계 <em class="gold">더</em></h3>
-      <p><em class="gold">사후관리</em>까지 책임집니다. 치료가 끝나도 관계는 이어집니다. 정기 검진과 관리를 통해 치료 결과가 오래 유지되도록 함께합니다.</p>
-    </div>
-    <div class="v-card">
-      <div class="v-card-bg">05</div>
-      <div class="v-card-num">05</div>
-      <h3><em class="gold">정직한</em> 진료</h3>
-      <p>필요한 치료만, <em class="gold">솔직하게</em> 말씀드립니다. 과잉 진료 없이, 신뢰를 먼저 쌓습니다. 서면 치료계획서와 투명한 비용 안내가 기본입니다.</p>
-    </div>
-    <div class="v-card">
-      <div class="v-card-bg">06</div>
-      <div class="v-card-num">06</div>
-      <h3><em class="gold">가족</em> 같은 마음</h3>
-      <p>내 <em class="gold">가족</em>이라면 어떻게 할까. 그 기준으로 모든 치료를 결정합니다. 딸 '가온'의 이름을 건 약속, 80세까지 곁에서 함께합니다.</p>
+    <div class="ph-origin-grid">
+      <div class="ph-origin-text">
+        <p data-reveal>
+          대학병원 수련 시절, 진료가 끝난 후 한 어르신이 조심스럽게 물으셨습니다.
+        </p>
+        <div class="origin-highlight" data-reveal>
+          "선생님, 제가 방금 무슨 치료 받은 건가요?"
+        </div>
+        <p data-reveal>
+          이미 한 시간이 넘는 치료가 끝난 뒤였습니다. 설명을 안 드린 게 아니었습니다. 의학 용어로, 빠르게, 형식적으로 했을 뿐이었습니다. 환자분은 고개를 끄덕였지만 이해하신 게 아니었습니다.
+        </p>
+        <p data-reveal>
+          그날 밤, 집에 돌아와서 오래 생각했습니다.<br>
+          <em class="gold">"내가 만약 환자라면, 무슨 치료를 받는지도 모른 채 입을 벌리고 싶을까."</em>
+        </p>
+        <p data-reveal>
+          답은 당연히 아니었습니다.<br>
+          그리고 그 질문이, 서울가온치과의 <em class="gold">시작점</em>이 되었습니다.
+        </p>
+      </div>
+      <div class="ph-origin-photo" data-reveal>
+        <img src="/images/real-consult-scene.jpg" alt="현진호 원장 상담" loading="lazy">
+        <span class="ph-origin-caption">Consultation</span>
+      </div>
     </div>
   </div>
 </section>
 
 
-<!-- ===== STORY — 가온의 의미 ===== -->
-<section class="phil-story">
-  <div class="phil-story-bg">가온</div>
-  <div class="phil-story-inner">
-    <!-- 사진 -->
-    <div class="phil-photo-side">
-      <div class="phil-photo-glow"></div>
-      <div class="phil-photo-frame" data-reveal>
-        <img src="/images/story-daughter.jpg" alt="아버지와 딸 가온" loading="lazy">
-        <span class="phil-photo-label">with 가온</span>
-      </div>
+<!-- ========================================
+     3. TURNING POINT — 전환점 (메인에는 없는 섹션)
+     개원의로서의 결심. 왜 치과 이름에 딸 이름을 붙였는가.
+     ======================================== -->
+<section class="ph-turning">
+  <div class="ph-turning-bg">GAON</div>
+  <div class="ph-turning-inner">
+    <span class="ph-label">Turning Point</span>
+    <h2 class="ph-turning-quote" data-reveal>
+      매일 출근할 때<br>이 <em class="gold">이름</em>이 보이잖아.
+    </h2>
+    <div class="ph-turning-body">
+      <p data-reveal>
+        개원을 준비하면서, 치과 이름을 수십 개 써봤습니다. 멋진 영어 이름, 지역명을 넣은 이름, 전문 분야를 강조한 이름.
+      </p>
+      <p data-reveal>
+        그러다 문득, 딸의 이름이 떠올랐습니다.<br>
+        <em class="gold">'가온'</em> — 순우리말로 '<em class="gold">세상의 중심</em>'이라는 뜻.
+      </p>
+      <p data-reveal>
+        "이 이름을 건물에 붙이면, 매일 출근할 때 딸 이름이 보일 거다. 그러면 '이 아이가 나중에 여기 앉으면, 아빠한테 치료받고 싶다고 하겠지. 그때 부끄럽지 않으려면, 지금 이 환자분한테도 <em class="gold">똑같이</em> 해야 해' 라는 생각을 매일 하게 되지 않을까."
+      </p>
+      <p data-reveal>
+        거창한 각오가 아니었습니다.<br>
+        다만 <em class="gold">매일 스스로를 점검할 장치</em>가 필요했습니다.
+      </p>
     </div>
-    <!-- 텍스트 -->
-    <div class="phil-text-side">
-      <span class="phil-text-label">Our Story</span>
-      <h2 class="phil-headline">
-        <em class="gold">딸 아이</em>의 이름이<br>
-        부끄럽지 않게.
-      </h2>
-      <div class="phil-divider"></div>
-      <div class="phil-text-body">
-        <p>'<em class="gold">가온</em>'은 제 딸 아이의 이름입니다. 순우리말로 '<em class="gold">세상의 중심</em>'이라는 뜻을 가지고 있습니다.</p>
-        <p>아이의 이름을 치과에 붙인 이유는 단 하나 — 내 가족에게 <em class="gold">부끄럽지 않은 치료</em>를 하겠다는 약속입니다.</p>
-        <p><em class="gold">80세까지</em>, 가족처럼 곁에서 함께하는 치과. 그것이 <em class="gold">서울가온치과</em>가 존재하는 이유입니다.</p>
+  </div>
+</section>
+
+
+<!-- ========================================
+     4. 이런 분들에게 추천드립니다
+     메인의 6가지 가치 카드와 완전히 다른 포맷.
+     아이콘이 아닌 번호. 상황 묘사 + 환자 내면의 목소리.
+     ======================================== -->
+<section class="ph-for ph-sec-wide">
+  <div style="max-width:1000px;margin:0 auto">
+    <div class="ph-for-header">
+      <span class="ph-label">For You</span>
+      <h2 class="ph-title">이런 분들에게<br><em class="gold">추천</em>드립니다.</h2>
+      <p class="ph-sub" style="margin:0 auto">하나라도 해당되시면, 한 번 오셔서 이야기만 나눠보세요.</p>
+    </div>
+
+    <div class="ph-for-grid">
+      <div class="ph-for-card" data-reveal>
+        <div class="ph-for-num">01</div>
+        <div class="ph-for-text">
+          <h3>무슨 치료를 받았는지도 <em class="gold">모르셨던</em> 분</h3>
+          <p>"입 벌리세요" — 소리가 나고 — "다 됐습니다." 이게 전부였던 분. 여기서는 모니터를 같이 보면서, 지금 치아 상태가 어떤지, 어떤 치료가 필요한지, 왜 이 방법을 선택하는지 환자분이 <em class="gold">직접 이해하실 때까지</em> 설명부터 합니다.</p>
+          <span class="voice">"여기서 처음으로 내 치아 상태를 이해했어요."</span>
+        </div>
       </div>
-      <div class="phil-signature">
-        <div>
-          <p class="phil-sig-name">현진호 <em class="gold">대표원장</em></p>
-          <p class="phil-sig-role">서울가온치과</p>
+
+      <div class="ph-for-card" data-reveal>
+        <div class="ph-for-num">02</div>
+        <div class="ph-for-text">
+          <h3>이전 치과에서 <em class="gold">아프거나 무서운 기억</em>이 있으신 분</h3>
+          <p>그 기억 때문에 몇 년째 치과를 미루고 계신 거 알고 있습니다. 마취 자체가 아프면 안 됩니다. 표면마취를 먼저 충분히 하고, 마취액을 천천히 주입하며, 완전히 작용된 걸 <em class="gold">확인한 후에만</em> 시작합니다. 중간에 불편하시면 언제든 손을 드세요. 멈추는 게 귀찮은 일이 아니라, 당연한 일입니다.</p>
+          <span class="voice">"생각보다 괜찮았어요, 가 여기서 가장 많이 듣는 말입니다."</span>
+        </div>
+      </div>
+
+      <div class="ph-for-card" data-reveal>
+        <div class="ph-for-num">03</div>
+        <div class="ph-for-text">
+          <h3><em class="gold">과잉 진료</em>가 아닌지 의심이 드셨던 분</h3>
+          <p>경과 관찰이 나은 치아에 크라운을 씌우지 않습니다. 보존 가능한 치아를 빼지 않습니다. 서면 치료계획서에 항목별 비용을 적어 드립니다. 숨겨진 비용 없이, 환자분이 <em class="gold">직접 보고 선택</em>합니다. "이건 꼭 해야 하고, 이건 지켜봐도 됩니다" — 솔직하게 말씀드립니다.</p>
+          <span class="voice">"필요 없는 치료를 빼주셔서 오히려 신뢰가 갔어요."</span>
+        </div>
+      </div>
+
+      <div class="ph-for-card" data-reveal>
+        <div class="ph-for-num">04</div>
+        <div class="ph-for-text">
+          <h3>다른 곳에서 <em class="gold">"안 된다"</em>는 말을 들으신 분</h3>
+          <p>뼈가 부족하다고, 나이가 많다고, 전신 질환이 있다고. 포기하셨던 분들이 많이 오십니다. 가이드 수술과 정밀 뼈이식으로, 다른 곳에서 어렵다고 했던 케이스도 좋은 결과를 만들어냅니다. 70대, 80대 환자분도 안전하게 치료받고 계십니다.</p>
+          <span class="voice">"여기가 마지막이라 생각하고 왔는데, 가능하다는 말에 울컥했어요."</span>
+        </div>
+      </div>
+
+      <div class="ph-for-card" data-reveal>
+        <div class="ph-for-num">05</div>
+        <div class="ph-for-text">
+          <h3>온 가족이 <em class="gold">오래</em> 다닐 수 있는 치과를 찾으시는 분</h3>
+          <p>아이의 첫 치과 경험부터, 어르신의 임플란트까지. 한 곳에서 한 기준으로 진료합니다. 가족 구성원의 전체 구강 상태를 알고 있으면, 불필요한 검사와 중복 설명 없이 효율적으로 관리됩니다. <em class="gold">80세까지 함께</em>라는 말을 목표로 합니다.</p>
+          <span class="voice">"우리 가족 세 명 다 여기 다니고 있어요."</span>
+        </div>
+      </div>
+
+      <div class="ph-for-card" data-reveal>
+        <div class="ph-for-num">06</div>
+        <div class="ph-for-text">
+          <h3>비용이 <em class="gold">걱정</em>되시는 분</h3>
+          <p>좋은 치료가 무조건 비싼 치료는 아닙니다. 보험 적용이 가능한 항목은 반드시 안내드리고, 경제적인 대안이 있다면 함께 제시합니다. "비용 때문에 필요한 치료를 포기하는 일"이 없도록, 상담 시 솔직하게 모든 옵션을 말씀드립니다.</p>
+          <span class="voice">"다른 곳보다 오히려 비용이 합리적이었어요."</span>
         </div>
       </div>
     </div>
@@ -249,81 +359,220 @@
 </section>
 
 
-<!-- ===== CONSULT — 설명이 먼저 ===== -->
-<section class="phil-consult">
-  <div class="phil-consult-wrap">
-    <div class="phil-consult-img">
-      <img src="/images/real-consult-scene.jpg" alt="현진호 원장 상담 장면" loading="lazy">
-      <div class="phil-consult-overlay"></div>
+<!-- ========================================
+     5. 이것만큼은 약속드립니다
+     메인의 간략한 철학 카드와 완전히 다른 깊이.
+     각 약속마다 원장의 내면 독백(inner-voice)이 들어감.
+     ======================================== -->
+<section class="ph-promise ph-sec-wide">
+  <div style="max-width:1000px;margin:0 auto">
+    <div class="ph-promise-header">
+      <span class="ph-label">Our Promises</span>
+      <h2 class="ph-title">이것만큼은<br><em class="gold">약속</em>드립니다.</h2>
+      <p class="ph-sub" style="margin:0 auto">기술은 발전하고 장비는 바뀌지만,<br>이 다섯 가지 원칙은 변하지 않습니다.</p>
     </div>
-    <div class="phil-consult-text">
-      <span class="phil-consult-label">Our Promise</span>
-      <h2 class="phil-consult-quote">
-        <em>설명</em>이 먼저입니다.<br>치료는 그 다음입니다.
-      </h2>
-      <p class="phil-consult-desc">
-        서울가온치과는 환자분이 본인의 상태를 정확히 이해하실 때까지 충분히 설명드립니다. 파노라마, 구강 사진, 3D CT를 함께 보며 현재 상태와 치료 계획을 투명하게 공유합니다.
-      </p>
-      <p class="phil-consult-desc">
-        이해 없는 동의는 받지 않습니다. 납득이 되셔야 치료를 시작합니다.
-      </p>
-      <div class="phil-consult-features">
-        <span class="phil-consult-feat"><i class="fas fa-x-ray"></i> 파노라마·CT 직접 확인</span>
-        <span class="phil-consult-feat"><i class="fas fa-comments"></i> 충분한 상담 시간</span>
-        <span class="phil-consult-feat"><i class="fas fa-file-medical"></i> 서면 치료계획서</span>
-        <span class="phil-consult-feat"><i class="fas fa-won-sign"></i> 투명한 비용 안내</span>
+
+    <div class="ph-promise-list">
+      <div class="ph-pm-item" data-reveal>
+        <div class="ph-pm-num">01</div>
+        <div class="ph-pm-content">
+          <h3>치료 전, 반드시 <em class="gold">이해</em>시키겠습니다.</h3>
+          <p>파노라마와 CT를 모니터에 띄우고, 환자분의 치아를 하나하나 짚어 설명합니다. 의학 용어 대신 "이 치아는 지금 이런 상태이고, 이 방법으로 치료하면 이만큼 좋아집니다"라고 말합니다.</p>
+          <p>이해가 안 되시면 영상, 모형, 이전 케이스를 보여드립니다. 그래도 고민이 되시면, 집에 가서 생각하고 다시 오셔도 됩니다. <em class="gold">절대 재촉하지 않습니다.</em></p>
+          <div class="inner-voice">"이 치료가 왜 필요한지, 환자분이 나보다 더 잘 알 수 있어야 한다."</div>
+        </div>
+      </div>
+
+      <div class="ph-pm-item" data-reveal>
+        <div class="ph-pm-num">02</div>
+        <div class="ph-pm-content">
+          <h3>필요 <em class="gold">없는</em> 치료는 권하지 않겠습니다.</h3>
+          <p>경과 관찰이 나은 치아에 크라운을 씌우지 않습니다. 보존 가능한 치아를 발치하지 않습니다. 수익이 아니라 <em class="gold">환자의 치아 수명</em>이 판단 기준입니다.</p>
+          <p>서면 치료계획서에 항목별 비용을 명시합니다. "이건 지금 꼭 해야 하고, 이건 6개월 후 다시 확인해도 됩니다" — 정직하게 구분합니다.</p>
+          <div class="inner-voice">"내 가족이면 이 치료를 권할까? 그 질문을 매번 한다."</div>
+        </div>
+      </div>
+
+      <div class="ph-pm-item" data-reveal>
+        <div class="ph-pm-num">03</div>
+        <div class="ph-pm-content">
+          <h3><em class="gold">통증</em>은 최소화하겠습니다.</h3>
+          <p>마취 자체가 아프면 치료 시작 전에 이미 공포가 생깁니다. 표면마취를 충분히 한 후, 가장 가는 바늘로 마취액을 천천히 주입합니다. 마취가 완전히 작용되었는지 확인한 뒤에만 진행합니다.</p>
+          <p>치료 중 불편하시면 <em class="gold">언제든 손을 드세요.</em> 멈추고 확인하는 건 시간 낭비가 아니라, 환자분의 신뢰를 지키는 일입니다.</p>
+          <div class="inner-voice">"'안 아팠어요'가 아니라 '괜찮았어요'라는 말을 듣고 싶다."</div>
+        </div>
+      </div>
+
+      <div class="ph-pm-item" data-reveal>
+        <div class="ph-pm-num">04</div>
+        <div class="ph-pm-content">
+          <h3>빠른 치료보다 <em class="gold">오래가는</em> 치료를 하겠습니다.</h3>
+          <p>임플란트는 100% 가이드 수술입니다. 감이 아니라 데이터로 위치를 정합니다. 시간이 더 걸려도, 뼈 상태에 맞는 최적의 설계를 고집합니다.</p>
+          <p>보철은 전문 기공소와 1:1로 맞춤 제작합니다. 색상, 투명도, 잇몸라인까지. <em class="gold">"진짜 치아 같다"</em>는 말이 목표입니다.</p>
+          <div class="inner-voice">"빨리 끝내는 게 좋은 게 아니다. 다시 하지 않는 게 좋은 거다."</div>
+        </div>
+      </div>
+
+      <div class="ph-pm-item" data-reveal>
+        <div class="ph-pm-num">05</div>
+        <div class="ph-pm-content">
+          <h3>치료가 끝나도 <em class="gold">관계</em>는 이어가겠습니다.</h3>
+          <p>임플란트 식립 후 3개월, 6개월, 1년. 보철 장착 후에도 정기적으로 상태를 확인합니다. 문제가 생기기 전에 발견하는 것이 가장 좋은 치료입니다.</p>
+          <p>80세까지 곁에서 함께한다는 건, 홈페이지에 쓰기 좋은 문구가 아니라 <em class="gold">실제로 그렇게 하겠다는 뜻</em>입니다. 한 번 인연을 맺은 환자분의 구강 건강을, 끝까지 책임지겠습니다.</p>
+          <div class="inner-voice">"10년 후에 '그때 잘 선택했다'는 말을 듣는 치과가 되자."</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 
-<!-- ===== TIMELINE ===== -->
-<section class="phil-timeline">
-  <div class="phil-timeline-header">
-    <span class="pv-label">History</span>
-    <h2 class="pv-title">서울가온치과의 <em class="gold">여정</em></h2>
-  </div>
+<!-- ========================================
+     6. 상담 프로세스 — 눈으로 직접 확인
+     메인의 간략한 Our Promise와 완전히 다른 포맷.
+     실제 상담이 어떻게 진행되는지 단계별 묘사.
+     ======================================== -->
+<section class="ph-consult">
+  <div class="ph-consult-wrap">
+    <div class="ph-consult-img">
+      <img src="/images/real-consult-scene.jpg" alt="현진호 원장 상담 장면" loading="lazy">
+      <div class="ph-consult-overlay"></div>
+    </div>
+    <div class="ph-consult-text">
+      <span class="ph-label">How We Consult</span>
+      <h2 class="ph-consult-title">
+        상담은 이렇게<br><em>진행</em>됩니다.
+      </h2>
+      <p class="ph-consult-p">
+        "설명을 잘 해준다"는 말은 쉽습니다.<br>
+        구체적으로 어떻게 하는지 보여드리겠습니다.
+      </p>
 
-  <div class="timeline">
-    <div class="tl-item" data-reveal>
-      <div class="tl-year">2022</div>
-      <div class="tl-title">서울가온치과 <em class="gold">개원</em></div>
-      <div class="tl-desc">의정부 탑석에서 '설명이 먼저인 치과'를 목표로 시작. 딸 가온의 이름을 걸고 출발.</div>
-    </div>
-    <div class="tl-item" data-reveal>
-      <div class="tl-year">2023</div>
-      <div class="tl-title">가이드 임플란트 <em class="gold">100%</em> 달성</div>
-      <div class="tl-desc">모든 임플란트 수술에 가이드 시스템 적용. 정확한 위치, 최소 절개로 안전한 수술 환경 구축.</div>
-    </div>
-    <div class="tl-item" data-reveal>
-      <div class="tl-year">2023</div>
-      <div class="tl-title">서울대 보존과 전문의 <em class="gold">합류</em></div>
-      <div class="tl-desc">의정부 유일 서울대 치과병원 보존과 전문의 합류. 정밀한 신경치료와 치아 보존을 강화.</div>
-    </div>
-    <div class="tl-item" data-reveal>
-      <div class="tl-year">2024</div>
-      <div class="tl-title">진료 공간 <em class="gold">확장</em></div>
-      <div class="tl-desc">독립 수술실, 메이크업룸, 에어샤워 등 환자 중심 시설로 공간 확장 및 리뉴얼 완료.</div>
-    </div>
-    <div class="tl-item" data-reveal>
-      <div class="tl-year">NOW</div>
-      <div class="tl-title"><em class="gold">80세</em>까지의 약속</div>
-      <div class="tl-desc">치료로 끝나지 않는 관계. 정기 검진과 관리를 통해 환자분의 구강 건강을 평생 함께합니다.</div>
+      <div class="ph-consult-process">
+        <div class="ph-cp-step" data-reveal>
+          <div class="ph-cp-dot">1</div>
+          <div class="ph-cp-text">
+            <h4>파노라마 · CT 촬영</h4>
+            <p>전체 치아 상태를 정확히 파악합니다. 눈에 보이지 않는 뼈 속 상태까지 확인합니다.</p>
+          </div>
+        </div>
+        <div class="ph-cp-step" data-reveal>
+          <div class="ph-cp-dot">2</div>
+          <div class="ph-cp-text">
+            <h4>모니터로 같이 보기</h4>
+            <p>촬영 결과를 상담실 모니터에 띄워놓고, 환자분의 치아를 하나씩 짚어가며 설명합니다.</p>
+          </div>
+        </div>
+        <div class="ph-cp-step" data-reveal>
+          <div class="ph-cp-dot">3</div>
+          <div class="ph-cp-text">
+            <h4>치료 옵션 제시</h4>
+            <p>가능한 치료 방법들과 각각의 장단점, 비용, 기간을 솔직하게 비교해드립니다.</p>
+          </div>
+        </div>
+        <div class="ph-cp-step" data-reveal>
+          <div class="ph-cp-dot">4</div>
+          <div class="ph-cp-text">
+            <h4>서면 치료계획서</h4>
+            <p>상담 내용을 치료계획서에 정리하여 드립니다. 집에서 천천히 검토하셔도 됩니다.</p>
+          </div>
+        </div>
+        <div class="ph-cp-step" data-reveal>
+          <div class="ph-cp-dot">5</div>
+          <div class="ph-cp-text">
+            <h4>환자분이 결정</h4>
+            <p>의사가 일방적으로 결정하지 않습니다. 납득이 되셔야 치료를 시작합니다.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 
+<!-- ========================================
+     7. 가온 스토리 (깊은 버전)
+     메인의 3줄 요약이 아닌, 아버지의 진심.
+     ======================================== -->
+<section class="ph-story">
+  <div class="ph-story-bg">가온</div>
+  <div class="ph-story-inner">
+    <div style="position:relative">
+      <div class="ph-story-glow"></div>
+      <div class="ph-story-photo" data-reveal>
+        <img src="/images/story-daughter.jpg" alt="아버지와 딸 가온" loading="lazy">
+        <span class="ph-story-photo-label">with 가온</span>
+      </div>
+    </div>
+    <div class="ph-story-text">
+      <span class="ph-label">The Name "가온"</span>
+      <h2 class="ph-story-headline">
+        이 이름 앞에서<br><em class="gold">부끄러운</em> 진료는 못 합니다.
+      </h2>
+      <div class="ph-story-divider"></div>
+      <div class="ph-story-body">
+        <p data-reveal>
+          '가온'은 순우리말로 <em class="gold">'세상의 중심'</em>이라는 뜻입니다.<br>
+          제 딸의 이름이기도 합니다.
+        </p>
+        <p data-reveal>
+          아직 어린 아이가 자라서, 언젠가 이 치과의 이름을 알게 되겠죠.<br>
+          그때 이 아이가 "아빠가 여기서 어떤 치료를 했는지" 물어본다면,<br>
+          자신 있게 대답할 수 있어야 합니다.
+        </p>
+        <p data-reveal>
+          그래서 진료를 마칠 때마다 스스로에게 묻습니다.<br>
+          <em class="gold">"오늘 내 진료는, 이 이름 앞에서 떳떳한가."</em>
+        </p>
+        <p data-reveal>
+          환자분 한 분 한 분이 제 가족이라면,<br>
+          이 정도의 설명은 했을까. 이 치료가 정말 <em class="gold">필요한가</em>.<br>
+          이 비용이 <em class="gold">정직한가</em>.<br>
+          그 질문이 서울가온치과의 모든 판단 기준입니다.
+        </p>
+      </div>
+      <div class="ph-story-quote" data-reveal>
+        "가온이가 나중에 여기 앉으면, 아빠한테 치료받고 싶다고 하겠지. 그때 부끄럽지 않으려면 — 지금 이 환자분한테도 똑같이 해야 해."
+      </div>
+      <div class="ph-story-sig">현진호 <span>대표원장 · 서울가온치과</span></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========================================
+     8. 마무리 — 진정성 있는 한마디
+     ======================================== -->
+<section class="ph-closing">
+  <div class="ph-closing-bg">GAON</div>
+  <div class="ph-closing-content">
+    <span class="ph-label">Finally</span>
+    <h2 class="ph-closing-title" data-reveal>
+      치과 치료가<br><em class="gold">좋은 기억</em>이<br>될 수 있도록.
+    </h2>
+    <p class="ph-closing-body" data-reveal>
+      대단한 걸 약속하는 게 아닙니다.<br>
+      설명 잘 하고, 아프지 않게 하고, 정직하게 치료하고,<br>
+      끝까지 책임지겠다는 것.<br><br>
+      당연한 걸 당연하게 하는 치과.<br>
+      그게 서울가온치과가 매일 목표로 하는 전부입니다.
+    </p>
+  </div>
+</section>
+
+
 <!-- ===== CTA ===== -->
-<section class="phil-cta">
-  <div class="phil-cta-bg">GAON</div>
-  <div class="phil-cta-content">
-    <h2 class="phil-cta-title">설명부터 시작하겠습니다.</h2>
-    <p class="phil-cta-sub">궁금한 점이 있으시면 편하게 연락주세요.<br>상담은 언제든 부담 없이 가능합니다.</p>
-    <div class="phil-btns">
-      <a href="tel:0507-1325-3377" class="phil-btn gold">📞 0507-1325-3377</a>
-      <a href="https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&ackey=2cykehjt" target="_blank" rel="noopener" class="phil-btn green">네이버 예약</a>
+<section class="ph-cta">
+  <div class="ph-cta-bg">GAON</div>
+  <div class="ph-cta-content">
+    <h2 class="ph-cta-title">먼저 설명 듣고, 그 다음에 결정하세요.</h2>
+    <p class="ph-cta-sub">
+      상담만 받고 돌아가셔도 괜찮습니다.<br>
+      이해하신 후에 치료를 시작해도 늦지 않습니다.
+    </p>
+    <div class="ph-btns">
+      <a href="tel:0507-1325-3377" class="ph-btn gold">📞 0507-1325-3377</a>
+      <a href="https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&ackey=2cykehjt" target="_blank" rel="noopener" class="ph-btn green">네이버 예약</a>
     </div>
   </div>
 </section>
@@ -349,13 +598,16 @@
 <script>
 gsap.registerPlugin(ScrollTrigger);
 window.addEventListener('DOMContentLoaded', () => {
-  // Hero entrance
-  const tl = gsap.timeline({delay:.3});
-  tl.to('.phil-hero-label', {opacity:1, y:0, duration:.6, ease:'power3.out'})
-    .to('.phil-hero h1', {opacity:1, y:0, duration:.7, ease:'power3.out'}, '-=.3')
-    .to('.phil-hero-sub', {opacity:1, y:0, duration:.6, ease:'power3.out'}, '-=.3');
 
-  // Scroll reveal
+  /* ===== Hero — slow letter entrance ===== */
+  const tl = gsap.timeline({delay:.6});
+  tl.to('.ph-hero-label', {opacity:1, y:0, duration:.9, ease:'power2.out'})
+    .to('.ph-hero h1', {opacity:1, y:0, duration:1, ease:'power2.out'}, '-=.4')
+    .to('.ph-hero-body', {opacity:1, y:0, duration:.9, ease:'power2.out'}, '-=.4')
+    .to('.ph-hero-sig', {opacity:1, y:0, duration:.7, ease:'power2.out'}, '-=.3')
+    .to('.ph-hero-scroll', {opacity:1, duration:.6, ease:'power2.out'}, '-=.2');
+
+  /* ===== Scroll reveal — individual elements ===== */
   gsap.utils.toArray('[data-reveal]').forEach(el => {
     gsap.from(el, {
       scrollTrigger:{trigger:el, start:'top 88%', once:true},
@@ -363,27 +615,38 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Value cards stagger
-  gsap.from('.v-card', {
-    scrollTrigger:{trigger:'.values-grid', start:'top 80%', once:true},
-    opacity:0, y:50, stagger:.1, duration:.7, ease:'power3.out'
+  /* ===== For-you cards stagger ===== */
+  gsap.from('.ph-for-card', {
+    scrollTrigger:{trigger:'.ph-for-grid', start:'top 82%', once:true},
+    opacity:0, y:40, stagger:.1, duration:.6, ease:'power3.out'
   });
 
-  // Timeline items stagger
-  gsap.from('.tl-item', {
-    scrollTrigger:{trigger:'.timeline', start:'top 80%', once:true},
-    opacity:0, x:-30, stagger:.15, duration:.7, ease:'power3.out'
+  /* ===== Promise items stagger ===== */
+  gsap.from('.ph-pm-item', {
+    scrollTrigger:{trigger:'.ph-promise-list', start:'top 82%', once:true},
+    opacity:0, y:30, stagger:.12, duration:.7, ease:'power3.out'
   });
 
-  // Sections fade in
-  gsap.utils.toArray('.phil-story, .phil-consult, .phil-timeline, .phil-cta').forEach(sec => {
+  /* ===== Consult process steps stagger ===== */
+  gsap.from('.ph-cp-step', {
+    scrollTrigger:{trigger:'.ph-consult-process', start:'top 82%', once:true},
+    opacity:0, y:25, stagger:.1, duration:.6, ease:'power3.out'
+  });
+
+  /* ===== Section fade-ins ===== */
+  gsap.utils.toArray('.ph-turning, .ph-consult, .ph-story, .ph-closing, .ph-cta').forEach(sec => {
     gsap.from(sec, {
       scrollTrigger:{trigger:sec, start:'top 85%', once:true},
       opacity:0, y:40, duration:.8, ease:'power3.out'
     });
   });
 
-  // Cursor
+  /* ===== Nav stuck ===== */
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('stuck', window.scrollY > 60);
+  });
+
+  /* ===== Cursor ===== */
   const cur = document.getElementById('cur');
   if(cur && window.innerWidth > 768) {
     let mx=0, my=0, cx=0, cy=0;
@@ -399,7 +662,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Hamburger
+  /* ===== Hamburger ===== */
   const ham = document.querySelector('.hamburger');
   const mob = document.querySelector('.mob-menu');
   if(ham && mob) {
@@ -409,7 +672,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Scroll progress
+  /* ===== Scroll progress ===== */
   const bar = document.getElementById('progressBar');
   if(bar) {
     window.addEventListener('scroll', () => {
