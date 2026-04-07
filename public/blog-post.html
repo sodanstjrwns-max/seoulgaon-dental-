@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<title>블로그 | 서울가온치과</title>
+<meta name="description" content="서울가온치과 블로그 — 임플란트, 심미치료, 신경치료 등 치과 건강 정보를 쉽고 정직하게 전합니다.">
+<meta name="robots" content="index, follow">
+<meta name="author" content="서울가온치과의원">
+<link rel="canonical" href="https://www.seoulgaon.com/blog-post.html">
+<!-- Open Graph (동적 업데이트 됨) -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="서울가온치과">
+<meta property="og:title" content="블로그 | 서울가온치과">
+<meta property="og:description" content="서울가온치과 블로그 글">
+<meta property="og:url" content="https://www.seoulgaon.com/blog-post.html">
+<meta property="og:image" content="https://www.seoulgaon.com/images/og-blog.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="블로그 | 서울가온치과">
+<meta name="twitter:description" content="서울가온치과 블로그 글">
+<meta name="twitter:image" content="https://www.seoulgaon.com/images/og-blog.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<link href="pages.css" rel="stylesheet">
+<style>
+/* ===== BLOG POST DETAIL ===== */
+.bp-wrap{max-width:800px;margin:0 auto;padding:clamp(8rem,15vh,12rem) clamp(1.5rem,4vw,3rem) clamp(4rem,8vh,6rem)}
+.bp-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--stone-l,#AFA79D);margin-bottom:2rem;transition:color .3s;text-decoration:none}
+.bp-back:hover{color:var(--gold,#BFA46A)}
+.bp-back i{font-size:.7rem;transition:transform .3s}
+.bp-back:hover i{transform:translateX(-3px)}
+.bp-meta{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.bp-tag{font-family:var(--ff-en,'Bebas Neue');font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold,#BFA46A);padding:.3rem .8rem;border:1px solid rgba(191,164,106,.2);border-radius:100px}
+.bp-date{font-size:.78rem;color:var(--stone,#8C8578)}
+.bp-title{font-family:var(--ff-title,'Black Han Sans');font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.4;margin-bottom:1.5rem;color:var(--ivory,#F2EDE4)}
+.bp-doctor{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(191,164,106,.08);border:1px solid rgba(191,164,106,.15);border-radius:100px;font-size:.82rem;color:var(--stone-l,#AFA79D);text-decoration:none;transition:all .3s;margin-bottom:2.5rem}
+.bp-doctor:hover{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.bp-doctor img{width:28px;height:28px;border-radius:50%;object-fit:cover}
+.bp-divider{width:60px;height:1px;background:linear-gradient(90deg,var(--gold,#BFA46A),transparent);margin-bottom:2.5rem}
+.bp-content{font-size:clamp(.88rem,1vw,.95rem);line-height:2;color:var(--stone-l,#AFA79D);white-space:pre-wrap;word-break:keep-all;margin-bottom:3rem}
+.bp-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:3rem}
+.bp-images img{width:100%;border-radius:12px;cursor:pointer;transition:transform .3s,box-shadow .3s;aspect-ratio:4/3;object-fit:cover;border:1px solid rgba(191,164,106,.08)}
+.bp-images img:hover{transform:scale(1.02);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+/* Single image — full width */
+.bp-images.single{grid-template-columns:1fr}
+.bp-images.single img{aspect-ratio:auto;max-height:500px;object-fit:contain;background:var(--ink-3,#111009);border-radius:12px}
+/* Lightbox */
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10000;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.lb.show{display:flex}
+.lb img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:4px}
+/* Bottom nav */
+.bp-bottom{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid var(--line,rgba(191,164,106,.1));flex-wrap:wrap}
+.bp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.5rem;border-radius:100px;font-size:.82rem;font-weight:500;text-decoration:none;transition:all .3s}
+.bp-btn-back{border:1px solid var(--line,rgba(191,164,106,.1));color:var(--stone-l,#AFA79D)}
+.bp-btn-back:hover{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.bp-btn-cta{background:var(--gold,#BFA46A);color:var(--ink,#050504);font-weight:600}
+.bp-btn-cta:hover{background:var(--gold-b,#D4BA82)}
+/* Loading state */
+.bp-loading{text-align:center;padding:6rem 2rem;color:var(--stone,#8C8578)}
+.bp-loading .spinner{width:32px;height:32px;border:2px solid var(--line,rgba(191,164,106,.1));border-top-color:var(--gold,#BFA46A);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Error state */
+.bp-error{text-align:center;padding:6rem 2rem}
+.bp-error i{font-size:3rem;color:var(--stone,#8C8578);margin-bottom:1rem;display:block}
+.bp-error p{color:var(--stone-l,#AFA79D);margin-bottom:1.5rem}
+@media(max-width:768px){
+  .bp-images{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<noscript><div style="background:#BFA46A;color:#050504;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
+
+<div id="cur"><div id="cur-ring"></div><div id="cur-dot"></div></div>
+
+<nav id="nav" role="navigation" aria-label="메인 네비게이션">
+  <a href="/" class="nav-logo">서울가온치과<span>.</span></a>
+  <div class="nav-links">
+    <a href="philosophy.html">진료 철학</a>
+    <div class="nav-link-drop"><a href="treatments.html">진료 안내 ▾</a><div class="drop"><a href="treatments.html#implant">임플란트</a><a href="treatments.html#aesthetics">앞니 심미치료</a><a href="treatments.html#endodontics">신경치료</a><a href="treatments.html#general">일반진료</a></div></div>
+    <div class="nav-link-drop"><a href="#">커뮤니티 ▾</a><div class="drop"><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a></div></div>
+    <a href="doctors.html">의료진</a>
+    <div class="nav-link-drop"><a href="guide.html">안내 ▾</a><div class="drop"><a href="guide.html#visit">오시는 길</a><a href="guide.html#fee">수가 안내</a><a href="guide.html#faq">자주 묻는 질문</a></div></div>
+  </div>
+  <a href="tel:0507-1325-3377" class="nav-cta" data-magnet>예약 상담</a>
+  <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu"><a href="/">홈</a><a href="philosophy.html">진료 철학</a><a href="treatments.html">진료 안내</a><a href="doctors.html">의료진</a><a href="guide.html">안내</a><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a></div>
+
+<main id="main-content" role="main">
+<div class="bp-wrap" id="bp-wrap">
+  <!-- 로딩 상태 -->
+  <div class="bp-loading" id="bp-loading">
+    <div class="spinner"></div>
+    글을 불러오는 중...
+  </div>
+</div>
+</main>
+
+<footer role="contentinfo">
+  <div class="ft-logo">서울가온치과<span style="color:var(--gold)">.</span></div>
+  <p class="ft-slogan">치과 치료가 좋은 기억이 될 수 있도록.</p>
+  <div class="ft-biz" style="font-size:.72rem;color:var(--stone);margin-bottom:.5rem">
+    <span>서울가온치과의원</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>대표 현진호</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>사업자등록번호 898-03-02537</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>경기도 의정부시 용민로 22, 4층(용현동)</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>Tel. 0507-1325-3377</span>
+  </div>
+  <p class="ft-copy">© 2022–2026 서울가온치과의원. All rights reserved.</p>
+</footer>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" onclick="this.classList.remove('show')">
+  <img id="lb-img" src="" alt="">
+</div>
+
+<!-- Kakao floating -->
+<div id="kakao-float" onclick="window.open('https://pf.kakao.com/_LLxhwG/chat','_blank')" title="카카오톡 상담">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="32" height="32">
+    <path fill="#3C1E1E" d="M128 36C70.6 36 24 72.8 24 118c0 29.2 19.4 54.8 48.8 69.6l-10 36.8c-.4 1.6.4 2.4 1.6 1.6L106 198c7 1.2 14.4 2 22 2 57.4 0 104-36.8 104-82S185.4 36 128 36z"/>
+  </svg>
+  <span class="kakao-float-label">상담하기</span>
+</div>
+<style>
+#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s}
+#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(0,0,0,.4)}
+#kakao-float:active{transform:scale(.95)}
+.kakao-float-label{position:absolute;right:72px;background:rgba(5,5,4,.9);color:#F2EDE4;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;letter-spacing:.02em;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(191,164,106,.15)}
+.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(5,5,4,.9)}
+#kakao-float:hover .kakao-float-label{opacity:1;transform:translateX(0)}
+@media(max-width:768px){
+#kakao-float{width:52px;height:52px;bottom:1.2rem;right:1.2rem}
+#kakao-float svg{width:26px;height:26px}
+.kakao-float-label{display:none}
+}
+</style>
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<script src="pages.js"></script>
+<script>
+const catLabel = {'임플란트':'Implant','심미치료':'Aesthetic','신경치료':'Endodontics','치과상식':'Info','일반':'Info'};
+
+(async function(){
+  const wrap = document.getElementById('bp-wrap');
+  const loading = document.getElementById('bp-loading');
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+
+  if(!id){
+    showError('잘못된 접근입니다.');
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/blog/' + id);
+    if(!res.ok) throw new Error('not found');
+    const data = await res.json();
+    if(!data.post) throw new Error('no post');
+
+    const post = data.post;
+    const images = data.images || [];
+    const tag = catLabel[post.category] || post.category;
+    const date = new Date(post.created_at).toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
+
+    // 페이지 타이틀 동적 업데이트
+    document.title = post.title + ' | 서울가온치과 블로그';
+    const metaDesc = post.content.substring(0, 150).replace(/\n/g,' ') + '...';
+    document.querySelector('meta[name="description"]').content = metaDesc;
+    document.querySelector('meta[property="og:title"]').content = post.title + ' | 서울가온치과';
+    document.querySelector('meta[property="og:description"]').content = metaDesc;
+    document.querySelector('meta[name="twitter:title"]').content = post.title + ' | 서울가온치과';
+    document.querySelector('meta[name="twitter:description"]').content = metaDesc;
+    if(post.thumbnail_url){
+      document.querySelector('meta[property="og:image"]').content = post.thumbnail_url;
+      document.querySelector('meta[name="twitter:image"]').content = post.thumbnail_url;
+    }
+
+    // 의료진 배지 HTML
+    let drHtml = '';
+    if(post.doctor_name){
+      drHtml = `<a class="bp-doctor" href="doctors.html?id=${post.doctor_id}">
+        ${post.doctor_photo ? '<img src="'+post.doctor_photo+'" alt="'+post.doctor_name+'">' : '<i class="fas fa-user-md"></i>'}
+        ${post.doctor_name}${post.doctor_title ? ' · '+post.doctor_title : ''}
+      </a>`;
+    }
+
+    // 이미지 HTML
+    let imgHtml = '';
+    if(images.length){
+      const cls = images.length === 1 ? 'bp-images single' : 'bp-images';
+      imgHtml = `<div class="${cls}">
+        ${images.map(img => `<img src="${img.image_url}" alt="${img.filename||post.title}" loading="lazy" onclick="openLB(this.src)">`).join('')}
+      </div>`;
+    }
+
+    wrap.innerHTML = `
+      <a href="blog.html" class="bp-back"><i class="fas fa-chevron-left"></i> 블로그 목록으로</a>
+
+      <div class="bp-meta">
+        <span class="bp-tag">${tag}</span>
+        <span class="bp-date">${date}</span>
+      </div>
+
+      <h1 class="bp-title">${escHtml(post.title)}</h1>
+
+      ${drHtml}
+
+      <div class="bp-divider"></div>
+
+      ${imgHtml}
+
+      <div class="bp-content">${escHtml(post.content)}</div>
+
+      <div class="bp-bottom">
+        <a href="blog.html" class="bp-btn bp-btn-back"><i class="fas fa-arrow-left"></i> 목록으로</a>
+        <a href="tel:0507-1325-3377" class="bp-btn bp-btn-cta"><i class="fas fa-phone"></i> 상담 예약</a>
+      </div>
+    `;
+
+  } catch(e){
+    showError('게시글을 찾을 수 없습니다.');
+  }
+
+  function showError(msg){
+    wrap.innerHTML = `
+      <div class="bp-error">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>${msg}</p>
+        <a href="blog.html" class="bp-btn bp-btn-back"><i class="fas fa-arrow-left"></i> 블로그 목록으로</a>
+      </div>
+    `;
+  }
+
+  function escHtml(str){
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+})();
+
+function openLB(src){
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb').classList.add('show');
+}
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape') document.getElementById('lb').classList.remove('show');
+});
+
+// Nav: hamburger + scroll progress
+document.addEventListener('DOMContentLoaded', () => {
+  const ham = document.querySelector('.hamburger');
+  const mob = document.querySelector('.mob-menu');
+  if(ham && mob){
+    ham.addEventListener('click', () => { ham.classList.toggle('open'); mob.classList.toggle('open'); });
+    mob.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => { ham.classList.remove('open'); mob.classList.remove('open'); });
+    });
+  }
+  const bar = document.getElementById('progressBar');
+  if(bar){
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (window.scrollY / h * 100) + '%';
+    });
+  }
+});
+</script>
+</body>
+</html>
