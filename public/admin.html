@@ -144,6 +144,44 @@
   .seo-hint .dot.ok{background:var(--success)}
   .seo-hint .dot.warn{background:#fbbf24}
   .seo-hint .dot.bad{background:var(--danger)}
+  /* Block inserter (+ button between blocks) */
+  .block-inserter{position:relative;height:0;display:flex;align-items:center;justify-content:center;margin:0 .6rem;opacity:0;transition:opacity .2s}
+  .seo-blocks:hover .block-inserter{opacity:1}
+  .block-inserter::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(191,164,106,.15)}
+  .block-inserter button{position:relative;z-index:2;width:24px;height:24px;border-radius:50%;background:var(--ink-4);border:1px solid #444;color:#666;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .block-inserter button:hover{border-color:var(--gold);color:var(--gold);background:rgba(191,164,106,.1)}
+  /* Block type picker popup */
+  .block-picker{display:none;position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--ink-2);border:1px solid #444;border-radius:10px;padding:.5rem;z-index:20;box-shadow:0 8px 30px rgba(0,0,0,.5);white-space:nowrap}
+  .block-picker.show{display:flex;gap:.3rem;flex-wrap:wrap;justify-content:center}
+  .block-picker button{padding:.35rem .65rem;background:transparent;border:1px solid #444;border-radius:6px;color:#aaa;font-size:.72rem;cursor:pointer;display:flex;align-items:center;gap:.3rem;transition:all .15s}
+  .block-picker button:hover{border-color:var(--gold);color:var(--gold);background:rgba(191,164,106,.08)}
+  /* Drag-over highlight for image drop */
+  .seo-blocks.drag-over{background:rgba(191,164,106,.03);outline:2px dashed rgba(191,164,106,.3);outline-offset:-4px;border-radius:8px}
+  .seo-block.drag-target{border-color:var(--gold)!important;background:rgba(191,164,106,.04)}
+  /* Preview panel */
+  .seo-preview{display:none;padding:1.5rem 2rem;min-height:300px;background:var(--ink);color:#ccc;font-size:.92rem;line-height:2;overflow-y:auto;max-height:600px}
+  .seo-preview.show{display:block}
+  .seo-blocks.hide{display:none}
+  .seo-preview h2{font-size:1.4rem;font-weight:700;color:#F2EDE4;margin:1.5rem 0 .8rem;padding-bottom:.4rem;border-bottom:1px solid rgba(191,164,106,.12)}
+  .seo-preview h3{font-size:1.1rem;font-weight:600;color:#F2EDE4;margin:1.2rem 0 .6rem}
+  .seo-preview p{margin-bottom:1rem}
+  .seo-preview strong{color:#F2EDE4}
+  .seo-preview a{color:var(--gold)}
+  .seo-preview ul{margin:1rem 0 1rem 1.2rem}
+  .seo-preview li{margin-bottom:.3rem}
+  .seo-preview li::marker{color:var(--gold)}
+  .seo-preview blockquote{border-left:3px solid var(--gold);padding:.6rem 1rem;margin:1rem 0;font-style:italic;color:#aaa;background:rgba(191,164,106,.04);border-radius:0 6px 6px 0}
+  .seo-preview figure{margin:1.5rem 0;text-align:center}
+  .seo-preview figure img{max-width:100%;border-radius:8px;max-height:400px}
+  .seo-preview figcaption{font-size:.75rem;color:#888;margin-top:.4rem;font-style:italic}
+  /* Image block improvements */
+  .seo-block .block-img-wrap{position:relative}
+  .seo-block .block-img-wrap .img-replace{position:absolute;top:8px;left:8px;padding:.3rem .6rem;background:rgba(0,0,0,.7);border:1px solid #555;border-radius:6px;color:#aaa;font-size:.7rem;cursor:pointer;opacity:0;transition:opacity .2s;z-index:3}
+  .seo-block .block-img-wrap .img-replace input{position:absolute;inset:0;opacity:0;cursor:pointer}
+  .seo-block .block-img-wrap:hover .img-replace{opacity:1}
+  /* Toolbar mode toggle */
+  .seo-toolbar .mode-toggle{margin-left:auto;gap:.4rem}
+  .seo-toolbar .mode-toggle.active{background:var(--gold);color:var(--ink);border-color:var(--gold)}
   /* Sync panel */
   .sync-panel{background:var(--ink-3);border:1px solid rgba(191,164,106,.2);border-radius:12px;padding:1.5rem;margin-bottom:2rem}
   .sync-panel h3{font-size:.9rem;font-weight:700;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
@@ -293,11 +331,15 @@
               <button type="button" onclick="addBlock('image')" title="이미지 삽입"><i class="fas fa-image"></i> 이미지</button>
               <div class="sep"></div>
               <button type="button" onclick="execBold()" title="굵게 (Ctrl+B)"><i class="fas fa-bold"></i></button>
+              <button type="button" onclick="execItalic()" title="기울임 (Ctrl+I)"><i class="fas fa-italic"></i></button>
               <button type="button" onclick="execLink()" title="링크 삽입"><i class="fas fa-link"></i></button>
+              <div class="sep"></div>
+              <button type="button" class="mode-toggle" id="preview-toggle" onclick="togglePreview()" title="미리보기"><i class="fas fa-eye"></i> 미리보기</button>
             </div>
             <div class="seo-blocks" id="seo-blocks">
               <!-- 블록들이 여기에 동적으로 추가됨 -->
             </div>
+            <div class="seo-preview" id="seo-preview"></div>
             <div class="seo-hints" id="seo-hints"></div>
           </div>
         </div>
@@ -589,6 +631,42 @@ function showBlogTab(t){
 let blockIdCounter = 0;
 function nextBlockId(){ return 'blk-'+(++blockIdCounter) }
 
+function createBlockControls(id){
+  return `<div class="block-controls">
+    <button class="move" onclick="moveBlock('${id}',-1)" title="위로"><i class="fas fa-arrow-up"></i></button>
+    <button class="move" onclick="moveBlock('${id}',1)" title="아래로"><i class="fas fa-arrow-down"></i></button>
+    <button onclick="removeBlock('${id}')" title="삭제"><i class="fas fa-times"></i></button>
+  </div>`;
+}
+
+function createInserter(afterId){
+  const ins = document.createElement('div');
+  ins.className = 'block-inserter';
+  ins.innerHTML = `<button onclick="togglePicker(this)" title="블록 추가"><i class="fas fa-plus"></i></button>
+    <div class="block-picker">
+      <button onclick="insertBlockAt(this,'h2')"><i class="fas fa-heading"></i> H2</button>
+      <button onclick="insertBlockAt(this,'h3')"><i class="fas fa-heading" style="font-size:.6rem"></i> H3</button>
+      <button onclick="insertBlockAt(this,'p')"><i class="fas fa-paragraph"></i> 본문</button>
+      <button onclick="insertBlockAt(this,'ul')"><i class="fas fa-list-ul"></i> 목록</button>
+      <button onclick="insertBlockAt(this,'quote')"><i class="fas fa-quote-left"></i> 인용</button>
+      <button onclick="insertBlockAt(this,'image')"><i class="fas fa-image"></i> 이미지</button>
+    </div>`;
+  return ins;
+}
+
+function togglePicker(btn){
+  const picker = btn.nextElementSibling;
+  document.querySelectorAll('.block-picker.show').forEach(p=>{if(p!==picker)p.classList.remove('show')});
+  picker.classList.toggle('show');
+}
+
+function insertBlockAt(pickerBtn, type){
+  const inserter = pickerBtn.closest('.block-inserter');
+  const nextBlock = inserter.nextElementSibling;
+  pickerBtn.closest('.block-picker').classList.remove('show');
+  addBlock(type, inserter, null);
+}
+
 function addBlock(type, afterEl, data){
   const container = document.getElementById('seo-blocks');
   const id = nextBlockId();
@@ -597,18 +675,14 @@ function addBlock(type, afterEl, data){
   div.id = id;
   div.dataset.type = type;
 
-  const controls = `<div class="block-controls">
-    <button class="move" onclick="moveBlock('${id}',-1)" title="위로"><i class="fas fa-arrow-up"></i></button>
-    <button class="move" onclick="moveBlock('${id}',1)" title="아래로"><i class="fas fa-arrow-down"></i></button>
-    <button onclick="removeBlock('${id}')" title="삭제"><i class="fas fa-times"></i></button>
-  </div>`;
+  const controls = createBlockControls(id);
 
   if(type==='h2'){
     div.innerHTML = controls+`<h2 contenteditable="true" data-placeholder="소제목 (H2) — 핵심 키워드를 포함하세요">${data||''}</h2>`;
   } else if(type==='h3'){
     div.innerHTML = controls+`<h3 contenteditable="true" data-placeholder="중제목 (H3)">${data||''}</h3>`;
   } else if(type==='p'){
-    div.innerHTML = controls+`<div class="block-paragraph" contenteditable="true" data-placeholder="본문 내용을 입력하세요. 줄바꿈은 Enter, 굵게는 Ctrl+B">${data||''}</div>`;
+    div.innerHTML = controls+`<div class="block-paragraph" contenteditable="true" data-placeholder="본문을 입력하세요 — Ctrl+B 굵게, Ctrl+I 기울임">${data||''}</div>`;
   } else if(type==='ul'){
     div.innerHTML = controls+`<ul class="block-list" contenteditable="true" data-placeholder="목록 항목"><li>${data||''}</li></ul>`;
   } else if(type==='quote'){
@@ -616,6 +690,7 @@ function addBlock(type, afterEl, data){
   } else if(type==='image'){
     if(data && data.url){
       div.innerHTML = controls+`<div class="block-img-wrap" data-url="${data.url}" data-key="${data.key||''}">
+        <div class="img-replace" title="이미지 교체"><input type="file" accept="image/*" onchange="replaceBlockImage(event,'${id}')"><i class="fas fa-sync-alt"></i> 교체</div>
         <img src="${data.url}" alt="${data.alt||''}" loading="lazy">
         <div class="img-caption" contenteditable="true" data-placeholder="이미지 설명 (alt 텍스트 — SEO에 중요!)">${data.alt||''}</div>
       </div>`;
@@ -623,7 +698,7 @@ function addBlock(type, afterEl, data){
       div.innerHTML = controls+`<div class="block-img-placeholder">
         <input type="file" accept="image/*" onchange="handleBlockImage(event,'${id}')">
         <i class="fas fa-image"></i>
-        <p>클릭하여 이미지 업로드 (본문 중간에 삽입됩니다)</p>
+        <p>클릭하여 이미지 업로드 또는 본문 영역에 드래그</p>
       </div>`;
     }
   }
@@ -634,17 +709,21 @@ function addBlock(type, afterEl, data){
     div.classList.add('active');
   });
 
-  // Insert after specific element or append to end
-  if(afterEl && afterEl.nextSibling){ container.insertBefore(div, afterEl.nextSibling); }
-  else if(afterEl){ container.appendChild(div); }
-  else { container.appendChild(div); }
+  // Insert after specific element or at end
+  const inserter = createInserter(id);
+  if(afterEl && afterEl.nextSibling){
+    container.insertBefore(div, afterEl.nextSibling);
+    container.insertBefore(inserter, div.nextSibling);
+  } else {
+    container.appendChild(div);
+    container.appendChild(inserter);
+  }
 
   // Focus the editable element
   const editable = div.querySelector('[contenteditable]');
-  if(editable){
+  if(editable && !data){
     setTimeout(()=>{
       editable.focus();
-      // Move cursor to end
       const range = document.createRange();
       range.selectNodeContents(editable);
       range.collapse(false);
@@ -661,35 +740,57 @@ function moveBlock(id, dir){
   const block = document.getElementById(id);
   if(!block) return;
   const container = block.parentNode;
-  if(dir === -1 && block.previousElementSibling){
-    container.insertBefore(block, block.previousElementSibling);
-  } else if(dir === 1 && block.nextElementSibling){
-    container.insertBefore(block.nextElementSibling, block);
+  // Find adjacent seo-block (skip inserters)
+  let target = dir===-1 ? block.previousElementSibling : block.nextElementSibling;
+  while(target && !target.classList.contains('seo-block')) target = dir===-1 ? target.previousElementSibling : target.nextElementSibling;
+  if(!target) return;
+  if(dir===-1){
+    container.insertBefore(block, target);
+  } else {
+    container.insertBefore(block, target.nextSibling);
   }
   updateSeoHints();
+  block.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 function removeBlock(id){
   const block = document.getElementById(id);
-  if(block) block.remove();
+  if(!block) return;
+  // Also remove the inserter after this block
+  const next = block.nextElementSibling;
+  if(next && next.classList.contains('block-inserter')) next.remove();
+  block.remove();
   updateSeoHints();
 }
 
 async function handleBlockImage(e, blockId){
   const file = e.target.files[0];
   if(!file) return;
+  await uploadImageToBlock(file, blockId);
+}
+
+async function replaceBlockImage(e, blockId){
+  const file = e.target.files[0];
+  if(!file) return;
+  await uploadImageToBlock(file, blockId);
+}
+
+async function uploadImageToBlock(file, blockId){
   const block = document.getElementById(blockId);
   if(!block) return;
-  const wrap = block.querySelector('.block-img-placeholder');
-  if(wrap) wrap.innerHTML = '<div class="block-img-uploading"><i class="fas fa-spinner"></i> 이미지 업로드 중...</div>';
+  // Show uploading state
+  const wrap = block.querySelector('.block-img-placeholder') || block.querySelector('.block-img-wrap');
+  const oldHtml = wrap.innerHTML;
+  wrap.innerHTML = '<div class="block-img-uploading"><i class="fas fa-spinner"></i> 이미지 업로드 중...</div>';
   try{
     const d = await uploadFileToR2(file);
     const controls = block.querySelector('.block-controls').outerHTML;
     block.innerHTML = controls+`<div class="block-img-wrap" data-url="${d.url}" data-key="${d.key}">
+      <div class="img-replace" title="이미지 교체"><input type="file" accept="image/*" onchange="replaceBlockImage(event,'${blockId}')"><i class="fas fa-sync-alt"></i> 교체</div>
       <img src="${d.url}" alt="" loading="lazy">
       <div class="img-caption" contenteditable="true" data-placeholder="이미지 설명 (alt 텍스트 — SEO에 중요!)"></div>
     </div>`;
-    // Set as thumb if none
+    // Auto-set thumbnail
     if(!blogThumb){
       blogThumb = {url:d.url, key:d.key};
       document.getElementById('thumb-img').src = d.url;
@@ -698,7 +799,7 @@ async function handleBlockImage(e, blockId){
     }
   }catch(err){
     toast('이미지 업로드 실패: '+(err.message||''),true);
-    const controls = block.querySelector('.block-controls')?.outerHTML || '';
+    const controls = block.querySelector('.block-controls')?.outerHTML || createBlockControls(blockId);
     block.innerHTML = controls+`<div class="block-img-placeholder">
       <input type="file" accept="image/*" onchange="handleBlockImage(event,'${blockId}')">
       <i class="fas fa-image"></i>
@@ -708,12 +809,68 @@ async function handleBlockImage(e, blockId){
   updateSeoHints();
 }
 
-function execBold(){
-  document.execCommand('bold',false,null);
-}
+// ── Image drag & drop on editor area ──
+(function(){
+  const blocks = document.getElementById('seo-blocks');
+  if(!blocks) return;
+  blocks.addEventListener('dragover',e=>{
+    e.preventDefault();
+    if(e.dataTransfer.types.includes('Files')){
+      blocks.classList.add('drag-over');
+      // Highlight nearest block
+      document.querySelectorAll('.seo-block.drag-target').forEach(b=>b.classList.remove('drag-target'));
+      const target = e.target.closest('.seo-block');
+      if(target) target.classList.add('drag-target');
+    }
+  });
+  blocks.addEventListener('dragleave',e=>{
+    if(!blocks.contains(e.relatedTarget)) blocks.classList.remove('drag-over');
+    document.querySelectorAll('.seo-block.drag-target').forEach(b=>b.classList.remove('drag-target'));
+  });
+  blocks.addEventListener('drop',async e=>{
+    e.preventDefault();
+    blocks.classList.remove('drag-over');
+    document.querySelectorAll('.seo-block.drag-target').forEach(b=>b.classList.remove('drag-target'));
+    const files = Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/'));
+    if(!files.length) return;
+    // Find the block closest to drop position
+    const target = e.target.closest('.seo-block') || e.target.closest('.block-inserter');
+    for(const file of files){
+      const imgBlock = addBlock('image', target);
+      await uploadImageToBlock(file, imgBlock.id);
+    }
+  });
+})();
+
+function execBold(){ document.execCommand('bold',false,null); }
+function execItalic(){ document.execCommand('italic',false,null); }
 function execLink(){
-  const url = prompt('링크 URL을 입력하세요 (예: https://www.seoulgaon.com/treatments.html)');
-  if(url) document.execCommand('createLink',false,url);
+  const sel = window.getSelection();
+  if(sel.rangeCount && !sel.isCollapsed){
+    const url = prompt('링크 URL (예: https://www.seoulgaon.com/treatments.html)');
+    if(url) document.execCommand('createLink',false,url);
+  } else {
+    toast('먼저 텍스트를 선택한 후 링크를 삽입해주세요',true);
+  }
+}
+
+// ── Preview toggle ──
+function togglePreview(){
+  const blocks = document.getElementById('seo-blocks');
+  const preview = document.getElementById('seo-preview');
+  const btn = document.getElementById('preview-toggle');
+  if(preview.classList.contains('show')){
+    preview.classList.remove('show');
+    blocks.classList.remove('hide');
+    btn.classList.remove('active');
+    btn.innerHTML = '<i class="fas fa-eye"></i> 미리보기';
+  } else {
+    preview.innerHTML = getEditorHTML();
+    preview.classList.add('show');
+    blocks.classList.add('hide');
+    btn.classList.add('active');
+    btn.innerHTML = '<i class="fas fa-edit"></i> 편집모드';
+  }
 }
 
 // ── Thumbnail handling ──
@@ -792,12 +949,17 @@ function getEditorHTML(){
 function loadEditorFromHTML(htmlStr){
   const container = document.getElementById('seo-blocks');
   container.innerHTML = '';
+  // Reset preview
+  document.getElementById('seo-preview').classList.remove('show');
+  container.classList.remove('hide');
   if(!htmlStr) return;
+  // Add initial inserter
+  container.appendChild(createInserter('top'));
   const parser = new DOMParser();
   const doc = parser.parseFromString('<div>'+htmlStr+'</div>','text/html');
   const nodes = doc.body.firstChild.childNodes;
   nodes.forEach(node=>{
-    if(node.nodeType !== 1) return; // skip text nodes
+    if(node.nodeType !== 1) return;
     const tag = node.tagName?.toLowerCase();
     if(tag==='h2') addBlock('h2',null,node.innerHTML);
     else if(tag==='h3') addBlock('h3',null,node.innerHTML);
@@ -828,7 +990,14 @@ function resetBlogForm(){
   document.getElementById('blog-form-title').textContent='새 블로그 작성';
   document.getElementById('blog-submit-btn').textContent='게시글 등록';
   document.getElementById('blog-cancel-btn').style.display='none';
-  // Add default starter blocks
+  // Reset preview mode
+  document.getElementById('seo-preview').classList.remove('show');
+  document.getElementById('seo-blocks').classList.remove('hide');
+  const pvBtn=document.getElementById('preview-toggle');
+  if(pvBtn){pvBtn.classList.remove('active');pvBtn.innerHTML='<i class="fas fa-eye"></i> 미리보기';}
+  // Add default starter blocks with initial inserter
+  const firstIns = createInserter('top');
+  document.getElementById('seo-blocks').appendChild(firstIns);
   addBlock('h2');
   addBlock('p');
   updateSeoHints();
@@ -896,7 +1065,9 @@ async function submitBlog(){
 
 // ── init default blocks on page load ──
 setTimeout(()=>{
-  if(document.getElementById('seo-blocks') && !document.getElementById('seo-blocks').children.length){
+  const seoBlocks = document.getElementById('seo-blocks');
+  if(seoBlocks && !seoBlocks.children.length){
+    seoBlocks.appendChild(createInserter('top'));
     addBlock('h2'); addBlock('p');
     updateSeoHints();
   }
@@ -906,12 +1077,49 @@ setTimeout(()=>{
 document.addEventListener('keydown',e=>{
   if(!e.target.closest('#seo-editor')) return;
   if(e.ctrlKey && e.key==='b'){e.preventDefault(); execBold();}
+  if(e.ctrlKey && e.key==='i'){e.preventDefault(); execItalic();}
+  const block = e.target.closest('.seo-block');
+  if(!block) return;
   // Enter in H2/H3 → add paragraph block
-  if(e.key==='Enter' && !e.shiftKey){
-    const block = e.target.closest('.seo-block');
-    if(block && (block.dataset.type==='h2'||block.dataset.type==='h3')){
+  if(e.key==='Enter' && !e.shiftKey && (block.dataset.type==='h2'||block.dataset.type==='h3')){
+    e.preventDefault();
+    addBlock('p', block.nextElementSibling || block);
+  }
+  // Backspace on empty block → remove it
+  if(e.key==='Backspace' && block.dataset.type!=='image'){
+    const el = block.querySelector('[contenteditable]');
+    if(el && el.textContent.trim()===''){
+      const prevBlock = block.previousElementSibling;
+      // Find previous seo-block
+      let prev = block.previousElementSibling;
+      while(prev && !prev.classList.contains('seo-block')) prev = prev.previousElementSibling;
+      if(prev){
+        e.preventDefault();
+        removeBlock(block.id);
+        const prevEdit = prev.querySelector('[contenteditable]');
+        if(prevEdit){
+          prevEdit.focus();
+          const range = document.createRange();
+          range.selectNodeContents(prevEdit);
+          range.collapse(false);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+      }
+    }
+  }
+  // / (slash) command at start of empty paragraph
+  if(e.key==='/' && block.dataset.type==='p'){
+    const el = block.querySelector('.block-paragraph');
+    if(el && el.textContent.trim()===''){
       e.preventDefault();
-      addBlock('p', block);
+      // Show the inserter above this block
+      let inserter = block.previousElementSibling;
+      if(inserter && inserter.classList.contains('block-inserter')){
+        const picker = inserter.querySelector('.block-picker');
+        if(picker) picker.classList.add('show');
+      }
     }
   }
 });
