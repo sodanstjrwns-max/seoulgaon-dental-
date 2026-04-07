@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>진료 철학 | 서울가온치과</title>
+<meta name="description" content="서울가온치과의 진료 철학 - 설명이 먼저입니다. 치료는 그 다음입니다. 딸 가온의 이름을 건 약속.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<link href="pages.css" rel="stylesheet">
+<style>
+/* ===== PHILOSOPHY HERO — CINEMATIC ===== */
+.phil-hero{position:relative;min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:clamp(8rem,18vh,12rem) clamp(1.5rem,4vw,6rem) clamp(4rem,8vh,6rem)}
+.phil-hero-bg{position:absolute;inset:0;z-index:0}
+.phil-hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:brightness(.3) grayscale(.3)}
+.phil-hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(5,5,4,.4) 0%,rgba(5,5,4,.9) 80%);z-index:1}
+.phil-hero-content{position:relative;z-index:2;max-width:700px}
+.phil-hero-label{font-family:var(--ff-en);font-size:clamp(.7rem,.9vw,.8rem);letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;display:inline-block;opacity:0;transform:translateY(10px)}
+.phil-hero h1{font-family:var(--ff-title);font-size:clamp(2.5rem,7vw,4.5rem);line-height:1.2;margin-bottom:1.5rem;opacity:0;transform:translateY(20px)}
+.phil-hero-sub{font-size:clamp(.9rem,1.2vw,1.05rem);color:var(--stone-l);line-height:1.8;max-width:500px;margin:0 auto;opacity:0;transform:translateY(15px)}
+
+/* ===== CORE VALUES ===== */
+.phil-values{max-width:1200px;margin:0 auto;padding:clamp(4rem,8vh,7rem) clamp(1.5rem,4vw,4rem)}
+.phil-values-header{text-align:center;margin-bottom:clamp(3rem,6vh,5rem)}
+.pv-label{font-family:var(--ff-en);font-size:.72rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:.5rem}
+.pv-title{font-family:var(--ff-title);font-size:clamp(1.8rem,4vw,3rem);margin-bottom:1rem}
+.pv-quote{font-size:clamp(.88rem,1.1vw,1rem);color:var(--stone-l);font-style:italic;max-width:550px;margin:0 auto}
+
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.v-card{background:var(--ink-4);border:1px solid var(--line);border-radius:16px;padding:2.5rem 2rem;transition:border-color .4s,box-shadow .4s,transform .3s;position:relative;overflow:hidden}
+.v-card:hover{border-color:rgba(191,164,106,.3);box-shadow:0 20px 60px rgba(0,0,0,.3);transform:translateY(-4px)}
+.v-card-bg{position:absolute;top:-1rem;right:-1rem;font-family:var(--ff-en);font-size:6rem;color:var(--gold);opacity:.04;line-height:1;font-weight:700;pointer-events:none}
+.v-card-num{font-family:var(--ff-en);font-size:2rem;color:var(--gold);opacity:.5;line-height:1;margin-bottom:.75rem}
+.v-card h3{font-family:var(--ff-title);font-size:1.2rem;margin-bottom:.6rem}
+.v-card p{font-size:.88rem;color:var(--stone-l);line-height:1.65}
+
+/* ===== STORY SECTION ===== */
+.phil-story{background:var(--ink-3);position:relative;overflow:hidden;padding:clamp(5rem,10vh,8rem) clamp(1.5rem,5vw,4rem)}
+.phil-story-bg{position:absolute;top:50%;right:-5%;font-family:var(--ff-title);font-size:clamp(8rem,20vw,16rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;white-space:nowrap;transform:translateY(-50%)}
+.phil-story-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(3rem,6vw,6rem);align-items:center}
+.phil-photo-side{position:relative}
+.phil-photo-glow{position:absolute;bottom:-20%;left:-20%;width:140%;height:60%;background:radial-gradient(ellipse,rgba(191,164,106,.12) 0%,transparent 70%);pointer-events:none}
+.phil-photo-frame{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:3/4;box-shadow:0 30px 80px rgba(0,0,0,.4),0 0 60px rgba(191,164,106,.08)}
+.phil-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:center top;transition:transform 8s cubic-bezier(.25,0,.15,1)}
+.phil-photo-frame:hover img{transform:scale(1.06)}
+.phil-photo-label{position:absolute;bottom:1.5rem;left:1.5rem;z-index:2;font-family:var(--ff-en);font-size:.7rem;letter-spacing:3px;color:var(--gold);opacity:.7;text-transform:uppercase}
+.phil-text-side{position:relative;z-index:1}
+.phil-text-label{font-family:var(--ff-en);font-size:.72rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:1rem}
+.phil-headline{font-family:var(--ff-title);font-size:clamp(2rem,5vw,3.5rem);line-height:1.3;margin-bottom:2rem}
+.phil-divider{width:60px;height:2px;background:var(--gold);margin-bottom:2rem;opacity:.6}
+.phil-text-body p{font-size:clamp(.9rem,1.1vw,1.05rem);color:var(--stone-l);line-height:2;margin-bottom:1.5rem}
+.phil-text-body p:last-child{margin-bottom:0}
+.phil-signature{margin-top:2.5rem;display:flex;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid rgba(191,164,106,.15)}
+.phil-sig-name{font-family:var(--ff-title);font-size:1.1rem;color:var(--ivory)}
+.phil-sig-role{font-size:.75rem;color:var(--stone);letter-spacing:.05em}
+
+/* ===== CONSULT PROMISE ===== */
+.phil-consult{background:var(--ink);position:relative;overflow:hidden}
+.phil-consult-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:75vh}
+.phil-consult-img{position:relative;overflow:hidden}
+.phil-consult-img img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 8s cubic-bezier(.25,0,.15,1)}
+.phil-consult-img:hover img{transform:scale(1.04)}
+.phil-consult-overlay{position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,var(--ink) 100%)}
+.phil-consult-text{display:flex;flex-direction:column;justify-content:center;padding:clamp(3rem,6vw,6rem);position:relative;z-index:1}
+.phil-consult-label{font-family:var(--ff-en);font-size:.72rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:1.5rem}
+.phil-consult-quote{font-family:var(--ff-title);font-size:clamp(2rem,4vw,3.2rem);line-height:1.4;margin-bottom:2rem;position:relative;padding-left:1.5rem}
+.phil-consult-quote::before{content:'';position:absolute;left:0;top:.3rem;bottom:.3rem;width:3px;background:var(--gold)}
+.phil-consult-quote em{color:var(--gold);font-style:normal}
+.phil-consult-desc{font-size:clamp(.88rem,1.1vw,1rem);color:var(--stone-l);line-height:2;margin-bottom:1.5rem}
+.phil-consult-features{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.5rem}
+.phil-consult-feat{display:flex;align-items:center;gap:.5rem;padding:.5rem 1.2rem;border:1px solid var(--line);border-radius:100px;font-size:.8rem;color:var(--stone-l);transition:border-color .3s,color .3s}
+.phil-consult-feat i{color:var(--gold);font-size:.7rem}
+.phil-consult-feat:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ===== TIMELINE ===== */
+.phil-timeline{max-width:800px;margin:0 auto;padding:clamp(4rem,8vh,7rem) clamp(1.5rem,4vw,4rem)}
+.phil-timeline-header{text-align:center;margin-bottom:clamp(3rem,6vh,4rem)}
+.timeline{position:relative;padding-left:3rem}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold),rgba(191,164,106,.1))}
+.tl-item{position:relative;margin-bottom:3rem;padding-left:1.5rem}
+.tl-item:last-child{margin-bottom:0}
+.tl-item::before{content:'';position:absolute;left:-3.35rem;top:.3rem;width:12px;height:12px;border-radius:50%;background:var(--gold);box-shadow:0 0 20px rgba(191,164,106,.3)}
+.tl-year{font-family:var(--ff-en);font-size:1.5rem;color:var(--gold);opacity:.7;margin-bottom:.3rem}
+.tl-title{font-family:var(--ff-title);font-size:1.1rem;margin-bottom:.3rem}
+.tl-desc{font-size:.85rem;color:var(--stone-l);line-height:1.6}
+
+/* ===== CTA BOTTOM ===== */
+.phil-cta{text-align:center;padding:clamp(4rem,8vh,6rem) 1.5rem;position:relative;overflow:hidden;background:var(--ink-3)}
+.phil-cta-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--ff-en);font-size:clamp(6rem,18vw,14rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;font-weight:700;white-space:nowrap}
+.phil-cta-content{position:relative;z-index:1}
+.phil-cta-title{font-family:var(--ff-title);font-size:clamp(1.5rem,4vw,2.5rem);margin-bottom:1rem}
+.phil-cta-sub{font-size:.9rem;color:var(--stone-l);margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.6}
+.phil-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.phil-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:100px;font-weight:600;font-size:.9rem;transition:transform .2s,box-shadow .2s}
+.phil-btn.gold{background:var(--gold);color:var(--ink)}
+.phil-btn.green{background:#03c75a;color:#fff}
+.phil-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(191,164,106,.2)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .phil-story-inner{grid-template-columns:1fr;gap:3rem}
+  .phil-photo-frame{max-width:420px;margin:0 auto}
+  .phil-text-side{text-align:center}
+  .phil-text-body{text-align:center}
+  .phil-divider{margin-left:auto;margin-right:auto}
+  .phil-signature{justify-content:center}
+  .phil-consult-wrap{grid-template-columns:1fr;min-height:auto}
+  .phil-consult-img{aspect-ratio:16/9;max-height:50vh}
+  .phil-consult-overlay{background:linear-gradient(to bottom,transparent 60%,var(--ink) 100%)}
+  .phil-consult-text{padding:2.5rem 1.5rem;text-align:center}
+  .phil-consult-quote{padding-left:0;text-align:center}
+  .phil-consult-quote::before{display:none}
+  .phil-consult-features{justify-content:center}
+  .values-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .values-grid{grid-template-columns:1fr}
+  .phil-hero{min-height:60vh}
+  .timeline{padding-left:2.5rem}
+  .tl-item::before{left:-2.85rem}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"><div id="cur-ring"></div><div id="cur-dot"></div></div>
+
+<nav id="nav">
+  <a href="/" class="nav-logo">서울가온치과<span>.</span></a>
+  <div class="nav-links">
+    <a href="philosophy.html">진료 철학</a>
+    <div class="nav-link-drop"><a href="treatments.html">진료 안내 ▾</a><div class="drop"><a href="treatments.html#implant">임플란트</a><a href="treatments.html#aesthetics">앞니 심미치료</a><a href="treatments.html#endodontics">신경치료</a><a href="treatments.html#general">일반진료</a></div></div>
+    <div class="nav-link-drop"><a href="#">커뮤니티 ▾</a><div class="drop"><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a></div></div>
+    <a href="doctors.html">의료진</a>
+    <div class="nav-link-drop"><a href="guide.html">안내 ▾</a><div class="drop"><a href="guide.html#visit">오시는 길</a><a href="guide.html#fee">수가 안내</a><a href="guide.html#faq">자주 묻는 질문</a></div></div>
+  </div>
+  <a href="tel:0507-1325-3377" class="nav-cta" data-magnet>예약 상담</a>
+  <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu"><a href="/">홈</a><a href="philosophy.html">진료 철학</a><a href="treatments.html">진료 안내</a><a href="doctors.html">의료진</a><a href="guide.html">안내</a><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a></div>
+
+
+<!-- ===== HERO — CINEMATIC ===== -->
+<section class="phil-hero">
+  <div class="phil-hero-bg">
+    <img src="/images/story-daughter.jpg" alt="서울가온치과 진료 철학" loading="eager">
+  </div>
+  <div class="phil-hero-overlay"></div>
+  <div class="phil-hero-content">
+    <span class="phil-hero-label">Our Philosophy</span>
+    <h1>
+      <em class="gold">딸 아이</em>의 이름을 건<br>
+      치과의 <em class="gold">약속</em>.
+    </h1>
+    <p class="phil-hero-sub">
+      내 가족에게 부끄럽지 않은 치료.<br>
+      그것이 서울가온치과의 모든 진료의 기준입니다.
+    </p>
+  </div>
+</section>
+
+
+<!-- ===== CORE VALUES ===== -->
+<section class="phil-values">
+  <div class="phil-values-header">
+    <span class="pv-label">Core Values</span>
+    <h2 class="pv-title">좋은 치과는 <em class="gold">설명부터</em> 다릅니다.</h2>
+    <p class="pv-quote">"다른 치과에서는 무슨 말인지 모르겠었는데, 여기서 처음으로 이해했어요."</p>
+  </div>
+
+  <div class="values-grid">
+    <div class="v-card">
+      <div class="v-card-bg">01</div>
+      <div class="v-card-num">01</div>
+      <h3><em class="gold">편안한</em> 진료</h3>
+      <p>통증과 불안을 최소화합니다. <em class="gold">무서운 마음</em>부터 이해하고, 시작합니다. 충분한 마취와 세심한 진행으로 "생각보다 괜찮았어요"라는 말을 가장 많이 듣습니다.</p>
+    </div>
+    <div class="v-card">
+      <div class="v-card-bg">02</div>
+      <div class="v-card-num">02</div>
+      <h3><em class="gold">명확한</em> 설명</h3>
+      <p><em class="gold">이해</em>될 때까지 말씀드립니다. 파노라마, CT, 구강 사진을 함께 보며 현재 상태와 치료 방향을 투명하게 공유합니다. 궁금한 게 없을 때까지, 천천히.</p>
+    </div>
+    <div class="v-card">
+      <div class="v-card-bg">03</div>
+      <div class="v-card-num">03</div>
+      <h3><em class="gold">오래가는</em> 결과</h3>
+      <p>빠름보다 <em class="gold">정확함</em>을 선택합니다. 한 번의 치료가 오래가도록. 가이드 수술 100%, 정밀한 보철 설계로 예측 가능한 결과를 만듭니다.</p>
+    </div>
+    <div class="v-card">
+      <div class="v-card-bg">04</div>
+      <div class="v-card-num">04</div>
+      <h3>한 단계 <em class="gold">더</em></h3>
+      <p><em class="gold">사후관리</em>까지 책임집니다. 치료가 끝나도 관계는 이어집니다. 정기 검진과 관리를 통해 치료 결과가 오래 유지되도록 함께합니다.</p>
+    </div>
+    <div class="v-card">
+      <div class="v-card-bg">05</div>
+      <div class="v-card-num">05</div>
+      <h3><em class="gold">정직한</em> 진료</h3>
+      <p>필요한 치료만, <em class="gold">솔직하게</em> 말씀드립니다. 과잉 진료 없이, 신뢰를 먼저 쌓습니다. 서면 치료계획서와 투명한 비용 안내가 기본입니다.</p>
+    </div>
+    <div class="v-card">
+      <div class="v-card-bg">06</div>
+      <div class="v-card-num">06</div>
+      <h3><em class="gold">가족</em> 같은 마음</h3>
+      <p>내 <em class="gold">가족</em>이라면 어떻게 할까. 그 기준으로 모든 치료를 결정합니다. 딸 '가온'의 이름을 건 약속, 80세까지 곁에서 함께합니다.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== STORY — 가온의 의미 ===== -->
+<section class="phil-story">
+  <div class="phil-story-bg">가온</div>
+  <div class="phil-story-inner">
+    <!-- 사진 -->
+    <div class="phil-photo-side">
+      <div class="phil-photo-glow"></div>
+      <div class="phil-photo-frame" data-reveal>
+        <img src="/images/story-daughter.jpg" alt="아버지와 딸 가온" loading="lazy">
+        <span class="phil-photo-label">with 가온</span>
+      </div>
+    </div>
+    <!-- 텍스트 -->
+    <div class="phil-text-side">
+      <span class="phil-text-label">Our Story</span>
+      <h2 class="phil-headline">
+        <em class="gold">딸 아이</em>의 이름이<br>
+        부끄럽지 않게.
+      </h2>
+      <div class="phil-divider"></div>
+      <div class="phil-text-body">
+        <p>'<em class="gold">가온</em>'은 제 딸 아이의 이름입니다. 순우리말로 '<em class="gold">세상의 중심</em>'이라는 뜻을 가지고 있습니다.</p>
+        <p>아이의 이름을 치과에 붙인 이유는 단 하나 — 내 가족에게 <em class="gold">부끄럽지 않은 치료</em>를 하겠다는 약속입니다.</p>
+        <p><em class="gold">80세까지</em>, 가족처럼 곁에서 함께하는 치과. 그것이 <em class="gold">서울가온치과</em>가 존재하는 이유입니다.</p>
+      </div>
+      <div class="phil-signature">
+        <div>
+          <p class="phil-sig-name">현진호 <em class="gold">대표원장</em></p>
+          <p class="phil-sig-role">서울가온치과</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== CONSULT — 설명이 먼저 ===== -->
+<section class="phil-consult">
+  <div class="phil-consult-wrap">
+    <div class="phil-consult-img">
+      <img src="/images/real-consult-scene.jpg" alt="현진호 원장 상담 장면" loading="lazy">
+      <div class="phil-consult-overlay"></div>
+    </div>
+    <div class="phil-consult-text">
+      <span class="phil-consult-label">Our Promise</span>
+      <h2 class="phil-consult-quote">
+        <em>설명</em>이 먼저입니다.<br>치료는 그 다음입니다.
+      </h2>
+      <p class="phil-consult-desc">
+        서울가온치과는 환자분이 본인의 상태를 정확히 이해하실 때까지 충분히 설명드립니다. 파노라마, 구강 사진, 3D CT를 함께 보며 현재 상태와 치료 계획을 투명하게 공유합니다.
+      </p>
+      <p class="phil-consult-desc">
+        이해 없는 동의는 받지 않습니다. 납득이 되셔야 치료를 시작합니다.
+      </p>
+      <div class="phil-consult-features">
+        <span class="phil-consult-feat"><i class="fas fa-x-ray"></i> 파노라마·CT 직접 확인</span>
+        <span class="phil-consult-feat"><i class="fas fa-comments"></i> 충분한 상담 시간</span>
+        <span class="phil-consult-feat"><i class="fas fa-file-medical"></i> 서면 치료계획서</span>
+        <span class="phil-consult-feat"><i class="fas fa-won-sign"></i> 투명한 비용 안내</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== TIMELINE ===== -->
+<section class="phil-timeline">
+  <div class="phil-timeline-header">
+    <span class="pv-label">History</span>
+    <h2 class="pv-title">서울가온치과의 <em class="gold">여정</em></h2>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item" data-reveal>
+      <div class="tl-year">2022</div>
+      <div class="tl-title">서울가온치과 <em class="gold">개원</em></div>
+      <div class="tl-desc">의정부 탑석에서 '설명이 먼저인 치과'를 목표로 시작. 딸 가온의 이름을 걸고 출발.</div>
+    </div>
+    <div class="tl-item" data-reveal>
+      <div class="tl-year">2023</div>
+      <div class="tl-title">가이드 임플란트 <em class="gold">100%</em> 달성</div>
+      <div class="tl-desc">모든 임플란트 수술에 가이드 시스템 적용. 정확한 위치, 최소 절개로 안전한 수술 환경 구축.</div>
+    </div>
+    <div class="tl-item" data-reveal>
+      <div class="tl-year">2023</div>
+      <div class="tl-title">서울대 보존과 전문의 <em class="gold">합류</em></div>
+      <div class="tl-desc">의정부 유일 서울대 치과병원 보존과 전문의 합류. 정밀한 신경치료와 치아 보존을 강화.</div>
+    </div>
+    <div class="tl-item" data-reveal>
+      <div class="tl-year">2024</div>
+      <div class="tl-title">진료 공간 <em class="gold">확장</em></div>
+      <div class="tl-desc">독립 수술실, 메이크업룸, 에어샤워 등 환자 중심 시설로 공간 확장 및 리뉴얼 완료.</div>
+    </div>
+    <div class="tl-item" data-reveal>
+      <div class="tl-year">NOW</div>
+      <div class="tl-title"><em class="gold">80세</em>까지의 약속</div>
+      <div class="tl-desc">치료로 끝나지 않는 관계. 정기 검진과 관리를 통해 환자분의 구강 건강을 평생 함께합니다.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== CTA ===== -->
+<section class="phil-cta">
+  <div class="phil-cta-bg">GAON</div>
+  <div class="phil-cta-content">
+    <h2 class="phil-cta-title">설명부터 시작하겠습니다.</h2>
+    <p class="phil-cta-sub">궁금한 점이 있으시면 편하게 연락주세요.<br>상담은 언제든 부담 없이 가능합니다.</p>
+    <div class="phil-btns">
+      <a href="tel:0507-1325-3377" class="phil-btn gold">📞 0507-1325-3377</a>
+      <a href="https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&ackey=2cykehjt" target="_blank" rel="noopener" class="phil-btn green">네이버 예약</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="ft-logo">서울가온치과<span style="color:var(--gold)">.</span></div>
+  <p class="ft-slogan">치과 치료가 좋은 기억이 될 수 있도록.</p>
+  <div class="ft-biz" style="font-size:.72rem;color:var(--stone);margin-bottom:.5rem">
+    <span>서울가온치과의원</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>대표 현진호</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>사업자등록번호 898-03-02537</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>경기도 의정부시 용민로 22, 4층(용현동)</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>Tel. 0507-1325-3377</span>
+  </div>
+  <p class="ft-copy">© 2022–2026 서울가온치과의원. All rights reserved.</p>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/js/gsap.min.js"></script>
+<script src="/js/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+window.addEventListener('DOMContentLoaded', () => {
+  // Hero entrance
+  const tl = gsap.timeline({delay:.3});
+  tl.to('.phil-hero-label', {opacity:1, y:0, duration:.6, ease:'power3.out'})
+    .to('.phil-hero h1', {opacity:1, y:0, duration:.7, ease:'power3.out'}, '-=.3')
+    .to('.phil-hero-sub', {opacity:1, y:0, duration:.6, ease:'power3.out'}, '-=.3');
+
+  // Scroll reveal
+  gsap.utils.toArray('[data-reveal]').forEach(el => {
+    gsap.from(el, {
+      scrollTrigger:{trigger:el, start:'top 88%', once:true},
+      opacity:0, y:35, duration:.8, ease:'power3.out'
+    });
+  });
+
+  // Value cards stagger
+  gsap.from('.v-card', {
+    scrollTrigger:{trigger:'.values-grid', start:'top 80%', once:true},
+    opacity:0, y:50, stagger:.1, duration:.7, ease:'power3.out'
+  });
+
+  // Timeline items stagger
+  gsap.from('.tl-item', {
+    scrollTrigger:{trigger:'.timeline', start:'top 80%', once:true},
+    opacity:0, x:-30, stagger:.15, duration:.7, ease:'power3.out'
+  });
+
+  // Sections fade in
+  gsap.utils.toArray('.phil-story, .phil-consult, .phil-timeline, .phil-cta').forEach(sec => {
+    gsap.from(sec, {
+      scrollTrigger:{trigger:sec, start:'top 85%', once:true},
+      opacity:0, y:40, duration:.8, ease:'power3.out'
+    });
+  });
+
+  // Cursor
+  const cur = document.getElementById('cur');
+  if(cur && window.innerWidth > 768) {
+    let mx=0, my=0, cx=0, cy=0;
+    document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+    (function loop() {
+      cx += (mx-cx)*.15; cy += (my-cy)*.15;
+      gsap.set(cur, {x:cx, y:cy});
+      requestAnimationFrame(loop);
+    })();
+    document.querySelectorAll('a,button').forEach(el => {
+      el.addEventListener('mouseenter', () => cur.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cur.classList.remove('hover'));
+    });
+  }
+
+  // Hamburger
+  const ham = document.querySelector('.hamburger');
+  const mob = document.querySelector('.mob-menu');
+  if(ham && mob) {
+    ham.addEventListener('click', () => { ham.classList.toggle('open'); mob.classList.toggle('open'); });
+    mob.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => { ham.classList.remove('open'); mob.classList.remove('open'); });
+    });
+  }
+
+  // Scroll progress
+  const bar = document.getElementById('progressBar');
+  if(bar) {
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (window.scrollY / h * 100) + '%';
+    });
+  }
+});
+</script>
+</body>
+</html>
