@@ -73,6 +73,44 @@
 /* Empty state */
 .empty-state{text-align:center;padding:4rem 2rem;color:#666;font-size:.9rem}
 .empty-state i{font-size:3rem;margin-bottom:1rem;display:block;color:#444}
+/* ===== BLUR OVERLAY (비회원) ===== */
+.blur-active #ba-grid{filter:blur(12px);pointer-events:none;user-select:none;-webkit-user-select:none;transition:filter .5s ease}
+.blur-active .filter-bar{pointer-events:none;opacity:.5}
+.blur-gate{display:none;position:relative;z-index:100;max-width:520px;margin:-6rem auto 2rem;text-align:center;padding:2.5rem 2rem;background:rgba(10,9,7,.95);border:1px solid var(--gold,#BFA46A);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.blur-active .blur-gate{display:block}
+.blur-gate-icon{width:64px;height:64px;background:rgba(191,164,106,.12);border:2px solid var(--gold,#BFA46A);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;font-size:1.5rem;color:var(--gold,#BFA46A)}
+.blur-gate h3{font-family:var(--ff-title,'Black Han Sans',sans-serif);font-size:1.3rem;margin-bottom:.5rem;color:#F2EDE4}
+.blur-gate p{font-size:.85rem;color:#AFA79D;line-height:1.6;margin-bottom:1.5rem}
+.blur-gate-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.blur-gate-btns a{padding:.7rem 2rem;border-radius:100px;font-size:.85rem;font-weight:600;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem}
+.blur-gate-btns .btn-primary{background:var(--gold,#BFA46A);color:#050504}
+.blur-gate-btns .btn-primary:hover{background:#D4BA82}
+.blur-gate-btns .btn-secondary{border:1px solid var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.blur-gate-btns .btn-secondary:hover{background:rgba(191,164,106,.1)}
+.blur-gate-sub{font-size:.72rem;color:#8C8578;margin-top:1rem}
+/* Unlock animation */
+@keyframes unlockFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.unlock-anim #ba-grid{animation:unlockFade .5s ease forwards}
+/* Member badge in nav area */
+.member-bar{display:flex;align-items:center;gap:.75rem;justify-content:flex-end;max-width:1100px;margin:0 auto;padding:.5rem clamp(1.5rem,4vw,4rem) 0}
+.member-badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--gold,#BFA46A);padding:.35rem 1rem;border:1px solid rgba(191,164,106,.2);border-radius:100px;background:rgba(191,164,106,.06)}
+.member-badge i{font-size:.7rem}
+.member-logout{font-size:.75rem;color:#8C8578;cursor:pointer;transition:color .2s;background:none;border:none;padding:.35rem .5rem}
+.member-logout:hover{color:#F2EDE4}
+@media(max-width:768px){
+  .blur-gate{margin:-4rem 1rem 1.5rem;padding:2rem 1.5rem;border-radius:12px}
+  .blur-gate h3{font-size:1.1rem}
+  .blur-gate p{font-size:.82rem}
+  .blur-gate-btns a{padding:.6rem 1.5rem;font-size:.82rem}
+  .member-bar{padding:.5rem 1.25rem 0}
+}
+@media(max-width:480px){
+  .blur-gate{margin:-3rem .75rem 1rem;padding:1.5rem 1rem}
+  .blur-gate-icon{width:52px;height:52px;font-size:1.2rem}
+  .blur-gate h3{font-size:1rem}
+  .blur-gate-btns{flex-direction:column}
+  .blur-gate-btns a{width:100%;justify-content:center}
+}
 /* Doctor badge on BA card */
 .ba-card-doctor{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;color:var(--stone-l,#AFA79D);margin-top:.6rem;padding:.3rem .8rem;background:rgba(191,164,106,.08);border:1px solid rgba(191,164,106,.15);border-radius:100px;transition:all .3s;cursor:pointer}
 .ba-card-doctor:hover{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
@@ -154,10 +192,13 @@
     <a href="doctors.html">의료진</a>
     <div class="nav-link-drop"><a href="guide.html">안내 ▾</a><div class="drop"><a href="guide.html#visit">오시는 길</a><a href="guide.html#fee">수가 안내</a><a href="guide.html#faq">자주 묻는 질문</a></div></div>
   </div>
-  <a href="tel:0507-1325-3377" class="nav-cta" data-magnet>예약 상담</a>
+  <div style="display:flex;align-items:center;gap:.75rem">
+    <a href="signup.html" class="nav-member-link" id="nav-login-link" style="font-size:.8rem;color:var(--gold);transition:color .2s"><i class="fas fa-user"></i> 로그인</a>
+    <a href="tel:0507-1325-3377" class="nav-cta" data-magnet>예약 상담</a>
+  </div>
   <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
 </nav>
-<div class="mob-menu"><a href="/">홈</a><a href="philosophy.html">진료 철학</a><a href="treatments.html">진료 안내</a><a href="doctors.html">의료진</a><a href="guide.html">안내</a><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a></div>
+<div class="mob-menu"><a href="/">홈</a><a href="philosophy.html">진료 철학</a><a href="treatments.html">진료 안내</a><a href="doctors.html">의료진</a><a href="guide.html">안내</a><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a><a href="signup.html" id="mob-login-link"><i class="fas fa-user"></i> 로그인</a></div>
 <main id="main-content" role="main">
 
 <section class="page-hero">
@@ -174,8 +215,26 @@
   <button class="filter-btn" data-filter="endo">신경치료</button>
 </div>
 
+<!-- Member bar (shows when logged in) -->
+<div class="member-bar" id="member-bar" style="display:none">
+  <span class="member-badge"><i class="fas fa-check-circle"></i> <span id="member-name"></span>님</span>
+  <button class="member-logout" onclick="memberLogout()"><i class="fas fa-sign-out-alt"></i> 로그아웃</button>
+</div>
+
 <div class="card-grid" id="ba-grid">
   <!-- DB cases + static placeholder cards rendered here -->
+</div>
+
+<!-- Blur gate overlay for non-members -->
+<div class="blur-gate" id="blur-gate">
+  <div class="blur-gate-icon"><i class="fas fa-lock"></i></div>
+  <h3>회원 전용 콘텐츠</h3>
+  <p>비포·애프터 치료 사례는 회원만 열람 가능합니다.<br>간편 가입 후 모든 치료 결과를 확인하세요.</p>
+  <div class="blur-gate-btns">
+    <a href="signup.html?from=before-after&redirect=before-after.html" class="btn-primary"><i class="fas fa-user-plus"></i> 무료 회원가입</a>
+    <a href="signup.html?from=before-after&redirect=before-after.html" class="btn-secondary" onclick="localStorage.setItem('gaon_goto_login','1')"><i class="fas fa-sign-in-alt"></i> 로그인</a>
+  </div>
+  <div class="blur-gate-sub">가입은 30초면 충분합니다 · 이름, 전화번호, 비밀번호만 입력</div>
 </div>
 
 <!-- BA detail modal -->
@@ -207,18 +266,47 @@
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
 <script src="pages.js"></script>
 <script>
+// ===== MEMBER AUTH CHECK =====
+const MEMBER_TOKEN_KEY = 'gaon_member_token';
+const MEMBER_USER_KEY = 'gaon_member_user';
+let isMember = false;
+
+function checkMemberAuth(){
+  const token = localStorage.getItem(MEMBER_TOKEN_KEY);
+  const user = JSON.parse(localStorage.getItem(MEMBER_USER_KEY) || 'null');
+  const navLink = document.getElementById('nav-login-link');
+  const mobLink = document.getElementById('mob-login-link');
+  if(token && user){
+    isMember = true;
+    document.getElementById('member-bar').style.display = 'flex';
+    document.getElementById('member-name').textContent = user.name;
+    document.querySelector('main').classList.remove('blur-active');
+    document.querySelector('main').classList.add('unlock-anim');
+    // Update nav link
+    if(navLink){ navLink.innerHTML = '<i class="fas fa-user-check"></i> ' + user.name + '님'; navLink.href = '#'; navLink.onclick = function(e){ e.preventDefault(); memberLogout(); }; }
+    if(mobLink){ mobLink.innerHTML = '<i class="fas fa-user-check"></i> ' + user.name + '님 (로그아웃)'; mobLink.href = '#'; mobLink.onclick = function(e){ e.preventDefault(); memberLogout(); }; }
+  } else {
+    isMember = false;
+    document.querySelector('main').classList.add('blur-active');
+    if(navLink){ navLink.innerHTML = '<i class="fas fa-user"></i> 로그인'; navLink.href = 'signup.html'; }
+    if(mobLink){ mobLink.innerHTML = '<i class="fas fa-user"></i> 로그인'; mobLink.href = 'signup.html'; }
+  }
+}
+checkMemberAuth();
+
+function memberLogout(){
+  localStorage.removeItem(MEMBER_TOKEN_KEY);
+  localStorage.removeItem(MEMBER_USER_KEY);
+  isMember = false;
+  document.getElementById('member-bar').style.display = 'none';
+  document.querySelector('main').classList.remove('unlock-anim');
+  document.querySelector('main').classList.add('blur-active');
+}
+
 const catMap = {'임플란트':'implant','심미치료':'aesthetic','신경치료':'endo','교정':'endo','기타':'info'};
 const catLabel = {'임플란트':'Implant','심미치료':'Aesthetic','신경치료':'Endodontics'};
 
-// Static placeholder cases (no real photos yet)
-const staticCases = [
-  {title:'70대 여성 · 상악 전체 임플란트', desc:'뼈이식 후 가이드 임플란트로 상악 전체 재건', category:'implant', tag:'Implant'},
-  {title:'30대 여성 · 앞니 라미네이트 6개', desc:'앞니 6개 라미네이트로 자연스러운 스마일라인 완성', category:'aesthetic', tag:'Aesthetic'},
-  {title:'60대 남성 · 하악 임플란트 3개', desc:'하악 어금니 3개 가이드 임플란트 식립', category:'implant', tag:'Implant'},
-  {title:'40대 여성 · 재신경치료+크라운', desc:'이전 치과에서 실패한 신경치료를 재치료 후 크라운 완성', category:'endo', tag:'Endodontics'},
-  {title:'20대 여성 · 올세라믹 크라운', desc:'앞니 올세라믹 크라운으로 자연스러운 미소 회복', category:'aesthetic', tag:'Aesthetic'},
-  {title:'50대 남성 · 무절개 임플란트', desc:'무절개 가이드 수술로 최소 부담, 빠른 회복', category:'implant', tag:'Implant'},
-];
+// Static placeholder cases removed — DB only
 
 let dbCases = [];
 
@@ -277,7 +365,18 @@ function makeDBCard(c, idx){
 
   let html = '';
   dbCases.forEach((c, i) => html += makeDBCard(c, i));
-  staticCases.forEach(s => html += makeStaticCard(s));
+  if(!dbCases.length){
+    // Show placeholder cards for blur effect even when no DB data
+    const placeholders = [
+      {title:'상악 전체 임플란트', category:'implant', tag:'Implant'},
+      {title:'앞니 라미네이트', category:'aesthetic', tag:'Aesthetic'},
+      {title:'하악 임플란트', category:'implant', tag:'Implant'},
+      {title:'재신경치료+크라운', category:'endo', tag:'Endodontics'},
+      {title:'올세라믹 크라운', category:'aesthetic', tag:'Aesthetic'},
+      {title:'무절개 임플란트', category:'implant', tag:'Implant'},
+    ];
+    placeholders.forEach(s => html += makeStaticCard(s));
+  }
   grid.innerHTML = html;
 
   // Re-init card animations
@@ -333,6 +432,11 @@ function initBAFilter(){
 
 // BA detail modal
 function openBADetail(idx){
+  if(!isMember){
+    // Non-member can't open detail — redirect to signup
+    location.href = 'signup.html?from=before-after&redirect=before-after.html';
+    return;
+  }
   const c = dbCases[idx];
   if(!c) return;
   

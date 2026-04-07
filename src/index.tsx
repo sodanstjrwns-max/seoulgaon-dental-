@@ -201,6 +201,16 @@ async function initDB(db: D1Database) {
     // SEO columns for blog (safe ALTER)
     `ALTER TABLE blog_posts ADD COLUMN meta_description TEXT DEFAULT ''`,
     `ALTER TABLE blog_posts ADD COLUMN thumbnail_key TEXT DEFAULT ''`,
+    // Members table (일반 회원)
+    `CREATE TABLE IF NOT EXISTS members (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      phone TEXT UNIQUE NOT NULL,
+      password_hash TEXT NOT NULL,
+      is_active INTEGER DEFAULT 1,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_members_phone ON members(phone)`,
   ]
   for (const sql of tables) {
     try { await db.prepare(sql).run() } catch (e: any) {
@@ -385,6 +395,71 @@ app.put('/api/auth/password', auth, async (c) => {
   } catch (e: any) {
     return c.json({ error: '비밀번호 변경 실패: ' + e.message }, 500)
   }
+})
+
+// ══════════════════════════════════════════════════
+//  MEMBER AUTH API — 일반 회원 가입/로그인
+// ══════════════════════════════════════════════════
+
+// 회원가입
+app.post('/api/member/signup', async (c) => {
+  try {
+    const db = c.env.DB
+    const { name, phone, password } = await c.req.json<{ name: string; phone: string; password: string }>()
+    if (!name?.trim()) return c.json({ error: '이름을 입력해주세요' }, 400)
+    if (!phone?.trim()) return c.json({ error: '전화번호를 입력해주세요' }, 400)
+    if (!password || password.length < 4) return c.json({ error: '비밀번호는 4자 이상이어야 합니다' }, 400)
+
+    // 전화번호 정규화 (숫자만 추출)
+    const cleanPhone = phone.replace(/[^0-9]/g, '')
+    if (cleanPhone.length < 10 || cleanPhone.length > 11) return c.json({ error: '올바른 전화번호를 입력해주세요' }, 400)
+
+    // 중복 체크
+    const existing = await db.prepare('SELECT id FROM members WHERE phone = ?').bind(cleanPhone).first()
+    if (existing) return c.json({ error: '이미 가입된 전화번호입니다' }, 409)
+
+    const hash = await hashPassword(password)
+    const result = await db.prepare(
+      'INSERT INTO members (name, phone, password_hash) VALUES (?, ?, ?)'
+    ).bind(name.trim(), cleanPhone, hash).run()
+
+    const memberId = result.meta.last_row_id
+    const token = await createToken({ id: memberId, name: name.trim(), phone: cleanPhone, role: 'member' })
+    return c.json({ token, user: { id: memberId, name: name.trim(), phone: cleanPhone, role: 'member' } }, 201)
+  } catch (e: any) {
+    return c.json({ error: '회원가입 실패: ' + e.message }, 500)
+  }
+})
+
+// 회원 로그인
+app.post('/api/member/login', async (c) => {
+  try {
+    const db = c.env.DB
+    const { phone, password } = await c.req.json<{ phone: string; password: string }>()
+    if (!phone?.trim()) return c.json({ error: '전화번호를 입력해주세요' }, 400)
+    if (!password) return c.json({ error: '비밀번호를 입력해주세요' }, 400)
+
+    const cleanPhone = phone.replace(/[^0-9]/g, '')
+    const hash = await hashPassword(password)
+    const member: any = await db.prepare(
+      'SELECT id, name, phone, is_active FROM members WHERE phone = ? AND password_hash = ?'
+    ).bind(cleanPhone, hash).first()
+
+    if (!member) return c.json({ error: '전화번호 또는 비밀번호가 올바르지 않습니다' }, 401)
+    if (!member.is_active) return c.json({ error: '비활성화된 계정입니다. 관리자에게 문의하세요.' }, 403)
+
+    const token = await createToken({ id: member.id, name: member.name, phone: member.phone, role: 'member' })
+    return c.json({ token, user: { id: member.id, name: member.name, phone: member.phone, role: 'member' } })
+  } catch (e: any) {
+    return c.json({ error: '로그인 실패: ' + e.message }, 500)
+  }
+})
+
+// 회원 정보 확인
+app.get('/api/member/me', auth, async (c) => {
+  const user = c.get('user')
+  if (user.role !== 'member') return c.json({ error: '회원 전용 API입니다' }, 403)
+  return c.json({ user })
 })
 
 // ══════════════════════════════════════════════════

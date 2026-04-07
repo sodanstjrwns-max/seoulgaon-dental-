@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<title>회원가입 · 로그인 | 서울가온치과</title>
+<meta name="description" content="서울가온치과 회원가입 및 로그인. 회원 전용 콘텐츠를 확인하세요.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<link href="pages.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+/* ===== AUTH PAGE ===== */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:6rem 1.5rem 3rem}
+.auth-card{background:var(--ink-3);border:1px solid var(--line);border-radius:16px;padding:2.5rem;width:100%;max-width:420px;box-shadow:0 24px 80px rgba(0,0,0,.4)}
+.auth-logo{text-align:center;margin-bottom:2rem}
+.auth-logo a{font-family:var(--ff-title);font-size:1.5rem;color:var(--ivory)}
+.auth-logo a span{color:var(--gold)}
+.auth-logo p{font-size:.78rem;color:var(--stone);margin-top:.4rem}
+.auth-tabs{display:flex;gap:0;margin-bottom:2rem;border:1px solid var(--line);border-radius:100px;overflow:hidden}
+.auth-tab{flex:1;padding:.65rem 0;text-align:center;font-size:.85rem;font-weight:600;color:var(--stone-l);transition:all .3s;cursor:pointer;background:transparent}
+.auth-tab.active{background:var(--gold);color:var(--ink)}
+.auth-tab:hover:not(.active){color:var(--ivory)}
+/* Form */
+.auth-form{display:flex;flex-direction:column;gap:1rem}
+.auth-field{position:relative}
+.auth-field label{display:block;font-size:.78rem;color:var(--stone-l);margin-bottom:.4rem;letter-spacing:.03em}
+.auth-field input{width:100%;background:var(--ink-4);border:1px solid var(--line);border-radius:10px;padding:.85rem 1rem .85rem 2.8rem;font-size:.9rem;color:var(--ivory);outline:none;transition:border-color .3s}
+.auth-field input:focus{border-color:var(--gold)}
+.auth-field input::placeholder{color:var(--stone)}
+.auth-field .field-icon{position:absolute;left:1rem;bottom:.9rem;color:var(--stone);font-size:.9rem;pointer-events:none}
+.auth-field .toggle-pw{position:absolute;right:1rem;bottom:.9rem;color:var(--stone);cursor:pointer;font-size:.9rem;transition:color .2s}
+.auth-field .toggle-pw:hover{color:var(--ivory)}
+/* Error */
+.auth-error{background:rgba(255,82,82,.1);border:1px solid rgba(255,82,82,.3);border-radius:8px;padding:.6rem 1rem;font-size:.8rem;color:#ff5252;display:none;align-items:center;gap:.5rem}
+.auth-error i{font-size:.9rem}
+/* Success */
+.auth-success{background:rgba(3,199,90,.1);border:1px solid rgba(3,199,90,.3);border-radius:8px;padding:.6rem 1rem;font-size:.8rem;color:#03c75a;display:none;align-items:center;gap:.5rem}
+.auth-success i{font-size:.9rem}
+/* Submit */
+.auth-submit{width:100%;padding:.9rem;background:var(--gold);color:var(--ink);border:none;border-radius:100px;font-size:.9rem;font-weight:700;letter-spacing:.03em;cursor:pointer;transition:background .3s,transform .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.5rem}
+.auth-submit:hover{background:var(--gold-b)}
+.auth-submit:active{transform:scale(.98)}
+.auth-submit:disabled{opacity:.6;pointer-events:none}
+.auth-submit .spinner{width:18px;height:18px;border:2px solid var(--ink);border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Footer link */
+.auth-footer{text-align:center;margin-top:1.5rem;font-size:.8rem;color:var(--stone)}
+.auth-footer a{color:var(--gold);font-weight:600;transition:color .2s}
+.auth-footer a:hover{color:var(--gold-b)}
+/* Privacy */
+.auth-privacy{font-size:.72rem;color:var(--stone);text-align:center;line-height:1.5;margin-top:1rem}
+.auth-privacy a{color:var(--gold);text-decoration:underline}
+/* Already logged in */
+.auth-logged-in{text-align:center;padding:2rem 0}
+.auth-logged-in .user-icon{width:64px;height:64px;background:rgba(191,164,106,.15);border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem;color:var(--gold)}
+.auth-logged-in h3{font-family:var(--ff-title);font-size:1.2rem;margin-bottom:.3rem}
+.auth-logged-in p{font-size:.82rem;color:var(--stone-l);margin-bottom:1.5rem}
+.auth-logged-in .btn-row{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.btn-outline{padding:.6rem 1.5rem;border:1px solid var(--gold);border-radius:100px;font-size:.82rem;color:var(--gold);transition:all .3s;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem}
+.btn-outline:hover{background:rgba(191,164,106,.1)}
+.btn-gold{padding:.6rem 1.5rem;background:var(--gold);border-radius:100px;font-size:.82rem;color:var(--ink);font-weight:600;transition:all .3s;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;border:none}
+.btn-gold:hover{background:var(--gold-b)}
+/* Phone input formatting hint */
+.field-hint{font-size:.7rem;color:var(--stone);margin-top:.3rem;padding-left:1rem}
+@media(max-width:480px){
+  .auth-wrap{padding:5rem 1rem 2rem}
+  .auth-card{padding:2rem 1.5rem;border-radius:12px}
+  .auth-logo a{font-size:1.3rem}
+  .auth-field input{padding:.75rem .8rem .75rem 2.5rem;font-size:.85rem}
+}
+</style>
+</head>
+<body>
+<noscript><div style="background:#BFA46A;color:#050504;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
+<div id="cur"><div id="cur-ring"></div><div id="cur-dot"></div></div>
+
+<nav id="nav" role="navigation" aria-label="메인 네비게이션">
+  <a href="/" class="nav-logo">서울가온치과<span>.</span></a>
+  <div class="nav-links">
+    <a href="philosophy.html">진료 철학</a>
+    <div class="nav-link-drop"><a href="treatments.html">진료 안내 ▾</a><div class="drop"><a href="treatments.html#implant">임플란트</a><a href="treatments.html#aesthetics">앞니 심미치료</a><a href="treatments.html#endodontics">신경치료</a><a href="treatments.html#general">일반진료</a></div></div>
+    <div class="nav-link-drop"><a href="#">커뮤니티 ▾</a><div class="drop"><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a></div></div>
+    <a href="doctors.html">의료진</a>
+    <div class="nav-link-drop"><a href="guide.html">안내 ▾</a><div class="drop"><a href="guide.html#visit">오시는 길</a><a href="guide.html#fee">수가 안내</a><a href="guide.html#faq">자주 묻는 질문</a></div></div>
+  </div>
+  <a href="tel:0507-1325-3377" class="nav-cta" data-magnet>예약 상담</a>
+  <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu"><a href="/">홈</a><a href="philosophy.html">진료 철학</a><a href="treatments.html">진료 안내</a><a href="doctors.html">의료진</a><a href="guide.html">안내</a><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a></div>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <!-- Already logged in state -->
+    <div id="logged-in-state" style="display:none">
+      <div class="auth-logged-in">
+        <div class="user-icon"><i class="fas fa-user-check"></i></div>
+        <h3 id="logged-name">님, 환영합니다!</h3>
+        <p>이미 로그인되어 있습니다.</p>
+        <div class="btn-row">
+          <a href="before-after.html" class="btn-gold"><i class="fas fa-images"></i> 비포·애프터 보기</a>
+          <button onclick="logout()" class="btn-outline"><i class="fas fa-sign-out-alt"></i> 로그아웃</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auth forms -->
+    <div id="auth-forms">
+      <div class="auth-logo">
+        <a href="/">서울가온치과<span>.</span></a>
+        <p>회원 전용 콘텐츠를 확인하세요</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">로그인</button>
+        <button class="auth-tab" onclick="switchTab('signup')">회원가입</button>
+      </div>
+
+      <!-- Error / Success messages -->
+      <div class="auth-error" id="auth-error"><i class="fas fa-exclamation-circle"></i><span></span></div>
+      <div class="auth-success" id="auth-success"><i class="fas fa-check-circle"></i><span></span></div>
+
+      <!-- LOGIN FORM -->
+      <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
+        <div class="auth-field">
+          <label for="login-phone">전화번호</label>
+          <i class="fas fa-phone field-icon"></i>
+          <input type="tel" id="login-phone" placeholder="010-0000-0000" required autocomplete="tel">
+        </div>
+        <div class="auth-field">
+          <label for="login-pw">비밀번호</label>
+          <i class="fas fa-lock field-icon"></i>
+          <input type="password" id="login-pw" placeholder="비밀번호 입력" required autocomplete="current-password">
+          <i class="fas fa-eye toggle-pw" onclick="togglePw(this)"></i>
+        </div>
+        <button type="submit" class="auth-submit" id="login-btn">
+          <span>로그인</span>
+          <div class="spinner"></div>
+        </button>
+      </form>
+
+      <!-- SIGNUP FORM -->
+      <form id="signup-form" class="auth-form" style="display:none" onsubmit="handleSignup(event)">
+        <div class="auth-field">
+          <label for="signup-name">이름</label>
+          <i class="fas fa-user field-icon"></i>
+          <input type="text" id="signup-name" placeholder="홍길동" required autocomplete="name">
+        </div>
+        <div class="auth-field">
+          <label for="signup-phone">전화번호</label>
+          <i class="fas fa-phone field-icon"></i>
+          <input type="tel" id="signup-phone" placeholder="010-0000-0000" required autocomplete="tel">
+          <div class="field-hint">숫자만 입력해도 됩니다 (예: 01012345678)</div>
+        </div>
+        <div class="auth-field">
+          <label for="signup-pw">비밀번호</label>
+          <i class="fas fa-lock field-icon"></i>
+          <input type="password" id="signup-pw" placeholder="4자 이상" required minlength="4" autocomplete="new-password">
+          <i class="fas fa-eye toggle-pw" onclick="togglePw(this)"></i>
+        </div>
+        <div class="auth-field">
+          <label for="signup-pw2">비밀번호 확인</label>
+          <i class="fas fa-shield-halved field-icon"></i>
+          <input type="password" id="signup-pw2" placeholder="비밀번호 재입력" required minlength="4" autocomplete="new-password">
+        </div>
+        <button type="submit" class="auth-submit" id="signup-btn">
+          <span>회원가입</span>
+          <div class="spinner"></div>
+        </button>
+        <div class="auth-privacy">
+          가입 시 <a href="#">이용약관</a> 및 <a href="#">개인정보 처리방침</a>에 동의하는 것으로 간주합니다.
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="pages.js"></script>
+<script>
+const TOKEN_KEY = 'gaon_member_token';
+const USER_KEY = 'gaon_member_user';
+
+// Check if already logged in
+(function checkAuth(){
+  const token = localStorage.getItem(TOKEN_KEY);
+  const user = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
+  if(token && user){
+    document.getElementById('auth-forms').style.display = 'none';
+    document.getElementById('logged-in-state').style.display = 'block';
+    document.getElementById('logged-name').textContent = user.name + '님, 환영합니다!';
+  }
+  // If redirected from before-after
+  const params = new URLSearchParams(location.search);
+  if(params.get('from') === 'before-after'){
+    showSuccess('비포·애프터 콘텐츠는 회원만 열람 가능합니다. 로그인 또는 회원가입 후 이용해주세요.');
+  }
+  // If user wanted login tab
+  if(localStorage.getItem('gaon_goto_login')){
+    localStorage.removeItem('gaon_goto_login');
+    switchTab('login');
+  }
+})();
+
+function switchTab(tab){
+  const tabs = document.querySelectorAll('.auth-tab');
+  tabs.forEach((t,i) => {
+    if((tab==='login' && i===0) || (tab==='signup' && i===1)){
+      t.classList.add('active');
+    } else {
+      t.classList.remove('active');
+    }
+  });
+  document.getElementById('login-form').style.display = tab==='login' ? 'flex' : 'none';
+  document.getElementById('signup-form').style.display = tab==='signup' ? 'flex' : 'none';
+  hideMessages();
+}
+
+function showError(msg){
+  const el = document.getElementById('auth-error');
+  el.querySelector('span').textContent = msg;
+  el.style.display = 'flex';
+  document.getElementById('auth-success').style.display = 'none';
+}
+function showSuccess(msg){
+  const el = document.getElementById('auth-success');
+  el.querySelector('span').textContent = msg;
+  el.style.display = 'flex';
+  document.getElementById('auth-error').style.display = 'none';
+}
+function hideMessages(){
+  document.getElementById('auth-error').style.display = 'none';
+  document.getElementById('auth-success').style.display = 'none';
+}
+
+function togglePw(icon){
+  const input = icon.previousElementSibling;
+  if(input.type === 'password'){
+    input.type = 'text';
+    icon.classList.replace('fa-eye','fa-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.replace('fa-eye-slash','fa-eye');
+  }
+}
+
+function setLoading(btn, loading){
+  const span = btn.querySelector('span');
+  const spinner = btn.querySelector('.spinner');
+  btn.disabled = loading;
+  span.style.display = loading ? 'none' : '';
+  spinner.style.display = loading ? 'block' : 'none';
+}
+
+async function handleLogin(e){
+  e.preventDefault();
+  hideMessages();
+  const phone = document.getElementById('login-phone').value.trim();
+  const password = document.getElementById('login-pw').value;
+  if(!phone || !password){ showError('전화번호와 비밀번호를 입력해주세요'); return; }
+
+  const btn = document.getElementById('login-btn');
+  setLoading(btn, true);
+
+  try {
+    const res = await fetch('/api/member/login', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ phone, password })
+    });
+    const data = await res.json();
+    if(!res.ok){ showError(data.error || '로그인 실패'); setLoading(btn,false); return; }
+
+    localStorage.setItem(TOKEN_KEY, data.token);
+    localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+
+    showSuccess('로그인 성공! 잠시 후 이동합니다...');
+    setTimeout(()=>{
+      const params = new URLSearchParams(location.search);
+      const redirect = params.get('redirect') || 'before-after.html';
+      location.href = redirect;
+    }, 800);
+  } catch(err){
+    showError('네트워크 오류가 발생했습니다');
+    setLoading(btn,false);
+  }
+}
+
+async function handleSignup(e){
+  e.preventDefault();
+  hideMessages();
+  const name = document.getElementById('signup-name').value.trim();
+  const phone = document.getElementById('signup-phone').value.trim();
+  const password = document.getElementById('signup-pw').value;
+  const password2 = document.getElementById('signup-pw2').value;
+
+  if(!name){ showError('이름을 입력해주세요'); return; }
+  if(!phone){ showError('전화번호를 입력해주세요'); return; }
+  if(!password || password.length < 4){ showError('비밀번호는 4자 이상이어야 합니다'); return; }
+  if(password !== password2){ showError('비밀번호가 일치하지 않습니다'); return; }
+
+  const btn = document.getElementById('signup-btn');
+  setLoading(btn, true);
+
+  try {
+    const res = await fetch('/api/member/signup', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ name, phone, password })
+    });
+    const data = await res.json();
+    if(!res.ok){ showError(data.error || '회원가입 실패'); setLoading(btn,false); return; }
+
+    localStorage.setItem(TOKEN_KEY, data.token);
+    localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+
+    showSuccess('회원가입 완료! 환영합니다, ' + data.user.name + '님!');
+    setTimeout(()=>{
+      const params = new URLSearchParams(location.search);
+      const redirect = params.get('redirect') || 'before-after.html';
+      location.href = redirect;
+    }, 1000);
+  } catch(err){
+    showError('네트워크 오류가 발생했습니다');
+    setLoading(btn,false);
+  }
+}
+
+function logout(){
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+  location.reload();
+}
+
+// Auto-format phone number
+['login-phone','signup-phone'].forEach(id => {
+  document.getElementById(id).addEventListener('input', function(e){
+    let v = this.value.replace(/[^0-9]/g,'');
+    if(v.length > 11) v = v.substring(0,11);
+    if(v.length > 7) v = v.substring(0,3)+'-'+v.substring(3,7)+'-'+v.substring(7);
+    else if(v.length > 3) v = v.substring(0,3)+'-'+v.substring(3);
+    this.value = v;
+  });
+});
+
+// Hamburger menu
+document.addEventListener('DOMContentLoaded', function(){
+  const h = document.querySelector('.hamburger');
+  const m = document.querySelector('.mob-menu');
+  if(h && m){
+    h.addEventListener('click', () => { h.classList.toggle('open'); m.classList.toggle('open'); });
+    m.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { h.classList.remove('open'); m.classList.remove('open'); }));
+  }
+});
+</script>
+</body>
+</html>
