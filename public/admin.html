@@ -14,7 +14,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:'Noto Sans KR',sans-serif;background:#0a0a0a;color:#e5e5e5;min-height:100vh}
-  :root{--gold:#BFA46A;--gold-b:#D4BA82;--ink:#0a0a0a;--ink-2:#141413;--ink-3:#1a1a19;--ink-4:#222221}
+  :root{--gold:#BFA46A;--gold-b:#D4BA82;--ink:#0a0a0a;--ink-2:#141413;--ink-3:#1a1a19;--ink-4:#222221;--success:#4ade80;--danger:#f87171;--info:#60a5fa}
   .auth-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
   .auth-card{background:var(--ink-2);border:1px solid #333;border-radius:16px;padding:3rem;width:100%;max-width:420px}
   .auth-logo{font-size:1.5rem;font-weight:700;text-align:center;margin-bottom:.5rem}
@@ -32,7 +32,7 @@
   .auth-switch a{color:var(--gold);cursor:pointer;text-decoration:none}
   .error-msg{background:#3a1515;border:1px solid #6b2d2d;color:#ff6b6b;padding:.6rem 1rem;border-radius:8px;font-size:.8rem;margin-bottom:1rem;display:none}
   .dash{display:none;min-height:100vh}
-  .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:var(--ink-2);border-right:1px solid #222;padding:1.5rem 0;z-index:100;overflow-y:auto}
+  .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:var(--ink-2);border-right:1px solid #222;padding:1.5rem 0;z-index:100;overflow-y:auto;transition:transform .3s}
   .side-logo{padding:0 1.5rem;font-size:1.1rem;font-weight:700;margin-bottom:.3rem}
   .side-logo span{color:var(--gold)}
   .side-sub{padding:0 1.5rem;font-size:.7rem;color:#666;margin-bottom:2rem}
@@ -48,9 +48,11 @@
   .page-title{font-size:1.5rem;font-weight:700;margin-bottom:.3rem}
   .page-desc{color:#888;font-size:.85rem;margin-bottom:2rem}
   .stat-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:2.5rem}
-  .stat-card{background:var(--ink-2);border:1px solid #222;border-radius:12px;padding:1.5rem}
+  .stat-card{background:var(--ink-2);border:1px solid #222;border-radius:12px;padding:1.5rem;transition:border-color .3s}
+  .stat-card:hover{border-color:var(--gold)}
   .stat-card .num{font-size:2rem;font-weight:700;color:var(--gold)}
   .stat-card .label{font-size:.8rem;color:#888;margin-top:.3rem}
+  .stat-card .sub{font-size:.7rem;color:#555;margin-top:.2rem}
   .panel{background:var(--ink-2);border:1px solid #222;border-radius:12px;padding:2rem;margin-bottom:2rem}
   .panel-title{font-size:1.1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}
   .panel-title i{color:var(--gold)}
@@ -80,14 +82,15 @@
   .item-title{font-size:.9rem;font-weight:500}
   .item-meta{font-size:.75rem;color:#666;margin-top:.2rem}
   .item-actions{display:flex;gap:.5rem}
-  .btn-sm{padding:.4rem .8rem;border-radius:6px;font-size:.75rem;cursor:pointer;border:1px solid #333;background:transparent;color:#888;transition:all .2s}
+  .btn-sm{padding:.4rem .8rem;border-radius:6px;font-size:.75rem;cursor:pointer;border:1px solid #333;background:transparent;color:#888;transition:all .2s;white-space:nowrap}
   .btn-sm:hover{border-color:var(--gold);color:var(--gold)}
   .btn-sm.danger:hover{border-color:#ff6b6b;color:#ff6b6b}
   .btn-sm.edit:hover{border-color:#6baaff;color:#6baaff}
+  .btn-sm.preview{background:rgba(191,164,106,.1);border-color:rgba(191,164,106,.3);color:var(--gold)}
   .toast{position:fixed;top:2rem;right:2rem;background:#1a3a1a;border:1px solid #2d6b2d;color:#6bff6b;padding:.8rem 1.5rem;border-radius:8px;font-size:.85rem;transform:translateX(120%);transition:transform .3s;z-index:9999}
   .toast.show{transform:translateX(0)}
   .toast.error{background:#3a1515;border-color:#6b2d2d;color:#ff6b6b}
-  .tab-bar{display:flex;gap:.5rem;margin-bottom:1.5rem}
+  .tab-bar{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
   .tab-btn{padding:.5rem 1.2rem;border-radius:8px;font-size:.8rem;cursor:pointer;border:1px solid #333;background:transparent;color:#888;transition:all .2s}
   .tab-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(191,164,106,.1)}
   .check-row{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem}
@@ -100,20 +103,38 @@
   .badge.published{background:rgba(107,255,107,.1);color:#6bff6b}
   .badge.draft{background:rgba(255,107,107,.1);color:#ff6b6b}
   .badge.pinned{background:rgba(191,164,106,.15);color:var(--gold)}
-  /* Edit modal */
-  .edit-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9000;display:none;align-items:center;justify-content:center;padding:1rem}
-  .edit-overlay.show{display:flex}
-  .edit-box{background:var(--ink-2);border:1px solid #333;border-radius:16px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;padding:2rem}
-  .edit-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer}
-  .edit-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
-  .edit-header h3{font-size:1.2rem;font-weight:700}
   .upload-counter{font-size:.75rem;color:#888;margin-top:.5rem}
-  @media(max-width:768px){.sidebar{display:none}.main{margin-left:0;padding:1rem}.stat-cards{grid-template-columns:1fr 1fr}.ba-grid{grid-template-columns:1fr}}
+  /* Sync panel */
+  .sync-panel{background:var(--ink-3);border:1px solid rgba(191,164,106,.2);border-radius:12px;padding:1.5rem;margin-bottom:2rem}
+  .sync-panel h3{font-size:.9rem;font-weight:700;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+  .sync-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid #1a1a1a;font-size:.82rem}
+  .sync-row:last-child{border-bottom:none}
+  .sync-ok{color:var(--success)}
+  .sync-warn{color:#fbbf24}
+  .sync-label{color:#999}
+  .sync-value{font-weight:600;display:flex;align-items:center;gap:.4rem}
+  /* Quick link */
+  .quick-links{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+  .quick-link{display:inline-flex;align-items:center;gap:.3rem;padding:.4rem .8rem;background:rgba(191,164,106,.08);border:1px solid rgba(191,164,106,.15);border-radius:6px;font-size:.75rem;color:var(--gold);text-decoration:none;transition:all .2s}
+  .quick-link:hover{border-color:var(--gold);background:rgba(191,164,106,.15)}
+  /* Mobile */
+  .mob-toggle{display:none;position:fixed;top:1rem;left:1rem;z-index:200;width:40px;height:40px;background:var(--ink-2);border:1px solid #333;border-radius:8px;color:var(--gold);font-size:1.2rem;cursor:pointer;align-items:center;justify-content:center}
+  @media(max-width:768px){
+    .mob-toggle{display:flex}
+    .sidebar{transform:translateX(-100%)}
+    .sidebar.open{transform:translateX(0)}
+    .main{margin-left:0;padding:1rem;padding-top:4rem}
+    .stat-cards{grid-template-columns:1fr 1fr}
+    .ba-grid{grid-template-columns:1fr}
+  }
 </style>
 </head>
 <body>
 
 <div id="toast" class="toast"></div>
+
+<!-- Mobile sidebar toggle -->
+<button class="mob-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
 
 <!-- AUTH -->
 <div id="auth-screen" class="auth-wrap">
@@ -140,7 +161,7 @@
 <div id="dashboard" class="dash">
   <aside class="sidebar">
     <div class="side-logo">서울가온치과<span>.</span></div>
-    <div class="side-sub">Admin Dashboard v2</div>
+    <div class="side-sub">Admin Dashboard v3</div>
     <nav class="side-nav">
       <a href="#" class="active" onclick="showPage('home',this)"><i class="fas fa-home"></i>대시보드</a>
       <a href="#" onclick="showPage('doctors',this)"><i class="fas fa-user-md"></i>의료진 관리</a>
@@ -158,13 +179,33 @@
     <!-- HOME -->
     <div id="page-home">
       <h1 class="page-title">대시보드</h1>
-      <p class="page-desc">서울가온치과 관리자 페이지입니다.</p>
-      <div class="stat-cards">
-        <div class="stat-card"><div class="num" id="cnt-blog">0</div><div class="label">블로그 게시글</div></div>
-        <div class="stat-card"><div class="num" id="cnt-ba">0</div><div class="label">비포&애프터</div></div>
-        <div class="stat-card"><div class="num" id="cnt-notice">0</div><div class="label">공지사항</div></div>
-        <div class="stat-card"><div class="num" id="cnt-user">0</div><div class="label">관리자</div></div>
+      <p class="page-desc">서울가온치과 관리자 페이지 — 데이터를 등록하면 홈페이지에 실시간 반영됩니다.</p>
+      
+      <!-- SYNC PANEL -->
+      <div class="sync-panel" id="sync-panel">
+        <h3><i class="fas fa-sync-alt"></i> 데이터 동기화 상태 <button onclick="loadSyncCheck()" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:.7rem;margin-left:.5rem"><i class="fas fa-redo"></i> 새로고침</button></h3>
+        <div id="sync-body">불러오는 중...</div>
       </div>
+
+      <div class="stat-cards">
+        <div class="stat-card"><div class="num" id="cnt-blog">0</div><div class="label">블로그 게시글</div><div class="sub" id="cnt-blog-pub">공개 0건</div></div>
+        <div class="stat-card"><div class="num" id="cnt-ba">0</div><div class="label">비포&애프터</div><div class="sub" id="cnt-ba-pub">공개 0건</div></div>
+        <div class="stat-card"><div class="num" id="cnt-notice">0</div><div class="label">공지사항</div><div class="sub" id="cnt-notice-pub">공개 0건</div></div>
+        <div class="stat-card"><div class="num" id="cnt-doctor">0</div><div class="label">의료진</div><div class="sub" id="cnt-doctor-active">활성 0명</div></div>
+      </div>
+
+      <!-- Quick links to frontend -->
+      <div class="panel">
+        <div class="panel-title"><i class="fas fa-external-link-alt"></i> 사이트 바로가기</div>
+        <div class="quick-links">
+          <a href="/" target="_blank" class="quick-link"><i class="fas fa-home"></i> 홈페이지</a>
+          <a href="/blog.html" target="_blank" class="quick-link"><i class="fas fa-pen-fancy"></i> 블로그</a>
+          <a href="/before-after.html" target="_blank" class="quick-link"><i class="fas fa-images"></i> 비포&애프터</a>
+          <a href="/notice.html" target="_blank" class="quick-link"><i class="fas fa-bullhorn"></i> 공지사항</a>
+          <a href="/doctors.html" target="_blank" class="quick-link"><i class="fas fa-user-md"></i> 의료진</a>
+        </div>
+      </div>
+
       <div class="panel">
         <div class="panel-title"><i class="fas fa-clock"></i>최근 활동</div>
         <div id="recent-activity" style="font-size:.85rem;color:#999">로딩 중...</div>
@@ -173,8 +214,11 @@
 
     <!-- BLOG -->
     <div id="page-blog" style="display:none">
-      <h1 class="page-title">블로그 관리</h1>
-      <p class="page-desc">블로그 게시글을 작성하고 관리합니다. 이미지는 R2 스토리지에 저장됩니다.</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">
+        <h1 class="page-title" style="margin-bottom:0">블로그 관리</h1>
+        <a href="/blog.html" target="_blank" class="btn-sm preview"><i class="fas fa-external-link-alt"></i> 사이트에서 보기</a>
+      </div>
+      <p class="page-desc">블로그 게시글을 작성하면 홈페이지 블로그 페이지에 즉시 반영됩니다.</p>
       <div class="tab-bar">
         <button class="tab-btn active" onclick="showBlogTab('write')">새 글 작성</button>
         <button class="tab-btn" onclick="showBlogTab('list')">게시글 목록</button>
@@ -182,12 +226,12 @@
       <div id="blog-write" class="panel">
         <div class="panel-title"><i class="fas fa-edit"></i><span id="blog-form-title">새 블로그 작성</span></div>
         <input type="hidden" id="blog-edit-id" value="">
-        <div class="field"><label>제목</label><input type="text" id="blog-title" placeholder="블로그 제목을 입력하세요"></div>
-        <div class="field"><label>카테고리</label><select id="blog-category"><option>일반</option><option>임플란트</option><option>심미치료</option><option>신경치료</option><option>치과상식</option></select></div>
+        <div class="field"><label>제목 *</label><input type="text" id="blog-title" placeholder="블로그 제목을 입력하세요"></div>
+        <div class="field"><label>카테고리</label><select id="blog-category"><option value="일반">일반</option><option value="임플란트">임플란트</option><option value="심미치료">심미치료</option><option value="신경치료">신경치료</option><option value="치과상식">치과상식</option></select></div>
         <div class="field"><label>담당 원장</label><select id="blog-doctor"><option value="">원장 선택 (선택사항)</option></select></div>
-        <div class="field"><label>내용</label><textarea id="blog-content" placeholder="블로그 내용을 입력하세요" rows="8"></textarea></div>
+        <div class="field"><label>내용 *</label><textarea id="blog-content" placeholder="블로그 내용을 입력하세요" rows="8"></textarea></div>
         <div class="field">
-          <label>사진 업로드 (여러 장 드래그 & 드롭) — R2 스토리지 저장</label>
+          <label>사진 업로드 (여러 장 드래그 & 드롭) — 첫 번째 사진이 썸네일이 됩니다</label>
           <div class="dropzone" id="blog-dropzone">
             <input type="file" multiple accept="image/*" onchange="handleBlogFiles(event)">
             <i class="fas fa-cloud-upload-alt"></i>
@@ -202,13 +246,16 @@
           <button class="btn-gold" id="blog-cancel-btn" onclick="cancelBlogEdit()" style="flex:0 0 auto;background:#333;color:#ccc;display:none">취소</button>
         </div>
       </div>
-      <div id="blog-list" style="display:none"><div class="item-list" id="blog-items"></div></div>
+      <div id="blog-list" style="display:none"><div class="item-list" id="blog-items">로딩 중...</div></div>
     </div>
 
     <!-- BEFORE & AFTER -->
     <div id="page-ba" style="display:none">
-      <h1 class="page-title">비포&애프터 관리</h1>
-      <p class="page-desc">치료 전후 사진을 업로드합니다. 올린 사진만 표시됩니다.</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">
+        <h1 class="page-title" style="margin-bottom:0">비포&애프터 관리</h1>
+        <a href="/before-after.html" target="_blank" class="btn-sm preview"><i class="fas fa-external-link-alt"></i> 사이트에서 보기</a>
+      </div>
+      <p class="page-desc">치료 전후 사진을 업로드하면 홈페이지에 즉시 반영됩니다. 올린 사진만 표시됩니다.</p>
       <div class="tab-bar">
         <button class="tab-btn active" onclick="showBATab('write')">새 케이스 등록</button>
         <button class="tab-btn" onclick="showBATab('list')">케이스 목록</button>
@@ -216,8 +263,8 @@
       <div id="ba-write" class="panel">
         <div class="panel-title"><i class="fas fa-camera"></i><span id="ba-form-title">새 비포&애프터 등록</span></div>
         <input type="hidden" id="ba-edit-id" value="">
-        <div class="field"><label>케이스 제목</label><input type="text" id="ba-title" placeholder="예: 상악 임플란트 2개 식립"></div>
-        <div class="field"><label>카테고리</label><select id="ba-category"><option>임플란트</option><option>심미치료</option><option>신경치료</option><option>교정</option><option>기타</option></select></div>
+        <div class="field"><label>케이스 제목 *</label><input type="text" id="ba-title" placeholder="예: 상악 임플란트 2개 식립"></div>
+        <div class="field"><label>카테고리</label><select id="ba-category"><option value="임플란트">임플란트</option><option value="심미치료">심미치료</option><option value="신경치료">신경치료</option><option value="교정">교정</option><option value="기타">기타</option></select></div>
         <div class="field"><label>담당 원장</label><select id="ba-doctor"><option value="">원장 선택 (선택사항)</option></select></div>
         <div class="field"><label>설명 (선택)</label><textarea id="ba-desc" placeholder="케이스 설명" rows="3"></textarea></div>
         <div class="field">
@@ -239,12 +286,15 @@
           <button class="btn-gold" id="ba-cancel-btn" onclick="cancelBAEdit()" style="flex:0 0 auto;background:#333;color:#ccc;display:none">취소</button>
         </div>
       </div>
-      <div id="ba-list" style="display:none"><div class="item-list" id="ba-items"></div></div>
+      <div id="ba-list" style="display:none"><div class="item-list" id="ba-items">로딩 중...</div></div>
     </div>
 
     <!-- DOCTORS -->
     <div id="page-doctors" style="display:none">
-      <h1 class="page-title">의료진 관리</h1>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">
+        <h1 class="page-title" style="margin-bottom:0">의료진 관리</h1>
+        <a href="/doctors.html" target="_blank" class="btn-sm preview"><i class="fas fa-external-link-alt"></i> 사이트에서 보기</a>
+      </div>
       <p class="page-desc">원장님 정보를 관리합니다. 블로그·비포애프터 작성 시 원장을 선택할 수 있습니다.</p>
       <div class="tab-bar">
         <button class="tab-btn active" onclick="showDoctorTab('write')">원장 등록/수정</button>
@@ -276,13 +326,16 @@
           <button class="btn-gold" id="doctor-cancel-btn" onclick="cancelDoctorEdit()" style="flex:0 0 auto;background:#333;color:#ccc;display:none">취소</button>
         </div>
       </div>
-      <div id="doctor-list" style="display:none"><div class="item-list" id="doctor-items"></div></div>
+      <div id="doctor-list" style="display:none"><div class="item-list" id="doctor-items">로딩 중...</div></div>
     </div>
 
     <!-- NOTICES -->
     <div id="page-notice" style="display:none">
-      <h1 class="page-title">공지사항 관리</h1>
-      <p class="page-desc">공지사항을 작성하고 관리합니다.</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">
+        <h1 class="page-title" style="margin-bottom:0">공지사항 관리</h1>
+        <a href="/notice.html" target="_blank" class="btn-sm preview"><i class="fas fa-external-link-alt"></i> 사이트에서 보기</a>
+      </div>
+      <p class="page-desc">공지사항을 작성하면 홈페이지 공지사항 페이지에 즉시 반영됩니다.</p>
       <div class="tab-bar">
         <button class="tab-btn active" onclick="showNoticeTab('write')">새 공지 작성</button>
         <button class="tab-btn" onclick="showNoticeTab('list')">공지 목록</button>
@@ -290,8 +343,8 @@
       <div id="notice-write" class="panel">
         <div class="panel-title"><i class="fas fa-bullhorn"></i><span id="notice-form-title">새 공지사항 작성</span></div>
         <input type="hidden" id="notice-edit-id" value="">
-        <div class="field"><label>제목</label><input type="text" id="notice-title" placeholder="공지사항 제목"></div>
-        <div class="field"><label>내용</label><textarea id="notice-content" placeholder="공지 내용을 입력하세요" rows="8"></textarea></div>
+        <div class="field"><label>제목 *</label><input type="text" id="notice-title" placeholder="공지사항 제목"></div>
+        <div class="field"><label>내용 *</label><textarea id="notice-content" placeholder="공지 내용을 입력하세요" rows="8"></textarea></div>
         <div class="field">
           <label>사진 첨부 (선택, 여러 장 드래그 & 드롭)</label>
           <div class="dropzone" id="notice-dropzone">
@@ -309,7 +362,7 @@
           <button class="btn-gold" id="notice-cancel-btn" onclick="cancelNoticeEdit()" style="flex:0 0 auto;background:#333;color:#ccc;display:none">취소</button>
         </div>
       </div>
-      <div id="notice-list" style="display:none"><div class="item-list" id="notice-items"></div></div>
+      <div id="notice-list" style="display:none"><div class="item-list" id="notice-items">로딩 중...</div></div>
     </div>
   </div>
 </div>
@@ -317,17 +370,19 @@
 <script>
 // ══════ STATE ══════
 let token = localStorage.getItem('gaon_token') || '';
-let blogImages = []; // {url, key, name, status:'uploaded'|'uploading', localPreview}
-let noticeImages = []; // same structure as blogImages
+let blogImages = [];
+let noticeImages = [];
 let baSlots = {'intra-before':null,'intra-after':null,'pano-before':null,'pano-after':null};
 let uploadTotal = 0, uploadDone = 0;
 let noticeUploadTotal = 0, noticeUploadDone = 0;
+let doctorPhoto = null;
+let doctorsList = [];
 
 function authHeaders(){ return {'Content-Type':'application/json','Authorization':'Bearer '+token} }
 function uploadHeaders(){ return {'Authorization':'Bearer '+token} }
 
 // ══════ TOAST ══════
-function toast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(err?' error':'');setTimeout(()=>t.className='toast',3000)}
+function toast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(err?' error':'');setTimeout(()=>t.className='toast',3500)}
 
 // ══════ AUTH ══════
 let isRegister=false;
@@ -346,9 +401,10 @@ async function handleLogin(e){
   const btn=document.getElementById('login-btn');btn.disabled=true;btn.textContent='로그인 중...';
   try{
     const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:document.getElementById('login-email').value,password:document.getElementById('login-pw').value})});
-    const d=await r.json();if(!r.ok)return showError(d.error);
+    const d=await r.json();
+    if(!r.ok){showError(d.error||'로그인 실패');return false}
     token=d.token;localStorage.setItem('gaon_token',token);enterDashboard(d.user);
-  }catch(err){showError('서버 연결에 실패했습니다')}
+  }catch(err){showError('서버 연결에 실패했습니다. 잠시 후 다시 시도해주세요.')}
   finally{btn.disabled=false;btn.textContent='로그인'}
   return false;
 }
@@ -357,17 +413,28 @@ async function handleRegister(e){
   const btn=document.getElementById('reg-btn');btn.disabled=true;btn.textContent='가입 중...';
   try{
     const r=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:document.getElementById('reg-name').value,email:document.getElementById('reg-email').value,password:document.getElementById('reg-pw').value})});
-    const d=await r.json();if(!r.ok)return showError(d.error);
+    const d=await r.json();
+    if(!r.ok){showError(d.error||'회원가입 실패');return false}
     token=d.token;localStorage.setItem('gaon_token',token);enterDashboard(d.user);
-  }catch(err){showError('서버 연결에 실패했습니다')}
+  }catch(err){showError('서버 연결에 실패했습니다.')}
   finally{btn.disabled=false;btn.textContent='회원가입'}
   return false;
 }
-function enterDashboard(u){document.getElementById('auth-screen').style.display='none';document.getElementById('dashboard').style.display='block';document.getElementById('user-name').textContent=u.name||u.email;loadDashboard()}
+function enterDashboard(u){
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  document.getElementById('user-name').textContent=u.name||u.email;
+  loadDashboard();
+  loadSyncCheck();
+}
 function logout(){token='';localStorage.removeItem('gaon_token');location.reload()}
 async function checkAuth(){
   if(!token)return;
-  try{const r=await fetch('/api/auth/me',{headers:authHeaders()});if(r.ok){const d=await r.json();enterDashboard(d.user)}else{token='';localStorage.removeItem('gaon_token')}}catch{token='';localStorage.removeItem('gaon_token')}
+  try{
+    const r=await fetch('/api/auth/me',{headers:authHeaders()});
+    if(r.ok){const d=await r.json();enterDashboard(d.user)}
+    else{token='';localStorage.removeItem('gaon_token')}
+  }catch{token='';localStorage.removeItem('gaon_token')}
 }
 
 // ══════ NAV ══════
@@ -375,40 +442,73 @@ function showPage(p,el){
   ['home','doctors','blog','ba','notice'].forEach(x=>document.getElementById('page-'+x).style.display=x===p?'block':'none');
   document.querySelectorAll('.side-nav a').forEach(a=>a.classList.remove('active'));
   if(el)el.classList.add('active');
-  if(p==='home')loadDashboard();
+  // Close mobile sidebar
+  document.querySelector('.sidebar').classList.remove('open');
+  if(p==='home'){loadDashboard();loadSyncCheck()}
   if(p==='doctors')loadDoctorList();
   if(p==='blog'){loadBlogList();loadDoctorsForSelect()}
   if(p==='ba'){loadBAList();loadDoctorsForSelect()}
   if(p==='notice')loadNoticeList();
 }
 
+// ══════ SYNC CHECK ══════
+async function loadSyncCheck(){
+  try{
+    const d=await fetch('/api/admin/sync-check',{headers:authHeaders()}).then(r=>r.json());
+    if(d.error){document.getElementById('sync-body').innerHTML='<span style="color:#ff6b6b">'+d.error+'</span>';return}
+    const s=d.sync;
+    const html=`
+      <div class="sync-row"><span class="sync-label">블로그</span><span class="sync-value ${s.blog.published===s.blog.total?'sync-ok':'sync-warn'}"><i class="fas fa-${s.blog.published===s.blog.total?'check-circle':'exclamation-triangle'}"></i> 공개 ${s.blog.published}건 / 전체 ${s.blog.total}건</span></div>
+      <div class="sync-row"><span class="sync-label">비포&애프터</span><span class="sync-value ${s.before_after.published===s.before_after.total?'sync-ok':'sync-warn'}"><i class="fas fa-${s.before_after.published===s.before_after.total?'check-circle':'exclamation-triangle'}"></i> 공개 ${s.before_after.published}건 / 전체 ${s.before_after.total}건</span></div>
+      <div class="sync-row"><span class="sync-label">공지사항</span><span class="sync-value ${s.notices.published===s.notices.total?'sync-ok':'sync-warn'}"><i class="fas fa-${s.notices.published===s.notices.total?'check-circle':'exclamation-triangle'}"></i> 공개 ${s.notices.published}건 / 전체 ${s.notices.total}건</span></div>
+      <div class="sync-row"><span class="sync-label">의료진</span><span class="sync-value ${s.doctors.active===s.doctors.total?'sync-ok':'sync-warn'}"><i class="fas fa-${s.doctors.active===s.doctors.total?'check-circle':'exclamation-triangle'}"></i> 활성 ${s.doctors.active}명 / 전체 ${s.doctors.total}명</span></div>
+      <div style="margin-top:.8rem;font-size:.7rem;color:#555">마지막 확인: ${new Date(d.timestamp).toLocaleString('ko-KR')}</div>
+    `;
+    document.getElementById('sync-body').innerHTML=html;
+    // Also update stat sub-labels
+    document.getElementById('cnt-blog-pub').textContent='공개 '+s.blog.published+'건';
+    document.getElementById('cnt-ba-pub').textContent='공개 '+s.before_after.published+'건';
+    document.getElementById('cnt-notice-pub').textContent='공개 '+s.notices.published+'건';
+    document.getElementById('cnt-doctor-active').textContent='활성 '+s.doctors.active+'명';
+  }catch(err){
+    document.getElementById('sync-body').innerHTML='<span style="color:#ff6b6b">동기화 확인 실패</span>';
+  }
+}
+
 // ══════ DASHBOARD ══════
 async function loadDashboard(){
   try{
     const d=await fetch('/api/admin/stats',{headers:authHeaders()}).then(r=>r.json());
+    if(d.error){toast(d.error,true);return}
     document.getElementById('cnt-blog').textContent=d.blogs||0;
     document.getElementById('cnt-ba').textContent=d.cases||0;
     document.getElementById('cnt-notice').textContent=d.notices||0;
-    document.getElementById('cnt-user').textContent=d.users||0;
+    document.getElementById('cnt-doctor').textContent=d.doctors||0;
     // Recent activity
     let html='';
     const all=[];
-    (d.recent?.blogs||[]).forEach(i=>all.push({...i,type:'블로그'}));
-    (d.recent?.cases||[]).forEach(i=>all.push({...i,type:'비포&애프터'}));
-    (d.recent?.notices||[]).forEach(i=>all.push({...i,type:'공지사항'}));
+    (d.recent?.blogs||[]).forEach(i=>all.push({...i,type:'블로그',link:'/blog-post.html?id='+i.id}));
+    (d.recent?.cases||[]).forEach(i=>all.push({...i,type:'비포&애프터',link:'/before-after.html'}));
+    (d.recent?.notices||[]).forEach(i=>all.push({...i,type:'공지사항',link:'/notice.html'}));
     all.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
     if(all.length){
-      html=all.slice(0,8).map(i=>`<div style="padding:.5rem 0;border-bottom:1px solid #1a1a1a;display:flex;justify-content:space-between"><span><span style="color:var(--gold);font-size:.75rem;margin-right:.5rem">[${i.type}]</span>${i.title}</span><span style="font-size:.75rem;color:#555">${new Date(i.created_at).toLocaleDateString('ko-KR')}</span></div>`).join('');
-    }else html='<div style="color:#555;padding:1rem;text-align:center">아직 등록된 콘텐츠가 없습니다</div>';
+      html=all.slice(0,10).map(i=>`<div style="padding:.5rem 0;border-bottom:1px solid #1a1a1a;display:flex;justify-content:space-between;align-items:center">
+        <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span style="color:var(--gold);font-size:.75rem;margin-right:.5rem">[${i.type}]</span>${esc(i.title)}</span>
+        <span style="display:flex;gap:.5rem;align-items:center;flex-shrink:0">
+          <span style="font-size:.7rem;color:#555">${fmtDate(i.created_at)}</span>
+          <a href="${i.link}" target="_blank" style="font-size:.65rem;color:var(--gold);text-decoration:none;border:1px solid rgba(191,164,106,.2);padding:2px 6px;border-radius:4px">보기</a>
+        </span>
+      </div>`).join('');
+    }else html='<div style="color:#555;padding:1rem;text-align:center">아직 등록된 콘텐츠가 없습니다. 블로그나 공지사항을 등록해 보세요!</div>';
     document.getElementById('recent-activity').innerHTML=html;
-  }catch(err){console.error(err)}
+  }catch(err){console.error('Dashboard load error',err)}
 }
 
 // ══════ R2 UPLOAD HELPER ══════
 async function uploadFileToR2(file){
   const fd=new FormData();fd.append('file',file);
   const r=await fetch('/api/upload',{method:'POST',headers:uploadHeaders(),body:fd});
-  if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.error||'Upload failed')}
+  if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.error||'Upload failed ('+r.status+')')}
   return r.json();
 }
 
@@ -455,15 +555,15 @@ async function uploadBlogImage(file){
     toast('이미지 업로드 실패: '+(err.message||''),true);
   }
   updateProgress('blog-progress',uploadDone,uploadTotal);
-  document.getElementById('blog-upload-counter').textContent=`업로드: ${blogImages.filter(i=>i.status==='uploaded').length}장`;
+  document.getElementById('blog-upload-counter').textContent=`업로드 완료: ${blogImages.filter(i=>i.status==='uploaded').length}장`;
   renderBlogPreviews();
 }
 
-function removeBlogImage(i){blogImages.splice(i,1);renderBlogPreviews();document.getElementById('blog-upload-counter').textContent=`업로드: ${blogImages.filter(x=>x.status==='uploaded').length}장`}
+function removeBlogImage(i){blogImages.splice(i,1);renderBlogPreviews();document.getElementById('blog-upload-counter').textContent=`업로드 완료: ${blogImages.filter(x=>x.status==='uploaded').length}장`}
 function renderBlogPreviews(){
   document.getElementById('blog-previews').innerHTML=blogImages.map((img,i)=>{
     const src=img.status==='uploading'?img.localPreview:img.url;
-    return `<div class="preview-item"><img src="${src}">${img.status==='uploading'?'<div class="uploading"><i class="fas fa-spinner"></i></div>':'<div class="remove" onclick="removeBlogImage('+i+')"><i class="fas fa-times"></i></div>'}</div>`;
+    return `<div class="preview-item"><img src="${src}" alt="">${img.status==='uploading'?'<div class="uploading"><i class="fas fa-spinner"></i></div>':'<div class="remove" onclick="removeBlogImage('+i+')"><i class="fas fa-times"></i></div>'}</div>`;
   }).join('');
 }
 
@@ -480,33 +580,28 @@ function resetBlogForm(){
   document.getElementById('blog-submit-btn').textContent='게시글 등록';
   document.getElementById('blog-cancel-btn').style.display='none';
 }
-
 function cancelBlogEdit(){resetBlogForm()}
 
 async function editBlog(id){
   try{
     const d=await fetch('/api/admin/blog/'+id,{headers:authHeaders()}).then(r=>r.json());
-    if(!d.post)return toast('게시글을 불러올 수 없습니다',true);
-    // Switch to write tab
+    if(!d.post){toast('게시글을 불러올 수 없습니다',true);return}
     showBlogTab('write');
     document.getElementById('blog-edit-id').value=id;
     document.getElementById('blog-title').value=d.post.title;
     document.getElementById('blog-content').value=d.post.content;
     document.getElementById('blog-category').value=d.post.category||'일반';
-    // Set doctor
     await loadDoctorsForSelect();
     document.getElementById('blog-doctor').value=d.post.doctor_id||'';
-    // Load existing images
     blogImages=(d.images||[]).map(img=>({url:img.image_url,key:img.r2_key,name:img.filename||'',status:'uploaded'}));
     uploadTotal=blogImages.length;uploadDone=blogImages.length;
     renderBlogPreviews();
-    document.getElementById('blog-upload-counter').textContent=`업로드: ${blogImages.length}장`;
+    document.getElementById('blog-upload-counter').textContent=blogImages.length?`업로드 완료: ${blogImages.length}장`:'';
     document.getElementById('blog-form-title').textContent='블로그 수정';
     document.getElementById('blog-submit-btn').textContent='수정 완료';
     document.getElementById('blog-cancel-btn').style.display='block';
-    // Scroll to top
-    document.getElementById('page-blog').scrollIntoView({behavior:'smooth'});
-  }catch(err){toast('게시글 로드 실패',true)}
+    window.scrollTo({top:0,behavior:'smooth'});
+  }catch(err){toast('게시글 로드 실패: '+(err.message||''),true)}
 }
 
 async function submitBlog(){
@@ -514,7 +609,8 @@ async function submitBlog(){
   const title=document.getElementById('blog-title').value.trim();
   const content=document.getElementById('blog-content').value.trim();
   const category=document.getElementById('blog-category').value;
-  if(!title||!content)return toast('제목과 내용을 입력해주세요',true);
+  if(!title)return toast('제목을 입력해주세요',true);
+  if(!content)return toast('내용을 입력해주세요',true);
   if(blogImages.some(i=>i.status==='uploading'))return toast('이미지 업로드 중입니다. 잠시 기다려주세요.',true);
   const btn=document.getElementById('blog-submit-btn');btn.disabled=true;btn.textContent=editId?'수정 중...':'등록 중...';
   try{
@@ -523,30 +619,44 @@ async function submitBlog(){
     const url=editId?'/api/admin/blog/'+editId:'/api/admin/blog';
     const method=editId?'PUT':'POST';
     const r=await fetch(url,{method,headers:authHeaders(),body:JSON.stringify({title,content,category,doctor_id:doctor_id?parseInt(doctor_id):null,images})});
-    const d=await r.json();if(!r.ok)return toast(d.error,true);
-    toast(editId?'게시글이 수정되었습니다!':'블로그 게시글이 등록되었습니다!');
-    resetBlogForm();loadDashboard();loadBlogList();
-  }catch(err){toast('저장에 실패했습니다',true)}
+    const d=await r.json();
+    if(!r.ok){toast(d.error||'저장 실패',true);return}
+    toast(editId?'게시글이 수정되었습니다! 블로그 페이지에서 확인하세요.':'블로그 게시글이 등록되었습니다! 블로그 페이지에서 확인하세요.');
+    resetBlogForm();loadDashboard();loadBlogList();loadSyncCheck();
+  }catch(err){toast('저장에 실패했습니다: '+(err.message||''),true)}
   finally{btn.disabled=false;btn.textContent=editId?'수정 완료':'게시글 등록'}
 }
 
 async function loadBlogList(){
   try{
     const d=await fetch('/api/admin/blog',{headers:authHeaders()}).then(r=>r.json());
+    if(d.error){toast(d.error,true);return}
     const el=document.getElementById('blog-items');
-    if(!(d.posts||[]).length){el.innerHTML='<div style="padding:2rem;text-align:center;color:#666">등록된 블로그가 없습니다</div>';return}
+    if(!(d.posts||[]).length){el.innerHTML='<div style="padding:2rem;text-align:center;color:#666">등록된 블로그가 없습니다. 첫 번째 글을 작성해 보세요!</div>';return}
     el.innerHTML=d.posts.map(p=>`<div class="item-row">
-      <div><div class="item-title">${esc(p.title)}</div><div class="item-meta">${esc(p.category)} · ${fmtDate(p.created_at)} <span class="badge ${p.is_published?'published':'draft'}">${p.is_published?'공개':'비공개'}</span></div></div>
+      <div style="flex:1;min-width:0">
+        <div class="item-title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.title)}</div>
+        <div class="item-meta">${esc(p.category)} ${p.doctor_name?'· '+esc(p.doctor_name)+' 원장':''} · ${fmtDate(p.created_at)} <span class="badge ${p.is_published?'published':'draft'}">${p.is_published?'공개':'비공개'}</span></div>
+      </div>
       <div class="item-actions">
+        <a href="/blog-post.html?id=${p.id}" target="_blank" class="btn-sm preview" title="사이트에서 보기"><i class="fas fa-eye"></i></a>
         <button class="btn-sm edit" onclick="editBlog(${p.id})" title="수정"><i class="fas fa-pen"></i></button>
-        <button class="btn-sm" onclick="togglePublish('blog',${p.id},${p.is_published?0:1})" title="${p.is_published?'비공개':'공개'}"><i class="fas fa-${p.is_published?'eye-slash':'eye'}"></i></button>
+        <button class="btn-sm" onclick="togglePublish('blog',${p.id},${p.is_published?0:1})" title="${p.is_published?'비공개로':'공개로'}"><i class="fas fa-${p.is_published?'eye-slash':'globe'}"></i></button>
         <button class="btn-sm danger" onclick="deleteBlog(${p.id})" title="삭제"><i class="fas fa-trash"></i></button>
       </div>
     </div>`).join('');
-  }catch(err){console.error(err)}
+  }catch(err){document.getElementById('blog-items').innerHTML='<div style="padding:2rem;text-align:center;color:#ff6b6b">목록 로드 실패</div>'}
 }
 
-async function deleteBlog(id){if(!confirm('정말 삭제하시겠습니까? R2에 저장된 이미지도 함께 삭제됩니다.'))return;await fetch('/api/admin/blog/'+id,{method:'DELETE',headers:authHeaders()});toast('삭제되었습니다');loadBlogList();loadDashboard()}
+async function deleteBlog(id){
+  if(!confirm('정말 삭제하시겠습니까?\nR2에 저장된 이미지도 함께 삭제됩니다.'))return;
+  try{
+    const r=await fetch('/api/admin/blog/'+id,{method:'DELETE',headers:authHeaders()});
+    const d=await r.json();
+    if(!r.ok){toast(d.error||'삭제 실패',true);return}
+    toast('삭제되었습니다');loadBlogList();loadDashboard();loadSyncCheck();
+  }catch(err){toast('삭제 실패',true)}
+}
 
 // ══════ BEFORE & AFTER ══════
 function showBATab(t){
@@ -563,7 +673,7 @@ async function handleBASlot(e,slotId){
   try{
     const d=await uploadFileToR2(file);
     baSlots[slotId]={url:d.url,key:d.key};
-    slot.innerHTML=`<input type="file" accept="image/*" onchange="handleBASlot(event,'${slotId}')"><img src="${d.url}"><div class="remove" onclick="clearBASlot('${slotId}')" style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,.7);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;color:#ff6b6b;z-index:2"><i class="fas fa-times"></i></div>`;
+    slot.innerHTML=`<input type="file" accept="image/*" onchange="handleBASlot(event,'${slotId}')"><img src="${d.url}" alt=""><div class="remove" onclick="clearBASlot('${slotId}')" style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,.7);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;color:#ff6b6b;z-index:2"><i class="fas fa-times"></i></div>`;
   }catch(err){
     toast('이미지 업로드 실패: '+(err.message||''),true);
     resetBASlot(slotId);
@@ -577,10 +687,9 @@ function resetBASlot(id){
   const isIntra=id.startsWith('intra'),isBefore=id.endsWith('before');
   slot.innerHTML=`<input type="file" accept="image/*" onchange="handleBASlot(event,'${id}')"><div class="slot-label">${isBefore?'BEFORE':'AFTER'}</div><i class="fas fa-${isIntra?'tooth':'x-ray'}" style="font-size:1.5rem;color:#555;margin-bottom:.3rem"></i><p>${isIntra?'구내':'파노라마'} 사진 (${isBefore?'전':'후'})</p>`;
 }
-
 function setBASlotImage(id,url){
   const slot=document.getElementById('slot-'+id);
-  slot.innerHTML=`<input type="file" accept="image/*" onchange="handleBASlot(event,'${id}')"><img src="${url}"><div class="remove" onclick="clearBASlot('${id}')" style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,.7);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;color:#ff6b6b;z-index:2"><i class="fas fa-times"></i></div>`;
+  slot.innerHTML=`<input type="file" accept="image/*" onchange="handleBASlot(event,'${id}')"><img src="${url}" alt=""><div class="remove" onclick="clearBASlot('${id}')" style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,.7);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;color:#ff6b6b;z-index:2"><i class="fas fa-times"></i></div>`;
 }
 
 function resetBAForm(){
@@ -595,23 +704,20 @@ function resetBAForm(){
   document.getElementById('ba-submit-btn').textContent='케이스 등록';
   document.getElementById('ba-cancel-btn').style.display='none';
 }
-
 function cancelBAEdit(){resetBAForm()}
 
 async function editBA(id){
   try{
     const d=await fetch('/api/admin/before-after/'+id,{headers:authHeaders()}).then(r=>r.json());
-    if(!d.case)return toast('케이스를 불러올 수 없습니다',true);
+    if(!d.case){toast('케이스를 불러올 수 없습니다',true);return}
     const c=d.case;
     showBATab('write');
     document.getElementById('ba-edit-id').value=id;
     document.getElementById('ba-title').value=c.title;
     document.getElementById('ba-category').value=c.category||'임플란트';
     document.getElementById('ba-desc').value=c.description||'';
-    // Set doctor
     await loadDoctorsForSelect();
     document.getElementById('ba-doctor').value=c.doctor_id||'';
-    // Set existing images in slots
     baSlots={'intra-before':null,'intra-after':null,'pano-before':null,'pano-after':null};
     if(c.intraoral_before_url){baSlots['intra-before']={url:c.intraoral_before_url,key:c.intraoral_before_key};setBASlotImage('intra-before',c.intraoral_before_url)}else resetBASlot('intra-before');
     if(c.intraoral_after_url){baSlots['intra-after']={url:c.intraoral_after_url,key:c.intraoral_after_key};setBASlotImage('intra-after',c.intraoral_after_url)}else resetBASlot('intra-after');
@@ -620,7 +726,7 @@ async function editBA(id){
     document.getElementById('ba-form-title').textContent='비포&애프터 수정';
     document.getElementById('ba-submit-btn').textContent='수정 완료';
     document.getElementById('ba-cancel-btn').style.display='block';
-    document.getElementById('page-ba').scrollIntoView({behavior:'smooth'});
+    window.scrollTo({top:0,behavior:'smooth'});
   }catch(err){toast('케이스 로드 실패',true)}
 }
 
@@ -641,9 +747,10 @@ async function submitBA(){
     const url=editId?'/api/admin/before-after/'+editId:'/api/admin/before-after';
     const method=editId?'PUT':'POST';
     const r=await fetch(url,{method,headers:authHeaders(),body:JSON.stringify(body)});
-    const d=await r.json();if(!r.ok)return toast(d.error,true);
-    toast(editId?'케이스가 수정되었습니다!':'비포&애프터 케이스가 등록되었습니다!');
-    resetBAForm();loadDashboard();loadBAList();
+    const d=await r.json();
+    if(!r.ok){toast(d.error||'저장 실패',true);return}
+    toast(editId?'케이스가 수정되었습니다! 비포&애프터 페이지에서 확인하세요.':'비포&애프터 케이스가 등록되었습니다!');
+    resetBAForm();loadDashboard();loadBAList();loadSyncCheck();
   }catch(err){toast('저장에 실패했습니다',true)}
   finally{btn.disabled=false;btn.textContent=editId?'수정 완료':'케이스 등록'}
 }
@@ -651,22 +758,33 @@ async function submitBA(){
 async function loadBAList(){
   try{
     const d=await fetch('/api/admin/before-after',{headers:authHeaders()}).then(r=>r.json());
+    if(d.error){toast(d.error,true);return}
     const el=document.getElementById('ba-items');
-    if(!(d.cases||[]).length){el.innerHTML='<div style="padding:2rem;text-align:center;color:#666">등록된 케이스가 없습니다</div>';return}
+    if(!(d.cases||[]).length){el.innerHTML='<div style="padding:2rem;text-align:center;color:#666">등록된 케이스가 없습니다. 첫 번째 케이스를 등록해 보세요!</div>';return}
     el.innerHTML=d.cases.map(c=>{
       const imgs=[c.intraoral_before_url,c.intraoral_after_url,c.panorama_before_url,c.panorama_after_url].filter(Boolean).length;
       return `<div class="item-row">
-        <div><div class="item-title">${esc(c.title)}</div><div class="item-meta">${esc(c.category)} · 사진 ${imgs}장 · ${fmtDate(c.created_at)} <span class="badge ${c.is_published?'published':'draft'}">${c.is_published?'공개':'비공개'}</span></div></div>
+        <div style="flex:1;min-width:0">
+          <div class="item-title">${esc(c.title)}</div>
+          <div class="item-meta">${esc(c.category)} · 사진 ${imgs}장 · ${fmtDate(c.created_at)} <span class="badge ${c.is_published?'published':'draft'}">${c.is_published?'공개':'비공개'}</span></div>
+        </div>
         <div class="item-actions">
           <button class="btn-sm edit" onclick="editBA(${c.id})" title="수정"><i class="fas fa-pen"></i></button>
-          <button class="btn-sm" onclick="togglePublish('before-after',${c.id},${c.is_published?0:1})" title="${c.is_published?'비공개':'공개'}"><i class="fas fa-${c.is_published?'eye-slash':'eye'}"></i></button>
+          <button class="btn-sm" onclick="togglePublish('before-after',${c.id},${c.is_published?0:1})" title="${c.is_published?'비공개':'공개'}"><i class="fas fa-${c.is_published?'eye-slash':'globe'}"></i></button>
           <button class="btn-sm danger" onclick="deleteBA(${c.id})" title="삭제"><i class="fas fa-trash"></i></button>
         </div>
       </div>`}).join('');
-  }catch(err){console.error(err)}
+  }catch(err){document.getElementById('ba-items').innerHTML='<div style="padding:2rem;text-align:center;color:#ff6b6b">목록 로드 실패</div>'}
 }
 
-async function deleteBA(id){if(!confirm('정말 삭제하시겠습니까? R2에 저장된 이미지도 함께 삭제됩니다.'))return;await fetch('/api/admin/before-after/'+id,{method:'DELETE',headers:authHeaders()});toast('삭제되었습니다');loadBAList();loadDashboard()}
+async function deleteBA(id){
+  if(!confirm('정말 삭제하시겠습니까?\nR2에 저장된 이미지도 함께 삭제됩니다.'))return;
+  try{
+    const r=await fetch('/api/admin/before-after/'+id,{method:'DELETE',headers:authHeaders()});
+    if(!r.ok){const d=await r.json();toast(d.error||'삭제 실패',true);return}
+    toast('삭제되었습니다');loadBAList();loadDashboard();loadSyncCheck();
+  }catch(err){toast('삭제 실패',true)}
+}
 
 // ══════ NOTICES ══════
 function showNoticeTab(t){
@@ -676,7 +794,6 @@ function showNoticeTab(t){
   if(t==='list')loadNoticeList();
 }
 
-// Notice dropzone drag & drop
 const ndz=document.getElementById('notice-dropzone');
 if(ndz){
   ndz.addEventListener('dragover',e=>{e.preventDefault();ndz.classList.add('drag-over')});
@@ -701,15 +818,15 @@ async function uploadNoticeImage(file){
     toast('이미지 업로드 실패: '+(err.message||''),true);
   }
   updateProgress('notice-progress',noticeUploadDone,noticeUploadTotal);
-  document.getElementById('notice-upload-counter').textContent=`업로드: ${noticeImages.filter(i=>i.status==='uploaded').length}장`;
+  document.getElementById('notice-upload-counter').textContent=`업로드 완료: ${noticeImages.filter(i=>i.status==='uploaded').length}장`;
   renderNoticePreviews();
 }
 
-function removeNoticeImage(i){noticeImages.splice(i,1);renderNoticePreviews();document.getElementById('notice-upload-counter').textContent=`업로드: ${noticeImages.filter(x=>x.status==='uploaded').length}장`}
+function removeNoticeImage(i){noticeImages.splice(i,1);renderNoticePreviews();document.getElementById('notice-upload-counter').textContent=`업로드 완료: ${noticeImages.filter(x=>x.status==='uploaded').length}장`}
 function renderNoticePreviews(){
   document.getElementById('notice-previews').innerHTML=noticeImages.map((img,i)=>{
     const src=img.status==='uploading'?img.localPreview:img.url;
-    return `<div class="preview-item"><img src="${src}">${img.status==='uploading'?'<div class="uploading"><i class="fas fa-spinner"></i></div>':'<div class="remove" onclick="removeNoticeImage('+i+')"><i class="fas fa-times"></i></div>'}</div>`;
+    return `<div class="preview-item"><img src="${src}" alt="">${img.status==='uploading'?'<div class="uploading"><i class="fas fa-spinner"></i></div>':'<div class="remove" onclick="removeNoticeImage('+i+')"><i class="fas fa-times"></i></div>'}</div>`;
   }).join('');
 }
 
@@ -725,28 +842,26 @@ function resetNoticeForm(){
   document.getElementById('notice-submit-btn').textContent='공지 등록';
   document.getElementById('notice-cancel-btn').style.display='none';
 }
-
 function cancelNoticeEdit(){resetNoticeForm()}
 
 async function editNotice(id){
   try{
     const d=await fetch('/api/admin/notices/'+id,{headers:authHeaders()}).then(r=>r.json());
-    if(!d.notice)return toast('공지를 불러올 수 없습니다',true);
+    if(!d.notice){toast('공지를 불러올 수 없습니다',true);return}
     const n=d.notice;
     showNoticeTab('write');
     document.getElementById('notice-edit-id').value=id;
     document.getElementById('notice-title').value=n.title;
     document.getElementById('notice-content').value=n.content;
     document.getElementById('notice-pin').checked=!!n.is_pinned;
-    // Load existing images
     noticeImages=(d.images||[]).map(img=>({url:img.image_url,key:img.r2_key,name:img.filename||'',status:'uploaded'}));
     noticeUploadTotal=noticeImages.length;noticeUploadDone=noticeImages.length;
     renderNoticePreviews();
-    document.getElementById('notice-upload-counter').textContent=noticeImages.length?`업로드: ${noticeImages.length}장`:'';
+    document.getElementById('notice-upload-counter').textContent=noticeImages.length?`업로드 완료: ${noticeImages.length}장`:'';
     document.getElementById('notice-form-title').textContent='공지사항 수정';
     document.getElementById('notice-submit-btn').textContent='수정 완료';
     document.getElementById('notice-cancel-btn').style.display='block';
-    document.getElementById('page-notice').scrollIntoView({behavior:'smooth'});
+    window.scrollTo({top:0,behavior:'smooth'});
   }catch(err){toast('공지 로드 실패',true)}
 }
 
@@ -755,7 +870,8 @@ async function submitNotice(){
   const title=document.getElementById('notice-title').value.trim();
   const content=document.getElementById('notice-content').value.trim();
   const is_pinned=document.getElementById('notice-pin').checked;
-  if(!title||!content)return toast('제목과 내용을 입력해주세요',true);
+  if(!title)return toast('제목을 입력해주세요',true);
+  if(!content)return toast('내용을 입력해주세요',true);
   if(noticeImages.some(i=>i.status==='uploading'))return toast('이미지 업로드 중입니다. 잠시 기다려주세요.',true);
   const btn=document.getElementById('notice-submit-btn');btn.disabled=true;btn.textContent=editId?'수정 중...':'등록 중...';
   try{
@@ -763,9 +879,10 @@ async function submitNotice(){
     const url=editId?'/api/admin/notices/'+editId:'/api/admin/notices';
     const method=editId?'PUT':'POST';
     const r=await fetch(url,{method,headers:authHeaders(),body:JSON.stringify({title,content,is_pinned,images})});
-    const d=await r.json();if(!r.ok)return toast(d.error,true);
-    toast(editId?'공지사항이 수정되었습니다!':'공지사항이 등록되었습니다!');
-    resetNoticeForm();loadDashboard();loadNoticeList();
+    const d=await r.json();
+    if(!r.ok){toast(d.error||'저장 실패',true);return}
+    toast(editId?'공지사항이 수정되었습니다! 공지사항 페이지에서 확인하세요.':'공지사항이 등록되었습니다!');
+    resetNoticeForm();loadDashboard();loadNoticeList();loadSyncCheck();
   }catch(err){toast('저장에 실패했습니다',true)}
   finally{btn.disabled=false;btn.textContent=editId?'수정 완료':'공지 등록'}
 }
@@ -773,25 +890,33 @@ async function submitNotice(){
 async function loadNoticeList(){
   try{
     const d=await fetch('/api/admin/notices',{headers:authHeaders()}).then(r=>r.json());
+    if(d.error){toast(d.error,true);return}
     const el=document.getElementById('notice-items');
-    if(!(d.notices||[]).length){el.innerHTML='<div style="padding:2rem;text-align:center;color:#666">등록된 공지가 없습니다</div>';return}
+    if(!(d.notices||[]).length){el.innerHTML='<div style="padding:2rem;text-align:center;color:#666">등록된 공지가 없습니다. 첫 번째 공지를 작성해 보세요!</div>';return}
     el.innerHTML=d.notices.map(n=>`<div class="item-row">
-      <div><div class="item-title">${n.is_pinned?'<i class="fas fa-thumbtack" style="color:var(--gold);margin-right:.3rem;font-size:.75rem"></i>':''}${esc(n.title)}</div><div class="item-meta">${fmtDate(n.created_at)} <span class="badge ${n.is_published?'published':'draft'}">${n.is_published?'공개':'비공개'}</span> ${n.is_pinned?'<span class="badge pinned">고정</span>':''}</div></div>
+      <div style="flex:1;min-width:0">
+        <div class="item-title">${n.is_pinned?'<i class="fas fa-thumbtack" style="color:var(--gold);margin-right:.3rem;font-size:.75rem"></i>':''}${esc(n.title)}</div>
+        <div class="item-meta">${fmtDate(n.created_at)} <span class="badge ${n.is_published?'published':'draft'}">${n.is_published?'공개':'비공개'}</span> ${n.is_pinned?'<span class="badge pinned">고정</span>':''}</div>
+      </div>
       <div class="item-actions">
         <button class="btn-sm edit" onclick="editNotice(${n.id})" title="수정"><i class="fas fa-pen"></i></button>
-        <button class="btn-sm" onclick="togglePublish('notices',${n.id},${n.is_published?0:1})" title="${n.is_published?'비공개':'공개'}"><i class="fas fa-${n.is_published?'eye-slash':'eye'}"></i></button>
+        <button class="btn-sm" onclick="togglePublish('notices',${n.id},${n.is_published?0:1})" title="${n.is_published?'비공개':'공개'}"><i class="fas fa-${n.is_published?'eye-slash':'globe'}"></i></button>
         <button class="btn-sm danger" onclick="deleteNotice(${n.id})" title="삭제"><i class="fas fa-trash"></i></button>
       </div>
     </div>`).join('');
-  }catch(err){console.error(err)}
+  }catch(err){document.getElementById('notice-items').innerHTML='<div style="padding:2rem;text-align:center;color:#ff6b6b">목록 로드 실패</div>'}
 }
 
-async function deleteNotice(id){if(!confirm('정말 삭제하시겠습니까?'))return;await fetch('/api/admin/notices/'+id,{method:'DELETE',headers:authHeaders()});toast('삭제되었습니다');loadNoticeList();loadDashboard()}
+async function deleteNotice(id){
+  if(!confirm('정말 삭제하시겠습니까?'))return;
+  try{
+    const r=await fetch('/api/admin/notices/'+id,{method:'DELETE',headers:authHeaders()});
+    if(!r.ok){const d=await r.json();toast(d.error||'삭제 실패',true);return}
+    toast('삭제되었습니다');loadNoticeList();loadDashboard();loadSyncCheck();
+  }catch(err){toast('삭제 실패',true)}
+}
 
 // ══════ DOCTORS ══════
-let doctorPhoto = null; // {url, key}
-let doctorsList = []; // cached list for select dropdowns
-
 function showDoctorTab(t){
   document.getElementById('doctor-write').style.display=t==='write'?'block':'none';
   document.getElementById('doctor-list').style.display=t==='list'?'block':'none';
@@ -806,7 +931,7 @@ async function handleDoctorPhoto(e){
   try{
     const d=await uploadFileToR2(file);
     doctorPhoto={url:d.url,key:d.key};
-    slot.innerHTML=`<input type="file" accept="image/*" onchange="handleDoctorPhoto(event)"><img src="${d.url}" style="max-width:100%;max-height:160px;object-fit:contain;border-radius:8px"><div class="remove" onclick="clearDoctorPhoto()" style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,.7);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;color:#ff6b6b;z-index:2"><i class="fas fa-times"></i></div>`;
+    slot.innerHTML=`<input type="file" accept="image/*" onchange="handleDoctorPhoto(event)"><img src="${d.url}" style="max-width:100%;max-height:160px;object-fit:contain;border-radius:8px" alt=""><div class="remove" onclick="clearDoctorPhoto()" style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,.7);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;color:#ff6b6b;z-index:2"><i class="fas fa-times"></i></div>`;
   }catch(err){
     toast('사진 업로드 실패',true);
     resetDoctorPhotoSlot();
@@ -837,9 +962,9 @@ function cancelDoctorEdit(){resetDoctorForm()}
 
 async function editDoctor(id){
   try{
-    const d=await fetch('/api/admin/doctors',{headers:authHeaders()}).then(r=>r.json());
-    const doc=(d.doctors||[]).find(x=>x.id===id);
-    if(!doc)return toast('원장 정보를 불러올 수 없습니다',true);
+    const d=await fetch('/api/admin/doctors/'+id,{headers:authHeaders()}).then(r=>r.json());
+    if(!d.doctor){toast('원장 정보를 불러올 수 없습니다',true);return}
+    const doc=d.doctor;
     showDoctorTab('write');
     document.getElementById('doctor-edit-id').value=id;
     document.getElementById('doctor-name').value=doc.name||'';
@@ -853,12 +978,12 @@ async function editDoctor(id){
     if(doc.photo_url){
       doctorPhoto={url:doc.photo_url,key:doc.photo_key};
       const slot=document.getElementById('slot-doctor-photo');
-      slot.innerHTML=`<input type="file" accept="image/*" onchange="handleDoctorPhoto(event)"><img src="${doc.photo_url}" style="max-width:100%;max-height:160px;object-fit:contain;border-radius:8px"><div class="remove" onclick="clearDoctorPhoto()" style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,.7);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;color:#ff6b6b;z-index:2"><i class="fas fa-times"></i></div>`;
-    } else {doctorPhoto=null;resetDoctorPhotoSlot()}
+      slot.innerHTML=`<input type="file" accept="image/*" onchange="handleDoctorPhoto(event)"><img src="${doc.photo_url}" style="max-width:100%;max-height:160px;object-fit:contain;border-radius:8px" alt=""><div class="remove" onclick="clearDoctorPhoto()" style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,.7);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;color:#ff6b6b;z-index:2"><i class="fas fa-times"></i></div>`;
+    }else{doctorPhoto=null;resetDoctorPhotoSlot()}
     document.getElementById('doctor-form-title').textContent='원장 정보 수정';
     document.getElementById('doctor-submit-btn').textContent='수정 완료';
     document.getElementById('doctor-cancel-btn').style.display='block';
-    document.getElementById('page-doctors').scrollIntoView({behavior:'smooth'});
+    window.scrollTo({top:0,behavior:'smooth'});
   }catch(err){toast('원장 로드 실패',true)}
 }
 
@@ -881,9 +1006,10 @@ async function submitDoctor(){
     const url=editId?'/api/admin/doctors/'+editId:'/api/admin/doctors';
     const method=editId?'PUT':'POST';
     const r=await fetch(url,{method,headers:authHeaders(),body:JSON.stringify(body)});
-    const d=await r.json();if(!r.ok)return toast(d.error,true);
+    const d=await r.json();
+    if(!r.ok){toast(d.error||'저장 실패',true);return}
     toast(editId?'원장 정보가 수정되었습니다!':'원장이 등록되었습니다!');
-    resetDoctorForm();loadDoctorList();loadDoctorsForSelect();
+    resetDoctorForm();loadDoctorList();loadDoctorsForSelect();loadSyncCheck();
   }catch(err){toast('저장에 실패했습니다',true)}
   finally{btn.disabled=false;btn.textContent=editId?'수정 완료':'원장 등록'}
 }
@@ -891,13 +1017,14 @@ async function submitDoctor(){
 async function loadDoctorList(){
   try{
     const d=await fetch('/api/admin/doctors',{headers:authHeaders()}).then(r=>r.json());
+    if(d.error){toast(d.error,true);return}
     const el=document.getElementById('doctor-items');
     const docs=d.doctors||[];
     if(!docs.length){el.innerHTML='<div style="padding:2rem;text-align:center;color:#666">등록된 원장이 없습니다</div>';return}
     el.innerHTML=docs.map(doc=>`<div class="item-row">
-      <div style="display:flex;align-items:center;gap:1rem">
-        ${doc.photo_url?'<img src="'+doc.photo_url+'" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #333">':'<div style="width:48px;height:48px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center"><i class="fas fa-user" style="color:#555"></i></div>'}
-        <div>
+      <div style="display:flex;align-items:center;gap:1rem;flex:1;min-width:0">
+        ${doc.photo_url?'<img src="'+doc.photo_url+'" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #333;flex-shrink:0" alt="">':'<div style="width:48px;height:48px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas fa-user" style="color:#555"></i></div>'}
+        <div style="min-width:0">
           <div class="item-title">${esc(doc.name)} ${doc.title?'<span style="color:var(--gold);font-size:.75rem;margin-left:.3rem">'+esc(doc.title)+'</span>':''}</div>
           <div class="item-meta">${esc(doc.specialties||'전문분야 미입력')} · 순서: ${doc.sort_order} <span class="badge ${doc.is_active?'published':'draft'}">${doc.is_active?'활성':'비활성'}</span></div>
         </div>
@@ -908,31 +1035,33 @@ async function loadDoctorList(){
         <button class="btn-sm danger" onclick="deleteDoctor(${doc.id})" title="삭제"><i class="fas fa-trash"></i></button>
       </div>
     </div>`).join('');
-  }catch(err){console.error(err)}
+  }catch(err){document.getElementById('doctor-items').innerHTML='<div style="padding:2rem;text-align:center;color:#ff6b6b">목록 로드 실패</div>'}
 }
 
 async function deleteDoctor(id){
-  if(!confirm('정말 삭제하시겠습니까? 이 원장과 연결된 블로그/비포애프터의 원장 정보가 해제됩니다.'))return;
-  await fetch('/api/admin/doctors/'+id,{method:'DELETE',headers:authHeaders()});
-  toast('삭제되었습니다');loadDoctorList();loadDoctorsForSelect();
+  if(!confirm('정말 삭제하시겠습니까?\n이 원장과 연결된 블로그/비포애프터의 원장 정보가 해제됩니다.'))return;
+  try{
+    const r=await fetch('/api/admin/doctors/'+id,{method:'DELETE',headers:authHeaders()});
+    if(!r.ok){const d=await r.json();toast(d.error||'삭제 실패',true);return}
+    toast('삭제되었습니다');loadDoctorList();loadDoctorsForSelect();loadSyncCheck();
+  }catch(err){toast('삭제 실패',true)}
 }
 
 async function toggleDoctorActive(id,val){
   try{
     const r=await fetch('/api/admin/doctors/'+id,{method:'PUT',headers:authHeaders(),body:JSON.stringify({is_active:val})});
     if(!r.ok){toast('변경 실패',true);return}
-    toast(val?'활성화 완료':'비활성화 완료');loadDoctorList();loadDoctorsForSelect();
+    toast(val?'활성화 완료':'비활성화 완료');loadDoctorList();loadDoctorsForSelect();loadSyncCheck();
   }catch(err){toast('변경 실패',true)}
 }
 
-// Load doctors for blog/BA dropdowns
 async function loadDoctorsForSelect(){
   try{
     const d=await fetch('/api/doctors').then(r=>r.json());
     doctorsList=d.doctors||[];
-    // Populate blog doctor select
     const blogSel=document.getElementById('blog-doctor');
     const baSel=document.getElementById('ba-doctor');
+    if(!blogSel||!baSel)return;
     const savedBlog=blogSel.value;
     const savedBA=baSel.value;
     const opts='<option value="">원장 선택 (선택사항)</option>'+doctorsList.map(doc=>`<option value="${doc.id}">${doc.name}${doc.title?' ('+doc.title+')':''}</option>`).join('');
@@ -949,8 +1078,9 @@ async function togglePublish(type,id,val){
   try{
     const r=await fetch(url,{method:'PUT',headers:authHeaders(),body:JSON.stringify({is_published:val})});
     if(!r.ok){const d=await r.json();toast(d.error||'변경 실패',true);return}
-    toast(val?'공개로 변경':'비공개로 변경');
+    toast(val?'공개로 변경 — 홈페이지에서 확인하세요':'비공개로 변경');
     if(type==='blog')loadBlogList();else if(type==='before-after')loadBAList();else loadNoticeList();
+    loadSyncCheck();
   }catch(err){toast('변경 실패',true)}
 }
 

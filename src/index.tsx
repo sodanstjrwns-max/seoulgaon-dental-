@@ -688,12 +688,12 @@ app.get('/api/admin/blog', auth, async (c) => {
   }
 })
 
-// Get single blog (admin — includes unpublished)
+// Get single blog (admin — includes unpublished, with doctor info)
 app.get('/api/admin/blog/:id', auth, async (c) => {
   try {
     const db = c.env.DB
     const id = c.req.param('id')
-    const post = await db.prepare('SELECT * FROM blog_posts WHERE id = ?').bind(id).first()
+    const post = await db.prepare('SELECT b.*, d.name as doctor_name, d.photo_url as doctor_photo, d.title as doctor_title FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id WHERE b.id = ?').bind(id).first()
     if (!post) return c.json({ error: '게시글을 찾을 수 없습니다' }, 404)
 
     const images = await db.prepare('SELECT id, image_url, r2_key, filename, sort_order FROM blog_images WHERE post_id = ? ORDER BY sort_order').bind(id).all()
@@ -886,7 +886,7 @@ app.get('/api/admin/before-after/:id', auth, async (c) => {
   try {
     const db = c.env.DB
     const id = c.req.param('id')
-    const item = await db.prepare('SELECT * FROM before_after WHERE id = ?').bind(id).first()
+    const item = await db.prepare('SELECT ba.*, d.name as doctor_name, d.photo_url as doctor_photo FROM before_after ba LEFT JOIN doctors d ON ba.doctor_id = d.id WHERE ba.id = ?').bind(id).first()
     if (!item) return c.json({ error: '케이스를 찾을 수 없습니다' }, 404)
     return c.json({ case: item })
   } catch (e: any) {
@@ -1121,10 +1121,55 @@ app.get('/api/admin/stats', auth, async (c) => {
 })
 
 // ══════════════════════════════════════════════════
+//  ADMIN: GET SINGLE DOCTOR
+// ══════════════════════════════════════════════════
+app.get('/api/admin/doctors/:id', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const id = c.req.param('id')
+    const doctor = await db.prepare('SELECT * FROM doctors WHERE id = ?').bind(id).first()
+    if (!doctor) return c.json({ error: '의료진을 찾을 수 없습니다' }, 404)
+    return c.json({ doctor })
+  } catch (e: any) {
+    return c.json({ error: '의료진 조회 실패: ' + e.message }, 500)
+  }
+})
+
+// ══════════════════════════════════════════════════
+//  SYNC CHECK — verify admin data appears on public site
+// ══════════════════════════════════════════════════
+app.get('/api/admin/sync-check', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const [pubBlogs, adminBlogs, pubCases, adminCases, pubNotices, adminNotices, pubDoctors, adminDoctors] = await Promise.all([
+      db.prepare('SELECT COUNT(*) as count FROM blog_posts WHERE is_published = 1').first() as Promise<any>,
+      db.prepare('SELECT COUNT(*) as count FROM blog_posts').first() as Promise<any>,
+      db.prepare('SELECT COUNT(*) as count FROM before_after WHERE is_published = 1').first() as Promise<any>,
+      db.prepare('SELECT COUNT(*) as count FROM before_after').first() as Promise<any>,
+      db.prepare('SELECT COUNT(*) as count FROM notices WHERE is_published = 1').first() as Promise<any>,
+      db.prepare('SELECT COUNT(*) as count FROM notices').first() as Promise<any>,
+      db.prepare('SELECT COUNT(*) as count FROM doctors WHERE is_active = 1').first() as Promise<any>,
+      db.prepare('SELECT COUNT(*) as count FROM doctors').first() as Promise<any>,
+    ])
+    return c.json({
+      sync: {
+        blog: { published: pubBlogs?.count || 0, total: adminBlogs?.count || 0 },
+        before_after: { published: pubCases?.count || 0, total: adminCases?.count || 0 },
+        notices: { published: pubNotices?.count || 0, total: adminNotices?.count || 0 },
+        doctors: { active: pubDoctors?.count || 0, total: adminDoctors?.count || 0 },
+      },
+      timestamp: new Date().toISOString()
+    })
+  } catch (e: any) {
+    return c.json({ error: '동기화 확인 실패: ' + e.message }, 500)
+  }
+})
+
+// ══════════════════════════════════════════════════
 //  HEALTH CHECK
 // ══════════════════════════════════════════════════
 app.get('/api/health', async (c) => {
-  return c.json({ status: 'ok', timestamp: new Date().toISOString(), version: '2.0.0' })
+  return c.json({ status: 'ok', timestamp: new Date().toISOString(), version: '2.1.0' })
 })
 
 // ══════════════════════════════════════════════════
