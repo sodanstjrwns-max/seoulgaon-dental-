@@ -220,17 +220,17 @@
 
 <!-- ========================================
      2. ORIGIN — 왜 이 치과를 열었는가
-     메인 페이지에는 없는 이야기. 수련 시절의 구체적 경험.
+     봉직의 시절의 구체적 경험.
      ======================================== -->
 <section class="ph-origin ph-sec-wide">
   <div class="ph-origin-inner">
     <span class="ph-label">Why We Exist</span>
-    <h2 class="ph-title">수련 시절,<br>한 환자분이 하신 <em class="gold">말</em>.</h2>
+    <h2 class="ph-title">봉직의 시절,<br>한 환자분이 하신 <em class="gold">말</em>.</h2>
 
     <div class="ph-origin-grid">
       <div class="ph-origin-text">
         <p data-reveal>
-          대학병원 수련 시절, 진료가 끝난 후 한 어르신이 조심스럽게 물으셨습니다.
+          봉직의 시절, 진료가 끝난 후 한 어르신이 조심스럽게 물으셨습니다.
         </p>
         <div class="origin-highlight" data-reveal>
           "선생님, 제가 방금 무슨 치료 받은 건가요?"
@@ -609,37 +609,48 @@ window.addEventListener('DOMContentLoaded', () => {
 
   /* ===== Scroll reveal — individual elements ===== */
   gsap.utils.toArray('[data-reveal]').forEach(el => {
-    gsap.from(el, {
-      scrollTrigger:{trigger:el, start:'top 88%', once:true},
-      opacity:0, y:35, duration:.8, ease:'power3.out'
+    gsap.set(el, {opacity:0, y:30});
+    ScrollTrigger.create({
+      trigger:el, start:'top 92%', once:true,
+      onEnter: () => gsap.to(el, {opacity:1, y:0, duration:.7, ease:'power3.out'})
     });
   });
 
   /* ===== For-you cards stagger ===== */
-  gsap.from('.ph-for-card', {
-    scrollTrigger:{trigger:'.ph-for-grid', start:'top 82%', once:true},
-    opacity:0, y:40, stagger:.1, duration:.6, ease:'power3.out'
+  const forCards = gsap.utils.toArray('.ph-for-card');
+  forCards.forEach(c => gsap.set(c, {opacity:0, y:35}));
+  ScrollTrigger.create({
+    trigger:'.ph-for-grid', start:'top 88%', once:true,
+    onEnter: () => gsap.to(forCards, {opacity:1, y:0, stagger:.08, duration:.6, ease:'power3.out'})
   });
 
   /* ===== Promise items stagger ===== */
-  gsap.from('.ph-pm-item', {
-    scrollTrigger:{trigger:'.ph-promise-list', start:'top 82%', once:true},
-    opacity:0, y:30, stagger:.12, duration:.7, ease:'power3.out'
+  const pmItems = gsap.utils.toArray('.ph-pm-item');
+  pmItems.forEach(c => gsap.set(c, {opacity:0, y:25}));
+  ScrollTrigger.create({
+    trigger:'.ph-promise-list', start:'top 88%', once:true,
+    onEnter: () => gsap.to(pmItems, {opacity:1, y:0, stagger:.1, duration:.6, ease:'power3.out'})
   });
 
   /* ===== Consult process steps stagger ===== */
-  gsap.from('.ph-cp-step', {
-    scrollTrigger:{trigger:'.ph-consult-process', start:'top 82%', once:true},
-    opacity:0, y:25, stagger:.1, duration:.6, ease:'power3.out'
+  const cpSteps = gsap.utils.toArray('.ph-cp-step');
+  cpSteps.forEach(c => gsap.set(c, {opacity:0, y:20}));
+  ScrollTrigger.create({
+    trigger:'.ph-consult-process', start:'top 88%', once:true,
+    onEnter: () => gsap.to(cpSteps, {opacity:1, y:0, stagger:.08, duration:.5, ease:'power3.out'})
   });
 
-  /* ===== Section fade-ins ===== */
+  /* ===== Section fade-ins (safe pattern) ===== */
   gsap.utils.toArray('.ph-turning, .ph-consult, .ph-story, .ph-closing, .ph-cta').forEach(sec => {
-    gsap.from(sec, {
-      scrollTrigger:{trigger:sec, start:'top 85%', once:true},
-      opacity:0, y:40, duration:.8, ease:'power3.out'
+    gsap.set(sec, {opacity:0, y:35});
+    ScrollTrigger.create({
+      trigger:sec, start:'top 90%', once:true,
+      onEnter: () => gsap.to(sec, {opacity:1, y:0, duration:.7, ease:'power3.out'})
     });
   });
+
+  /* ===== Refresh ScrollTrigger after all images load ===== */
+  window.addEventListener('load', () => ScrollTrigger.refresh());
 
   /* ===== Nav stuck ===== */
   window.addEventListener('scroll', () => {
