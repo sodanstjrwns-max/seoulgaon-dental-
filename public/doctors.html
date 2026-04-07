@@ -61,7 +61,7 @@
 /* ===== CREDENTIALS ===== */
 .dir-credentials{padding:clamp(4rem,8vh,7rem) clamp(1.5rem,4vw,6rem);max-width:1000px;margin:0 auto;border-top:1px solid var(--line,rgba(191,164,106,.1))}
 .dir-cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;margin-top:2rem}
-.dir-cred-block h3{font-family:var(--ff-en,'Bebas Neue');font-size:.8rem;letter-spacing:3px;color:var(--gold,#BFA46A);text-transform:uppercase;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line,rgba(191,164,106,.1))}
+.dir-cred-block h4{font-family:var(--ff-en,'Bebas Neue');font-size:.8rem;letter-spacing:3px;color:var(--gold,#BFA46A);text-transform:uppercase;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line,rgba(191,164,106,.1))}
 .dir-cred-list{list-style:none;padding:0}
 .dir-cred-list li{padding:.55rem 0;font-size:.88rem;color:var(--stone-l,#AFA79D);border-bottom:1px solid rgba(191,164,106,.04);display:flex;align-items:flex-start;gap:.5rem;line-height:1.5}
 .dir-cred-list li::before{content:'✦';color:var(--gold,#BFA46A);font-size:.55rem;margin-top:.4rem;flex-shrink:0}
@@ -112,7 +112,7 @@
 .cho-accent .dir-philo-card:hover{border-color:var(--accent)}
 .cho-accent .dir-philo-card .num{color:var(--accent)}
 .cho-accent .dir-philo-card .inner-voice{color:var(--accent)}
-.cho-accent .dir-cred-block h3{color:var(--accent)}
+.cho-accent .dir-cred-block h4{color:var(--accent)}
 .cho-accent .dir-cred-list li::before{color:var(--accent)}
 .cho-accent .dir-origin p em{color:var(--accent)}
 .cho-accent .dir-personal-text em{color:var(--accent)}
@@ -161,6 +161,49 @@
   .dir-philo-cards{grid-template-columns:1fr}
 }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "서울가온치과 의료진 소개",
+  "description": "현진호 대표원장과 조은비 원장. 서울대 출신 전문의 두 분이 직접 진료합니다.",
+  "url": "https://www.seoulgaon.com/doctors.html",
+  "mainEntity": [
+    {
+      "@type": "Physician",
+      "name": "현진호",
+      "jobTitle": "대표원장",
+      "description": "서울대학교 치의학과 수석 졸업. 통합치의학과 전문의. 임플란트·심미치료 전문. 오스템 임플란트 증례 금상.",
+      "medicalSpecialty": ["Implantology", "Cosmetic Dentistry"],
+      "alumniOf": [
+        {"@type": "EducationalOrganization", "name": "서울대학교 치의학과"},
+        {"@type": "EducationalOrganization", "name": "서울대학교 치의학대학원"}
+      ],
+      "memberOf": [
+        {"@type": "Organization", "name": "대한치과보철학회"},
+        {"@type": "Organization", "name": "대한치과보존학회"}
+      ],
+      "worksFor": {"@type": "Dentist", "name": "서울가온치과의원", "url": "https://www.seoulgaon.com"}
+    },
+    {
+      "@type": "Physician",
+      "name": "조은비",
+      "jobTitle": "원장 · 치과보존과 전문의",
+      "description": "서울대학교 치의학과 우등 졸업. 서울대 치의학대학원 박사 수료. 치과보존과 전문의 · 통합치의학과 전문의. 자연치아 보존 전문.",
+      "medicalSpecialty": ["Endodontics", "Conservative Dentistry"],
+      "alumniOf": [
+        {"@type": "EducationalOrganization", "name": "서울대학교 치의학과"},
+        {"@type": "EducationalOrganization", "name": "서울대학교 치의학대학원"}
+      ],
+      "memberOf": [
+        {"@type": "Organization", "name": "대한치과보존학회"},
+        {"@type": "Organization", "name": "대한근관치료학회"}
+      ],
+      "worksFor": {"@type": "Dentist", "name": "서울가온치과의원", "url": "https://www.seoulgaon.com"}
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -254,7 +297,7 @@
   <h3 class="dir-origin-title">학력 · 경력 · 자격</h3>
   <div class="dir-cred-grid">
     <div class="dir-cred-block">
-      <h3>Education & Certification</h3>
+      <h4>Education & Certification</h4>
       <ul class="dir-cred-list">
         <li><strong>서울대학교 치의학과</strong> 수석 졸업</li>
         <li>서울대학교 치의학대학원 <strong>석사</strong></li>
@@ -264,7 +307,7 @@
       </ul>
     </div>
     <div class="dir-cred-block">
-      <h3>Career</h3>
+      <h4>Career</h4>
       <ul class="dir-cred-list">
         <li>서울대학교 치과병원 근무</li>
         <li><strong>강남365치과</strong> 대표원장</li>
@@ -274,7 +317,7 @@
       </ul>
     </div>
     <div class="dir-cred-block">
-      <h3>Awards & Specialties</h3>
+      <h4>Awards & Specialties</h4>
       <ul class="dir-cred-list">
         <li><strong>오스템 임플란트 증례 금상</strong> 수상</li>
         <li>가이드 임플란트 100% 시행</li>
@@ -284,7 +327,7 @@
       </ul>
     </div>
     <div class="dir-cred-block">
-      <h3>Memberships</h3>
+      <h4>Memberships</h4>
       <ul class="dir-cred-list">
         <li>대한치과보철학회</li>
         <li>대한치과보존학회</li>
@@ -502,14 +545,14 @@
   <h3 class="dir-origin-title">학력 · 경력 · 자격</h3>
   <div class="dir-cred-grid">
     <div class="dir-cred-block">
-      <h3>Education</h3>
+      <h4>Education</h4>
       <ul class="dir-cred-list">
         <li><strong>서울대학교 치의학과</strong> 우등 졸업</li>
         <li>서울대학교 치의학대학원 <strong>박사 수료</strong></li>
       </ul>
     </div>
     <div class="dir-cred-block">
-      <h3>Certification</h3>
+      <h4>Certification</h4>
       <ul class="dir-cred-list">
         <li>보건복지부 인증 <strong>치과보존과 전문의</strong></li>
         <li>보건복지부 인증 <strong>통합치의학과 전문의</strong></li>
@@ -517,14 +560,14 @@
       </ul>
     </div>
     <div class="dir-cred-block">
-      <h3>Career</h3>
+      <h4>Career</h4>
       <ul class="dir-cred-list">
         <li>前 서울대학교 치과병원 <strong>치과보존과 전공의</strong> (4년)</li>
         <li><strong>서울가온치과</strong> 원장 (현)</li>
       </ul>
     </div>
     <div class="dir-cred-block">
-      <h3>Memberships</h3>
+      <h4>Memberships</h4>
       <ul class="dir-cred-list">
         <li>대한치과보존학회 정회원</li>
         <li>대한근관치료학회 정회원</li>
