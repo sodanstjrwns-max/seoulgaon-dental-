@@ -151,7 +151,7 @@ function makeDBCard(p){
   const thumb = p.thumbnail_url || null;
   const drBadge = p.doctor_name ? `<div class="blog-card-doctor" onclick="event.stopPropagation();location.href='doctors.html?id=${p.doctor_id}'">${p.doctor_photo?'<img src="'+p.doctor_photo+'" alt="">':'<i class="fas fa-user-md"></i>'} ${p.doctor_name}</div>` : '';
   return `<a href="blog-post.html?id=${p.id}" class="blog-card" data-category="${cat}" data-tilt style="text-decoration:none;color:inherit;display:block">
-    ${thumb ? '<div style="width:100%;height:200px;overflow:hidden;border-radius:12px 12px 0 0"><img src="'+thumb+'" style="width:100%;height:100%;object-fit:cover" alt=""></div>' : ''}
+    ${thumb ? '<div style="width:100%;height:200px;overflow:hidden;border-radius:12px 12px 0 0"><img src="'+thumb+'" style="width:100%;height:100%;object-fit:cover" alt="" loading="lazy"></div>' : ''}
     <div class="blog-card-body">
       <div class="blog-card-tag">${tag}</div>
       <div class="blog-card-date">${date}</div>

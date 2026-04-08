@@ -105,8 +105,12 @@
   .page-hero h1{font-size:clamp(1.6rem,7vw,2.2rem)}
   .page-hero-sub{font-size:.85rem}
   .page-hero-bg{font-size:clamp(6rem,22vw,12rem)}
-  .page-tabs{gap:.5rem;padding:0 .75rem}
-  .page-tab{padding:.4rem 1rem;font-size:.75rem;min-height:36px;display:inline-flex;align-items:center}
+  .page-tabs{gap:.5rem;padding:0 .75rem;overflow-x:auto;flex-wrap:nowrap;justify-content:flex-start;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .page-tabs::-webkit-scrollbar{display:none}
+  .page-tab{padding:.4rem 1rem;font-size:.75rem;min-height:44px;display:inline-flex;align-items:center;flex-shrink:0}
+  /* Touch-friendly targets */
+  .tx-cta{min-height:48px}
+  .blog-card-link{min-height:44px;display:inline-flex;align-items:center}
   /* Blog cards mobile */
   .blog-card-body{padding:1.25rem}
   .blog-card h3{font-size:1rem}
@@ -156,4 +160,9 @@
   .ba-placeholder{height:140px;font-size:.78rem}
   .tx-sec-sub{font-size:.82rem}
   .tx-sec-title{font-size:clamp(1.3rem,5vw,1.8rem)}
+  /* Process step arrow on small screens */
+  .tx-step{min-width:auto}
+  .tx-step-num{font-size:1.3rem}
+  .tx-step h4{font-size:.82rem}
+  .tx-step p{font-size:.72rem}
 }

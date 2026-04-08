@@ -344,7 +344,7 @@ function makeDBCard(c, idx){
   if(imgs.length > 0){
     const cols = imgs.length >= 4 ? 'cols-4' : imgs.length === 3 ? 'cols-3' : imgs.length === 2 ? 'cols-2' : 'cols-1';
     imgHTML = `<div class="ba-card-images ${cols}">${imgs.map(i=>
-      `<div class="ba-img-wrap"><img src="${i.src}" alt="${i.label}"><div class="ba-img-label">${i.label}</div></div>`
+      `<div class="ba-img-wrap"><img src="${i.src}" alt="${i.label}" loading="lazy"><div class="ba-img-label">${i.label}</div></div>`
     ).join('')}</div>`;
   } else {
     imgHTML = '<div class="ba-placeholder">사진 없음</div>';

@@ -32,6 +32,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
 <link href="style.css" rel="stylesheet">
 <link href="pages.css" rel="stylesheet">
 <script type="application/ld+json">
@@ -164,7 +165,7 @@ function makeNoticeHTML(n, isDB, images){
   let imagesHTML = '';
   if (images && images.length > 0) {
     imagesHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:1rem">' +
-      images.map(img => `<img src="${img.image_url}" alt="${img.filename||''}" style="width:100%;border-radius:8px;cursor:pointer;aspect-ratio:4/3;object-fit:cover;transition:transform .3s" onclick="openNoticeImg(this.src)" onmouseenter="this.style.transform='scale(1.03)'" onmouseleave="this.style.transform='scale(1)'">`).join('') +
+      images.map(img => `<img src="${img.image_url}" alt="${img.filename||''}" loading="lazy" style="width:100%;border-radius:8px;cursor:pointer;aspect-ratio:4/3;object-fit:cover;transition:transform .3s" onclick="openNoticeImg(this.src)" onmouseenter="this.style.transform='scale(1.03)'" onmouseleave="this.style.transform='scale(1)'">`).join('') +
       '</div>';
   }
   
