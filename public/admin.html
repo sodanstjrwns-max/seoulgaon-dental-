@@ -254,6 +254,7 @@
       <a href="#" onclick="showPage('ba',this)"><i class="fas fa-images"></i>비포&애프터</a>
       <a href="#" onclick="showPage('notice',this)"><i class="fas fa-bullhorn"></i>공지사항</a>
       <a href="#" onclick="showPage('members',this)"><i class="fas fa-users"></i>회원관리</a>
+      <a href="#" onclick="showPage('enc',this)"><i class="fas fa-book-medical"></i>백과사전</a>
     </nav>
     <div class="side-bottom">
       <div class="side-user"><i class="fas fa-user-circle"></i><span id="user-name">관리자</span></div>
@@ -278,7 +279,8 @@
         <div class="stat-card"><div class="num" id="cnt-blog">0</div><div class="label">블로그 게시글</div><div class="sub" id="cnt-blog-pub">공개 0건</div></div>
         <div class="stat-card"><div class="num" id="cnt-ba">0</div><div class="label">비포&애프터</div><div class="sub" id="cnt-ba-pub">공개 0건</div></div>
         <div class="stat-card"><div class="num" id="cnt-notice">0</div><div class="label">공지사항</div><div class="sub" id="cnt-notice-pub">공개 0건</div></div>
-        <div class="stat-card" style="cursor:pointer" onclick="showPage('members',document.querySelector('.side-nav a:last-child'))"><div class="num" id="cnt-members">0</div><div class="label">회원</div><div class="sub" id="cnt-members-mkt">마케팅 동의 0명</div></div>
+        <div class="stat-card" style="cursor:pointer" onclick="showPage('members',document.querySelectorAll('.side-nav a')[4])"><div class="num" id="cnt-members">0</div><div class="label">회원</div><div class="sub" id="cnt-members-mkt">마케팅 동의 0명</div></div>
+        <div class="stat-card" style="cursor:pointer" onclick="showPage('enc',document.querySelectorAll('.side-nav a')[5])"><div class="num" id="cnt-enc">0</div><div class="label">백과사전</div><div class="sub" id="cnt-enc-pub">공개 0건</div></div>
       </div>
 
       <!-- Quick links to frontend -->
@@ -289,6 +291,7 @@
           <a href="/blog.html" target="_blank" class="quick-link"><i class="fas fa-pen-fancy"></i> 블로그</a>
           <a href="/before-after.html" target="_blank" class="quick-link"><i class="fas fa-images"></i> 비포&애프터</a>
           <a href="/notice.html" target="_blank" class="quick-link"><i class="fas fa-bullhorn"></i> 공지사항</a>
+          <a href="/encyclopedia.html" target="_blank" class="quick-link"><i class="fas fa-book-medical"></i> 백과사전</a>
           <a href="/doctors.html" target="_blank" class="quick-link"><i class="fas fa-user-md"></i> 의료진 소개</a>
         </div>
       </div>
@@ -502,6 +505,96 @@
       <div style="display:flex;justify-content:center;gap:.5rem;margin-top:1rem" id="member-pagination"></div>
     </div>
 
+    <!-- ENCYCLOPEDIA -->
+    <div id="page-enc" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">
+        <h1 class="page-title" style="margin-bottom:0">백과사전 관리</h1>
+        <a href="/encyclopedia.html" target="_blank" class="btn-sm preview"><i class="fas fa-external-link-alt"></i> 사이트에서 보기</a>
+      </div>
+      <p class="page-desc">치과 용어를 등록하면 백과사전 페이지에 즉시 반영됩니다. 지역 SEO/AEO 자동 적용.</p>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="showEncTab('write')">+ 용어 등록</button>
+        <button class="tab-btn" onclick="showEncTab('list')">.용어 목록</button>
+      </div>
+
+      <!-- Write/Edit form -->
+      <div id="enc-write" class="panel">
+        <input type="hidden" id="enc-edit-id">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div>
+            <label style="font-size:.75rem;color:#888;display:block;margin-bottom:.3rem">용어명 *</label>
+            <input type="text" id="enc-term" class="input" placeholder="예: 임플란트">
+          </div>
+          <div>
+            <label style="font-size:.75rem;color:#888;display:block;margin-bottom:.3rem">카테고리 *</label>
+            <select id="enc-category" class="input">
+              <option>임플란트</option><option>보철</option><option>보존</option><option>교정</option><option>예방</option><option>구강외과</option><option>일반</option><option>심미치료</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem">
+          <div>
+            <label style="font-size:.75rem;color:#888;display:block;margin-bottom:.3rem">Slug (URL용, 영문)</label>
+            <input type="text" id="enc-slug" class="input" placeholder="자동 생성">
+          </div>
+          <div>
+            <label style="font-size:.75rem;color:#888;display:block;margin-bottom:.3rem">관련 진료</label>
+            <input type="text" id="enc-treatment" class="input" placeholder="예: 임플란트">
+          </div>
+        </div>
+        <div style="margin-top:.75rem">
+          <label style="font-size:.75rem;color:#888;display:block;margin-bottom:.3rem">요약 *</label>
+          <textarea id="enc-summary" class="input" rows="2" placeholder="한 줄 설명"></textarea>
+        </div>
+        <div style="margin-top:.75rem">
+          <label style="font-size:.75rem;color:#888;display:block;margin-bottom:.3rem">본문 * (## 제목, - 목록 형식)</label>
+          <textarea id="enc-content" class="input" rows="10" placeholder="## 임플란트란?\n상실된 치아를 대체하는...\n## 과정\n- 1단계: ..."></textarea>
+        </div>
+        <!-- FAQ -->
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #333">
+          <label style="font-size:.8rem;font-weight:600;color:var(--gold);display:block;margin-bottom:.6rem"><i class="fas fa-question-circle" style="margin-right:4px"></i> 자주 묻는 질문 (FAQ) — AEO 최적화</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">
+            <input type="text" id="enc-faq-q1" class="input" placeholder="Q1. 질문">
+            <input type="text" id="enc-faq-a1" class="input" placeholder="A1. 답변">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">
+            <input type="text" id="enc-faq-q2" class="input" placeholder="Q2. 질문">
+            <input type="text" id="enc-faq-a2" class="input" placeholder="A2. 답변">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+            <input type="text" id="enc-faq-q3" class="input" placeholder="Q3. 질문">
+            <input type="text" id="enc-faq-a3" class="input" placeholder="A3. 답변">
+          </div>
+        </div>
+        <!-- SEO -->
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #333">
+          <label style="font-size:.8rem;font-weight:600;color:var(--gold);display:block;margin-bottom:.6rem"><i class="fas fa-search" style="margin-right:4px"></i> SEO 설정</label>
+          <input type="text" id="enc-seo-title" class="input" placeholder="SEO 타이틀 (예: 의정부 임플란트 — 임플란트란? | 서울가온치과)" style="margin-bottom:.5rem">
+          <input type="text" id="enc-seo-desc" class="input" placeholder="SEO 디스크립션" style="margin-bottom:.5rem">
+          <input type="text" id="enc-seo-kw" class="input" placeholder="SEO 키워드 (쉼표 구분, 예: 의정부임플란트,양주임플란트)">
+        </div>
+        <div style="display:flex;gap:.75rem;margin-top:1rem;align-items:center">
+          <label style="font-size:.8rem;color:#888;display:flex;align-items:center;gap:.4rem"><input type="checkbox" id="enc-published" checked> 공개</label>
+          <label style="font-size:.8rem;color:#888;display:flex;align-items:center;gap:.4rem">정렬순서 <input type="number" id="enc-sort" value="0" style="width:60px;padding:.3rem;background:var(--ink-3);border:1px solid #333;border-radius:4px;color:#fff;font-size:.8rem;text-align:center"></label>
+          <div style="flex:1"></div>
+          <button onclick="resetEncForm()" style="padding:.5rem 1rem;background:var(--ink-3);border:1px solid #555;border-radius:8px;color:#aaa;font-size:.82rem;cursor:pointer">초기화</button>
+          <button onclick="saveEncEntry()" id="enc-save-btn" style="padding:.5rem 1.5rem;background:var(--gold);border:none;border-radius:8px;color:var(--ink);font-weight:600;font-size:.85rem;cursor:pointer">등록</button>
+        </div>
+      </div>
+
+      <!-- List -->
+      <div id="enc-list" style="display:none">
+        <div style="display:flex;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center">
+          <div style="flex:1;min-width:200px;position:relative">
+            <i class="fas fa-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#666;font-size:.8rem"></i>
+            <input type="text" id="enc-list-search" placeholder="용어 검색" style="width:100%;padding:.6rem .8rem .6rem 2.2rem;background:var(--ink-3);border:1px solid #333;border-radius:8px;color:#fff;font-size:.85rem;outline:none" oninput="loadEncList()">
+          </div>
+          <span id="enc-list-count" style="font-size:.8rem;color:#888"></span>
+        </div>
+        <div id="enc-list-body"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -572,7 +665,7 @@ async function checkAuth(){
 
 // ══════ NAV ══════
 function showPage(p,el){
-  ['home','blog','ba','notice','members'].forEach(x=>{const e=document.getElementById('page-'+x);if(e)e.style.display=x===p?'block':'none'});
+  ['home','blog','ba','notice','members','enc'].forEach(x=>{const e=document.getElementById('page-'+x);if(e)e.style.display=x===p?'block':'none'});
   document.querySelectorAll('.side-nav a').forEach(a=>a.classList.remove('active'));
   if(el)el.classList.add('active');
   // Close mobile sidebar
@@ -582,6 +675,7 @@ function showPage(p,el){
   if(p==='ba'){loadBAList();loadDoctorsForSelect()}
   if(p==='notice')loadNoticeList();
   if(p==='members')loadMemberList();
+  if(p==='enc')loadEncList();
 }
 
 // ══════ SYNC CHECK ══════
@@ -615,6 +709,11 @@ async function loadDashboard(){
     document.getElementById('cnt-ba').textContent=d.cases||0;
     document.getElementById('cnt-notice').textContent=d.notices||0;
     document.getElementById('cnt-members').textContent=d.members||0;
+    document.getElementById('cnt-enc').textContent=d.encyclopedia||0;
+    // Fetch encyclopedia stats for published count
+    fetch('/api/admin/stats/encyclopedia',{headers:authHeaders()}).then(r=>r.json()).then(ed=>{
+      if(ed.published!==undefined)document.getElementById('cnt-enc-pub').textContent='공개 '+ed.published+'건';
+    }).catch(()=>{});
     // Recent activity
     let html='';
     const all=[];
@@ -1630,6 +1729,132 @@ async function exportMembers(){
     URL.revokeObjectURL(url);
     toast('CSV 파일 다운로드 완료');
   } catch(e){ toast('CSV 다운로드 실패',true); }
+}
+
+// ══════ ENCYCLOPEDIA (백과사전) ══════
+function showEncTab(tab){
+  document.getElementById('enc-write').style.display = tab==='write'?'block':'none';
+  document.getElementById('enc-list').style.display  = tab==='list'?'block':'none';
+  document.querySelectorAll('#page-enc .tab-btn').forEach((b,i)=>b.classList.toggle('active',i===(tab==='write'?0:1)));
+  if(tab==='list') loadEncList();
+}
+
+function resetEncForm(){
+  document.getElementById('enc-edit-id').value='';
+  ['enc-term','enc-slug','enc-treatment','enc-summary','enc-content',
+   'enc-faq-q1','enc-faq-a1','enc-faq-q2','enc-faq-a2','enc-faq-q3','enc-faq-a3',
+   'enc-seo-title','enc-seo-desc','enc-seo-kw'].forEach(id=>{document.getElementById(id).value=''});
+  document.getElementById('enc-category').value='임플란트';
+  document.getElementById('enc-published').checked=true;
+  document.getElementById('enc-sort').value='0';
+  document.getElementById('enc-save-btn').textContent='등록';
+}
+
+async function saveEncEntry(){
+  const btn=document.getElementById('enc-save-btn');
+  const editId=document.getElementById('enc-edit-id').value;
+  const term=document.getElementById('enc-term').value.trim();
+  const content=document.getElementById('enc-content').value.trim();
+  if(!term){toast('용어명을 입력해주세요',true);return}
+  if(!content){toast('본문을 입력해주세요',true);return}
+  
+  const body={
+    term, slug:document.getElementById('enc-slug').value.trim(),
+    category:document.getElementById('enc-category').value,
+    summary:document.getElementById('enc-summary').value.trim(),
+    content,
+    related_treatment:document.getElementById('enc-treatment').value.trim(),
+    faq_q1:document.getElementById('enc-faq-q1').value.trim(),
+    faq_a1:document.getElementById('enc-faq-a1').value.trim(),
+    faq_q2:document.getElementById('enc-faq-q2').value.trim(),
+    faq_a2:document.getElementById('enc-faq-a2').value.trim(),
+    faq_q3:document.getElementById('enc-faq-q3').value.trim(),
+    faq_a3:document.getElementById('enc-faq-a3').value.trim(),
+    seo_title:document.getElementById('enc-seo-title').value.trim(),
+    seo_description:document.getElementById('enc-seo-desc').value.trim(),
+    seo_keywords:document.getElementById('enc-seo-kw').value.trim(),
+    is_published:document.getElementById('enc-published').checked,
+    sort_order:parseInt(document.getElementById('enc-sort').value)||0
+  };
+
+  btn.disabled=true;btn.textContent='저장 중...';
+  try{
+    const url=editId?`/api/admin/encyclopedia/${editId}`:'/api/admin/encyclopedia';
+    const method=editId?'PUT':'POST';
+    const r=await fetch(url,{method,headers:authHeaders(),body:JSON.stringify(body)});
+    const d=await r.json();
+    if(!r.ok){toast(d.error||'저장 실패',true);return}
+    toast(editId?'수정 완료':'등록 완료');
+    resetEncForm();
+    loadEncList();
+    loadDashboard();
+  }catch(e){toast('저장 실패',true)}
+  finally{btn.disabled=false;btn.textContent=editId?'수정':'등록'}
+}
+
+async function loadEncList(){
+  try{
+    const d=await fetch('/api/admin/encyclopedia',{headers:authHeaders()}).then(r=>r.json());
+    if(d.error){toast(d.error,true);return}
+    const entries=d.entries||[];
+    const search=(document.getElementById('enc-list-search')?.value||'').toLowerCase();
+    const filtered=search?entries.filter(e=>e.term.toLowerCase().includes(search)||e.category.toLowerCase().includes(search)||(e.seo_keywords||'').toLowerCase().includes(search)):entries;
+    document.getElementById('enc-list-count').textContent='총 '+filtered.length+'개';
+    if(!filtered.length){
+      document.getElementById('enc-list-body').innerHTML='<div class="panel" style="text-align:center;color:#666;padding:2rem"><i class="fas fa-book-open" style="font-size:1.5rem;display:block;margin-bottom:.5rem"></i>등록된 용어가 없습니다</div>';
+      return;
+    }
+    document.getElementById('enc-list-body').innerHTML=filtered.map(e=>{
+      const pub=e.is_published?'<span style="color:#4ade80;font-size:.7rem">공개</span>':'<span style="color:#f87171;font-size:.7rem">비공개</span>';
+      return `<div class="panel" style="margin-bottom:.5rem;padding:.8rem 1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;cursor:pointer;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='#222'">
+        <span style="background:var(--gold);color:var(--ink);padding:2px 8px;border-radius:100px;font-size:.68rem;font-weight:600;white-space:nowrap">${esc(e.category)}</span>
+        <span style="font-weight:600;flex:1;min-width:100px">${esc(e.term)}</span>
+        <span style="font-size:.75rem;color:#888;flex:2;min-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.summary||'')}</span>
+        <span style="font-size:.7rem;color:#666;white-space:nowrap">조회 ${e.view_count||0}</span>
+        ${pub}
+        <button onclick="editEncEntry(${e.id})" style="background:none;border:1px solid #333;border-radius:4px;color:#ccc;font-size:.7rem;padding:3px 8px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='#333';this.style.color='#ccc'"><i class="fas fa-edit"></i></button>
+        <button onclick="deleteEncEntry(${e.id},'${esc(e.term)}')" style="background:none;border:1px solid #3a1515;border-radius:4px;color:#f87171;font-size:.7rem;padding:3px 8px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(248,113,113,.1)'" onmouseout="this.style.background='none'"><i class="fas fa-trash-alt"></i></button>
+      </div>`;
+    }).join('');
+  }catch(e){toast('백과사전 목록 로딩 실패',true)}
+}
+
+async function editEncEntry(id){
+  try{
+    const d=await fetch(`/api/admin/encyclopedia/${id}`,{headers:authHeaders()}).then(r=>r.json());
+    if(d.error){toast(d.error,true);return}
+    const e=d.entry;
+    document.getElementById('enc-edit-id').value=e.id;
+    document.getElementById('enc-term').value=e.term||'';
+    document.getElementById('enc-slug').value=e.slug||'';
+    document.getElementById('enc-category').value=e.category||'임플란트';
+    document.getElementById('enc-treatment').value=e.related_treatment||'';
+    document.getElementById('enc-summary').value=e.summary||'';
+    document.getElementById('enc-content').value=e.content||'';
+    document.getElementById('enc-faq-q1').value=e.faq_q1||'';
+    document.getElementById('enc-faq-a1').value=e.faq_a1||'';
+    document.getElementById('enc-faq-q2').value=e.faq_q2||'';
+    document.getElementById('enc-faq-a2').value=e.faq_a2||'';
+    document.getElementById('enc-faq-q3').value=e.faq_q3||'';
+    document.getElementById('enc-faq-a3').value=e.faq_a3||'';
+    document.getElementById('enc-seo-title').value=e.seo_title||'';
+    document.getElementById('enc-seo-desc').value=e.seo_description||'';
+    document.getElementById('enc-seo-kw').value=e.seo_keywords||'';
+    document.getElementById('enc-published').checked=!!e.is_published;
+    document.getElementById('enc-sort').value=e.sort_order||0;
+    document.getElementById('enc-save-btn').textContent='수정';
+    showEncTab('write');
+    document.getElementById('enc-term').scrollIntoView({behavior:'smooth'});
+  }catch(e){toast('용어 로딩 실패',true)}
+}
+
+async function deleteEncEntry(id,term){
+  if(!confirm(`"${term}" 용어를 삭제하시겠습니까?`))return;
+  try{
+    const r=await fetch(`/api/admin/encyclopedia/${id}`,{method:'DELETE',headers:authHeaders()});
+    if(!r.ok){toast('삭제 실패',true);return}
+    toast('삭제 완료');loadEncList();loadDashboard();
+  }catch(e){toast('삭제 실패',true)}
 }
 
 // ══════ INIT ══════

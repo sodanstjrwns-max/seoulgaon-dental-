@@ -215,6 +215,33 @@ async function initDB(db: D1Database) {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
     `CREATE INDEX IF NOT EXISTS idx_members_phone ON members(phone)`,
+    // Encyclopedia (백과사전)
+    `CREATE TABLE IF NOT EXISTS encyclopedia (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      term TEXT NOT NULL,
+      slug TEXT UNIQUE NOT NULL,
+      category TEXT DEFAULT '일반',
+      summary TEXT NOT NULL,
+      content TEXT NOT NULL,
+      faq_q1 TEXT DEFAULT '',
+      faq_a1 TEXT DEFAULT '',
+      faq_q2 TEXT DEFAULT '',
+      faq_a2 TEXT DEFAULT '',
+      faq_q3 TEXT DEFAULT '',
+      faq_a3 TEXT DEFAULT '',
+      related_treatment TEXT DEFAULT '',
+      seo_title TEXT DEFAULT '',
+      seo_description TEXT DEFAULT '',
+      seo_keywords TEXT DEFAULT '',
+      is_published INTEGER DEFAULT 1,
+      sort_order INTEGER DEFAULT 0,
+      view_count INTEGER DEFAULT 0,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_enc_published ON encyclopedia(is_published, sort_order)`,
+    `CREATE INDEX IF NOT EXISTS idx_enc_category ON encyclopedia(category)`,
+    `CREATE INDEX IF NOT EXISTS idx_enc_slug ON encyclopedia(slug)`,
   ]
   for (const sql of tables) {
     try { await db.prepare(sql).run() } catch (e: any) {
@@ -1246,13 +1273,14 @@ app.delete('/api/admin/notices/:id', auth, async (c) => {
 app.get('/api/admin/stats', auth, async (c) => {
   try {
     const db = c.env.DB
-    const [blogs, cases, notices, users, doctors, members] = await Promise.all([
+    const [blogs, cases, notices, users, doctors, members, encyclopedia] = await Promise.all([
       db.prepare('SELECT COUNT(*) as count FROM blog_posts').first() as Promise<any>,
       db.prepare('SELECT COUNT(*) as count FROM before_after').first() as Promise<any>,
       db.prepare('SELECT COUNT(*) as count FROM notices').first() as Promise<any>,
       db.prepare('SELECT COUNT(*) as count FROM users').first() as Promise<any>,
       db.prepare('SELECT COUNT(*) as count FROM doctors WHERE is_active = 1').first() as Promise<any>,
       db.prepare('SELECT COUNT(*) as count FROM members WHERE is_active = 1').first() as Promise<any>,
+      db.prepare('SELECT COUNT(*) as count FROM encyclopedia WHERE is_published = 1').first() as Promise<any>,
     ])
 
     // Recent activity
@@ -1266,6 +1294,7 @@ app.get('/api/admin/stats', auth, async (c) => {
       notices: notices?.count || 0,
       users: users?.count || 0,
       members: members?.count || 0,
+      encyclopedia: encyclopedia?.count || 0,
       recent: {
         blogs: recentBlogs.results || [],
         cases: recentCases.results || [],
@@ -1323,10 +1352,162 @@ app.get('/api/admin/sync-check', auth, async (c) => {
 })
 
 // ══════════════════════════════════════════════════
+//  ENCYCLOPEDIA (치과 백과사전) — PUBLIC API
+// ══════════════════════════════════════════════════
+
+// 지역 키워드 목록 (SEO/AEO 용)
+const LOCAL_AREAS = [
+  '의정부','의정부시','용현동','탑석역','탑석','민락동','금오동','호원동',
+  '녹양동','가능동','의정부역','회룡','회룡역','장암','장암역','송산동',
+  '양주','양주시','동두천','남양주','포천','구리','노원','노원구','도봉','도봉구'
+]
+
+// Public: 전체 목록 (카테고리 필터, 검색)
+app.get('/api/encyclopedia', async (c) => {
+  try {
+    const db = c.env.DB
+    const category = c.req.query('category')
+    const search = c.req.query('search')
+    let where = ['is_published = 1']
+    let binds: any[] = []
+    if (category && category !== 'all') {
+      where.push('category = ?')
+      binds.push(category)
+    }
+    if (search) {
+      where.push('(term LIKE ? OR summary LIKE ? OR content LIKE ? OR seo_keywords LIKE ?)')
+      const s = `%${search}%`
+      binds.push(s, s, s, s)
+    }
+    const sql = `SELECT id, term, slug, category, summary, related_treatment, seo_title, seo_description, view_count
+      FROM encyclopedia WHERE ${where.join(' AND ')} ORDER BY sort_order ASC, term ASC`
+    const result = await runQuery(db, sql, binds)
+    return c.json({ entries: result.results || [], areas: LOCAL_AREAS })
+  } catch (e: any) {
+    return c.json({ error: e.message }, 500)
+  }
+})
+
+// Public: 단일 용어 상세 (slug 기반 — SEO-friendly URL)
+app.get('/api/encyclopedia/:slug', async (c) => {
+  try {
+    const db = c.env.DB
+    const slug = c.req.param('slug')
+    const entry: any = await db.prepare(
+      'SELECT * FROM encyclopedia WHERE slug = ? AND is_published = 1'
+    ).bind(slug).first()
+    if (!entry) return c.json({ error: '해당 용어를 찾을 수 없습니다' }, 404)
+    // view count++
+    await db.prepare('UPDATE encyclopedia SET view_count = view_count + 1 WHERE id = ?').bind(entry.id).run()
+    // 관련 용어 추천 (같은 카테고리)
+    const related = await db.prepare(
+      'SELECT id, term, slug, summary FROM encyclopedia WHERE category = ? AND id != ? AND is_published = 1 ORDER BY RANDOM() LIMIT 4'
+    ).bind(entry.category, entry.id).all()
+    return c.json({ entry, related: related.results || [], areas: LOCAL_AREAS })
+  } catch (e: any) {
+    return c.json({ error: e.message }, 500)
+  }
+})
+
+// ══════════════════════════════════════════════════
+//  ENCYCLOPEDIA — ADMIN API
+// ══════════════════════════════════════════════════
+
+app.post('/api/admin/encyclopedia', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const d = await c.req.json<any>()
+    if (!d.term?.trim()) return c.json({ error: '용어명을 입력해주세요' }, 400)
+    if (!d.content?.trim()) return c.json({ error: '본문을 입력해주세요' }, 400)
+    const slug = d.slug?.trim() || d.term.trim().toLowerCase().replace(/[^가-힣a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    const exists = await db.prepare('SELECT id FROM encyclopedia WHERE slug = ?').bind(slug).first()
+    if (exists) return c.json({ error: '이미 존재하는 slug입니다' }, 409)
+    const result = await db.prepare(
+      `INSERT INTO encyclopedia (term, slug, category, summary, content, faq_q1, faq_a1, faq_q2, faq_a2, faq_q3, faq_a3, related_treatment, seo_title, seo_description, seo_keywords, is_published, sort_order)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(
+      d.term.trim(), slug, d.category || '일반', d.summary || '', d.content,
+      d.faq_q1 || '', d.faq_a1 || '', d.faq_q2 || '', d.faq_a2 || '', d.faq_q3 || '', d.faq_a3 || '',
+      d.related_treatment || '', d.seo_title || '', d.seo_description || '', d.seo_keywords || '',
+      d.is_published !== false ? 1 : 0, d.sort_order || 0
+    ).run()
+    return c.json({ id: result.meta.last_row_id, slug }, 201)
+  } catch (e: any) {
+    return c.json({ error: e.message }, 500)
+  }
+})
+
+app.put('/api/admin/encyclopedia/:id', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const id = c.req.param('id')
+    const d = await c.req.json<any>()
+    await db.prepare(
+      `UPDATE encyclopedia SET term=?, slug=?, category=?, summary=?, content=?, faq_q1=?, faq_a1=?, faq_q2=?, faq_a2=?, faq_q3=?, faq_a3=?,
+       related_treatment=?, seo_title=?, seo_description=?, seo_keywords=?, is_published=?, sort_order=?, updated_at=CURRENT_TIMESTAMP WHERE id=?`
+    ).bind(
+      d.term, d.slug, d.category, d.summary, d.content,
+      d.faq_q1 || '', d.faq_a1 || '', d.faq_q2 || '', d.faq_a2 || '', d.faq_q3 || '', d.faq_a3 || '',
+      d.related_treatment || '', d.seo_title || '', d.seo_description || '', d.seo_keywords || '',
+      d.is_published ? 1 : 0, d.sort_order || 0, id
+    ).run()
+    return c.json({ success: true })
+  } catch (e: any) {
+    return c.json({ error: e.message }, 500)
+  }
+})
+
+app.get('/api/admin/encyclopedia', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const result = await db.prepare('SELECT * FROM encyclopedia ORDER BY sort_order ASC, term ASC').all()
+    return c.json({ entries: result.results || [] })
+  } catch (e: any) {
+    return c.json({ error: e.message }, 500)
+  }
+})
+
+app.get('/api/admin/encyclopedia/:id', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const id = c.req.param('id')
+    const entry = await db.prepare('SELECT * FROM encyclopedia WHERE id = ?').bind(id).first()
+    if (!entry) return c.json({ error: '찾을 수 없습니다' }, 404)
+    return c.json({ entry })
+  } catch (e: any) {
+    return c.json({ error: e.message }, 500)
+  }
+})
+
+app.delete('/api/admin/encyclopedia/:id', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const id = c.req.param('id')
+    await db.prepare('DELETE FROM encyclopedia WHERE id = ?').bind(id).run()
+    return c.json({ success: true })
+  } catch (e: any) {
+    return c.json({ error: e.message }, 500)
+  }
+})
+
+// Dashboard stats에 encyclopedia 추가
+app.get('/api/admin/stats/encyclopedia', auth, async (c) => {
+  try {
+    const db = c.env.DB
+    const total = await db.prepare('SELECT COUNT(*) as count FROM encyclopedia').first() as any
+    const published = await db.prepare('SELECT COUNT(*) as count FROM encyclopedia WHERE is_published = 1').first() as any
+    const cats = await db.prepare('SELECT category, COUNT(*) as count FROM encyclopedia GROUP BY category ORDER BY count DESC').all()
+    return c.json({ total: total?.count || 0, published: published?.count || 0, categories: cats.results || [] })
+  } catch (e: any) {
+    return c.json({ error: e.message }, 500)
+  }
+})
+
+// ══════════════════════════════════════════════════
 //  HEALTH CHECK
 // ══════════════════════════════════════════════════
 app.get('/api/health', async (c) => {
-  return c.json({ status: 'ok', timestamp: new Date().toISOString(), version: '2.1.0' })
+  return c.json({ status: 'ok', timestamp: new Date().toISOString(), version: '2.2.0' })
 })
 
 // ══════════════════════════════════════════════════

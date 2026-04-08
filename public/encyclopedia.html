@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<title>치과 백과사전 | 서울가온치과 — 의정부 치과 용어 가이드</title>
+<meta name="description" content="임플란트, 신경치료, 크라운, 스케일링 등 치과 용어를 쉽게 설명합니다. 의정부·양주·남양주·노원 주민을 위한 서울가온치과 치과 백과사전.">
+<meta name="keywords" content="치과백과사전,치과용어,임플란트뜻,신경치료란,의정부치과,의정부임플란트,탑석역치과,양주치과,남양주치과,노원치과,서울가온치과">
+<meta name="robots" content="index, follow">
+<meta name="author" content="서울가온치과의원">
+<meta name="geo.region" content="KR-41">
+<meta name="geo.placename" content="의정부시">
+<link rel="canonical" href="https://www.seoulgaon.com/encyclopedia.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="서울가온치과">
+<meta property="og:title" content="치과 백과사전 | 서울가온치과 — 의정부 치과 용어 가이드">
+<meta property="og:description" content="임플란트, 신경치료, 크라운 등 치과 용어를 쉽게 설명합니다. 의정부·양주·남양주 주민을 위한 치과 지식 가이드.">
+<meta property="og:url" content="https://www.seoulgaon.com/encyclopedia.html">
+<meta property="og:image" content="https://www.seoulgaon.com/images/og-encyclopedia.jpg">
+<meta property="og:locale" content="ko_KR">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="치과 백과사전 | 서울가온치과">
+<meta name="twitter:description" content="치과 용어를 쉽게 설명합니다. 의정부·양주·남양주 주민을 위한 치과 지식 가이드.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<link href="pages.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+/* ===== Encyclopedia Page ===== */
+.enc-search-wrap{max-width:640px;margin:0 auto 2.5rem;position:relative}
+.enc-search{width:100%;background:var(--ink-3);border:1px solid var(--line);border-radius:100px;padding:.9rem 1.2rem .9rem 3rem;font-size:.95rem;color:var(--ivory);outline:none;transition:border-color .3s;font-family:var(--ff-body)}
+.enc-search:focus{border-color:var(--gold)}
+.enc-search::placeholder{color:var(--stone)}
+.enc-search-icon{position:absolute;left:1.2rem;top:50%;transform:translateY(-50%);color:var(--stone);font-size:1rem}
+.enc-count{text-align:center;font-size:.8rem;color:var(--stone);margin-bottom:2rem}
+.enc-count strong{color:var(--gold)}
+/* Grid */
+.enc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;padding:0 clamp(1rem,3vw,4rem)}
+.enc-card{background:var(--ink-3);border:1px solid var(--line);border-radius:14px;padding:1.8rem;transition:all .35s cubic-bezier(.4,0,.2,1);cursor:pointer;position:relative;overflow:hidden}
+.enc-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 40px rgba(191,164,106,.08)}
+.enc-card-cat{display:inline-block;font-size:.68rem;font-weight:600;letter-spacing:.05em;color:var(--ink);background:var(--gold);padding:.2rem .7rem;border-radius:100px;margin-bottom:.8rem}
+.enc-card h3{font-family:var(--ff-title);font-size:1.2rem;margin-bottom:.5rem;color:var(--ivory);line-height:1.3}
+.enc-card h3 .enc-term-en{font-family:var(--ff-en);font-size:.85rem;color:var(--stone-l);margin-left:.4rem;font-weight:400}
+.enc-card-summary{font-size:.84rem;color:var(--stone-l);line-height:1.65;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.enc-card-meta{display:flex;align-items:center;gap:.8rem;margin-top:1rem;font-size:.72rem;color:var(--stone)}
+.enc-card-meta i{color:var(--gold);font-size:.65rem}
+.enc-card-arrow{position:absolute;right:1.5rem;bottom:1.5rem;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;transition:all .3s;color:var(--stone)}
+.enc-card:hover .enc-card-arrow{border-color:var(--gold);color:var(--gold);background:rgba(191,164,106,.1)}
+
+/* Detail Modal */
+.enc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10000;display:none;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.enc-overlay.show{display:flex}
+.enc-detail{background:var(--ink-2);border:1px solid rgba(191,164,106,.15);border-radius:16px;max-width:760px;width:100%;margin-top:3rem;margin-bottom:3rem;overflow:hidden;animation:encSlideUp .4s ease}
+@keyframes encSlideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.enc-detail-header{padding:2rem 2.5rem;border-bottom:1px solid var(--line);position:relative}
+.enc-detail-header .enc-card-cat{font-size:.72rem}
+.enc-detail-header h2{font-family:var(--ff-title);font-size:1.6rem;margin:.6rem 0 .3rem;color:var(--ivory)}
+.enc-detail-header .subtitle{font-size:.85rem;color:var(--stone-l)}
+.enc-detail-close{position:absolute;right:1.5rem;top:1.5rem;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--stone);cursor:pointer;transition:all .2s;background:none;font-size:1.1rem}
+.enc-detail-close:hover{border-color:var(--gold);color:var(--gold)}
+.enc-detail-body{padding:2rem 2.5rem}
+.enc-detail-body h4{font-family:var(--ff-title);font-size:1rem;color:var(--gold);margin:1.5rem 0 .6rem}
+.enc-detail-body h4:first-child{margin-top:0}
+.enc-detail-body p,.enc-detail-body li{font-size:.88rem;color:var(--stone-l);line-height:1.75}
+.enc-detail-body ul{padding-left:1.2rem;margin-bottom:1rem}
+.enc-detail-body ul li{margin-bottom:.3rem}
+/* FAQ in detail */
+.enc-faq{margin-top:1.5rem;border-top:1px solid var(--line);padding-top:1.5rem}
+.enc-faq-item{margin-bottom:1rem}
+.enc-faq-q{font-size:.88rem;font-weight:700;color:var(--ivory);margin-bottom:.3rem;display:flex;gap:.5rem}
+.enc-faq-q::before{content:'Q.';color:var(--gold);font-family:var(--ff-en);font-weight:700;min-width:24px}
+.enc-faq-a{font-size:.84rem;color:var(--stone-l);line-height:1.7;padding-left:30px}
+/* Related */
+.enc-related{padding:1.5rem 2.5rem;border-top:1px solid var(--line);background:var(--ink-3)}
+.enc-related h4{font-size:.85rem;color:var(--ivory);margin-bottom:.8rem;font-weight:600}
+.enc-related-tags{display:flex;flex-wrap:wrap;gap:.5rem}
+.enc-related-tag{padding:.4rem .9rem;border:1px solid var(--line);border-radius:100px;font-size:.78rem;color:var(--stone-l);cursor:pointer;transition:all .2s}
+.enc-related-tag:hover{border-color:var(--gold);color:var(--gold)}
+/* Local SEO bar */
+.enc-local-seo{padding:1rem 2.5rem;background:rgba(191,164,106,.04);border-top:1px solid var(--line);font-size:.72rem;color:var(--stone);line-height:1.8}
+.enc-local-seo strong{color:var(--stone-l)}
+
+/* Empty */
+.enc-empty{text-align:center;padding:4rem 2rem;color:var(--stone)}
+.enc-empty i{font-size:3rem;color:var(--stone);margin-bottom:1rem;display:block}
+
+@media(max-width:768px){
+  .enc-grid{grid-template-columns:1fr;padding:0 1rem}
+  .enc-detail-header,.enc-detail-body,.enc-related,.enc-local-seo{padding-left:1.5rem;padding-right:1.5rem}
+  .enc-detail-header h2{font-size:1.3rem}
+  .enc-detail{margin-top:1rem}
+  .enc-overlay{padding:1rem .5rem}
+}
+</style>
+<!-- JSON-LD: 메인 페이지 구조화 데이터 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "치과 백과사전",
+  "description": "임플란트, 신경치료, 크라운 등 치과 용어를 쉽게 설명하는 서울가온치과 백과사전",
+  "url": "https://www.seoulgaon.com/encyclopedia.html",
+  "publisher": {
+    "@type": "Dentist",
+    "name": "서울가온치과의원",
+    "url": "https://www.seoulgaon.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "용민로 22, 4층",
+      "addressLocality": "의정부시",
+      "addressRegion": "경기도",
+      "postalCode": "11651",
+      "addressCountry": "KR"
+    },
+    "telephone": "0507-1325-3377",
+    "areaServed": [
+      {"@type":"City","name":"의정부시"},
+      {"@type":"City","name":"양주시"},
+      {"@type":"City","name":"남양주시"},
+      {"@type":"City","name":"동두천시"},
+      {"@type":"City","name":"포천시"},
+      {"@type":"AdministrativeArea","name":"노원구"},
+      {"@type":"AdministrativeArea","name":"도봉구"}
+    ]
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"홈","item":"https://www.seoulgaon.com/"},
+      {"@type":"ListItem","position":2,"name":"치과 백과사전","item":"https://www.seoulgaon.com/encyclopedia.html"}
+    ]
+  }
+}
+</script>
+<!-- Dynamic JSON-LD for individual terms will be injected by JS -->
+<script id="dynamic-jsonld" type="application/ld+json">{}</script>
+</head>
+<body>
+<noscript><div style="background:#BFA46A;color:#050504;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
+<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--gold);color:var(--ink);font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--gold,#BFA46A);color:var(--ink,#050504);font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
+
+<div id="cur"><div id="cur-ring"></div><div id="cur-dot"></div></div>
+
+<nav id="nav" role="navigation" aria-label="메인 네비게이션">
+  <a href="/" class="nav-logo">서울가온치과<span>.</span></a>
+  <div class="nav-links">
+    <a href="philosophy.html">진료 철학</a>
+    <div class="nav-link-drop"><a href="treatments.html">진료 안내 ▾</a><div class="drop"><a href="treatments.html#implant">임플란트</a><a href="treatments.html#aesthetics">앞니 심미치료</a><a href="treatments.html#endodontics">신경치료</a><a href="treatments.html#general">일반진료</a></div></div>
+    <div class="nav-link-drop"><a href="#">커뮤니티 ▾</a><div class="drop"><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a><a href="encyclopedia.html">치과 백과사전</a></div></div>
+    <a href="doctors.html">의료진</a>
+    <div class="nav-link-drop"><a href="guide.html">안내 ▾</a><div class="drop"><a href="guide.html#visit">오시는 길</a><a href="guide.html#fee">수가 안내</a><a href="guide.html#faq">자주 묻는 질문</a></div></div>
+  </div>
+  <a href="tel:0507-1325-3377" class="nav-cta" data-magnet>예약 상담</a>
+  <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu"><a href="/">홈</a><a href="philosophy.html">진료 철학</a><a href="treatments.html">진료 안내</a><a href="doctors.html">의료진</a><a href="guide.html">안내</a><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a><a href="encyclopedia.html">치과 백과사전</a></div>
+
+<main id="main-content" role="main">
+<section class="page-hero">
+  <div class="page-hero-bg">ENCYCLOPEDIA</div>
+  <span class="page-hero-label">Dental Encyclopedia</span>
+  <h1>치과 백과사전</h1>
+  <p class="page-hero-sub">치과 용어, 이제 쉽게 이해하세요</p>
+  <div class="page-tabs" id="filter-tabs">
+    <button class="page-tab filter-btn active" data-filter="all">전체</button>
+    <button class="page-tab filter-btn" data-filter="임플란트">임플란트</button>
+    <button class="page-tab filter-btn" data-filter="보철">보철</button>
+    <button class="page-tab filter-btn" data-filter="보존">보존</button>
+    <button class="page-tab filter-btn" data-filter="교정">교정</button>
+    <button class="page-tab filter-btn" data-filter="예방">예방</button>
+    <button class="page-tab filter-btn" data-filter="구강외과">구강외과</button>
+    <button class="page-tab filter-btn" data-filter="일반">일반</button>
+  </div>
+</section>
+
+<section style="padding-top:1rem">
+  <div class="enc-search-wrap">
+    <i class="fas fa-search enc-search-icon"></i>
+    <input type="search" class="enc-search" id="enc-search" placeholder="궁금한 치과 용어를 검색하세요 (예: 임플란트, 크라운, 사랑니)" autocomplete="off">
+  </div>
+  <div class="enc-count" id="enc-count"></div>
+  <div class="enc-grid" id="enc-grid"></div>
+</section>
+</main>
+
+<footer>
+  <p class="ft-logo">서울가온치과<span style="color:var(--gold)">.</span></p>
+  <p class="ft-slogan">치과 치료가 좋은 기억이 될 수 있도록.</p>
+  <div style="font-size:.7rem;color:var(--stone);margin-bottom:.5rem;line-height:1.6">
+    <span>서울가온치과의원</span><span style="color:var(--line);margin:0 .4rem">|</span>
+    <span>대표 현진호</span><span style="color:var(--line);margin:0 .4rem">|</span>
+    <span>사업자등록번호 898-03-02537</span><span style="color:var(--line);margin:0 .4rem">|</span>
+    <span>경기도 의정부시 용민로 22, 4층(용현동)</span><span style="color:var(--line);margin:0 .4rem">|</span>
+    <span>Tel. 0507-1325-3377</span>
+  </div>
+  <p class="ft-copy">© 2022–2026 서울가온치과의원. All rights reserved.</p>
+</footer>
+
+<!-- Detail overlay -->
+<div class="enc-overlay" id="enc-overlay">
+  <div class="enc-detail" id="enc-detail"></div>
+</div>
+
+<script src="pages.js"></script>
+<script>
+const AREAS = [];
+let ALL_ENTRIES = [];
+
+// Load entries
+async function loadEntries(category, search) {
+  const params = new URLSearchParams();
+  if (category && category !== 'all') params.set('category', category);
+  if (search) params.set('search', search);
+  try {
+    const res = await fetch('/api/encyclopedia?' + params);
+    const data = await res.json();
+    ALL_ENTRIES = data.entries || [];
+    if (data.areas) AREAS.splice(0, AREAS.length, ...data.areas);
+    renderGrid(ALL_ENTRIES);
+  } catch(e) {
+    document.getElementById('enc-grid').innerHTML = '<div class="enc-empty"><i class="fas fa-exclamation-triangle"></i><p>데이터를 불러올 수 없습니다</p></div>';
+  }
+}
+
+function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+function renderGrid(entries) {
+  const grid = document.getElementById('enc-grid');
+  const count = document.getElementById('enc-count');
+  count.innerHTML = '총 <strong>' + entries.length + '</strong>개의 치과 용어';
+  if (!entries.length) {
+    grid.innerHTML = '<div class="enc-empty"><i class="fas fa-book-open"></i><p>검색 결과가 없습니다</p></div>';
+    return;
+  }
+  grid.innerHTML = entries.map(e => {
+    const treatment = e.related_treatment ? '<i class="fas fa-tooth"></i> ' + esc(e.related_treatment) : '';
+    return '<article class="enc-card" data-slug="' + esc(e.slug) + '" onclick="openDetail(\'' + esc(e.slug) + '\')">' +
+      '<span class="enc-card-cat">' + esc(e.category) + '</span>' +
+      '<h3>' + esc(e.term) + '</h3>' +
+      '<p class="enc-card-summary">' + esc(e.summary) + '</p>' +
+      '<div class="enc-card-meta">' + treatment +
+        (e.view_count > 0 ? '<span><i class="fas fa-eye"></i> ' + e.view_count + '</span>' : '') +
+      '</div>' +
+      '<div class="enc-card-arrow"><i class="fas fa-arrow-right"></i></div>' +
+    '</article>';
+  }).join('');
+}
+
+// Detail
+async function openDetail(slug) {
+  try {
+    const res = await fetch('/api/encyclopedia/' + encodeURIComponent(slug));
+    const data = await res.json();
+    if (!data.entry) return;
+    const e = data.entry;
+    const related = data.related || [];
+    const areas = data.areas || AREAS;
+
+    let faqHtml = '';
+    const faqs = [];
+    if(e.faq_q1&&e.faq_a1){faqs.push({q:e.faq_q1,a:e.faq_a1})}
+    if(e.faq_q2&&e.faq_a2){faqs.push({q:e.faq_q2,a:e.faq_a2})}
+    if(e.faq_q3&&e.faq_a3){faqs.push({q:e.faq_q3,a:e.faq_a3})}
+    if(faqs.length){
+      faqHtml = '<div class="enc-faq"><h4 style="margin-top:0"><i class="fas fa-question-circle" style="margin-right:.4rem"></i>자주 묻는 질문</h4>';
+      faqs.forEach(f => {
+        faqHtml += '<div class="enc-faq-item"><div class="enc-faq-q">' + esc(f.q) + '</div><div class="enc-faq-a">' + esc(f.a) + '</div></div>';
+      });
+      faqHtml += '</div>';
+    }
+
+    let relatedHtml = '';
+    if(related.length){
+      relatedHtml = '<div class="enc-related"><h4><i class="fas fa-link" style="margin-right:.4rem;color:var(--gold)"></i>관련 용어</h4><div class="enc-related-tags">';
+      related.forEach(r => {
+        relatedHtml += '<span class="enc-related-tag" onclick="event.stopPropagation();openDetail(\'' + esc(r.slug) + '\')">' + esc(r.term) + '</span>';
+      });
+      relatedHtml += '</div></div>';
+    }
+
+    // 지역 키워드 SEO 바
+    const localHtml = '<div class="enc-local-seo"><strong>' + esc(e.term) + ' 관련 지역 정보</strong> — ' +
+      areas.map(a => esc(a) + ' ' + esc(e.term)).join(' · ') + '</div>';
+
+    document.getElementById('enc-detail').innerHTML =
+      '<div class="enc-detail-header">' +
+        '<span class="enc-card-cat">' + esc(e.category) + '</span>' +
+        '<h2>' + esc(e.term) + '</h2>' +
+        (e.seo_description ? '<p class="subtitle">' + esc(e.seo_description) + '</p>' : '') +
+        '<button class="enc-detail-close" onclick="closeDetail()">&times;</button>' +
+      '</div>' +
+      '<div class="enc-detail-body">' +
+        formatContent(e.content) +
+        faqHtml +
+      '</div>' +
+      relatedHtml +
+      localHtml;
+
+    document.getElementById('enc-overlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+
+    // Dynamic JSON-LD (SEO + AEO: FAQPage + MedicalWebPage)
+    const jsonld = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "MedicalWebPage",
+          "name": e.seo_title || (e.term + ' — 서울가온치과 치과 백과사전'),
+          "description": e.seo_description || e.summary,
+          "url": "https://www.seoulgaon.com/encyclopedia.html?term=" + encodeURIComponent(e.slug),
+          "about": {"@type":"MedicalCondition","name":e.term},
+          "publisher": {"@type":"Dentist","name":"서울가온치과의원","telephone":"0507-1325-3377"},
+          "audience": {"@type":"PeopleAudience","suggestedMinAge":"18"}
+        }
+      ]
+    };
+    if(faqs.length){
+      jsonld["@graph"].push({
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(f => ({
+          "@type": "Question",
+          "name": f.q,
+          "acceptedAnswer": {"@type":"Answer","text": f.a}
+        }))
+      });
+    }
+    document.getElementById('dynamic-jsonld').textContent = JSON.stringify(jsonld);
+
+    // Update URL without reload (for sharing)
+    history.replaceState(null, '', '/encyclopedia.html?term=' + encodeURIComponent(e.slug));
+    // Update page title for SEO
+    document.title = (e.seo_title || e.term + ' — 치과 백과사전') + ' | 서울가온치과';
+
+  } catch(err) {
+    console.error(err);
+  }
+}
+
+function closeDetail() {
+  document.getElementById('enc-overlay').classList.remove('show');
+  document.body.style.overflow = '';
+  history.replaceState(null, '', '/encyclopedia.html');
+  document.title = '치과 백과사전 | 서울가온치과 — 의정부 치과 용어 가이드';
+  document.getElementById('dynamic-jsonld').textContent = '{}';
+}
+
+function formatContent(text) {
+  // Simple markdown-ish: lines starting with ## → h4, - → li
+  return text.split('\n').map(line => {
+    line = line.trim();
+    if (!line) return '';
+    if (line.startsWith('## ')) return '<h4>' + esc(line.slice(3)) + '</h4>';
+    if (line.startsWith('- ')) return '<li>' + esc(line.slice(2)) + '</li>';
+    return '<p>' + esc(line) + '</p>';
+  }).join('');
+}
+
+// Filter tabs
+document.getElementById('filter-tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadEntries(btn.dataset.filter, document.getElementById('enc-search').value.trim());
+});
+
+// Search with debounce
+let searchTimer;
+document.getElementById('enc-search').addEventListener('input', function() {
+  clearTimeout(searchTimer);
+  const val = this.value.trim();
+  const activeCat = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+  searchTimer = setTimeout(() => loadEntries(activeCat, val), 300);
+});
+
+// Overlay close
+document.getElementById('enc-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeDetail();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+
+// Init: check if opened with ?term=slug
+(function init() {
+  loadEntries('all', '');
+  const params = new URLSearchParams(location.search);
+  const term = params.get('term');
+  if (term) setTimeout(() => openDetail(term), 500);
+})();
+</script>
+</body>
+</html>

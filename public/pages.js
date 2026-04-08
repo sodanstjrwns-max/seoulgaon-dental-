@@ -322,8 +322,41 @@ window.__memberLogout = function(){
   location.reload();
 };
 
+/* ---------- 14. ENCYCLOPEDIA NAV LINK ---------- */
+function initEncyclopediaNav(){
+  /* 커뮤니티 드롭다운에 백과사전 링크 추가 */
+  document.querySelectorAll('.nav-link-drop .drop').forEach(drop=>{
+    const links = drop.querySelectorAll('a');
+    const hasBlog = Array.from(links).some(a=>a.href.includes('blog'));
+    const hasEnc  = Array.from(links).some(a=>a.href.includes('encyclopedia'));
+    if(hasBlog && !hasEnc){
+      const a = document.createElement('a');
+      a.href = 'encyclopedia.html';
+      a.textContent = '치과 백과사전';
+      drop.appendChild(a);
+    }
+  });
+  /* 모바일 메뉴에 백과사전 링크 추가 */
+  const mob = document.querySelector('.mob-menu');
+  if(mob){
+    const hasEnc = Array.from(mob.querySelectorAll('a')).some(a=>a.href.includes('encyclopedia'));
+    if(!hasEnc){
+      const notice = Array.from(mob.querySelectorAll('a')).find(a=>a.href.includes('notice'));
+      const a = document.createElement('a');
+      a.href = 'encyclopedia.html';
+      a.textContent = '치과 백과사전';
+      if(notice && notice.nextSibling){
+        mob.insertBefore(a, notice.nextSibling);
+      } else {
+        mob.appendChild(a);
+      }
+    }
+  }
+}
+
 /* ---------- INIT ---------- */
 document.addEventListener('DOMContentLoaded',()=>{
+  initEncyclopediaNav();
   initMemberNav();
   initCursor();
   initHamburger();
