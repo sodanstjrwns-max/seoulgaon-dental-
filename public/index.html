@@ -581,12 +581,31 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
   "serviceType": "치과 진료",
   "provider": {
     "@type": "Dentist",
-    "name": "서울가온치과의원"
+    "name": "서울가온치과의원",
+    "url": "https://www.seoulgaon.com",
+    "telephone": "0507-1325-3377",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "용민로 22, 골드자이프라자 4층",
+      "addressLocality": "의정부시",
+      "addressRegion": "경기도",
+      "postalCode": "11786",
+      "addressCountry": "KR"
+    },
+    "geo": {"@type": "GeoCoordinates", "latitude": 37.7388, "longitude": 127.0560},
+    "openingHoursSpecification": [
+      {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Friday"], "opens": "09:30", "closes": "18:30"},
+      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "09:30", "closes": "20:30"},
+      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:30", "closes": "14:00"}
+    ]
   },
-  "areaServed": {
-    "@type": "City",
-    "name": "의정부시"
-  },
+  "areaServed": [
+    {"@type": "City", "name": "의정부시"},
+    {"@type": "City", "name": "양주시"},
+    {"@type": "City", "name": "남양주시"},
+    {"@type": "AdministrativeArea", "name": "노원구"},
+    {"@type": "AdministrativeArea", "name": "도봉구"}
+  ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
     "name": "서울가온치과 진료 서비스",
@@ -630,14 +649,47 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "홈",
-      "item": "https://www.seoulgaon.com/"
-    }
+  "@type": "WebSite",
+  "name": "서울가온치과",
+  "alternateName": "Seoul Gaon Dental Clinic",
+  "url": "https://www.seoulgaon.com",
+  "inLanguage": "ko",
+  "publisher": {
+    "@type": "Dentist",
+    "name": "서울가온치과의원",
+    "url": "https://www.seoulgaon.com",
+    "telephone": "0507-1325-3377",
+    "address": {"@type": "PostalAddress", "streetAddress": "용민로 22, 골드자이프라자 4층", "addressLocality": "의정부시", "addressRegion": "경기도", "postalCode": "11786", "addressCountry": "KR"},
+    "geo": {"@type": "GeoCoordinates", "latitude": 37.7388, "longitude": 127.0560},
+    "openingHoursSpecification": [
+      {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Friday"], "opens": "09:30", "closes": "18:30"},
+      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "09:30", "closes": "20:30"},
+      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:30", "closes": "14:00"}
+    ]
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.seoulgaon.com/encyclopedia.html?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SiteNavigationElement",
+  "name": ["홈", "진료 철학", "진료 안내", "의료진", "블로그", "비포 애프터", "공지사항", "자주 묻는 질문", "내원 안내", "치과 백과사전"],
+  "url": [
+    "https://www.seoulgaon.com/",
+    "https://www.seoulgaon.com/philosophy.html",
+    "https://www.seoulgaon.com/treatments.html",
+    "https://www.seoulgaon.com/doctors.html",
+    "https://www.seoulgaon.com/blog.html",
+    "https://www.seoulgaon.com/before-after.html",
+    "https://www.seoulgaon.com/notice.html",
+    "https://www.seoulgaon.com/faq.html",
+    "https://www.seoulgaon.com/guide.html",
+    "https://www.seoulgaon.com/encyclopedia.html"
   ]
 }
 </script>
