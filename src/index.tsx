@@ -242,6 +242,11 @@ async function initDB(db: D1Database) {
     `CREATE INDEX IF NOT EXISTS idx_enc_published ON encyclopedia(is_published, sort_order)`,
     `CREATE INDEX IF NOT EXISTS idx_enc_category ON encyclopedia(category)`,
     `CREATE INDEX IF NOT EXISTS idx_enc_slug ON encyclopedia(slug)`,
+    // FAQ 4~5 columns (safe ALTER)
+    `ALTER TABLE encyclopedia ADD COLUMN faq_q4 TEXT DEFAULT ''`,
+    `ALTER TABLE encyclopedia ADD COLUMN faq_a4 TEXT DEFAULT ''`,
+    `ALTER TABLE encyclopedia ADD COLUMN faq_q5 TEXT DEFAULT ''`,
+    `ALTER TABLE encyclopedia ADD COLUMN faq_a5 TEXT DEFAULT ''`,
   ]
   for (const sql of tables) {
     try { await db.prepare(sql).run() } catch (e: any) {
@@ -1362,6 +1367,19 @@ const LOCAL_AREAS = [
   '양주','양주시','동두천','남양주','포천','구리','노원','노원구','도봉','도봉구'
 ]
 
+// Public: 카테고리 목록
+app.get('/api/encyclopedia/categories', async (c) => {
+  try {
+    const db = c.env.DB
+    const result = await db.prepare(
+      'SELECT category, COUNT(*) as count FROM encyclopedia WHERE is_published = 1 GROUP BY category ORDER BY MIN(sort_order) ASC'
+    ).all()
+    return c.json({ categories: result.results || [] })
+  } catch (e: any) {
+    return c.json({ error: e.message }, 500)
+  }
+})
+
 // Public: 전체 목록 (카테고리 필터, 검색)
 app.get('/api/encyclopedia', async (c) => {
   try {
@@ -1423,11 +1441,12 @@ app.post('/api/admin/encyclopedia', auth, async (c) => {
     const exists = await db.prepare('SELECT id FROM encyclopedia WHERE slug = ?').bind(slug).first()
     if (exists) return c.json({ error: '이미 존재하는 slug입니다' }, 409)
     const result = await db.prepare(
-      `INSERT INTO encyclopedia (term, slug, category, summary, content, faq_q1, faq_a1, faq_q2, faq_a2, faq_q3, faq_a3, related_treatment, seo_title, seo_description, seo_keywords, is_published, sort_order)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO encyclopedia (term, slug, category, summary, content, faq_q1, faq_a1, faq_q2, faq_a2, faq_q3, faq_a3, faq_q4, faq_a4, faq_q5, faq_a5, related_treatment, seo_title, seo_description, seo_keywords, is_published, sort_order)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
       d.term.trim(), slug, d.category || '일반', d.summary || '', d.content,
       d.faq_q1 || '', d.faq_a1 || '', d.faq_q2 || '', d.faq_a2 || '', d.faq_q3 || '', d.faq_a3 || '',
+      d.faq_q4 || '', d.faq_a4 || '', d.faq_q5 || '', d.faq_a5 || '',
       d.related_treatment || '', d.seo_title || '', d.seo_description || '', d.seo_keywords || '',
       d.is_published !== false ? 1 : 0, d.sort_order || 0
     ).run()
@@ -1444,10 +1463,12 @@ app.put('/api/admin/encyclopedia/:id', auth, async (c) => {
     const d = await c.req.json<any>()
     await db.prepare(
       `UPDATE encyclopedia SET term=?, slug=?, category=?, summary=?, content=?, faq_q1=?, faq_a1=?, faq_q2=?, faq_a2=?, faq_q3=?, faq_a3=?,
+       faq_q4=?, faq_a4=?, faq_q5=?, faq_a5=?,
        related_treatment=?, seo_title=?, seo_description=?, seo_keywords=?, is_published=?, sort_order=?, updated_at=CURRENT_TIMESTAMP WHERE id=?`
     ).bind(
       d.term, d.slug, d.category, d.summary, d.content,
       d.faq_q1 || '', d.faq_a1 || '', d.faq_q2 || '', d.faq_a2 || '', d.faq_q3 || '', d.faq_a3 || '',
+      d.faq_q4 || '', d.faq_a4 || '', d.faq_q5 || '', d.faq_a5 || '',
       d.related_treatment || '', d.seo_title || '', d.seo_description || '', d.seo_keywords || '',
       d.is_published ? 1 : 0, d.sort_order || 0, id
     ).run()

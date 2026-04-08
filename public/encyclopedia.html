@@ -172,13 +172,7 @@
   <p class="page-hero-sub">치과 용어, 이제 쉽게 이해하세요</p>
   <div class="page-tabs" id="filter-tabs">
     <button class="page-tab filter-btn active" data-filter="all">전체</button>
-    <button class="page-tab filter-btn" data-filter="임플란트">임플란트</button>
-    <button class="page-tab filter-btn" data-filter="보철">보철</button>
-    <button class="page-tab filter-btn" data-filter="보존">보존</button>
-    <button class="page-tab filter-btn" data-filter="교정">교정</button>
-    <button class="page-tab filter-btn" data-filter="예방">예방</button>
-    <button class="page-tab filter-btn" data-filter="구강외과">구강외과</button>
-    <button class="page-tab filter-btn" data-filter="일반">일반</button>
+    <!-- 동적으로 카테고리 버튼 추가됨 -->
   </div>
 </section>
 
@@ -270,6 +264,8 @@ async function openDetail(slug) {
     if(e.faq_q1&&e.faq_a1){faqs.push({q:e.faq_q1,a:e.faq_a1})}
     if(e.faq_q2&&e.faq_a2){faqs.push({q:e.faq_q2,a:e.faq_a2})}
     if(e.faq_q3&&e.faq_a3){faqs.push({q:e.faq_q3,a:e.faq_a3})}
+    if(e.faq_q4&&e.faq_a4){faqs.push({q:e.faq_q4,a:e.faq_a4})}
+    if(e.faq_q5&&e.faq_a5){faqs.push({q:e.faq_q5,a:e.faq_a5})}
     if(faqs.length){
       faqHtml = '<div class="enc-faq"><h4 style="margin-top:0"><i class="fas fa-question-circle" style="margin-right:.4rem"></i>자주 묻는 질문</h4>';
       faqs.forEach(f => {
@@ -388,8 +384,25 @@ document.getElementById('enc-overlay').addEventListener('click', function(e) {
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
 
+// Load dynamic category tabs
+async function loadCategories() {
+  try {
+    const res = await fetch('/api/encyclopedia/categories');
+    const data = await res.json();
+    const tabs = document.getElementById('filter-tabs');
+    (data.categories || []).forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'page-tab filter-btn';
+      btn.dataset.filter = c.category;
+      btn.textContent = c.category + ' (' + c.count + ')';
+      tabs.appendChild(btn);
+    });
+  } catch(e) {}
+}
+
 // Init: check if opened with ?term=slug
 (function init() {
+  loadCategories();
   loadEntries('all', '');
   const params = new URLSearchParams(location.search);
   const term = params.get('term');

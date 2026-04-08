@@ -528,7 +528,7 @@
           <div>
             <label style="font-size:.75rem;color:#888;display:block;margin-bottom:.3rem">카테고리 *</label>
             <select id="enc-category" class="input">
-              <option>임플란트</option><option>보철</option><option>보존</option><option>교정</option><option>예방</option><option>구강외과</option><option>일반</option><option>심미치료</option>
+              <option>임플란트</option><option>보철</option><option>보존</option><option>교정</option><option>예방</option><option>구강외과</option><option>심미</option><option>소아·청소년</option><option>진단·검사</option><option>잇몸</option><option>일반</option>
             </select>
           </div>
         </div>
@@ -561,9 +561,17 @@
             <input type="text" id="enc-faq-q2" class="input" placeholder="Q2. 질문">
             <input type="text" id="enc-faq-a2" class="input" placeholder="A2. 답변">
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">
             <input type="text" id="enc-faq-q3" class="input" placeholder="Q3. 질문">
             <input type="text" id="enc-faq-a3" class="input" placeholder="A3. 답변">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">
+            <input type="text" id="enc-faq-q4" class="input" placeholder="Q4. 질문">
+            <input type="text" id="enc-faq-a4" class="input" placeholder="A4. 답변">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+            <input type="text" id="enc-faq-q5" class="input" placeholder="Q5. 질문">
+            <input type="text" id="enc-faq-a5" class="input" placeholder="A5. 답변">
           </div>
         </div>
         <!-- SEO -->
@@ -1743,6 +1751,7 @@ function resetEncForm(){
   document.getElementById('enc-edit-id').value='';
   ['enc-term','enc-slug','enc-treatment','enc-summary','enc-content',
    'enc-faq-q1','enc-faq-a1','enc-faq-q2','enc-faq-a2','enc-faq-q3','enc-faq-a3',
+   'enc-faq-q4','enc-faq-a4','enc-faq-q5','enc-faq-a5',
    'enc-seo-title','enc-seo-desc','enc-seo-kw'].forEach(id=>{document.getElementById(id).value=''});
   document.getElementById('enc-category').value='임플란트';
   document.getElementById('enc-published').checked=true;
@@ -1770,6 +1779,10 @@ async function saveEncEntry(){
     faq_a2:document.getElementById('enc-faq-a2').value.trim(),
     faq_q3:document.getElementById('enc-faq-q3').value.trim(),
     faq_a3:document.getElementById('enc-faq-a3').value.trim(),
+    faq_q4:document.getElementById('enc-faq-q4').value.trim(),
+    faq_a4:document.getElementById('enc-faq-a4').value.trim(),
+    faq_q5:document.getElementById('enc-faq-q5').value.trim(),
+    faq_a5:document.getElementById('enc-faq-a5').value.trim(),
     seo_title:document.getElementById('enc-seo-title').value.trim(),
     seo_description:document.getElementById('enc-seo-desc').value.trim(),
     seo_keywords:document.getElementById('enc-seo-kw').value.trim(),
@@ -1837,6 +1850,10 @@ async function editEncEntry(id){
     document.getElementById('enc-faq-a2').value=e.faq_a2||'';
     document.getElementById('enc-faq-q3').value=e.faq_q3||'';
     document.getElementById('enc-faq-a3').value=e.faq_a3||'';
+    document.getElementById('enc-faq-q4').value=e.faq_q4||'';
+    document.getElementById('enc-faq-a4').value=e.faq_a4||'';
+    document.getElementById('enc-faq-q5').value=e.faq_q5||'';
+    document.getElementById('enc-faq-a5').value=e.faq_a5||'';
     document.getElementById('enc-seo-title').value=e.seo_title||'';
     document.getElementById('enc-seo-desc').value=e.seo_description||'';
     document.getElementById('enc-seo-kw').value=e.seo_keywords||'';
