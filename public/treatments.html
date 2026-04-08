@@ -49,6 +49,55 @@
 .gen-card-tags{display:flex;flex-wrap:wrap;gap:.35rem}
 .gen-card-tag{padding:.2rem .6rem;border:1px solid var(--line);border-radius:100px;font-size:.68rem;color:var(--stone-l);transition:border-color .3s,color .3s}
 .gen-card:hover .gen-card-tag{border-color:rgba(191,164,106,.2);color:var(--stone)}
+.gen-card{cursor:pointer}
+.gen-card-more{display:flex;align-items:center;gap:.3rem;font-size:.72rem;color:var(--gold);margin-top:.75rem;opacity:.5;transition:opacity .3s,transform .3s;font-family:var(--ff-en);letter-spacing:1px;text-transform:uppercase}
+.gen-card:hover .gen-card-more{opacity:1;transform:translateX(4px)}
+
+/* ===== General Detail Modal ===== */
+.gen-modal-overlay{position:fixed;inset:0;z-index:9999;background:rgba(5,5,4,.85);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .4s ease;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.gen-modal-overlay.active{opacity:1;pointer-events:auto}
+.gen-modal{background:var(--ink-4);border:1px solid var(--line);border-radius:20px;max-width:680px;width:100%;max-height:85vh;overflow-y:auto;transform:translateY(30px) scale(.97);transition:transform .4s cubic-bezier(.4,0,.2,1);position:relative}
+.gen-modal-overlay.active .gen-modal{transform:translateY(0) scale(1)}
+.gen-modal::-webkit-scrollbar{width:4px}
+.gen-modal::-webkit-scrollbar-track{background:transparent}
+.gen-modal::-webkit-scrollbar-thumb{background:rgba(191,164,106,.2);border-radius:4px}
+.gen-modal-close{position:sticky;top:0;right:0;float:right;z-index:2;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--stone);cursor:pointer;transition:color .3s;margin:1rem 1rem 0 0;background:rgba(5,5,4,.6);border-radius:50%;backdrop-filter:blur(4px)}
+.gen-modal-close:hover{color:var(--gold)}
+.gen-modal-header{padding:2.5rem 2.5rem 1.5rem;border-bottom:1px solid var(--line)}
+.gen-modal-icon{font-size:2.5rem;margin-bottom:.75rem;display:inline-block}
+.gen-modal-title{font-family:var(--ff-title);font-size:clamp(1.4rem,3vw,1.8rem)}
+.gen-modal-en{font-family:var(--ff-en);font-size:.72rem;letter-spacing:3px;color:var(--gold);text-transform:uppercase;display:block;margin-top:.25rem}
+.gen-modal-body{padding:2rem 2.5rem 2.5rem}
+.gen-modal-desc{font-size:.9rem;color:var(--stone-l);line-height:1.75;margin-bottom:2rem}
+.gen-modal-section{margin-bottom:2rem}
+.gen-modal-section-title{font-family:var(--ff-title);font-size:1.05rem;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+.gen-modal-section-title::before{content:'';width:3px;height:1em;background:var(--gold);border-radius:2px;flex-shrink:0}
+.gen-modal-features{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.gen-modal-feature{background:rgba(191,164,106,.04);border:1px solid rgba(191,164,106,.1);border-radius:10px;padding:.85rem 1rem;font-size:.82rem;line-height:1.5}
+.gen-modal-feature strong{color:var(--gold);display:block;margin-bottom:.2rem;font-size:.78rem}
+.gen-modal-process{display:flex;gap:1rem;overflow-x:auto;padding-bottom:.5rem}
+.gen-modal-step{flex-shrink:0;text-align:center;min-width:100px}
+.gen-modal-step-num{font-family:var(--ff-en);font-size:.65rem;color:var(--gold);letter-spacing:2px;display:block;margin-bottom:.25rem}
+.gen-modal-step-text{font-size:.78rem;color:var(--stone-l);line-height:1.4}
+.gen-modal-note{background:rgba(191,164,106,.06);border-left:3px solid var(--gold);padding:1rem 1.25rem;border-radius:0 8px 8px 0;font-size:.82rem;color:var(--stone-l);line-height:1.65}
+.gen-modal-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1.5rem}
+.gen-modal-tag{padding:.25rem .7rem;border:1px solid rgba(191,164,106,.2);border-radius:100px;font-size:.72rem;color:var(--gold)}
+.gen-modal-cta{display:flex;gap:.75rem;margin-top:2rem;flex-wrap:wrap}
+.gen-modal-cta a{display:inline-flex;align-items:center;gap:.4rem;padding:.7rem 1.5rem;border-radius:100px;font-size:.82rem;font-weight:600;transition:transform .2s,box-shadow .2s}
+.gen-modal-cta .cta-gold{background:var(--gold);color:var(--ink)}
+.gen-modal-cta .cta-outline{border:1px solid var(--gold);color:var(--gold)}
+.gen-modal-cta a:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(191,164,106,.2)}
+@media(max-width:768px){
+  .gen-modal{border-radius:16px 16px 0 0;max-height:90vh;margin-top:auto}
+  .gen-modal-overlay{align-items:flex-end;padding:0}
+  .gen-modal-header{padding:2rem 1.5rem 1.25rem}
+  .gen-modal-body{padding:1.5rem}
+  .gen-modal-features{grid-template-columns:1fr}
+  .gen-modal-close{margin:.75rem .75rem 0 0;width:38px;height:38px;font-size:1.2rem}
+  .gen-modal-process{gap:.75rem}
+  .gen-modal-cta{flex-direction:column}
+  .gen-modal-cta a{justify-content:center;min-height:44px}
+}
 
 /* Section divider */
 .tx-divider{text-align:center;padding:clamp(3rem,6vh,5rem) 2rem;position:relative}
@@ -471,7 +520,7 @@
   <div class="general-grid">
 
     <!-- 01. 충치 치료 -->
-    <div class="gen-card" data-reveal data-tilt>
+    <div class="gen-card" data-reveal data-tilt data-detail="cavity">
       <div class="gen-card-num">01</div>
       <div class="gen-card-icon">🦷</div>
       <h3>충치 치료</h3>
@@ -483,10 +532,11 @@
         <span class="gen-card-tag">온레이</span>
         <span class="gen-card-tag">세라믹</span>
       </div>
+      <div class="gen-card-more">자세히 보기 <i class="fas fa-arrow-right" style="font-size:.6rem"></i></div>
     </div>
 
     <!-- 02. 사랑니 발치 -->
-    <div class="gen-card" data-reveal data-tilt>
+    <div class="gen-card" data-reveal data-tilt data-detail="wisdom">
       <div class="gen-card-num">02</div>
       <div class="gen-card-icon">🔧</div>
       <h3>사랑니 발치</h3>
@@ -497,10 +547,11 @@
         <span class="gen-card-tag">CT 정밀진단</span>
         <span class="gen-card-tag">최소절개</span>
       </div>
+      <div class="gen-card-more">자세히 보기 <i class="fas fa-arrow-right" style="font-size:.6rem"></i></div>
     </div>
 
     <!-- 03. 스케일링 -->
-    <div class="gen-card" data-reveal data-tilt>
+    <div class="gen-card" data-reveal data-tilt data-detail="scaling">
       <div class="gen-card-num">03</div>
       <div class="gen-card-icon">✨</div>
       <h3>스케일링</h3>
@@ -511,10 +562,11 @@
         <span class="gen-card-tag">치석제거</span>
         <span class="gen-card-tag">예방치료</span>
       </div>
+      <div class="gen-card-more">자세히 보기 <i class="fas fa-arrow-right" style="font-size:.6rem"></i></div>
     </div>
 
     <!-- 04. 잇몸 치료 -->
-    <div class="gen-card" data-reveal data-tilt>
+    <div class="gen-card" data-reveal data-tilt data-detail="perio">
       <div class="gen-card-num">04</div>
       <div class="gen-card-icon">🩺</div>
       <h3>잇몸 치료 (치주치료)</h3>
@@ -525,10 +577,11 @@
         <span class="gen-card-tag">잇몸수술</span>
         <span class="gen-card-tag">치주관리</span>
       </div>
+      <div class="gen-card-more">자세히 보기 <i class="fas fa-arrow-right" style="font-size:.6rem"></i></div>
     </div>
 
     <!-- 05. 보철 치료 -->
-    <div class="gen-card" data-reveal data-tilt>
+    <div class="gen-card" data-reveal data-tilt data-detail="prosthetic">
       <div class="gen-card-num">05</div>
       <div class="gen-card-icon">👑</div>
       <h3>보철 치료</h3>
@@ -540,10 +593,11 @@
         <span class="gen-card-tag">틀니</span>
         <span class="gen-card-tag">지르코니아</span>
       </div>
+      <div class="gen-card-more">자세히 보기 <i class="fas fa-arrow-right" style="font-size:.6rem"></i></div>
     </div>
 
     <!-- 06. 치아 미백 -->
-    <div class="gen-card" data-reveal data-tilt>
+    <div class="gen-card" data-reveal data-tilt data-detail="whitening">
       <div class="gen-card-num">06</div>
       <div class="gen-card-icon">💎</div>
       <h3>치아 미백</h3>
@@ -554,10 +608,11 @@
         <span class="gen-card-tag">자가미백</span>
         <span class="gen-card-tag">듀얼미백</span>
       </div>
+      <div class="gen-card-more">자세히 보기 <i class="fas fa-arrow-right" style="font-size:.6rem"></i></div>
     </div>
 
     <!-- 07. 교정 치료 -->
-    <div class="gen-card" data-reveal data-tilt>
+    <div class="gen-card" data-reveal data-tilt data-detail="ortho">
       <div class="gen-card-num">07</div>
       <div class="gen-card-icon">😁</div>
       <h3>교정 치료</h3>
@@ -568,10 +623,11 @@
         <span class="gen-card-tag">부분교정</span>
         <span class="gen-card-tag">인비절라인</span>
       </div>
+      <div class="gen-card-more">자세히 보기 <i class="fas fa-arrow-right" style="font-size:.6rem"></i></div>
     </div>
 
     <!-- 08. 소아·청소년 치과 -->
-    <div class="gen-card" data-reveal data-tilt>
+    <div class="gen-card" data-reveal data-tilt data-detail="pediatric">
       <div class="gen-card-num">08</div>
       <div class="gen-card-icon">👶</div>
       <h3>소아·청소년 치과</h3>
@@ -583,10 +639,11 @@
         <span class="gen-card-tag">유치관리</span>
         <span class="gen-card-tag">예방치료</span>
       </div>
+      <div class="gen-card-more">자세히 보기 <i class="fas fa-arrow-right" style="font-size:.6rem"></i></div>
     </div>
 
     <!-- 09. 턱관절 치료 -->
-    <div class="gen-card" data-reveal data-tilt>
+    <div class="gen-card" data-reveal data-tilt data-detail="tmj">
       <div class="gen-card-num">09</div>
       <div class="gen-card-icon">🦴</div>
       <h3>턱관절 치료</h3>
@@ -597,10 +654,11 @@
         <span class="gen-card-tag">턱관절장애</span>
         <span class="gen-card-tag">이갈이</span>
       </div>
+      <div class="gen-card-more">자세히 보기 <i class="fas fa-arrow-right" style="font-size:.6rem"></i></div>
     </div>
 
     <!-- 10. 발치 -->
-    <div class="gen-card" data-reveal data-tilt>
+    <div class="gen-card" data-reveal data-tilt data-detail="extraction">
       <div class="gen-card-num">10</div>
       <div class="gen-card-icon">⚕️</div>
       <h3>일반 발치</h3>
@@ -611,10 +669,11 @@
         <span class="gen-card-tag">잔존치근</span>
         <span class="gen-card-tag">후속계획</span>
       </div>
+      <div class="gen-card-more">자세히 보기 <i class="fas fa-arrow-right" style="font-size:.6rem"></i></div>
     </div>
 
     <!-- 11. 구강검진 -->
-    <div class="gen-card" data-reveal data-tilt>
+    <div class="gen-card" data-reveal data-tilt data-detail="checkup">
       <div class="gen-card-num">11</div>
       <div class="gen-card-icon">🔍</div>
       <h3>구강검진</h3>
@@ -625,10 +684,11 @@
         <span class="gen-card-tag">파노라마</span>
         <span class="gen-card-tag">조기발견</span>
       </div>
+      <div class="gen-card-more">자세히 보기 <i class="fas fa-arrow-right" style="font-size:.6rem"></i></div>
     </div>
 
     <!-- 12. 응급 치과 -->
-    <div class="gen-card" data-reveal data-tilt>
+    <div class="gen-card" data-reveal data-tilt data-detail="emergency">
       <div class="gen-card-num">12</div>
       <div class="gen-card-icon">🚨</div>
       <h3>응급 치과 치료</h3>
@@ -639,6 +699,7 @@
         <span class="gen-card-tag">치아파절</span>
         <span class="gen-card-tag">당일진료</span>
       </div>
+      <div class="gen-card-more">자세히 보기 <i class="fas fa-arrow-right" style="font-size:.6rem"></i></div>
     </div>
 
   </div><!-- /general-grid -->
@@ -702,6 +763,239 @@
   <p class="ft-slogan">치과 치료가 좋은 기억이 될 수 있도록.</p>
   <p class="ft-copy">© 2026 서울가온치과의원. All rights reserved.</p>
 </footer>
+
+<!-- ===== GENERAL DENTISTRY DETAIL MODAL ===== -->
+<div class="gen-modal-overlay" id="genModalOverlay">
+  <div class="gen-modal" id="genModal">
+    <div class="gen-modal-close" id="genModalClose">&times;</div>
+    <div class="gen-modal-header">
+      <div class="gen-modal-icon" id="genModalIcon"></div>
+      <h2 class="gen-modal-title" id="genModalTitle"></h2>
+      <span class="gen-modal-en" id="genModalEn"></span>
+    </div>
+    <div class="gen-modal-body" id="genModalBody"></div>
+  </div>
+</div>
+
+<script>
+/* ===== General Dentistry Detail Data ===== */
+const genDetails = {
+  cavity: {
+    icon: '🦷', title: '충치 치료', en: 'Cavity Treatment',
+    desc: '충치는 치아 표면의 법랑질이 세균에 의해 손상되는 질환입니다. 서울가온치과는 최대한 자연치아를 보존하는 방향으로 치료하며, 충치의 범위와 깊이에 따라 최적의 재료와 방법을 선택합니다.',
+    features: [
+      { title: '레진 충전', desc: '초기 충치에 적합. 치아색과 동일한 재료로 심미적이며 당일 완료 가능합니다.' },
+      { title: '인레이/온레이', desc: '중간 이상의 충치에 적합. 세라믹·금으로 정밀 제작하여 내구성이 뛰어납니다.' },
+      { title: '보존적 접근', desc: '가능한 한 건강한 치아 조직을 보존합니다. 불필요한 삭제를 하지 않습니다.' },
+      { title: '정밀 진단', desc: '구강 카메라와 X-ray로 충치 범위를 정확히 파악 후 치료 계획을 수립합니다.' }
+    ],
+    steps: ['검사 및 진단', '마취 후 충치 제거', '재료 충전/제작', '교합 조정 및 마무리'],
+    note: '작은 충치도 방치하면 신경치료나 크라운이 필요해질 수 있습니다. 정기 검진으로 조기에 발견하는 것이 가장 경제적입니다.',
+    tags: ['레진', '인레이', '온레이', '세라믹 인레이', '골드 인레이', '건강보험']
+  },
+  wisdom: {
+    icon: '🔧', title: '사랑니 발치', en: 'Wisdom Tooth Extraction',
+    desc: '사랑니가 비스듬히 나거나, 충치가 있거나, 앞 치아를 밀어내는 경우 발치를 권합니다. CT 촬영으로 신경 위치를 정밀하게 파악한 후, 최소 절개로 안전하게 발치합니다.',
+    features: [
+      { title: 'CT 정밀 진단', desc: '하치조신경과의 거리를 3D로 파악하여 안전한 수술 경로를 설계합니다.' },
+      { title: '최소 절개', desc: '필요한 부분만 절개하여 회복이 빠르고 붓기·통증을 줄입니다.' },
+      { title: '매복 사랑니', desc: '뼈 속에 묻혀 있는 매복 사랑니도 풍부한 경험으로 안전하게 발치합니다.' },
+      { title: '수술 후 관리', desc: '발치 후 주의사항과 약 처방, 회복 일정을 상세히 안내드립니다.' }
+    ],
+    steps: ['파노라마/CT 촬영', '마취 및 절개', '사랑니 발거', '봉합 및 지혈'],
+    note: '모든 사랑니를 뺄 필요는 없습니다. 똑바로 나서 기능하는 사랑니는 보존합니다. 정확한 판단을 위해 검진을 받아보세요.',
+    tags: ['매복 사랑니', '수평 매복', 'CT 정밀진단', '최소절개', '당일 발치']
+  },
+  scaling: {
+    icon: '✨', title: '스케일링', en: 'Dental Scaling',
+    desc: '치석은 칫솔질로 제거되지 않는 석회화된 치태입니다. 스케일링으로 치석과 치태를 제거하여 잇몸 건강을 유지하고 치주질환을 예방합니다. 연 1회 건강보험이 적용됩니다.',
+    features: [
+      { title: '건강보험 적용', desc: '만 19세 이상 연 1회 건강보험으로 부담 없이 받을 수 있습니다.' },
+      { title: '치주질환 예방', desc: '치석이 잇몸을 자극하면 잇몸염, 치주염으로 진행됩니다. 예방이 핵심입니다.' },
+      { title: '구취 개선', desc: '치석과 세균 제거로 입냄새가 줄어듭니다.' },
+      { title: '전체 구강 점검', desc: '스케일링 시 전체 구강 상태를 함께 확인하여 문제를 조기에 발견합니다.' }
+    ],
+    steps: ['구강 상태 확인', '초음파 스케일링', '치면 연마', '구강 위생 교육'],
+    note: '스케일링 후 일시적으로 이가 시린 느낌이 있을 수 있으나 1~2주 내 자연스럽게 사라집니다. 6개월~1년 간격으로 정기적으로 받으시길 권합니다.',
+    tags: ['건강보험', '치석제거', '예방치료', '잇몸관리', '구취개선']
+  },
+  perio: {
+    icon: '🩺', title: '잇몸 치료 (치주치료)', en: 'Periodontal Treatment',
+    desc: '잇몸 출혈, 붓기, 구취는 치주질환의 신호입니다. 서울가온치과는 단계별 치주치료로 잇몸 건강을 회복합니다. 방치하면 치아 흔들림과 발치로 이어질 수 있습니다.',
+    features: [
+      { title: '치근활택술', desc: '잇몸 아래 치석과 감염 조직을 제거하여 잇몸이 치아에 다시 붙도록 합니다.' },
+      { title: '잇몸수술', desc: '심한 치주염의 경우 잇몸을 열어 깊은 부위의 치석과 염증을 제거합니다.' },
+      { title: '유지 관리', desc: '치료 후에도 3~6개월 간격의 정기 관리로 재발을 방지합니다.' },
+      { title: '조기 발견', desc: '잇몸 출혈이 있다면 이미 시작된 것입니다. 빠른 치료가 치아를 살립니다.' }
+    ],
+    steps: ['잇몸 검사 및 X-ray', '스케일링/치근활택술', '재평가 및 수술 여부 결정', '정기 유지관리'],
+    note: '치주질환은 초기에 통증이 없어 놓치기 쉽습니다. 잇몸에서 피가 나거나, 이가 시리거나, 구취가 있다면 검진을 받아보세요.',
+    tags: ['치근활택술', '잇몸수술', '치주관리', '잇몸출혈', '치주염']
+  },
+  prosthetic: {
+    icon: '👑', title: '보철 치료', en: 'Prosthetic Dentistry',
+    desc: '손상되거나 빠진 치아를 크라운, 브릿지, 틀니 등으로 회복합니다. 기능(씹기, 발음)과 심미성 모두를 고려한 맞춤 보철을 전문 기공소와 1:1 협업으로 제작합니다.',
+    features: [
+      { title: '크라운', desc: '손상된 치아를 전체적으로 감싸 보호합니다. 지르코니아·세라믹 소재로 자연스럽습니다.' },
+      { title: '브릿지', desc: '빠진 치아 양쪽의 건강한 치아에 연결하여 빈 공간을 메웁니다.' },
+      { title: '틀니', desc: '여러 개의 치아가 빠진 경우 부분틀니 또는 전체틀니로 기능을 회복합니다.' },
+      { title: '맞춤 제작', desc: '전문 기공소와 협업하여 환자의 구강에 꼭 맞는 보철물을 제작합니다.' }
+    ],
+    steps: ['정밀 검사 및 상담', '치아 준비 및 인상 채득', '보철물 제작 (기공소)', '장착 및 교합 조정'],
+    note: '보철 치료 후에도 정기 검진으로 보철물의 상태와 주변 잇몸 건강을 확인하는 것이 중요합니다.',
+    tags: ['크라운', '브릿지', '틀니', '지르코니아', '세라믹', 'PFM']
+  },
+  whitening: {
+    icon: '💎', title: '치아 미백', en: 'Teeth Whitening',
+    desc: '커피, 차, 흡연 등으로 변색된 치아를 전문 미백제로 밝게 만듭니다. 자가 미백과 전문 미백 중 치아 상태에 맞는 방법을 제안합니다.',
+    features: [
+      { title: '전문 미백(오피스)', desc: '고농도 미백제를 사용하여 1~2회 시술로 빠른 효과를 볼 수 있습니다.' },
+      { title: '자가 미백(홈)', desc: '맞춤 트레이에 미백제를 넣어 집에서 2~4주간 진행합니다.' },
+      { title: '듀얼 미백', desc: '전문 미백 + 자가 미백을 병행하여 가장 효과적인 결과를 만듭니다.' },
+      { title: '안전한 시술', desc: '치아 상태를 먼저 확인하고, 시린 증상을 최소화하며 진행합니다.' }
+    ],
+    steps: ['구강 검사 및 색상 측정', '잇몸 보호 및 미백제 도포', '광조사(전문 미백 시)', '결과 확인 및 유지 안내'],
+    note: '미백 효과는 생활 습관에 따라 차이가 있으며, 보통 6개월~2년 유지됩니다. 정기적인 터치업으로 밝은 치아를 유지할 수 있습니다.',
+    tags: ['전문미백', '자가미백', '듀얼미백', '변색치아', '미백 트레이']
+  },
+  ortho: {
+    icon: '😁', title: '교정 치료', en: 'Orthodontics',
+    desc: '삐뚤어진 치아와 부정교합을 바로잡아 기능적·심미적 개선을 이끕니다. 투명 교정(인비절라인)부터 부분 교정까지 다양한 옵션을 제공합니다.',
+    features: [
+      { title: '투명 교정', desc: '인비절라인 등 투명한 장치를 사용하여 교정 중에도 자연스럽습니다.' },
+      { title: '부분 교정', desc: '앞니 부분만 가지런히 하는 교정으로, 기간과 비용이 절약됩니다.' },
+      { title: '디지털 설계', desc: '3D 스캔으로 교정 전후 시뮬레이션을 확인할 수 있습니다.' },
+      { title: '맞춤 계획', desc: '환자의 교합 상태, 나이, 라이프스타일에 맞는 교정 계획을 수립합니다.' }
+    ],
+    steps: ['정밀 검사 및 3D 스캔', '교정 계획 수립', '장치 장착 및 치료 시작', '유지 장치 및 정기 관리'],
+    note: '교정 치료 기간은 상태에 따라 6개월~2년이며, 부분 교정은 3~6개월로 짧습니다. 상담을 통해 예상 기간과 비용을 안내드립니다.',
+    tags: ['투명교정', '부분교정', '인비절라인', '3D 스캔', '부정교합']
+  },
+  pediatric: {
+    icon: '👶', title: '소아·청소년 치과', en: 'Pediatric Dentistry',
+    desc: '아이들의 첫 치과 경험을 좋은 기억으로 만듭니다. 공포심을 줄이는 행동 유도, 불소도포, 실란트, 충치 치료를 아이 눈높이에서 진행합니다.',
+    features: [
+      { title: '불소도포', desc: '치아 표면을 강화하여 충치를 예방합니다. 통증 없이 간단하게 시행됩니다.' },
+      { title: '실란트', desc: '어금니의 깊은 홈을 메워 음식물과 세균이 끼지 않도록 합니다.' },
+      { title: '아이 친화적 진료', desc: '무서워하지 않도록 단계적으로 치과에 익숙해지는 과정을 거칩니다.' },
+      { title: '유치 관리', desc: '유치는 영구치의 길잡이입니다. 유치 충치도 반드시 치료해야 합니다.' }
+    ],
+    steps: ['아이와 친해지기', '구강 검사 및 상담', '불소/실란트/치료', '보호자 칫솔질 교육'],
+    note: '첫 치과 방문은 만 1세 전후를 권장합니다. 조기 검진과 예방 치료가 건강한 영구치의 시작입니다.',
+    tags: ['불소도포', '실란트', '유치관리', '예방치료', '소아충치']
+  },
+  tmj: {
+    icon: '🦴', title: '턱관절 치료', en: 'TMJ Treatment',
+    desc: '입을 벌릴 때 소리가 나거나 통증이 있다면 턱관절 장애일 수 있습니다. 원인을 정밀하게 진단하고, 스플린트(교합안정장치), 물리치료 등으로 증상을 개선합니다.',
+    features: [
+      { title: '스플린트 치료', desc: '교합안정장치를 장착하여 턱관절의 부담을 줄이고 근육을 이완시킵니다.' },
+      { title: '이갈이 치료', desc: '수면 중 이갈이로 인한 턱관절 손상과 치아 마모를 방지합니다.' },
+      { title: '근육 이완', desc: '턱 주변 근육의 긴장을 풀어주는 운동과 물리치료를 안내합니다.' },
+      { title: '원인 분석', desc: '스트레스, 교합 문제, 습관 등 다양한 원인을 파악하여 맞춤 치료합니다.' }
+    ],
+    steps: ['턱관절 검사 및 교합 분석', '원인 파악 및 치료 계획', '스플린트 제작/장착', '정기 체크 및 조정'],
+    note: '턱관절 장애를 방치하면 두통, 목·어깨 통증까지 이어질 수 있습니다. 증상이 있다면 조기 상담을 권합니다.',
+    tags: ['스플린트', '턱관절장애', '이갈이', '교합치료', '근육통']
+  },
+  extraction: {
+    icon: '⚕️', title: '일반 발치', en: 'Tooth Extraction',
+    desc: '보존이 어려운 치아는 정확한 진단 후 발치를 진행합니다. 발치 후 빈 공간에 대한 후속 치료 계획(임플란트, 브릿지 등)까지 함께 설명드립니다.',
+    features: [
+      { title: '정확한 진단', desc: '발치가 정말 필요한지 정밀하게 확인합니다. 살릴 수 있으면 보존을 우선합니다.' },
+      { title: '통증 관리', desc: '충분한 마취로 통증 없이 진행하며, 발치 후 통증 관리도 안내드립니다.' },
+      { title: '후속 계획', desc: '빠진 자리를 어떻게 회복할지 사전에 계획하여 추가 문제를 예방합니다.' },
+      { title: '잔존치근 제거', desc: '이전 치료로 남아있는 뿌리도 안전하게 제거합니다.' }
+    ],
+    steps: ['X-ray 검사 및 상태 확인', '마취 및 발치', '지혈 및 봉합', '후속 치료 계획 상담'],
+    note: '발치 후 바로 임플란트를 식립하는 "즉시 식립"도 상태에 따라 가능합니다. 발치 결정 전에 꼭 한 번 더 상담받아보세요.',
+    tags: ['단순발치', '잔존치근', '후속계획', '즉시식립', '발치 후 관리']
+  },
+  checkup: {
+    icon: '🔍', title: '구강검진', en: 'Oral Examination',
+    desc: '정기적인 구강검진으로 충치, 치주질환, 구강 이상을 조기에 발견합니다. 파노라마·구내 촬영으로 전체 구강 상태를 꼼꼼히 확인합니다.',
+    features: [
+      { title: '파노라마 촬영', desc: '전체 치아와 턱뼈를 한 번에 확인하는 X-ray입니다. 보험 적용 가능합니다.' },
+      { title: '구강 카메라', desc: '구강 내부를 확대하여 환자분께 직접 보여드리며 설명합니다.' },
+      { title: '조기 발견', desc: '초기 충치, 잇몸 질환, 구강 병변을 조기에 발견하여 치료 범위를 최소화합니다.' },
+      { title: '맞춤 관리 플랜', desc: '검진 결과를 바탕으로 환자 맞춤 관리 계획을 수립합니다.' }
+    ],
+    steps: ['문진 및 병력 확인', '파노라마/구내 촬영', '구강 상태 종합 진단', '치료 계획 및 관리 안내'],
+    note: '6개월~1년에 한 번 정기 검진을 권장합니다. 초진 검진과 파노라마 촬영은 건강보험이 적용됩니다.',
+    tags: ['정기검진', '파노라마', '조기발견', '건강보험', '구강 카메라']
+  },
+  emergency: {
+    icon: '🚨', title: '응급 치과 치료', en: 'Emergency Dental Care',
+    desc: '갑작스러운 치통, 치아 파절, 탈구 등 응급 상황에 신속히 대응합니다. 진료 시간 내 연락 주시면 빠르게 안내해드립니다.',
+    features: [
+      { title: '급성 치통', desc: '심한 통증의 원인을 파악하고 즉시 통증을 완화하는 응급 처치를 시행합니다.' },
+      { title: '치아 파절', desc: '깨지거나 부러진 치아를 신속하게 처치하여 추가 손상을 방지합니다.' },
+      { title: '치아 탈구', desc: '빠진 치아는 30분 이내 재식립하면 살릴 확률이 높습니다. 빠르게 연락주세요.' },
+      { title: '당일 진료', desc: '응급 상황 시 예약 없이도 당일 진료가 가능하도록 최대한 조정합니다.' }
+    ],
+    steps: ['전화 접수 및 상태 파악', '내원 및 응급 처치', '통증 관리 및 원인 치료', '후속 치료 계획 수립'],
+    note: '치아가 빠졌다면 우유나 식염수에 담가 30분 이내 내원하세요. 진료시간: 월·화·수·금 09:30~18:30 / 목 09:30~20:30 / 토 09:30~14:00',
+    tags: ['급성통증', '치아파절', '치아탈구', '당일진료', '응급처치']
+  }
+};
+
+/* ===== Modal Functions ===== */
+const overlay = document.getElementById('genModalOverlay');
+const modal = document.getElementById('genModal');
+
+function openGenModal(key) {
+  const d = genDetails[key];
+  if (!d) return;
+  
+  document.getElementById('genModalIcon').textContent = d.icon;
+  document.getElementById('genModalTitle').textContent = d.title;
+  document.getElementById('genModalEn').textContent = d.en;
+  
+  let html = '<p class="gen-modal-desc">' + d.desc + '</p>';
+  
+  // Features
+  html += '<div class="gen-modal-section"><h3 class="gen-modal-section-title">주요 특징</h3><div class="gen-modal-features">';
+  d.features.forEach(f => {
+    html += '<div class="gen-modal-feature"><strong>' + f.title + '</strong>' + f.desc + '</div>';
+  });
+  html += '</div></div>';
+  
+  // Process
+  html += '<div class="gen-modal-section"><h3 class="gen-modal-section-title">진행 과정</h3><div class="gen-modal-process">';
+  d.steps.forEach((s, i) => {
+    html += '<div class="gen-modal-step"><span class="gen-modal-step-num">STEP 0' + (i+1) + '</span><span class="gen-modal-step-text">' + s + '</span></div>';
+  });
+  html += '</div></div>';
+  
+  // Note
+  html += '<div class="gen-modal-section"><div class="gen-modal-note">💡 ' + d.note + '</div></div>';
+  
+  // Tags
+  html += '<div class="gen-modal-tags">';
+  d.tags.forEach(t => { html += '<span class="gen-modal-tag">' + t + '</span>'; });
+  html += '</div>';
+  
+  // CTA
+  html += '<div class="gen-modal-cta"><a href="tel:0507-1325-3377" class="cta-gold">📞 상담 예약</a><a href="https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&ackey=2cykehjt" target="_blank" rel="noopener" class="cta-outline">네이버 예약</a></div>';
+  
+  document.getElementById('genModalBody').innerHTML = html;
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  modal.scrollTop = 0;
+}
+
+function closeGenModal() {
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Event listeners
+document.querySelectorAll('.gen-card[data-detail]').forEach(card => {
+  card.addEventListener('click', () => openGenModal(card.dataset.detail));
+});
+document.getElementById('genModalClose').addEventListener('click', closeGenModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeGenModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGenModal(); });
+</script>
 
 <script src="pages.js"></script>
 
