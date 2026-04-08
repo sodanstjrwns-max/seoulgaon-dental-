@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<title>자주 묻는 질문 | 서울가온치과 — 진료·임플란트·비용·내원 FAQ</title>
+<meta name="description" content="서울가온치과 자주 묻는 질문 모음. 임플란트, 신경치료, 심미치료, 비용, 보험, 내원 준비 등 환자분들이 궁금해하시는 모든 질문에 답합니다.">
+<meta name="keywords" content="서울가온치과 FAQ, 의정부치과 자주 묻는 질문, 임플란트 질문, 치과 비용, 신경치료 FAQ, 치과 두려움, 의정부 임플란트 가격">
+<meta name="robots" content="index, follow">
+<meta name="author" content="서울가온치과의원">
+<link rel="canonical" href="https://www.seoulgaon.com/faq.html">
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="서울가온치과">
+<meta property="og:title" content="자주 묻는 질문 | 서울가온치과 FAQ">
+<meta property="og:description" content="임플란트, 신경치료, 심미치료, 비용, 보험, 내원 등 환자분들이 궁금해하시는 모든 질문에 답합니다.">
+<meta property="og:url" content="https://www.seoulgaon.com/faq.html">
+<meta property="og:image" content="https://www.seoulgaon.com/images/og-guide.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="자주 묻는 질문 | 서울가온치과 FAQ">
+<meta name="twitter:description" content="임플란트, 신경치료, 심미치료, 비용, 보험, 내원 준비 등 모든 질문에 답합니다.">
+<meta name="twitter:image" content="https://www.seoulgaon.com/images/og-guide.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<link href="pages.css" rel="stylesheet">
+<style>
+/* ===== FAQ PAGE STYLES ===== */
+
+/* Category filter */
+.faq-filter{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;padding:0 1.5rem}
+.faq-filter-btn{padding:.55rem 1.4rem;border:1px solid var(--line);border-radius:100px;font-size:.82rem;color:var(--stone-l);transition:all .3s;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;white-space:nowrap}
+.faq-filter-btn:hover,.faq-filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(191,164,106,.08)}
+.faq-filter-btn .faq-count{font-family:var(--ff-en);font-size:.68rem;background:rgba(191,164,106,.1);padding:.1rem .45rem;border-radius:10px;color:var(--gold);line-height:1.3}
+.faq-filter-btn.active .faq-count{background:rgba(191,164,106,.2)}
+
+/* FAQ container */
+.faq-container{max-width:900px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem) clamp(4rem,8vh,6rem)}
+
+/* Category group */
+.faq-category{margin-bottom:3rem;opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.faq-category.revealed{opacity:1;transform:translateY(0)}
+.faq-cat-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:1px solid var(--gold)}
+.faq-cat-icon{width:40px;height:40px;background:rgba(191,164,106,.08);border:1px solid rgba(191,164,106,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.faq-cat-info{flex:1}
+.faq-cat-label{font-family:var(--ff-en);font-size:.68rem;letter-spacing:3px;color:var(--gold);text-transform:uppercase;display:block;line-height:1}
+.faq-cat-title{font-family:var(--ff-title);font-size:clamp(1.1rem,2vw,1.4rem);margin-top:.25rem}
+.faq-cat-count{font-family:var(--ff-en);font-size:.72rem;color:var(--stone);flex-shrink:0}
+
+/* FAQ item */
+.faq-page-item{border-bottom:1px solid var(--line);transition:background .3s}
+.faq-page-item:hover{background:rgba(191,164,106,.02)}
+.faq-page-q{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 0;cursor:pointer;width:100%;font-size:clamp(.88rem,1.1vw,1rem);text-align:left;font-weight:500;gap:1rem;transition:color .3s}
+.faq-page-q:hover{color:var(--gold)}
+.faq-page-q .q-icon{color:var(--gold);font-family:var(--ff-en);font-size:.85rem;font-weight:700;margin-right:.75rem;flex-shrink:0;opacity:.6}
+.faq-page-q .q-text{flex:1}
+.faq-page-q .plus{font-family:var(--ff-en);font-size:1.5rem;color:var(--gold);transition:transform .4s;flex-shrink:0}
+.faq-page-q.active .plus{transform:rotate(45deg)}
+.faq-page-q.active{color:var(--gold)}
+.faq-page-a{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.4,0,.2,1)}
+.faq-page-a-inner{padding:0 0 1.25rem 2.1rem;font-size:.88rem;color:var(--stone-l);line-height:1.75}
+
+/* Search bar */
+.faq-search-wrap{max-width:600px;margin:0 auto 2.5rem;padding:0 1.5rem}
+.faq-search{position:relative}
+.faq-search input{width:100%;padding:.85rem 1.25rem .85rem 3rem;border:1px solid var(--line);border-radius:100px;background:var(--ink-4);color:var(--ivory);font-size:.9rem;font-family:var(--ff-body);outline:none;transition:border-color .3s}
+.faq-search input::placeholder{color:var(--stone)}
+.faq-search input:focus{border-color:var(--gold)}
+.faq-search-icon{position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:var(--stone);font-size:.9rem;pointer-events:none;transition:color .3s}
+.faq-search input:focus ~ .faq-search-icon{color:var(--gold)}
+.faq-no-result{text-align:center;padding:3rem 1.5rem;display:none}
+.faq-no-result .no-icon{font-size:3rem;margin-bottom:1rem;opacity:.3}
+.faq-no-result h3{font-family:var(--ff-title);font-size:1.3rem;margin-bottom:.5rem}
+.faq-no-result p{font-size:.88rem;color:var(--stone-l)}
+
+/* CTA bottom */
+.faq-cta-section{text-align:center;padding:clamp(4rem,8vh,6rem) 1.5rem;position:relative;overflow:hidden}
+.faq-cta-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--ff-en);font-size:clamp(6rem,18vw,14rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;font-weight:700;white-space:nowrap}
+.faq-cta-content{position:relative;z-index:1}
+.faq-cta-title{font-family:var(--ff-title);font-size:clamp(1.5rem,4vw,2.5rem);margin-bottom:1rem}
+.faq-cta-sub{font-size:.9rem;color:var(--stone-l);margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.6}
+.faq-cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.faq-cta-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:100px;font-weight:600;font-size:.9rem;transition:transform .2s,box-shadow .2s}
+.faq-cta-btn.gold{background:var(--gold);color:var(--ink)}
+.faq-cta-btn.green{background:#03c75a;color:#fff}
+.faq-cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(191,164,106,.2)}
+
+/* Stats strip */
+.faq-stats{display:flex;justify-content:center;gap:2.5rem;margin-bottom:2rem;opacity:0;transform:translateY(10px)}
+.faq-stat{text-align:center}
+.faq-stat-num{font-family:var(--ff-en);font-size:clamp(1.8rem,4vw,2.5rem);color:var(--gold);line-height:1;font-weight:700}
+.faq-stat-label{font-size:.75rem;color:var(--stone);margin-top:.25rem}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .faq-container{padding:0 1.25rem 3rem}
+  .faq-filter{padding:0 1rem;gap:.4rem;overflow-x:auto;flex-wrap:nowrap;justify-content:flex-start;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-bottom:2rem}
+  .faq-filter::-webkit-scrollbar{display:none}
+  .faq-filter-btn{padding:.45rem 1rem;font-size:.78rem;flex-shrink:0;min-height:36px}
+  .faq-search-wrap{padding:0 1.25rem;margin-bottom:2rem}
+  .faq-search input{padding:.75rem 1rem .75rem 2.75rem;font-size:.85rem}
+  .faq-page-q{font-size:.9rem;padding:1rem 0;gap:.5rem}
+  .faq-page-q .q-icon{font-size:.75rem;margin-right:.5rem}
+  .faq-page-a-inner{font-size:.85rem;padding-left:1.5rem;word-break:keep-all}
+  .faq-cat-header{gap:.5rem;margin-bottom:1rem}
+  .faq-cat-icon{width:34px;height:34px;font-size:.9rem}
+  .faq-cat-title{font-size:1.1rem}
+  .faq-category{margin-bottom:2.5rem}
+  .faq-stats{gap:1.5rem;margin-bottom:1.5rem}
+  .faq-stat-num{font-size:1.5rem}
+  .faq-cta-section{padding:3rem 1.25rem}
+  .faq-cta-btns{flex-direction:column;align-items:stretch;max-width:320px;margin:0 auto}
+  .faq-cta-btn{min-height:48px;justify-content:center}
+}
+@media(max-width:480px){
+  .faq-container{padding:0 1rem 2.5rem}
+  .faq-search-wrap{padding:0 1rem}
+  .faq-filter{gap:.3rem}
+  .faq-filter-btn{padding:.35rem .75rem;font-size:.72rem}
+  .faq-cat-header{flex-wrap:wrap}
+  .faq-stat-num{font-size:1.3rem}
+  .faq-stats{gap:1rem}
+}
+</style>
+
+<!-- JSON-LD: FAQPage structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "치과 치료가 너무 무서워요.", "acceptedAnswer": {"@type": "Answer", "text": "무서운 마음부터 이해합니다. 서울가온치과는 통증 최소화가 기본입니다. 충분한 마취와 세심한 진행으로, '생각보다 괜찮았어요'라는 말을 가장 많이 듣습니다. 치료 전 충분한 설명과 동의 과정을 거치며, 환자분의 속도에 맞춰 진행합니다."}},
+    {"@type": "Question", "name": "이전 치과에서 너무 아팠어요.", "acceptedAnswer": {"@type": "Answer", "text": "충분한 마취와 세심한 진료로, 치과가 좋은 기억이 되도록 합니다. 마취가 완전히 되었는지 반드시 확인한 후 진료를 시작하고, 진행 중에도 불편하시면 즉시 멈춥니다."}},
+    {"@type": "Question", "name": "임플란트 수술이 너무 겁나요.", "acceptedAnswer": {"@type": "Answer", "text": "가이드 수술은 CT 촬영을 기반으로 미리 계획된 안전한 경로로 진행됩니다. 절개를 최소화하고, 정확한 위치에 식립합니다. 수술 시간도 일반적으로 30분~1시간 내외로 짧습니다."}},
+    {"@type": "Question", "name": "고령이라 임플란트가 안 될까봐요.", "acceptedAnswer": {"@type": "Answer", "text": "나이 자체가 임플란트를 막지 않습니다. 전신 건강 상태와 잇몸뼈를 정밀하게 평가한 후, 대부분의 경우 안전하게 수술이 가능합니다. 당뇨, 고혈압 등 만성질환이 있어도 조절이 잘 되면 가능합니다."}},
+    {"@type": "Question", "name": "다른 치과에서 안 된다고 했어요.", "acceptedAnswer": {"@type": "Answer", "text": "정밀 뼈이식과 가이드 수술로 좋은 결과를 만들어냅니다. 뼈가 부족하거나 위치가 어려운 경우에도, 사전 계획을 통해 해결 방법을 찾습니다. 포기하기 전에 한 번 더 상담받아보세요."}},
+    {"@type": "Question", "name": "임플란트 수명은 얼마나 되나요?", "acceptedAnswer": {"@type": "Answer", "text": "잘 관리하면 20년 이상 사용하는 분들이 많습니다. 정기 검진(6개월~1년)과 올바른 칫솔질, 치간 칫솔 사용이 수명을 좌우합니다. 서울가온치과는 수술 후에도 체계적인 유지관리 프로그램을 운영합니다."}},
+    {"@type": "Question", "name": "앞니가 벌어졌는데 교정 없이 치료 가능한가요?", "acceptedAnswer": {"@type": "Answer", "text": "벌어진 정도와 원인에 따라 라미네이트나 크라운으로 교정 없이 개선할 수 있습니다. 최소 삭제로 자연스러운 형태와 색상을 구현하며, 보통 2~3회 내원으로 완성됩니다."}},
+    {"@type": "Question", "name": "신경치료 하면 이가 약해지나요?", "acceptedAnswer": {"@type": "Answer", "text": "신경치료 자체가 이를 약하게 만드는 것은 아닙니다. 다만 신경을 제거한 치아는 영양 공급이 줄어 장기적으로 취약해질 수 있어, 치료 후 크라운으로 보호하는 것을 권장합니다."}},
+    {"@type": "Question", "name": "설명을 들어도 잘 이해가 안 돼요.", "acceptedAnswer": {"@type": "Answer", "text": "'여기 와서 처음 이해했어요' — 저희가 가장 자주 듣는 말입니다. 구강 카메라 영상, 모형, CT 사진을 활용해 쉽게 설명드리고, 이해될 때까지 여러 번 말씀드립니다."}},
+    {"@type": "Question", "name": "치료 비용이 얼마나 드나요?", "acceptedAnswer": {"@type": "Answer", "text": "치료 비용은 환자분의 구강 상태와 치료 범위에 따라 달라집니다. 상담 시 정확한 치료 계획과 함께 비용을 투명하게 안내드립니다. 건강보험 적용 항목은 최대한 활용하며, 무이자 할부 등 부담을 줄이는 방법도 함께 안내드립니다."}},
+    {"@type": "Question", "name": "건강보험 적용이 되나요?", "acceptedAnswer": {"@type": "Answer", "text": "스케일링(연1회), 신경치료, 사랑니 발치, 만 65세 이상 임플란트(2개) 등은 건강보험이 적용됩니다. 초진 검진 및 파노라마 촬영도 보험 적용이 가능합니다."}},
+    {"@type": "Question", "name": "첫 방문 시 어떤 준비가 필요한가요?", "acceptedAnswer": {"@type": "Answer", "text": "신분증과 건강보험증만 가져오시면 됩니다. 현재 복용 중인 약이 있다면 약 이름이나 처방전을 가져오시면 진료에 도움이 됩니다. 첫 방문 시 파노라마 촬영과 구강 검진 후 상담을 진행하며, 약 30~40분 소요됩니다."}},
+    {"@type": "Question", "name": "예약 없이 방문해도 되나요?", "acceptedAnswer": {"@type": "Answer", "text": "가능합니다만, 사전 예약하시면 대기 시간 없이 바로 진료를 받으실 수 있습니다. 전화(0507-1325-3377) 또는 네이버 예약을 이용해 주세요."}},
+    {"@type": "Question", "name": "주차가 가능한가요?", "acceptedAnswer": {"@type": "Answer", "text": "맞은편 제일식자재마트 건물 지하주차장을 이용하실 수 있습니다. 무료 주차 쿠폰을 데스크에서 제공해 드립니다. 의정부역에서 도보 5분 거리로 대중교통도 편리합니다."}}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "홈", "item": "https://www.seoulgaon.com/"},
+    {"@type": "ListItem", "position": 2, "name": "자주 묻는 질문", "item": "https://www.seoulgaon.com/faq.html"}
+  ]
+}
+</script>
+</head>
+<body>
+<noscript><div style="background:#BFA46A;color:#050504;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다. 브라우저 설정에서 JavaScript를 활성화해주세요.</div></noscript>
+<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--gold);color:var(--ink);font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--gold,#BFA46A);color:var(--ink,#050504);font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
+
+<div id="cur"><div id="cur-ring"></div><div id="cur-dot"></div></div>
+
+<nav id="nav" class="stuck" role="navigation" aria-label="메인 네비게이션">
+  <a href="/" class="nav-logo">서울가온치과<span>.</span></a>
+  <div class="nav-links">
+    <a href="philosophy.html">진료 철학</a>
+    <div class="nav-link-drop"><a href="treatments.html">진료 안내 ▾</a><div class="drop"><a href="treatments.html#implant">임플란트</a><a href="treatments.html#aesthetics">앞니 심미치료</a><a href="treatments.html#endodontics">신경치료</a><a href="treatments.html#general">일반진료</a></div></div>
+    <div class="nav-link-drop"><a href="#">커뮤니티 ▾</a><div class="drop"><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a></div></div>
+    <a href="doctors.html">의료진</a>
+    <div class="nav-link-drop"><a href="guide.html">안내 ▾</a><div class="drop"><a href="guide.html#visit">오시는 길</a><a href="guide.html#fee">수가 안내</a><a href="faq.html">자주 묻는 질문</a></div></div>
+  </div>
+  <a href="tel:0507-1325-3377" class="nav-cta" data-magnet>예약 상담</a>
+  <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu"><a href="/">홈</a><a href="philosophy.html">진료 철학</a><a href="treatments.html">진료 안내</a><a href="doctors.html">의료진</a><a href="guide.html">안내</a><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a><a href="faq.html">자주 묻는 질문</a></div>
+<main id="main-content" role="main">
+
+<!-- ===== HERO ===== -->
+<section class="page-hero">
+  <div class="page-hero-bg">FAQ</div>
+  <span class="page-hero-label">Frequently Asked Questions</span>
+  <h1>자주 묻는 질문</h1>
+  <p class="page-hero-sub">환자분들이 궁금해하시는 내용을 카테고리별로 정리했습니다.<br>찾으시는 질문이 없으면 언제든 전화 주세요.</p>
+</section>
+
+<!-- ===== STATS ===== -->
+<div class="faq-stats" id="faqStats">
+  <div class="faq-stat"><div class="faq-stat-num" data-count="14">0</div><div class="faq-stat-label">전체 질문</div></div>
+  <div class="faq-stat"><div class="faq-stat-num" data-count="5">0</div><div class="faq-stat-label">카테고리</div></div>
+  <div class="faq-stat"><div class="faq-stat-num" data-count="6000">0</div><div class="faq-stat-label">교육 이수 원장</div></div>
+</div>
+
+<!-- ===== SEARCH ===== -->
+<div class="faq-search-wrap">
+  <div class="faq-search">
+    <input type="text" id="faqSearchInput" placeholder="궁금한 내용을 검색해보세요" autocomplete="off">
+    <i class="fas fa-search faq-search-icon"></i>
+  </div>
+</div>
+
+<!-- ===== FILTER TABS ===== -->
+<div class="faq-filter" id="faqFilter">
+  <button class="faq-filter-btn active" data-filter="all">전체 <span class="faq-count">14</span></button>
+  <button class="faq-filter-btn" data-filter="fear"><i class="fas fa-heart" style="font-size:.7rem"></i> 치과 공포·통증 <span class="faq-count">2</span></button>
+  <button class="faq-filter-btn" data-filter="implant"><i class="fas fa-tooth" style="font-size:.7rem"></i> 임플란트 <span class="faq-count">4</span></button>
+  <button class="faq-filter-btn" data-filter="treatment"><i class="fas fa-star" style="font-size:.7rem"></i> 심미·신경·설명 <span class="faq-count">3</span></button>
+  <button class="faq-filter-btn" data-filter="cost"><i class="fas fa-receipt" style="font-size:.7rem"></i> 비용·보험 <span class="faq-count">2</span></button>
+  <button class="faq-filter-btn" data-filter="visit"><i class="fas fa-map-marker-alt" style="font-size:.7rem"></i> 내원·준비 <span class="faq-count">3</span></button>
+</div>
+
+
+<!-- ===== FAQ CONTENT ===== -->
+<div class="faq-container" id="faqContainer">
+
+  <!-- ── 1. 치과 공포·통증 ── -->
+  <div class="faq-category" data-category="fear">
+    <div class="faq-cat-header">
+      <div class="faq-cat-icon">💙</div>
+      <div class="faq-cat-info">
+        <span class="faq-cat-label">Fear & Pain</span>
+        <h2 class="faq-cat-title">치과 공포·통증</h2>
+      </div>
+      <span class="faq-cat-count">2개</span>
+    </div>
+
+    <div class="faq-page-item" data-category="fear">
+      <button class="faq-page-q" data-open>
+        <span class="q-icon">Q</span>
+        <span class="q-text">치과 치료가 너무 무서워요.</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner">무서운 마음부터 이해합니다. 서울가온치과는 <strong style="color:var(--gold)">통증 최소화</strong>가 기본입니다. 충분한 마취와 세심한 진행으로, "생각보다 괜찮았어요"라는 말을 가장 많이 듣습니다. 무서우시면 언제든 손을 들어주세요. 치료 전 충분한 설명과 동의 과정을 거치며, 환자분의 속도에 맞춰 진행합니다.</div></div>
+    </div>
+
+    <div class="faq-page-item" data-category="fear">
+      <button class="faq-page-q">
+        <span class="q-icon">Q</span>
+        <span class="q-text">이전 치과에서 너무 아팠어요.</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner">충분한 마취와 세심한 진료로, 치과가 <strong style="color:var(--gold)">좋은 기억</strong>이 되도록 합니다. 이전의 아픈 경험을 말씀해주시면, 더 신경 쓰겠습니다. 마취가 완전히 되었는지 반드시 확인한 후 진료를 시작하고, 진행 중에도 불편하시면 즉시 멈춥니다.</div></div>
+    </div>
+  </div>
+
+
+  <!-- ── 2. 임플란트 ── -->
+  <div class="faq-category" data-category="implant">
+    <div class="faq-cat-header">
+      <div class="faq-cat-icon">🦷</div>
+      <div class="faq-cat-info">
+        <span class="faq-cat-label">Implant</span>
+        <h2 class="faq-cat-title">임플란트</h2>
+      </div>
+      <span class="faq-cat-count">4개</span>
+    </div>
+
+    <div class="faq-page-item" data-category="implant">
+      <button class="faq-page-q">
+        <span class="q-icon">Q</span>
+        <span class="q-text">임플란트 수술이 너무 겁나요.</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner"><strong style="color:var(--gold)">가이드 수술</strong>은 CT 촬영을 기반으로 미리 계획된 안전한 경로로 진행됩니다. 절개를 최소화하고, 정확한 위치에 식립합니다. 수술 후 "생각보다 편했다"는 말씀이 가장 많습니다. 수술 시간도 일반적으로 <strong style="color:var(--gold)">30분~1시간 내외</strong>로 짧습니다.</div></div>
+    </div>
+
+    <div class="faq-page-item" data-category="implant">
+      <button class="faq-page-q">
+        <span class="q-icon">Q</span>
+        <span class="q-text">고령이라 임플란트가 안 될까봐요.</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner">나이 자체가 임플란트를 막지 않습니다. 전신 건강 상태와 잇몸뼈를 정밀하게 평가한 후, 대부분의 경우 안전하게 수술이 가능합니다. <strong style="color:var(--gold)">70~80대 환자분</strong>도 많이 치료받고 계십니다. 당뇨, 고혈압 등 만성질환이 있어도 조절이 잘 되면 가능합니다.</div></div>
+    </div>
+
+    <div class="faq-page-item" data-category="implant">
+      <button class="faq-page-q">
+        <span class="q-icon">Q</span>
+        <span class="q-text">다른 치과에서 안 된다고 했어요.</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner"><strong style="color:var(--gold)">정밀 뼈이식</strong>과 가이드 수술로 좋은 결과를 만들어냅니다. 뼈가 부족하거나 위치가 어려운 경우에도, 사전 계획을 통해 해결 방법을 찾습니다. 포기하기 전에 한 번 더 상담받아보세요. 다른 곳에서 안 된다고 한 분들이 많이 찾아오십니다.</div></div>
+    </div>
+
+    <div class="faq-page-item" data-category="implant">
+      <button class="faq-page-q">
+        <span class="q-icon">Q</span>
+        <span class="q-text">임플란트 수명은 얼마나 되나요?</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner">잘 관리하면 <strong style="color:var(--gold)">20년 이상</strong> 사용하는 분들이 많습니다. 임플란트 자체는 반영구적이지만, 관리가 핵심입니다. 정기 검진(6개월~1년)과 올바른 칫솔질, 치간 칫솔 사용이 수명을 좌우합니다. 서울가온치과는 수술 후에도 체계적인 유지관리 프로그램을 운영합니다.</div></div>
+    </div>
+  </div>
+
+
+  <!-- ── 3. 심미·신경·설명 ── -->
+  <div class="faq-category" data-category="treatment">
+    <div class="faq-cat-header">
+      <div class="faq-cat-icon">✨</div>
+      <div class="faq-cat-info">
+        <span class="faq-cat-label">Treatment</span>
+        <h2 class="faq-cat-title">심미·신경치료·설명</h2>
+      </div>
+      <span class="faq-cat-count">3개</span>
+    </div>
+
+    <div class="faq-page-item" data-category="treatment">
+      <button class="faq-page-q">
+        <span class="q-icon">Q</span>
+        <span class="q-text">앞니가 벌어졌는데 교정 없이 치료 가능한가요?</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner">벌어진 정도와 원인에 따라 <strong style="color:var(--gold)">라미네이트나 크라운</strong>으로 교정 없이 개선할 수 있습니다. 최소 삭제로 자연스러운 형태와 색상을 구현하며, 보통 <strong style="color:var(--gold)">2~3회 내원</strong>으로 완성됩니다. 정밀 상담을 통해 최적의 방법을 안내드립니다.</div></div>
+    </div>
+
+    <div class="faq-page-item" data-category="treatment">
+      <button class="faq-page-q">
+        <span class="q-icon">Q</span>
+        <span class="q-text">신경치료 하면 이가 약해지나요?</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner">신경치료 자체가 이를 약하게 만드는 것은 아닙니다. 다만 신경을 제거한 치아는 영양 공급이 줄어 장기적으로 취약해질 수 있어, 치료 후 <strong style="color:var(--gold)">크라운으로 보호</strong>하는 것을 권장합니다. 서울가온치과는 최신 현미경과 장비로 정밀한 신경치료를 진행합니다.</div></div>
+    </div>
+
+    <div class="faq-page-item" data-category="treatment">
+      <button class="faq-page-q">
+        <span class="q-icon">Q</span>
+        <span class="q-text">설명을 들어도 잘 이해가 안 돼요.</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner">"여기 와서 처음 이해했어요" — 저희가 가장 자주 듣는 말입니다. <strong style="color:var(--gold)">구강 카메라 영상, 모형, CT 사진</strong>을 활용해 쉽게 설명드리고, 이해될 때까지 여러 번 말씀드립니다. 궁금한 점은 상담 중 언제든 질문해주세요.</div></div>
+    </div>
+  </div>
+
+
+  <!-- ── 4. 비용·보험 ── -->
+  <div class="faq-category" data-category="cost">
+    <div class="faq-cat-header">
+      <div class="faq-cat-icon">💰</div>
+      <div class="faq-cat-info">
+        <span class="faq-cat-label">Cost & Insurance</span>
+        <h2 class="faq-cat-title">비용·보험</h2>
+      </div>
+      <span class="faq-cat-count">2개</span>
+    </div>
+
+    <div class="faq-page-item" data-category="cost">
+      <button class="faq-page-q">
+        <span class="q-icon">Q</span>
+        <span class="q-text">치료 비용이 얼마나 드나요?</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner">치료 비용은 환자분의 구강 상태와 치료 범위에 따라 달라집니다. 상담 시 <strong style="color:var(--gold)">정확한 치료 계획</strong>과 함께 비용을 투명하게 안내드립니다. 불필요한 치료를 권하지 않으며, 건강보험 적용 항목은 최대한 활용합니다. <strong style="color:var(--gold)">무이자 할부</strong> 등 부담을 줄이는 방법도 함께 안내드립니다.</div></div>
+    </div>
+
+    <div class="faq-page-item" data-category="cost">
+      <button class="faq-page-q">
+        <span class="q-icon">Q</span>
+        <span class="q-text">건강보험 적용이 되나요?</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner"><strong style="color:var(--gold)">스케일링(연1회)</strong>, 신경치료, 사랑니 발치, <strong style="color:var(--gold)">만 65세 이상 임플란트(2개)</strong> 등은 건강보험이 적용됩니다. 초진 검진 및 파노라마 촬영도 보험 적용이 가능합니다. 자세한 보험 적용 범위는 상담 시 안내드립니다.</div></div>
+    </div>
+  </div>
+
+
+  <!-- ── 5. 내원·준비 ── -->
+  <div class="faq-category" data-category="visit">
+    <div class="faq-cat-header">
+      <div class="faq-cat-icon">🏥</div>
+      <div class="faq-cat-info">
+        <span class="faq-cat-label">Visit</span>
+        <h2 class="faq-cat-title">내원·준비</h2>
+      </div>
+      <span class="faq-cat-count">3개</span>
+    </div>
+
+    <div class="faq-page-item" data-category="visit">
+      <button class="faq-page-q">
+        <span class="q-icon">Q</span>
+        <span class="q-text">첫 방문 시 어떤 준비가 필요한가요?</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner"><strong style="color:var(--gold)">신분증과 건강보험증</strong>만 가져오시면 됩니다. 현재 복용 중인 약이 있다면 약 이름이나 처방전을 가져오시면 진료에 도움이 됩니다. 첫 방문 시 파노라마 촬영과 구강 검진 후 상담을 진행하며, 약 <strong style="color:var(--gold)">30~40분</strong> 소요됩니다.</div></div>
+    </div>
+
+    <div class="faq-page-item" data-category="visit">
+      <button class="faq-page-q">
+        <span class="q-icon">Q</span>
+        <span class="q-text">예약 없이 방문해도 되나요?</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner">가능합니다만, <strong style="color:var(--gold)">사전 예약</strong>하시면 대기 시간 없이 바로 진료를 받으실 수 있습니다. 전화(<strong style="color:var(--gold)">0507-1325-3377</strong>) 또는 네이버 예약을 이용해 주세요.</div></div>
+    </div>
+
+    <div class="faq-page-item" data-category="visit">
+      <button class="faq-page-q">
+        <span class="q-icon">Q</span>
+        <span class="q-text">주차가 가능한가요?</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="faq-page-a"><div class="faq-page-a-inner">네, 맞은편 <strong style="color:var(--gold)">제일식자재마트 건물 지하주차장</strong>을 이용하실 수 있습니다. 무료 주차 쿠폰을 데스크에서 제공해 드립니다. 자세한 사항은 방문 전 전화(0507-1325-3377)로 문의해주세요. 의정부역에서 도보 5분 거리로 대중교통도 편리합니다.</div></div>
+    </div>
+  </div>
+
+  <!-- No result message -->
+  <div class="faq-no-result" id="faqNoResult">
+    <div class="no-icon">🔍</div>
+    <h3>검색 결과가 없습니다</h3>
+    <p>다른 키워드로 검색하시거나,<br>전화(0507-1325-3377)로 문의해주세요.</p>
+  </div>
+
+</div>
+
+
+<!-- ===== CTA ===== -->
+<section class="faq-cta-section">
+  <div class="faq-cta-bg">GAON</div>
+  <div class="faq-cta-content">
+    <h2 class="faq-cta-title">찾으시는 질문이 없으신가요?</h2>
+    <p class="faq-cta-sub">상담은 언제든 부담 없이 가능합니다.<br>설명이 먼저입니다. 치료는 그 다음입니다.</p>
+    <div class="faq-cta-btns">
+      <a href="tel:0507-1325-3377" class="faq-cta-btn gold" data-magnet>📞 0507-1325-3377</a>
+      <a href="https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&ackey=2cykehjt" target="_blank" rel="noopener" class="faq-cta-btn green" data-magnet>네이버 예약</a>
+    </div>
+  </div>
+</section>
+
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer role="contentinfo">
+  <div class="ft-logo">서울가온치과<span style="color:var(--gold)">.</span></div>
+  <p class="ft-slogan">치과 치료가 좋은 기억이 될 수 있도록.</p>
+  <div class="ft-biz" style="font-size:.72rem;color:var(--stone);margin-bottom:.5rem">
+    <span>서울가온치과의원</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>대표 현진호</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>사업자등록번호 898-03-02537</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>경기도 의정부시 용민로 22, 4층(용현동)</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>Tel. 0507-1325-3377</span>
+  </div>
+  <p class="ft-copy">© 2022–2026 서울가온치과의원. All rights reserved.</p>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="pages.js"></script>
+<script src="/js/gsap.min.js"></script>
+<script src="/js/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+window.addEventListener('DOMContentLoaded', () => {
+
+  /* ===== Hero entrance ===== */
+  const heroLabel = document.querySelector('.page-hero-label');
+  const heroTitle = document.querySelector('.page-hero h1');
+  const heroSub = document.querySelector('.page-hero-sub');
+  const tl = gsap.timeline({delay:.2});
+  if(heroLabel) tl.to(heroLabel,{opacity:1,y:0,duration:.6,ease:'power3.out'});
+  if(heroTitle) tl.to(heroTitle,{opacity:1,y:0,duration:.6,ease:'power3.out'},'-=.4');
+  if(heroSub)   tl.to(heroSub,{opacity:1,y:0,duration:.5,ease:'power3.out'},'-=.3');
+
+  /* ===== Stats counter ===== */
+  const stats = document.getElementById('faqStats');
+  if(stats){
+    gsap.to(stats,{opacity:1,y:0,duration:.7,ease:'power3.out',delay:.6});
+    stats.querySelectorAll('[data-count]').forEach(el=>{
+      const target = parseInt(el.dataset.count);
+      const obj = {val:0};
+      gsap.to(obj,{
+        val:target, duration:1.5, delay:.8, ease:'power2.out',
+        onUpdate(){
+          el.textContent = target >= 1000
+            ? Math.round(obj.val).toLocaleString()+'+' 
+            : Math.round(obj.val);
+        }
+      });
+    });
+  }
+
+  /* ===== Scroll reveal categories ===== */
+  gsap.utils.toArray('.faq-category').forEach(cat=>{
+    ScrollTrigger.create({
+      trigger:cat, start:'top 88%', once:true,
+      onEnter(){ cat.classList.add('revealed'); }
+    });
+  });
+
+  /* ===== CTA reveal ===== */
+  gsap.from('.faq-cta-section',{
+    scrollTrigger:{trigger:'.faq-cta-section',start:'top 85%',once:true},
+    opacity:0, y:40, duration:.8, ease:'power3.out'
+  });
+
+  /* ===== FAQ Accordion ===== */
+  document.querySelectorAll('.faq-page-q').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const isOpen = btn.classList.contains('active');
+      // close all
+      document.querySelectorAll('.faq-page-q.active').forEach(b=>{
+        b.classList.remove('active');
+        b.parentElement.querySelector('.faq-page-a').style.maxHeight='0';
+      });
+      if(!isOpen){
+        btn.classList.add('active');
+        const a = btn.parentElement.querySelector('.faq-page-a');
+        a.style.maxHeight = a.scrollHeight+'px';
+      }
+    });
+  });
+
+  // Auto-open first item
+  const firstQ = document.querySelector('.faq-page-q[data-open]');
+  if(firstQ){
+    firstQ.classList.add('active');
+    const a = firstQ.parentElement.querySelector('.faq-page-a');
+    a.style.maxHeight = a.scrollHeight+'px';
+  }
+
+  /* ===== Category Filter ===== */
+  const filterBtns = document.querySelectorAll('.faq-filter-btn');
+  const categories = document.querySelectorAll('.faq-category');
+  const items = document.querySelectorAll('.faq-page-item');
+  const noResult = document.getElementById('faqNoResult');
+
+  filterBtns.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      // Reset search
+      const input = document.getElementById('faqSearchInput');
+      if(input) input.value='';
+
+      filterBtns.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.filter;
+
+      // Show/hide categories
+      categories.forEach(c=>{
+        if(cat==='all'||c.dataset.category===cat){
+          c.style.display='';
+          c.style.opacity='0';
+          c.style.transform='translateY(20px)';
+          requestAnimationFrame(()=>{
+            c.style.transition='opacity .5s ease, transform .5s ease';
+            c.style.opacity='1';
+            c.style.transform='translateY(0)';
+          });
+        } else {
+          c.style.opacity='0';
+          c.style.transform='translateY(20px)';
+          setTimeout(()=>{c.style.display='none';},300);
+        }
+      });
+      if(noResult) noResult.style.display='none';
+    });
+  });
+
+  /* ===== Search ===== */
+  const searchInput = document.getElementById('faqSearchInput');
+  if(searchInput){
+    let debounce;
+    searchInput.addEventListener('input',()=>{
+      clearTimeout(debounce);
+      debounce = setTimeout(()=>{
+        const q = searchInput.value.trim().toLowerCase();
+
+        // Reset filter buttons
+        filterBtns.forEach(b=>b.classList.remove('active'));
+        document.querySelector('.faq-filter-btn[data-filter="all"]').classList.add('active');
+
+        if(!q){
+          categories.forEach(c=>{c.style.display='';c.style.opacity='1';c.style.transform='translateY(0)'});
+          items.forEach(i=>{i.style.display=''});
+          if(noResult) noResult.style.display='none';
+          return;
+        }
+
+        let found = 0;
+        categories.forEach(cat=>{
+          const catItems = cat.querySelectorAll('.faq-page-item');
+          let catFound = 0;
+          catItems.forEach(item=>{
+            const qText = item.querySelector('.q-text').textContent.toLowerCase();
+            const aText = item.querySelector('.faq-page-a-inner').textContent.toLowerCase();
+            if(qText.includes(q)||aText.includes(q)){
+              item.style.display='';
+              catFound++;
+              found++;
+            } else {
+              item.style.display='none';
+            }
+          });
+          cat.style.display = catFound>0 ? '' : 'none';
+          if(catFound>0){
+            cat.style.opacity='1';
+            cat.style.transform='translateY(0)';
+          }
+        });
+
+        if(noResult) noResult.style.display = found===0?'block':'none';
+      },200);
+    });
+  }
+
+});
+</script>
+</body>
+</html>

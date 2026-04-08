@@ -354,9 +354,32 @@ function initEncyclopediaNav(){
   }
 }
 
+/* ---------- 15. FAQ NAV LINK ---------- */
+function initFaqNav(){
+  /* 모바일 메뉴에 FAQ 링크 추가 */
+  const mob = document.querySelector('.mob-menu');
+  if(mob){
+    const hasFaq = Array.from(mob.querySelectorAll('a')).some(a=>a.href.includes('faq'));
+    if(!hasFaq){
+      const enc = Array.from(mob.querySelectorAll('a')).find(a=>a.href.includes('encyclopedia'));
+      const notice = Array.from(mob.querySelectorAll('a')).find(a=>a.href.includes('notice'));
+      const a = document.createElement('a');
+      a.href = 'faq.html';
+      a.textContent = '자주 묻는 질문';
+      const after = enc || notice;
+      if(after && after.nextSibling){
+        mob.insertBefore(a, after.nextSibling);
+      } else {
+        mob.appendChild(a);
+      }
+    }
+  }
+}
+
 /* ---------- INIT ---------- */
 document.addEventListener('DOMContentLoaded',()=>{
   initEncyclopediaNav();
+  initFaqNav();
   initMemberNav();
   initCursor();
   initHamburger();

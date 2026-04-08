@@ -98,4 +98,16 @@
     </image:image>
   </url>
 
+  <!-- 자주 묻는 질문 -->
+  <url>
+    <loc>https://www.seoulgaon.com/faq.html</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://www.seoulgaon.com/images/og-guide.jpg</image:loc>
+      <image:title>서울가온치과 자주 묻는 질문</image:title>
+    </image:image>
+  </url>
+
 </urlset>
