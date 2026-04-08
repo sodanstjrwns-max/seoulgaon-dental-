@@ -242,11 +242,21 @@ async function initDB(db: D1Database) {
     `CREATE INDEX IF NOT EXISTS idx_enc_published ON encyclopedia(is_published, sort_order)`,
     `CREATE INDEX IF NOT EXISTS idx_enc_category ON encyclopedia(category)`,
     `CREATE INDEX IF NOT EXISTS idx_enc_slug ON encyclopedia(slug)`,
-    // FAQ 4~5 columns (safe ALTER)
+    // FAQ 4~10 columns (safe ALTER)
     `ALTER TABLE encyclopedia ADD COLUMN faq_q4 TEXT DEFAULT ''`,
     `ALTER TABLE encyclopedia ADD COLUMN faq_a4 TEXT DEFAULT ''`,
     `ALTER TABLE encyclopedia ADD COLUMN faq_q5 TEXT DEFAULT ''`,
     `ALTER TABLE encyclopedia ADD COLUMN faq_a5 TEXT DEFAULT ''`,
+    `ALTER TABLE encyclopedia ADD COLUMN faq_q6 TEXT DEFAULT ''`,
+    `ALTER TABLE encyclopedia ADD COLUMN faq_a6 TEXT DEFAULT ''`,
+    `ALTER TABLE encyclopedia ADD COLUMN faq_q7 TEXT DEFAULT ''`,
+    `ALTER TABLE encyclopedia ADD COLUMN faq_a7 TEXT DEFAULT ''`,
+    `ALTER TABLE encyclopedia ADD COLUMN faq_q8 TEXT DEFAULT ''`,
+    `ALTER TABLE encyclopedia ADD COLUMN faq_a8 TEXT DEFAULT ''`,
+    `ALTER TABLE encyclopedia ADD COLUMN faq_q9 TEXT DEFAULT ''`,
+    `ALTER TABLE encyclopedia ADD COLUMN faq_a9 TEXT DEFAULT ''`,
+    `ALTER TABLE encyclopedia ADD COLUMN faq_q10 TEXT DEFAULT ''`,
+    `ALTER TABLE encyclopedia ADD COLUMN faq_a10 TEXT DEFAULT ''`,
   ]
   for (const sql of tables) {
     try { await db.prepare(sql).run() } catch (e: any) {
@@ -1441,12 +1451,14 @@ app.post('/api/admin/encyclopedia', auth, async (c) => {
     const exists = await db.prepare('SELECT id FROM encyclopedia WHERE slug = ?').bind(slug).first()
     if (exists) return c.json({ error: '이미 존재하는 slug입니다' }, 409)
     const result = await db.prepare(
-      `INSERT INTO encyclopedia (term, slug, category, summary, content, faq_q1, faq_a1, faq_q2, faq_a2, faq_q3, faq_a3, faq_q4, faq_a4, faq_q5, faq_a5, related_treatment, seo_title, seo_description, seo_keywords, is_published, sort_order)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO encyclopedia (term, slug, category, summary, content, faq_q1, faq_a1, faq_q2, faq_a2, faq_q3, faq_a3, faq_q4, faq_a4, faq_q5, faq_a5, faq_q6, faq_a6, faq_q7, faq_a7, faq_q8, faq_a8, faq_q9, faq_a9, faq_q10, faq_a10, related_treatment, seo_title, seo_description, seo_keywords, is_published, sort_order)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
       d.term.trim(), slug, d.category || '일반', d.summary || '', d.content,
       d.faq_q1 || '', d.faq_a1 || '', d.faq_q2 || '', d.faq_a2 || '', d.faq_q3 || '', d.faq_a3 || '',
       d.faq_q4 || '', d.faq_a4 || '', d.faq_q5 || '', d.faq_a5 || '',
+      d.faq_q6 || '', d.faq_a6 || '', d.faq_q7 || '', d.faq_a7 || '', d.faq_q8 || '', d.faq_a8 || '',
+      d.faq_q9 || '', d.faq_a9 || '', d.faq_q10 || '', d.faq_a10 || '',
       d.related_treatment || '', d.seo_title || '', d.seo_description || '', d.seo_keywords || '',
       d.is_published !== false ? 1 : 0, d.sort_order || 0
     ).run()
@@ -1463,12 +1475,15 @@ app.put('/api/admin/encyclopedia/:id', auth, async (c) => {
     const d = await c.req.json<any>()
     await db.prepare(
       `UPDATE encyclopedia SET term=?, slug=?, category=?, summary=?, content=?, faq_q1=?, faq_a1=?, faq_q2=?, faq_a2=?, faq_q3=?, faq_a3=?,
-       faq_q4=?, faq_a4=?, faq_q5=?, faq_a5=?,
+       faq_q4=?, faq_a4=?, faq_q5=?, faq_a5=?, faq_q6=?, faq_a6=?, faq_q7=?, faq_a7=?, faq_q8=?, faq_a8=?,
+       faq_q9=?, faq_a9=?, faq_q10=?, faq_a10=?,
        related_treatment=?, seo_title=?, seo_description=?, seo_keywords=?, is_published=?, sort_order=?, updated_at=CURRENT_TIMESTAMP WHERE id=?`
     ).bind(
       d.term, d.slug, d.category, d.summary, d.content,
       d.faq_q1 || '', d.faq_a1 || '', d.faq_q2 || '', d.faq_a2 || '', d.faq_q3 || '', d.faq_a3 || '',
       d.faq_q4 || '', d.faq_a4 || '', d.faq_q5 || '', d.faq_a5 || '',
+      d.faq_q6 || '', d.faq_a6 || '', d.faq_q7 || '', d.faq_a7 || '', d.faq_q8 || '', d.faq_a8 || '',
+      d.faq_q9 || '', d.faq_a9 || '', d.faq_q10 || '', d.faq_a10 || '',
       d.related_treatment || '', d.seo_title || '', d.seo_description || '', d.seo_keywords || '',
       d.is_published ? 1 : 0, d.sort_order || 0, id
     ).run()
@@ -1528,7 +1543,7 @@ app.get('/api/admin/stats/encyclopedia', auth, async (c) => {
 //  HEALTH CHECK
 // ══════════════════════════════════════════════════
 app.get('/api/health', async (c) => {
-  return c.json({ status: 'ok', timestamp: new Date().toISOString(), version: '2.2.0' })
+  return c.json({ status: 'ok', timestamp: new Date().toISOString(), version: '2.3.0' })
 })
 
 // ══════════════════════════════════════════════════

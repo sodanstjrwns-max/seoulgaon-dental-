@@ -569,9 +569,29 @@
             <input type="text" id="enc-faq-q4" class="input" placeholder="Q4. 질문">
             <input type="text" id="enc-faq-a4" class="input" placeholder="A4. 답변">
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">
             <input type="text" id="enc-faq-q5" class="input" placeholder="Q5. 질문">
             <input type="text" id="enc-faq-a5" class="input" placeholder="A5. 답변">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">
+            <input type="text" id="enc-faq-q6" class="input" placeholder="Q6. 질문">
+            <input type="text" id="enc-faq-a6" class="input" placeholder="A6. 답변">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">
+            <input type="text" id="enc-faq-q7" class="input" placeholder="Q7. 질문">
+            <input type="text" id="enc-faq-a7" class="input" placeholder="A7. 답변">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">
+            <input type="text" id="enc-faq-q8" class="input" placeholder="Q8. 질문">
+            <input type="text" id="enc-faq-a8" class="input" placeholder="A8. 답변">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">
+            <input type="text" id="enc-faq-q9" class="input" placeholder="Q9. 질문">
+            <input type="text" id="enc-faq-a9" class="input" placeholder="A9. 답변">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+            <input type="text" id="enc-faq-q10" class="input" placeholder="Q10. 질문">
+            <input type="text" id="enc-faq-a10" class="input" placeholder="A10. 답변">
           </div>
         </div>
         <!-- SEO -->
@@ -1752,6 +1772,8 @@ function resetEncForm(){
   ['enc-term','enc-slug','enc-treatment','enc-summary','enc-content',
    'enc-faq-q1','enc-faq-a1','enc-faq-q2','enc-faq-a2','enc-faq-q3','enc-faq-a3',
    'enc-faq-q4','enc-faq-a4','enc-faq-q5','enc-faq-a5',
+   'enc-faq-q6','enc-faq-a6','enc-faq-q7','enc-faq-a7','enc-faq-q8','enc-faq-a8',
+   'enc-faq-q9','enc-faq-a9','enc-faq-q10','enc-faq-a10',
    'enc-seo-title','enc-seo-desc','enc-seo-kw'].forEach(id=>{document.getElementById(id).value=''});
   document.getElementById('enc-category').value='임플란트';
   document.getElementById('enc-published').checked=true;
@@ -1783,6 +1805,16 @@ async function saveEncEntry(){
     faq_a4:document.getElementById('enc-faq-a4').value.trim(),
     faq_q5:document.getElementById('enc-faq-q5').value.trim(),
     faq_a5:document.getElementById('enc-faq-a5').value.trim(),
+    faq_q6:document.getElementById('enc-faq-q6').value.trim(),
+    faq_a6:document.getElementById('enc-faq-a6').value.trim(),
+    faq_q7:document.getElementById('enc-faq-q7').value.trim(),
+    faq_a7:document.getElementById('enc-faq-a7').value.trim(),
+    faq_q8:document.getElementById('enc-faq-q8').value.trim(),
+    faq_a8:document.getElementById('enc-faq-a8').value.trim(),
+    faq_q9:document.getElementById('enc-faq-q9').value.trim(),
+    faq_a9:document.getElementById('enc-faq-a9').value.trim(),
+    faq_q10:document.getElementById('enc-faq-q10').value.trim(),
+    faq_a10:document.getElementById('enc-faq-a10').value.trim(),
     seo_title:document.getElementById('enc-seo-title').value.trim(),
     seo_description:document.getElementById('enc-seo-desc').value.trim(),
     seo_keywords:document.getElementById('enc-seo-kw').value.trim(),
@@ -1850,6 +1882,16 @@ async function editEncEntry(id){
     document.getElementById('enc-faq-a2').value=e.faq_a2||'';
     document.getElementById('enc-faq-q3').value=e.faq_q3||'';
     document.getElementById('enc-faq-a3').value=e.faq_a3||'';
+    document.getElementById('enc-faq-q6').value=e.faq_q6||'';
+    document.getElementById('enc-faq-a6').value=e.faq_a6||'';
+    document.getElementById('enc-faq-q7').value=e.faq_q7||'';
+    document.getElementById('enc-faq-a7').value=e.faq_a7||'';
+    document.getElementById('enc-faq-q8').value=e.faq_q8||'';
+    document.getElementById('enc-faq-a8').value=e.faq_a8||'';
+    document.getElementById('enc-faq-q9').value=e.faq_q9||'';
+    document.getElementById('enc-faq-a9').value=e.faq_a9||'';
+    document.getElementById('enc-faq-q10').value=e.faq_q10||'';
+    document.getElementById('enc-faq-a10').value=e.faq_a10||'';
     document.getElementById('enc-faq-q4').value=e.faq_q4||'';
     document.getElementById('enc-faq-a4').value=e.faq_a4||'';
     document.getElementById('enc-faq-q5').value=e.faq_q5||'';

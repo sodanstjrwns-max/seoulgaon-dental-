@@ -261,11 +261,7 @@ async function openDetail(slug) {
 
     let faqHtml = '';
     const faqs = [];
-    if(e.faq_q1&&e.faq_a1){faqs.push({q:e.faq_q1,a:e.faq_a1})}
-    if(e.faq_q2&&e.faq_a2){faqs.push({q:e.faq_q2,a:e.faq_a2})}
-    if(e.faq_q3&&e.faq_a3){faqs.push({q:e.faq_q3,a:e.faq_a3})}
-    if(e.faq_q4&&e.faq_a4){faqs.push({q:e.faq_q4,a:e.faq_a4})}
-    if(e.faq_q5&&e.faq_a5){faqs.push({q:e.faq_q5,a:e.faq_a5})}
+    for(let i=1;i<=10;i++){const q=e['faq_q'+i],a=e['faq_a'+i];if(q&&a)faqs.push({q,a})}
     if(faqs.length){
       faqHtml = '<div class="enc-faq"><h4 style="margin-top:0"><i class="fas fa-question-circle" style="margin-right:.4rem"></i>자주 묻는 질문</h4>';
       faqs.forEach(f => {
