@@ -206,7 +206,7 @@ function openNoticeImg(src){
       const res = await fetch('/api/notices/' + n.id);
       const data = await res.json();
       images = data.images || [];
-    } catch(e){}
+    } catch(e){ console.warn('Notice image load failed for ID=' + n.id, e); }
     return { notice: n, images };
   }));
 

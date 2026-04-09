@@ -354,7 +354,7 @@ async function openDetail(slug) {
     document.title = (e.seo_title || e.term + ' — 치과 백과사전') + ' | 서울가온치과';
 
   } catch(err) {
-    /* silent */
+    console.warn('Encyclopedia detail load failed:', err);
   }
 }
 
@@ -367,7 +367,10 @@ function closeDetail() {
 }
 
 function formatContent(text) {
-  // Simple markdown-ish: lines starting with ## → h4, - → li
+  if (!text) return '';
+  // If content already contains HTML tags, render as-is
+  if (/<[a-z][\s\S]*>/i.test(text)) return text;
+  // Otherwise markdown-ish: lines starting with ## → h4, - → li
   return text.split('\n').map(line => {
     line = line.trim();
     if (!line) return '';
@@ -414,7 +417,7 @@ async function loadCategories() {
       btn.textContent = c.category + ' (' + c.count + ')';
       tabs.appendChild(btn);
     });
-  } catch(e) {}
+  } catch(e) { console.warn('Category load failed:', e); }
 }
 
 // Init: check if opened with ?term=slug

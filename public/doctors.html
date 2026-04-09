@@ -944,7 +944,7 @@
       });
     },{threshold:.05});
     document.querySelectorAll('.doc-card').forEach(c=>cardObs.observe(c));
-  } catch(e){ /* silent */ }
+  } catch(e){ console.warn('Doctors API load failed:', e); }
 })();
 </script>
 
