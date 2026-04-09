@@ -11,13 +11,14 @@
 <meta name="description" content="서울가온치과 블로그 — 임플란트, 심미치료, 신경치료 등 치과 건강 정보를 쉽고 정직하게 전합니다.">
 <meta name="robots" content="index, follow">
 <meta name="author" content="서울가온치과의원">
-<link rel="canonical" href="https://www.seoulgaon.com/blog-post.html">
+<link rel="canonical" href="https://www.seoulgaon.com/blog-post">
+<link rel="alternate" hreflang="ko" href="https://www.seoulgaon.com/blog-post">
 <!-- Open Graph (동적 업데이트 됨) -->
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="서울가온치과">
 <meta property="og:title" content="블로그 | 서울가온치과">
 <meta property="og:description" content="서울가온치과 블로그 글">
-<meta property="og:url" content="https://www.seoulgaon.com/blog-post.html">
+<meta property="og:url" content="https://www.seoulgaon.com/blog-post">
 <meta property="og:image" content="https://www.seoulgaon.com/images/og-blog.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -123,7 +124,7 @@
   "@type": "BlogPosting",
   "headline": "서울가온치과 블로그",
   "description": "서울가온치과 블로그 — 임플란트, 심미치료, 신경치료 등 치과 건강 정보.",
-  "url": "https://www.seoulgaon.com/blog-post.html",
+  "url": "https://www.seoulgaon.com/blog-post",
   "image": "https://www.seoulgaon.com/images/og-blog.jpg",
   "author": {"@type": "Person", "name": "현진호", "jobTitle": "서울가온치과 대표원장"},
   "publisher": {
@@ -132,7 +133,7 @@
     "url": "https://www.seoulgaon.com",
     "logo": {"@type": "ImageObject", "url": "https://www.seoulgaon.com/images/og-main.jpg"}
   },
-  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://www.seoulgaon.com/blog-post.html"},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://www.seoulgaon.com/blog-post"},
   "inLanguage": "ko",
   "datePublished": "2026-04-08",
   "dateModified": "2026-04-08"
@@ -144,8 +145,8 @@
   "@type": "BreadcrumbList",
   "itemListElement": [
     {"@type": "ListItem", "position": 1, "name": "홈", "item": "https://www.seoulgaon.com/"},
-    {"@type": "ListItem", "position": 2, "name": "블로그", "item": "https://www.seoulgaon.com/blog.html"},
-    {"@type": "ListItem", "position": 3, "name": "블로그 글", "item": "https://www.seoulgaon.com/blog-post.html"}
+    {"@type": "ListItem", "position": 2, "name": "블로그", "item": "https://www.seoulgaon.com/blog"},
+    {"@type": "ListItem", "position": 3, "name": "블로그 글", "item": "https://www.seoulgaon.com/blog-post"}
   ]
 }
 </script>
@@ -268,7 +269,7 @@ const catLabel = {'임플란트':'Implant','심미치료':'Aesthetic','신경치
       const schema = JSON.parse(jsonLd.textContent);
       schema.headline = post.title;
       schema.description = metaDesc;
-      schema.url = 'https://www.seoulgaon.com/blog-post.html?id=' + id;
+      schema.url = 'https://www.seoulgaon.com/blog-post?id=' + id;
       schema.datePublished = post.created_at ? post.created_at.split('T')[0] : '2026-04-08';
       schema.dateModified = post.updated_at ? post.updated_at.split('T')[0] : schema.datePublished;
       if(post.thumbnail_url) schema.image = post.thumbnail_url;

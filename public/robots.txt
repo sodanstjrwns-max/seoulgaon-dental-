@@ -1,35 +1,100 @@
 # robots.txt — 서울가온치과 (www.seoulgaon.com)
-# Last updated: 2026-04-07
+# Last updated: 2026-04-09
 
-# 모든 검색엔진 허용
+# ── 모든 검색엔진 허용 ──
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /signup
 
-# 관리자 페이지 차단
-Disallow: /admin.html
+# ── Google 검색봇: 전체 허용 ──
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
 Disallow: /api/
 
-# 정적 리소스 (크롤링 불필요)
-Disallow: /static/
-Disallow: /js/
-
-# 이미지 검색엔진은 이미지 허용
+# ── 이미지 검색엔진 ──
 User-agent: Googlebot-Image
 Allow: /images/
-Disallow: /admin.html
+Disallow: /admin
 Disallow: /api/
 
-# 네이버 검색봇
+# ── 네이버 검색봇 ──
 User-agent: Yeti
 Allow: /
+Disallow: /admin
+Disallow: /api/
 
-# 다음 검색봇
+# ── 다음 검색봇 ──
 User-agent: Daum
 Allow: /
+Disallow: /admin
+Disallow: /api/
 
-# 빙 검색봇
+# ── Bing 검색봇 ──
 User-agent: Bingbot
 Allow: /
+Disallow: /admin
+Disallow: /api/
 
-# 사이트맵 위치
+# ── AI 검색엔진 (AEO 최적화) ──
+# ChatGPT/OpenAI
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Google AI (Gemini, SGE)
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Anthropic Claude
+User-agent: anthropic-ai
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Cohere AI
+User-agent: cohere-ai
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Meta AI
+User-agent: FacebookBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Microsoft Copilot
+User-agent: Bytespider
+Disallow: /
+
+# Unwanted crawlers
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+# ── 사이트맵 ──
 Sitemap: https://www.seoulgaon.com/sitemap.xml

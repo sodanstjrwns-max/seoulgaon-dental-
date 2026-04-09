@@ -19,6 +19,35 @@ const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 // ══════════════════════════════════════════════════
 //  MIDDLEWARE
 // ══════════════════════════════════════════════════
+
+// SEO & Security Headers — 모든 응답에 적용
+app.use('*', async (c, next) => {
+  await next()
+  const url = new URL(c.req.url)
+  const path = url.pathname
+
+  // 보안 헤더
+  c.header('X-Content-Type-Options', 'nosniff')
+  c.header('X-Frame-Options', 'SAMEORIGIN')
+  c.header('Referrer-Policy', 'strict-origin-when-cross-origin')
+  c.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self)')
+
+  // HTML 페이지 캐시: 짧게 (SEO 크롤러가 최신 콘텐츠 수집)
+  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup)$/)) {
+    c.header('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200')
+    c.header('X-Robots-Tag', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')
+  }
+  // admin은 검색엔진 차단
+  if (path === '/admin') {
+    c.header('X-Robots-Tag', 'noindex, nofollow')
+    c.header('Cache-Control', 'no-store, private')
+  }
+  // 정적 자산: 장기 캐시
+  if (path.match(/\.(js|css|png|jpg|jpeg|webp|svg|ico|woff2?)$/)) {
+    c.header('Cache-Control', 'public, max-age=31536000, immutable')
+  }
+})
+
 app.use('/api/*', cors({
   origin: '*',
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
