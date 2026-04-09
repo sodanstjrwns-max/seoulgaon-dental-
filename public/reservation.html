@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<title>예약 안내 | 서울가온치과 — 전화·카카오톡·네이버 예약</title>
+<meta name="description" content="서울가온치과 예약 안내. 전화 예약, 카카오톡 간편 상담, 네이버 예약 3가지 방법으로 편리하게 예약하세요. 의정부 탑석역 치과.">
+<meta name="keywords" content="서울가온치과 예약, 의정부치과 예약, 서울가온치과 전화번호, 서울가온치과 카카오톡, 서울가온치과 네이버예약, 의정부 임플란트 예약">
+<meta name="robots" content="index, follow">
+<meta name="author" content="서울가온치과의원">
+<link rel="canonical" href="https://seoulgaondc.kr/reservation">
+<link rel="alternate" hreflang="ko" href="https://seoulgaondc.kr/reservation">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="서울가온치과">
+<meta property="og:title" content="예약 안내 | 서울가온치과 — 전화·카카오톡·네이버 예약">
+<meta property="og:description" content="전화, 카카오톡, 네이버 3가지 방법으로 편리하게 예약하세요.">
+<meta property="og:url" content="https://seoulgaondc.kr/reservation">
+<meta property="og:image" content="https://seoulgaondc.kr/images/og-main.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="예약 안내 | 서울가온치과">
+<meta name="twitter:description" content="전화, 카카오톡, 네이버 3가지 방법으로 예약하세요.">
+<meta name="twitter:image" content="https://seoulgaondc.kr/images/og-main.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<link href="pages.css" rel="stylesheet">
+<style>
+/* ===== RESERVATION PAGE ===== */
+.rsv-section{max-width:1000px;margin:0 auto;padding:clamp(3rem,6vh,5rem) clamp(1.5rem,4vw,4rem)}
+
+/* 3 Channel Cards */
+.rsv-channels{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:clamp(3rem,6vh,5rem)}
+.rsv-card{background:var(--ink-4);border:1px solid var(--line);border-radius:20px;padding:clamp(2rem,3vw,2.5rem);text-align:center;transition:border-color .4s,transform .4s;position:relative;overflow:hidden}
+.rsv-card:hover{border-color:rgba(191,164,106,.3);transform:translateY(-6px)}
+.rsv-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;transition:opacity .4s;opacity:0}
+.rsv-card:hover::after{opacity:1}
+.rsv-card.phone::after{background:var(--gold)}
+.rsv-card.kakao::after{background:#FEE500}
+.rsv-card.naver::after{background:#03C75A}
+
+.rsv-badge{display:inline-block;font-family:var(--ff-en);font-size:.65rem;letter-spacing:3px;text-transform:uppercase;padding:.3rem .8rem;border-radius:100px;margin-bottom:1.2rem}
+.rsv-card.phone .rsv-badge{background:rgba(191,164,106,.1);color:var(--gold)}
+.rsv-card.kakao .rsv-badge{background:rgba(254,229,0,.1);color:#E5C200}
+.rsv-card.naver .rsv-badge{background:rgba(3,199,90,.1);color:#03C75A}
+
+.rsv-icon{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;font-size:2rem;transition:transform .4s}
+.rsv-card:hover .rsv-icon{transform:scale(1.1)}
+.rsv-card.phone .rsv-icon{background:rgba(191,164,106,.08);color:var(--gold)}
+.rsv-card.kakao .rsv-icon{background:rgba(254,229,0,.08);color:#FEE500}
+.rsv-card.naver .rsv-icon{background:rgba(3,199,90,.08);color:#03C75A}
+
+.rsv-title{font-family:var(--ff-title);font-size:clamp(1.3rem,2.5vw,1.6rem);margin-bottom:.6rem}
+.rsv-desc{font-size:.85rem;color:var(--stone-l);line-height:1.8;margin-bottom:1.5rem;min-height:4.5em}
+.rsv-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 2rem;border-radius:100px;font-size:.88rem;font-weight:600;transition:all .3s;letter-spacing:.02em}
+.rsv-card.phone .rsv-btn{background:var(--gold);color:var(--ink)}
+.rsv-card.phone .rsv-btn:hover{background:var(--gold-b)}
+.rsv-card.kakao .rsv-btn{background:#FEE500;color:#3C1E1E}
+.rsv-card.kakao .rsv-btn:hover{background:#FFD700}
+.rsv-card.naver .rsv-btn{background:#03C75A;color:#fff}
+.rsv-card.naver .rsv-btn:hover{background:#02B050}
+.rsv-num{font-family:var(--ff-en);font-size:1.5rem;color:var(--gold);letter-spacing:.02em;margin-bottom:.3rem}
+
+/* Info Section */
+.rsv-info{border-top:1px solid var(--line);padding-top:clamp(3rem,6vh,5rem)}
+.rsv-info-title{font-family:var(--ff-title);font-size:clamp(1.3rem,2.5vw,1.8rem);text-align:center;margin-bottom:.5rem}
+.rsv-info-sub{font-size:.88rem;color:var(--stone-l);text-align:center;margin-bottom:2.5rem}
+
+.rsv-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.rsv-info-card{background:var(--ink-4);border:1px solid var(--line);border-radius:16px;padding:1.5rem 2rem;transition:border-color .4s}
+.rsv-info-card:hover{border-color:rgba(191,164,106,.2)}
+.rsv-info-icon{color:var(--gold);font-size:1.1rem;margin-bottom:.6rem}
+.rsv-info-label{font-family:var(--ff-en);font-size:.65rem;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:.3rem}
+.rsv-info-val{font-size:.88rem;line-height:1.8}
+.rsv-info-val strong{color:var(--gold)}
+.rsv-info-val .note{display:block;font-size:.78rem;color:var(--stone);margin-top:.3rem}
+
+/* Steps */
+.rsv-steps{border-top:1px solid var(--line);padding-top:clamp(3rem,6vh,5rem);margin-top:clamp(3rem,6vh,5rem)}
+.rsv-steps-title{font-family:var(--ff-title);font-size:clamp(1.3rem,2.5vw,1.8rem);text-align:center;margin-bottom:2.5rem}
+.rsv-step-list{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+.rsv-step{text-align:center;flex:1;min-width:160px;max-width:220px}
+.rsv-step-num{width:48px;height:48px;border-radius:50%;background:rgba(191,164,106,.1);color:var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;font-family:var(--ff-en);font-size:1.2rem;font-weight:700}
+.rsv-step-name{font-size:.9rem;font-weight:600;margin-bottom:.3rem}
+.rsv-step-desc{font-size:.78rem;color:var(--stone-l);line-height:1.6}
+.rsv-step-arrow{color:var(--gold);font-size:.8rem;display:flex;align-items:center;padding-top:1rem}
+
+/* FAQ */
+.rsv-faq{border-top:1px solid var(--line);padding-top:clamp(3rem,6vh,5rem);margin-top:clamp(3rem,6vh,5rem)}
+.rsv-faq-title{font-family:var(--ff-title);font-size:clamp(1.3rem,2.5vw,1.8rem);text-align:center;margin-bottom:2rem}
+.rsv-faq-item{border-bottom:1px solid var(--line);padding:1.2rem 0}
+.rsv-faq-q{display:flex;align-items:center;gap:.8rem;cursor:pointer;width:100%;background:none;border:none;color:var(--ivory);font-size:.9rem;font-weight:500;text-align:left;padding:0}
+.rsv-faq-q::before{content:'Q';font-family:var(--ff-en);font-size:.75rem;font-weight:700;color:var(--gold);background:rgba(191,164,106,.1);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rsv-faq-q::after{content:'+';margin-left:auto;font-size:1.2rem;color:var(--stone);transition:transform .3s}
+.rsv-faq-item.open .rsv-faq-q::after{transform:rotate(45deg);color:var(--gold)}
+.rsv-faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;font-size:.85rem;color:var(--stone-l);line-height:1.8;padding:0 0 0 2.8rem}
+.rsv-faq-item.open .rsv-faq-a{max-height:300px;padding:.8rem 0 .5rem 2.8rem}
+
+@media(max-width:768px){
+  .rsv-channels{grid-template-columns:1fr;gap:1.2rem}
+  .rsv-info-grid{grid-template-columns:1fr}
+  .rsv-step-list{flex-direction:column;align-items:center}
+  .rsv-step-arrow{transform:rotate(90deg)}
+  .rsv-desc{min-height:auto}
+}
+</style>
+<!-- JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "예약 안내 | 서울가온치과",
+  "description": "서울가온치과 예약 방법 안내. 전화, 카카오톡, 네이버 3가지 채널.",
+  "url": "https://seoulgaondc.kr/reservation",
+  "inLanguage": "ko",
+  "dateModified": "2026-04-09",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": ["h1", ".rsv-title", ".rsv-info-val"]
+  },
+  "mainEntity": {
+    "@type": "Dentist",
+    "name": "서울가온치과의원",
+    "url": "https://seoulgaondc.kr",
+    "telephone": "0507-1325-3377",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "용민로 22, 골드자이프라자 4층",
+      "addressLocality": "의정부시",
+      "addressRegion": "경기도",
+      "postalCode": "11786",
+      "addressCountry": "KR"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 37.7388,
+      "longitude": 127.0560
+    },
+    "openingHoursSpecification": [
+      {"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Friday"],"opens":"09:30","closes":"18:30"},
+      {"@type":"OpeningHoursSpecification","dayOfWeek":"Thursday","opens":"09:30","closes":"20:30"},
+      {"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"09:30","closes":"14:00"}
+    ],
+    "potentialAction": [
+      {
+        "@type": "ReserveAction",
+        "name": "전화 예약",
+        "target": {"@type":"EntryPoint","urlTemplate":"tel:0507-1325-3377","actionPlatform":"http://schema.org/OfflinePlatform"}
+      },
+      {
+        "@type": "ReserveAction",
+        "name": "카카오톡 예약",
+        "target": {"@type":"EntryPoint","urlTemplate":"https://pf.kakao.com/_LLxhwG/chat","actionPlatform":"http://schema.org/DesktopWebPlatform"}
+      },
+      {
+        "@type": "ReserveAction",
+        "name": "네이버 예약",
+        "target": {"@type":"EntryPoint","urlTemplate":"https://m.place.naver.com/hospital/1139539439/home","actionPlatform":"http://schema.org/DesktopWebPlatform"}
+      }
+    ]
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"홈","item":"https://seoulgaondc.kr/"},
+    {"@type":"ListItem","position":2,"name":"예약 안내","item":"https://seoulgaondc.kr/reservation"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"당일 예약도 가능한가요?","acceptedAnswer":{"@type":"Answer","text":"네, 당일 예약도 가능합니다. 다만 진료 상황에 따라 대기가 발생할 수 있으므로, 가급적 사전 예약을 권장합니다. 전화 또는 카카오톡으로 당일 가능 여부를 확인해주세요."}},
+    {"@type":"Question","name":"예약 변경이나 취소는 어떻게 하나요?","acceptedAnswer":{"@type":"Answer","text":"전화(0507-1325-3377) 또는 카카오톡으로 예약 변경·취소가 가능합니다. 다른 환자분을 위해 가급적 전일까지 연락 부탁드립니다."}},
+    {"@type":"Question","name":"첫 방문 시 준비물이 있나요?","acceptedAnswer":{"@type":"Answer","text":"신분증과 건강보험증을 지참해주세요. 복용 중인 약이 있으시면 약 목록도 함께 가져오시면 좋습니다. 첫 방문 시 파노라마 촬영 + 구강 검진 + 상담으로 약 30~40분 소요됩니다."}},
+    {"@type":"Question","name":"주차 가능한가요?","acceptedAnswer":{"@type":"Answer","text":"네, 골드자이프라자 건물 내 지하 주차장을 이용하실 수 있으며, 진료 시 주차비를 지원해드립니다."}}
+  ]
+}
+</script>
+</head>
+<body>
+<noscript><div style="background:#BFA46A;color:#050504;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다. 브라우저 설정에서 JavaScript를 활성화해주세요.</div></noscript>
+<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--gold);color:var(--ink);font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--gold,#BFA46A);color:var(--ink,#050504);font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
+
+<div id="cur"><div id="cur-ring"></div><div id="cur-dot"></div></div>
+
+<nav id="nav" role="navigation" aria-label="메인 네비게이션">
+  <a href="/" class="nav-logo">서울가온치과<span>.</span></a>
+  <div class="nav-links">
+    <a href="philosophy.html">진료 철학</a>
+    <div class="nav-link-drop"><a href="community.html">커뮤니티 ▾</a><div class="drop"><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a><a href="encyclopedia.html">치과 백과사전</a></div></div>
+    <div class="nav-link-drop"><a href="treatments.html">진료 안내 ▾</a><div class="drop"><a href="treatments.html#implant">임플란트</a><a href="treatments.html#aesthetics">앞니 심미치료</a><a href="treatments.html#endodontics">신경치료</a><a href="treatments.html#general">일반진료</a></div></div>
+    <a href="doctors.html">의료진</a>
+    <div class="nav-link-drop"><a href="guide.html">안내 ▾</a><div class="drop"><a href="guide.html#visit">오시는 길</a><a href="guide.html#fee">수가 안내</a><a href="faq.html">자주 묻는 질문</a></div></div>
+  </div>
+  <a href="reservation.html" class="nav-cta" data-magnet><i class="fas fa-calendar-check" style="margin-right:.4rem;font-size:.78rem"></i>예약 안내</a>
+  <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu"><a href="/">홈</a><a href="philosophy.html">진료 철학</a><a href="treatments.html">진료 안내</a><a href="community.html">커뮤니티</a><a href="doctors.html">의료진</a><a href="guide.html">안내</a><a href="reservation.html">예약 안내</a><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a><a href="encyclopedia.html">치과 백과사전</a><a href="faq.html">자주 묻는 질문</a></div>
+
+<main id="main-content" role="main">
+
+<!-- AEO: AI 발췌용 요약 -->
+<article class="sr-only" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+  <h2>서울가온치과 예약 방법</h2>
+  <p>서울가온치과는 3가지 방법으로 예약할 수 있습니다. 1) 전화 예약: 0507-1325-3377로 전화하시면 상담사가 일정을 안내합니다. 2) 카카오톡 예약: 서울가온치과 카카오톡 채널에서 24시간 상담 접수 가능합니다. 3) 네이버 예약: 네이버에서 '서울가온치과' 검색 후 예약 버튼을 클릭하세요.</p>
+  <p>진료시간: 월·화·수·금 09:30~18:30 / 목요일 야간진료 09:30~20:30 / 토요일 09:30~14:00 / 일·공휴일 휴진.</p>
+</article>
+
+<section class="page-hero">
+  <div class="page-hero-bg">RESERVATION</div>
+  <span class="page-hero-label">Reservation</span>
+  <h1>예약 안내</h1>
+  <p class="page-hero-sub">편한 방법으로 예약하세요. 전화, 카카오톡, 네이버 3가지 채널을 운영합니다.</p>
+</section>
+
+<div class="rsv-section">
+
+<!-- ===== 3 CHANNELS ===== -->
+<div class="rsv-channels">
+
+  <!-- 전화 예약 -->
+  <div class="rsv-card phone" data-reveal>
+    <span class="rsv-badge">Recommended</span>
+    <div class="rsv-icon"><i class="fas fa-phone-alt"></i></div>
+    <h2 class="rsv-title">전화 예약</h2>
+    <div class="rsv-num">0507-1325-3377</div>
+    <p class="rsv-desc">가장 빠른 예약 방법입니다.<br>상담사가 직접 일정을 확인하고<br>최적의 시간을 안내해드립니다.</p>
+    <a href="tel:0507-1325-3377" class="rsv-btn"><i class="fas fa-phone-alt"></i> 바로 전화하기</a>
+  </div>
+
+  <!-- 카카오톡 -->
+  <div class="rsv-card kakao" data-reveal>
+    <span class="rsv-badge">24h Available</span>
+    <div class="rsv-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="36" height="36">
+        <path fill="#3C1E1E" d="M128 36C70.6 36 24 72.8 24 118c0 29.2 19.4 54.8 48.8 69.6l-10 36.8c-.4 1.6.4 2.4 1.6 1.6L106 198c7 1.2 14.4 2 22 2 57.4 0 104-36.8 104-82S185.4 36 128 36z"/>
+      </svg>
+    </div>
+    <h2 class="rsv-title">카카오톡 상담</h2>
+    <p class="rsv-desc" style="margin-top:.8rem">사진 첨부, 비용 문의, 예약 변경까지<br>카카오톡으로 편하게 상담하세요.<br>24시간 접수 가능, 진료 시간 내 답변.</p>
+    <a href="https://pf.kakao.com/_LLxhwG/chat" target="_blank" rel="noopener" class="rsv-btn"><i class="fas fa-comment"></i> 카카오톡 상담</a>
+  </div>
+
+  <!-- 네이버 -->
+  <div class="rsv-card naver" data-reveal>
+    <span class="rsv-badge">Easy Booking</span>
+    <div class="rsv-icon"><i class="fas fa-calendar-check"></i></div>
+    <h2 class="rsv-title">네이버 예약</h2>
+    <p class="rsv-desc">네이버에서 날짜와 시간을<br>직접 선택하여 예약할 수 있습니다.<br>예약 확인·변경도 네이버에서.</p>
+    <a href="https://m.place.naver.com/hospital/1139539439/home" target="_blank" rel="noopener" class="rsv-btn"><i class="fas fa-external-link-alt"></i> 네이버 예약</a>
+  </div>
+
+</div>
+
+<!-- ===== VISIT INFO ===== -->
+<div class="rsv-info" data-reveal>
+  <h2 class="rsv-info-title">방문 전 확인하세요</h2>
+  <p class="rsv-info-sub">예약 전 알아두시면 좋은 정보를 안내합니다</p>
+
+  <div class="rsv-info-grid">
+    <div class="rsv-info-card">
+      <div class="rsv-info-icon"><i class="fas fa-clock"></i></div>
+      <div class="rsv-info-label">Hours</div>
+      <div class="rsv-info-val">
+        <strong>월·화·수·금</strong> 09:30 – 18:30<br>
+        <strong>목요일 (야간)</strong> 09:30 – 20:30<br>
+        <strong>토요일</strong> 09:30 – 14:00<br>
+        <span class="note">일요일·공휴일 휴진 / 점심 13:00–14:00</span>
+      </div>
+    </div>
+
+    <div class="rsv-info-card">
+      <div class="rsv-info-icon"><i class="fas fa-map-marker-alt"></i></div>
+      <div class="rsv-info-label">Location</div>
+      <div class="rsv-info-val">
+        경기 의정부시 용민로 22<br>
+        <strong>골드자이프라자 4층</strong><br>
+        <span class="note">탑석센트럴자이 정문 배스킨라빈스 건물 / 탑석역 도보 5분</span>
+      </div>
+    </div>
+
+    <div class="rsv-info-card">
+      <div class="rsv-info-icon"><i class="fas fa-clipboard-list"></i></div>
+      <div class="rsv-info-label">Checklist</div>
+      <div class="rsv-info-val">
+        <strong>첫 방문 준비물</strong><br>
+        신분증, 건강보험증<br>
+        복용 중인 약 목록 (있는 경우)<br>
+        <span class="note">첫 방문 소요시간: 약 30~40분</span>
+      </div>
+    </div>
+
+    <div class="rsv-info-card">
+      <div class="rsv-info-icon"><i class="fas fa-car"></i></div>
+      <div class="rsv-info-label">Parking</div>
+      <div class="rsv-info-val">
+        건물 내 <strong>지하 주차장</strong> 이용 가능<br>
+        진료 시 주차비 지원<br>
+        <span class="note">지하 1~2층 주차 / 엘리베이터로 4층 이동</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FIRST VISIT STEPS ===== -->
+<div class="rsv-steps" data-reveal>
+  <h2 class="rsv-steps-title">첫 방문 진료 과정</h2>
+  <div class="rsv-step-list">
+    <div class="rsv-step">
+      <div class="rsv-step-num">1</div>
+      <div class="rsv-step-name">접수</div>
+      <div class="rsv-step-desc">데스크에서 건강보험증<br>확인 및 문진표 작성</div>
+    </div>
+    <div class="rsv-step-arrow"><i class="fas fa-chevron-right"></i></div>
+    <div class="rsv-step">
+      <div class="rsv-step-num">2</div>
+      <div class="rsv-step-name">정밀 검사</div>
+      <div class="rsv-step-desc">파노라마 X-ray 촬영<br>구강 상태 정밀 진단</div>
+    </div>
+    <div class="rsv-step-arrow"><i class="fas fa-chevron-right"></i></div>
+    <div class="rsv-step">
+      <div class="rsv-step-num">3</div>
+      <div class="rsv-step-name">상담</div>
+      <div class="rsv-step-desc">원장님 직접 1:1 상담<br>치료 계획 및 비용 설명</div>
+    </div>
+    <div class="rsv-step-arrow"><i class="fas fa-chevron-right"></i></div>
+    <div class="rsv-step">
+      <div class="rsv-step-num">4</div>
+      <div class="rsv-step-name">치료 시작</div>
+      <div class="rsv-step-desc">동의 후 바로 치료 시작<br>또는 다음 방문 예약</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FAQ ===== -->
+<div class="rsv-faq" data-reveal>
+  <h2 class="rsv-faq-title">예약 관련 자주 묻는 질문</h2>
+
+  <div class="rsv-faq-item">
+    <button class="rsv-faq-q">당일 예약도 가능한가요?</button>
+    <div class="rsv-faq-a">네, 당일 예약도 가능합니다. 다만 진료 상황에 따라 대기가 발생할 수 있으므로, 가급적 사전 예약을 권장합니다. 전화 또는 카카오톡으로 당일 가능 여부를 확인해주세요.</div>
+  </div>
+
+  <div class="rsv-faq-item">
+    <button class="rsv-faq-q">예약 변경이나 취소는 어떻게 하나요?</button>
+    <div class="rsv-faq-a">전화(0507-1325-3377) 또는 카카오톡으로 예약 변경·취소가 가능합니다. 다른 환자분을 위해 가급적 전일까지 연락 부탁드립니다.</div>
+  </div>
+
+  <div class="rsv-faq-item">
+    <button class="rsv-faq-q">첫 방문 시 준비물이 있나요?</button>
+    <div class="rsv-faq-a">신분증과 건강보험증을 지참해주세요. 복용 중인 약이 있으시면 약 목록도 함께 가져오시면 좋습니다. 타 병원 진료기록이 있으면 함께 가져오시면 더욱 정확한 진단이 가능합니다.</div>
+  </div>
+
+  <div class="rsv-faq-item">
+    <button class="rsv-faq-q">주차 가능한가요?</button>
+    <div class="rsv-faq-a">네, 골드자이프라자 건물 내 지하 주차장을 이용하실 수 있으며, 진료 시 주차비를 지원해드립니다. 지하 1~2층에 주차 후 엘리베이터로 4층으로 올라오시면 됩니다.</div>
+  </div>
+
+  <div class="rsv-faq-item">
+    <button class="rsv-faq-q">치료 비용은 미리 알 수 있나요?</button>
+    <div class="rsv-faq-a">카카오톡으로 증상을 설명해주시면 대략적인 비용 안내가 가능합니다. 정확한 비용은 검사 후 서면 치료계획서와 함께 투명하게 안내해드립니다. 무이자 할부도 가능합니다.</div>
+  </div>
+
+</div>
+
+</div>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer role="contentinfo">
+  <div class="ft-logo">서울가온치과<span style="color:var(--gold)">.</span></div>
+  <p class="ft-slogan">치과 치료가 좋은 기억이 될 수 있도록.</p>
+  <div class="ft-biz" style="font-size:.72rem;color:var(--stone);margin-bottom:.5rem">
+    <span>서울가온치과의원</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>대표 현진호</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>사업자등록번호 898-03-02537</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>경기도 의정부시 용민로 22, 4층(용현동)</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>Tel. 0507-1325-3377</span>
+  </div>
+  <p class="ft-copy">&copy; 2022&ndash;2026 서울가온치과의원. All rights reserved.</p>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/js/gsap.min.js"></script>
+<script src="/js/ScrollTrigger.min.js"></script>
+<script src="/pages.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+window.addEventListener('DOMContentLoaded', () => {
+  // Hero entrance
+  const heroLabel = document.querySelector('.page-hero-label');
+  const heroTitle = document.querySelector('.page-hero h1');
+  const heroSub = document.querySelector('.page-hero-sub');
+  const tl = gsap.timeline({delay: .2});
+  if(heroLabel) tl.to(heroLabel, {opacity:1, y:0, duration:.6, ease:'power3.out'});
+  if(heroTitle) tl.to(heroTitle, {opacity:1, y:0, duration:.6, ease:'power3.out'}, '-=.4');
+  if(heroSub) tl.to(heroSub, {opacity:1, y:0, duration:.5, ease:'power3.out'}, '-=.3');
+
+  // Card stagger
+  gsap.utils.toArray('.rsv-card, .rsv-info, .rsv-steps, .rsv-faq').forEach((el, i) => {
+    gsap.from(el, {
+      scrollTrigger:{trigger:el, start:'top 88%', once:true},
+      opacity:0, y:50, duration:.7, delay: i * .08, ease:'power3.out'
+    });
+  });
+
+  // Steps number pop
+  gsap.utils.toArray('.rsv-step-num').forEach((num, i) => {
+    gsap.from(num, {
+      scrollTrigger:{trigger:num, start:'top 90%', once:true},
+      scale:0, duration:.5, delay: i * .15, ease:'back.out(2)'
+    });
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.rsv-faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.rsv-faq-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.rsv-faq-item.open').forEach(el => el.classList.remove('open'));
+      if(!wasOpen) item.classList.add('open');
+    });
+  });
+});
+</script>
+
+<!-- ===== KAKAO FLOATING CTA ===== -->
+<div id="kakao-float" onclick="window.open('https://pf.kakao.com/_LLxhwG/chat','_blank')" title="카카오톡 상담">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="32" height="32">
+    <path fill="#3C1E1E" d="M128 36C70.6 36 24 72.8 24 118c0 29.2 19.4 54.8 48.8 69.6l-10 36.8c-.4 1.6.4 2.4 1.6 1.6L106 198c7 1.2 14.4 2 22 2 57.4 0 104-36.8 104-82S185.4 36 128 36z"/>
+  </svg>
+  <span class="kakao-float-label">상담하기</span>
+</div>
+<style>
+#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s}
+#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(0,0,0,.4)}
+#kakao-float:active{transform:scale(.95)}
+.kakao-float-label{position:absolute;right:72px;background:rgba(5,5,4,.9);color:#F2EDE4;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;letter-spacing:.02em;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(191,164,106,.15)}
+.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(5,5,4,.9)}
+#kakao-float:hover .kakao-float-label{opacity:1;transform:translateX(0)}
+@media(max-width:768px){
+#kakao-float{width:52px;height:52px;bottom:1.2rem;right:1.2rem}
+#kakao-float svg{width:26px;height:26px}
+.kakao-float-label{display:none}
+}
+</style>
+
+</body>
+</html>

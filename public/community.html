@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<title>커뮤니티 | 서울가온치과 — 블로그·비포애프터·공지사항·치과 백과사전</title>
+<meta name="description" content="서울가온치과 커뮤니티. 네이버 블로그, 치료 전후 비포 애프터, 공지사항, 치과 백과사전까지. 환자분들과 소통하는 공간입니다.">
+<meta name="keywords" content="서울가온치과 블로그, 의정부치과 후기, 치료 전후 사진, 서울가온치과 공지, 치과 백과사전, 임플란트 후기, 앞니 심미치료 전후">
+<meta name="robots" content="index, follow">
+<meta name="author" content="서울가온치과의원">
+<link rel="canonical" href="https://seoulgaondc.kr/community">
+<link rel="alternate" hreflang="ko" href="https://seoulgaondc.kr/community">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="서울가온치과">
+<meta property="og:title" content="커뮤니티 | 서울가온치과 — 블로그·비포애프터·공지사항·백과사전">
+<meta property="og:description" content="서울가온치과의 치료 후기, 비포 애프터, 공지사항, 치과 백과사전을 만나보세요.">
+<meta property="og:url" content="https://seoulgaondc.kr/community">
+<meta property="og:image" content="https://seoulgaondc.kr/images/og-main.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="커뮤니티 | 서울가온치과">
+<meta name="twitter:description" content="블로그, 비포애프터, 공지사항, 치과 백과사전 — 서울가온치과 커뮤니티">
+<meta name="twitter:image" content="https://seoulgaondc.kr/images/og-main.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<link href="pages.css" rel="stylesheet">
+<style>
+/* ===== COMMUNITY HUB ===== */
+.comm-grid{max-width:1100px;margin:0 auto;padding:clamp(3rem,6vh,5rem) clamp(1.5rem,4vw,4rem);display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.comm-card{background:var(--ink-4);border:1px solid var(--line);border-radius:20px;padding:clamp(2rem,3vw,3rem);transition:border-color .4s,transform .4s;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.comm-card:hover{border-color:rgba(191,164,106,.3);transform:translateY(-4px)}
+.comm-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gold);opacity:0;transition:opacity .4s}
+.comm-card:hover::before{opacity:1}
+.comm-icon{width:64px;height:64px;border-radius:16px;background:rgba(191,164,106,.08);display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;font-size:1.6rem;color:var(--gold)}
+.comm-card-label{font-family:var(--ff-en);font-size:.7rem;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:.4rem}
+.comm-card-title{font-family:var(--ff-title);font-size:clamp(1.3rem,2.5vw,1.8rem);margin-bottom:.75rem}
+.comm-card-desc{font-size:.88rem;color:var(--stone-l);line-height:1.8;margin-bottom:1.5rem;flex:1}
+.comm-card-link{display:inline-flex;align-items:center;gap:.5rem;background:rgba(191,164,106,.1);color:var(--gold);padding:.7rem 1.4rem;border-radius:100px;font-size:.85rem;font-weight:600;letter-spacing:.03em;transition:background .3s,color .3s;align-self:flex-start}
+.comm-card-link:hover{background:var(--gold);color:var(--ink)}
+.comm-card-link i{font-size:.75rem;transition:transform .3s}
+.comm-card-link:hover i{transform:translateX(3px)}
+
+/* Feature tags */
+.comm-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.2rem}
+.comm-tag{font-size:.72rem;padding:.25rem .65rem;border-radius:100px;background:rgba(191,164,106,.06);color:var(--stone-l);border:1px solid var(--line)}
+
+/* CTA section */
+.comm-cta{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem) clamp(4rem,8vh,6rem);text-align:center}
+.comm-cta-box{background:linear-gradient(135deg,rgba(191,164,106,.08),rgba(191,164,106,.02));border:1px solid rgba(191,164,106,.15);border-radius:24px;padding:clamp(2.5rem,4vw,4rem)}
+.comm-cta-title{font-family:var(--ff-title);font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1rem}
+.comm-cta-desc{font-size:.9rem;color:var(--stone-l);line-height:1.8;max-width:540px;margin:0 auto 2rem}
+.comm-cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.comm-cta-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.8rem;border-radius:100px;font-size:.85rem;font-weight:600;transition:all .3s}
+.comm-cta-btn.gold{background:var(--gold);color:var(--ink)}
+.comm-cta-btn.gold:hover{background:var(--gold-b)}
+.comm-cta-btn.outline{border:1px solid var(--gold);color:var(--gold)}
+.comm-cta-btn.outline:hover{background:var(--gold);color:var(--ink)}
+
+@media(max-width:768px){
+  .comm-grid{grid-template-columns:1fr;gap:1.5rem}
+  .comm-cta-btns{flex-direction:column;align-items:center}
+}
+</style>
+<!-- JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "커뮤니티 | 서울가온치과",
+  "description": "서울가온치과 커뮤니티 허브. 블로그, 비포 애프터, 공지사항, 치과 백과사전.",
+  "url": "https://seoulgaondc.kr/community",
+  "inLanguage": "ko",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "서울가온치과",
+    "url": "https://seoulgaondc.kr"
+  },
+  "hasPart": [
+    {"@type": "Blog", "name": "서울가온치과 블로그", "url": "https://seoulgaondc.kr/blog"},
+    {"@type": "CollectionPage", "name": "비포 애프터", "url": "https://seoulgaondc.kr/before-after"},
+    {"@type": "CollectionPage", "name": "공지사항", "url": "https://seoulgaondc.kr/notice"},
+    {"@type": "CollectionPage", "name": "치과 백과사전", "url": "https://seoulgaondc.kr/encyclopedia"}
+  ],
+  "provider": {
+    "@type": "Dentist",
+    "name": "서울가온치과의원",
+    "url": "https://seoulgaondc.kr",
+    "telephone": "0507-1325-3377"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"홈","item":"https://seoulgaondc.kr/"},
+    {"@type":"ListItem","position":2,"name":"커뮤니티","item":"https://seoulgaondc.kr/community"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "커뮤니티 | 서울가온치과",
+  "description": "서울가온치과 커뮤니티 허브 — 블로그, 비포 애프터, 공지사항, 치과 백과사전",
+  "url": "https://seoulgaondc.kr/community",
+  "inLanguage": "ko",
+  "dateModified": "2026-04-09",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": ["h1", ".comm-card-title", ".comm-card-desc"]
+  }
+}
+</script>
+</head>
+<body>
+<noscript><div style="background:#BFA46A;color:#050504;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다. 브라우저 설정에서 JavaScript를 활성화해주세요.</div></noscript>
+<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--gold);color:var(--ink);font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--gold,#BFA46A);color:var(--ink,#050504);font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
+
+<div id="cur"><div id="cur-ring"></div><div id="cur-dot"></div></div>
+
+<nav id="nav" role="navigation" aria-label="메인 네비게이션">
+  <a href="/" class="nav-logo">서울가온치과<span>.</span></a>
+  <div class="nav-links">
+    <a href="philosophy.html">진료 철학</a>
+    <div class="nav-link-drop"><a href="community.html">커뮤니티 ▾</a><div class="drop"><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a><a href="encyclopedia.html">치과 백과사전</a></div></div>
+    <div class="nav-link-drop"><a href="treatments.html">진료 안내 ▾</a><div class="drop"><a href="treatments.html#implant">임플란트</a><a href="treatments.html#aesthetics">앞니 심미치료</a><a href="treatments.html#endodontics">신경치료</a><a href="treatments.html#general">일반진료</a></div></div>
+    <a href="doctors.html">의료진</a>
+    <div class="nav-link-drop"><a href="guide.html">안내 ▾</a><div class="drop"><a href="guide.html#visit">오시는 길</a><a href="guide.html#fee">수가 안내</a><a href="faq.html">자주 묻는 질문</a></div></div>
+  </div>
+  <a href="reservation.html" class="nav-cta" data-magnet><i class="fas fa-calendar-check" style="margin-right:.4rem;font-size:.78rem"></i>예약 안내</a>
+  <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu"><a href="/">홈</a><a href="philosophy.html">진료 철학</a><a href="treatments.html">진료 안내</a><a href="community.html">커뮤니티</a><a href="doctors.html">의료진</a><a href="guide.html">안내</a><a href="reservation.html">예약 안내</a><a href="blog.html">블로그</a><a href="before-after.html">비포 애프터</a><a href="notice.html">공지사항</a><a href="encyclopedia.html">치과 백과사전</a><a href="faq.html">자주 묻는 질문</a></div>
+
+<main id="main-content" role="main">
+
+<section class="page-hero">
+  <div class="page-hero-bg">COMMUNITY</div>
+  <span class="page-hero-label">Community</span>
+  <h1>커뮤니티</h1>
+  <p class="page-hero-sub">서울가온치과의 소식과 이야기를 만나보세요</p>
+</section>
+
+<!-- ===== COMMUNITY CARDS ===== -->
+<div class="comm-grid">
+
+  <!-- 1. 블로그 -->
+  <div class="comm-card" data-reveal>
+    <div class="comm-icon"><i class="fas fa-pen-nib"></i></div>
+    <span class="comm-card-label">Blog</span>
+    <h2 class="comm-card-title">블로그</h2>
+    <div class="comm-tags">
+      <span class="comm-tag">치료 후기</span>
+      <span class="comm-tag">진료 정보</span>
+      <span class="comm-tag">원장 칼럼</span>
+      <span class="comm-tag">구강건강 팁</span>
+    </div>
+    <p class="comm-card-desc">서울가온치과의 진료 이야기, 치과 상식, 환자분들의 솔직한 후기까지. 네이버 블로그에서 더 많은 이야기를 확인하세요.</p>
+    <a href="blog.html" class="comm-card-link">블로그 보기 <i class="fas fa-arrow-right"></i></a>
+  </div>
+
+  <!-- 2. 비포 애프터 -->
+  <div class="comm-card" data-reveal>
+    <div class="comm-icon"><i class="fas fa-images"></i></div>
+    <span class="comm-card-label">Before & After</span>
+    <h2 class="comm-card-title">비포 애프터</h2>
+    <div class="comm-tags">
+      <span class="comm-tag">임플란트</span>
+      <span class="comm-tag">앞니 심미</span>
+      <span class="comm-tag">라미네이트</span>
+      <span class="comm-tag">치아미백</span>
+    </div>
+    <p class="comm-card-desc">실제 치료 전후 사진을 비교해보세요. 임플란트, 라미네이트, 앞니 심미치료 등 다양한 케이스를 투명하게 공개합니다.</p>
+    <a href="before-after.html" class="comm-card-link">사진 보기 <i class="fas fa-arrow-right"></i></a>
+  </div>
+
+  <!-- 3. 공지사항 -->
+  <div class="comm-card" data-reveal>
+    <div class="comm-icon"><i class="fas fa-bullhorn"></i></div>
+    <span class="comm-card-label">Notice</span>
+    <h2 class="comm-card-title">공지사항</h2>
+    <div class="comm-tags">
+      <span class="comm-tag">휴진 안내</span>
+      <span class="comm-tag">이벤트</span>
+      <span class="comm-tag">시스템 변경</span>
+    </div>
+    <p class="comm-card-desc">진료시간 변경, 휴진 안내, 이벤트 소식 등 서울가온치과의 최신 공지사항을 확인하세요.</p>
+    <a href="notice.html" class="comm-card-link">공지 확인 <i class="fas fa-arrow-right"></i></a>
+  </div>
+
+  <!-- 4. 치과 백과사전 -->
+  <div class="comm-card" data-reveal>
+    <div class="comm-icon"><i class="fas fa-book-medical"></i></div>
+    <span class="comm-card-label">Encyclopedia</span>
+    <h2 class="comm-card-title">치과 백과사전</h2>
+    <div class="comm-tags">
+      <span class="comm-tag">질환 정보</span>
+      <span class="comm-tag">치료 방법</span>
+      <span class="comm-tag">예방 관리</span>
+      <span class="comm-tag">AI 검색</span>
+    </div>
+    <p class="comm-card-desc">궁금한 치과 용어, 질환, 치료법을 검색해보세요. 서울대 출신 전문의가 감수한 신뢰할 수 있는 치과 정보입니다.</p>
+    <a href="encyclopedia.html" class="comm-card-link">백과사전 검색 <i class="fas fa-arrow-right"></i></a>
+  </div>
+
+</div>
+
+<!-- ===== CTA ===== -->
+<div class="comm-cta">
+  <div class="comm-cta-box" data-reveal>
+    <h2 class="comm-cta-title">궁금한 점이 있으신가요?</h2>
+    <p class="comm-cta-desc">치료 상담부터 비용 문의까지, 편하게 연락주세요.<br>카카오톡으로 간편 상담도 가능합니다.</p>
+    <div class="comm-cta-btns">
+      <a href="faq.html" class="comm-cta-btn outline"><i class="fas fa-question-circle"></i> 자주 묻는 질문</a>
+      <a href="reservation.html" class="comm-cta-btn gold"><i class="fas fa-calendar-check"></i> 예약 안내</a>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer role="contentinfo">
+  <div class="ft-logo">서울가온치과<span style="color:var(--gold)">.</span></div>
+  <p class="ft-slogan">치과 치료가 좋은 기억이 될 수 있도록.</p>
+  <div class="ft-biz" style="font-size:.72rem;color:var(--stone);margin-bottom:.5rem">
+    <span>서울가온치과의원</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>대표 현진호</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>사업자등록번호 898-03-02537</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>경기도 의정부시 용민로 22, 4층(용현동)</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>Tel. 0507-1325-3377</span>
+  </div>
+  <p class="ft-copy">&copy; 2022&ndash;2026 서울가온치과의원. All rights reserved.</p>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/js/gsap.min.js"></script>
+<script src="/js/ScrollTrigger.min.js"></script>
+<script src="/pages.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+window.addEventListener('DOMContentLoaded', () => {
+  // Hero entrance
+  const heroLabel = document.querySelector('.page-hero-label');
+  const heroTitle = document.querySelector('.page-hero h1');
+  const heroSub = document.querySelector('.page-hero-sub');
+  const tl = gsap.timeline({delay: .2});
+  if(heroLabel) tl.to(heroLabel, {opacity:1, y:0, duration:.6, ease:'power3.out'});
+  if(heroTitle) tl.to(heroTitle, {opacity:1, y:0, duration:.6, ease:'power3.out'}, '-=.4');
+  if(heroSub) tl.to(heroSub, {opacity:1, y:0, duration:.5, ease:'power3.out'}, '-=.3');
+
+  // Card stagger entrance
+  gsap.utils.toArray('.comm-card, .comm-cta-box').forEach((el, i) => {
+    gsap.from(el, {
+      scrollTrigger:{trigger:el, start:'top 88%', once:true},
+      opacity:0, y:50, duration:.7, delay: i * .1, ease:'power3.out'
+    });
+  });
+});
+</script>
+
+<!-- ===== KAKAO FLOATING CTA ===== -->
+<div id="kakao-float" onclick="window.open('https://pf.kakao.com/_LLxhwG/chat','_blank')" title="카카오톡 상담">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="32" height="32">
+    <path fill="#3C1E1E" d="M128 36C70.6 36 24 72.8 24 118c0 29.2 19.4 54.8 48.8 69.6l-10 36.8c-.4 1.6.4 2.4 1.6 1.6L106 198c7 1.2 14.4 2 22 2 57.4 0 104-36.8 104-82S185.4 36 128 36z"/>
+  </svg>
+  <span class="kakao-float-label">상담하기</span>
+</div>
+<style>
+#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s}
+#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(0,0,0,.4)}
+#kakao-float:active{transform:scale(.95)}
+.kakao-float-label{position:absolute;right:72px;background:rgba(5,5,4,.9);color:#F2EDE4;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;letter-spacing:.02em;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(191,164,106,.15)}
+.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(5,5,4,.9)}
+#kakao-float:hover .kakao-float-label{opacity:1;transform:translateX(0)}
+@media(max-width:768px){
+#kakao-float{width:52px;height:52px;bottom:1.2rem;right:1.2rem}
+#kakao-float svg{width:26px;height:26px}
+.kakao-float-label{display:none}
+}
+</style>
+
+</body>
+</html>
