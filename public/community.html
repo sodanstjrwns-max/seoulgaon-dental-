@@ -251,7 +251,7 @@
       <span class="hub-tag">구강건강</span>
     </div>
     <span class="hub-card-arrow">블로그 보러 가기 <i class="fas fa-arrow-right"></i></span>
-    <span class="hub-card-count" id="count-blog"><i class="fas fa-file-alt" style="margin-right:.3rem"></i>포스트</span>
+    <span class="hub-card-count"><i class="fas fa-file-alt" style="margin-right:.3rem"></i>포스트</span>
   </a>
 
   <!-- Before & After Card -->
@@ -266,7 +266,7 @@
       <span class="hub-tag">투명한 결과</span>
     </div>
     <span class="hub-card-arrow">사례 보러 가기 <i class="fas fa-arrow-right"></i></span>
-    <span class="hub-card-count" id="count-ba"><i class="fas fa-camera" style="margin-right:.3rem"></i>사례</span>
+    <span class="hub-card-count"><i class="fas fa-camera" style="margin-right:.3rem"></i>사례</span>
   </a>
 
   <!-- Notice Card -->
@@ -282,7 +282,7 @@
       <span class="hub-tag">시스템 변경</span>
     </div>
     <span class="hub-card-arrow">공지사항 보기 <i class="fas fa-arrow-right"></i></span>
-    <span class="hub-card-count" id="count-notice"><i class="fas fa-bell" style="margin-right:.3rem"></i>공지</span>
+    <span class="hub-card-count"><i class="fas fa-bell" style="margin-right:.3rem"></i>공지</span>
   </a>
 
   <!-- Encyclopedia Card -->
@@ -298,13 +298,13 @@
       <span class="hub-tag">자가진단</span>
     </div>
     <span class="hub-card-arrow">백과사전 보기 <i class="fas fa-arrow-right"></i></span>
-    <span class="hub-card-count" id="count-enc"><i class="fas fa-book" style="margin-right:.3rem"></i>항목</span>
+    <span class="hub-card-count"><i class="fas fa-book" style="margin-right:.3rem"></i>항목</span>
   </a>
 </div>
 
 
 <!-- ═══════════════════════════════════════════════
-     2. LATEST BLOG POSTS
+     2. LATEST BLOG POSTS (Static)
      ═══════════════════════════════════════════════ -->
 <section class="comm-section" id="sec-blog">
   <div class="comm-sec-head">
@@ -315,14 +315,40 @@
     </div>
     <a href="blog.html" class="comm-more">전체 보기 <i class="fas fa-arrow-right"></i></a>
   </div>
-  <div class="blog-preview-grid" id="blog-grid">
-    <!-- Filled by JS -->
+  <div class="blog-preview-grid">
+    <a href="blog.html" class="blog-preview">
+      <div class="blog-preview-thumb"><i class="fas fa-tooth icon-placeholder"></i></div>
+      <div class="blog-preview-body">
+        <span class="blog-preview-cat">임플란트</span>
+        <div class="blog-preview-title">임플란트 수술 후 주의사항 — 빠른 회복을 위한 7가지 팁</div>
+        <div class="blog-preview-excerpt">임플란트 수술 후 48시간이 가장 중요합니다. 붓기 관리, 식이 조절, 구강 위생까지 빠른 회복을 위한 핵심 정보를 정리했습니다.</div>
+        <div class="blog-preview-date">2026.03.25</div>
+      </div>
+    </a>
+    <a href="blog.html" class="blog-preview">
+      <div class="blog-preview-thumb"><i class="fas fa-magic icon-placeholder"></i></div>
+      <div class="blog-preview-body">
+        <span class="blog-preview-cat">앞니 심미</span>
+        <div class="blog-preview-title">앞니가 벌어졌을 때 — 라미네이트? 교정? 최적의 선택법</div>
+        <div class="blog-preview-excerpt">앞니 벌어짐(이개)의 원인과 치료 옵션을 비교합니다. 치아 상태에 따라 최적의 치료가 달라지는 이유를 설명합니다.</div>
+        <div class="blog-preview-date">2026.03.18</div>
+      </div>
+    </a>
+    <a href="blog.html" class="blog-preview">
+      <div class="blog-preview-thumb"><i class="fas fa-microscope icon-placeholder"></i></div>
+      <div class="blog-preview-body">
+        <span class="blog-preview-cat">신경치료</span>
+        <div class="blog-preview-title">신경치료 후 크라운, 왜 꼭 씌워야 할까요?</div>
+        <div class="blog-preview-excerpt">신경치료를 받은 치아는 혈액 공급이 끊겨 약해집니다. 크라운으로 보호하지 않으면 파절 위험이 높아지는 이유를 설명합니다.</div>
+        <div class="blog-preview-date">2026.03.10</div>
+      </div>
+    </a>
   </div>
 </section>
 
 
 <!-- ═══════════════════════════════════════════════
-     3. BEFORE & AFTER PREVIEW
+     3. BEFORE & AFTER PREVIEW (Static)
      ═══════════════════════════════════════════════ -->
 <section class="comm-section" id="sec-ba">
   <div class="comm-sec-head">
@@ -333,14 +359,53 @@
     </div>
     <a href="before-after.html" class="comm-more">전체 보기 <i class="fas fa-arrow-right"></i></a>
   </div>
-  <div class="ba-preview-grid" id="ba-grid">
-    <!-- Filled by JS -->
+  <div class="ba-preview-grid">
+    <a href="before-after.html" class="ba-preview">
+      <div class="ba-preview-imgs">
+        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.65rem">BEFORE</div><span class="ba-label">BEFORE</span></div>
+        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(191,164,106,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
+      </div>
+      <div class="ba-preview-body">
+        <div class="ba-preview-title">전체 임플란트 — 무치악 환자 풀 마우스</div>
+        <div class="ba-preview-cat">임플란트</div>
+      </div>
+    </a>
+    <a href="before-after.html" class="ba-preview">
+      <div class="ba-preview-imgs">
+        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.65rem">BEFORE</div><span class="ba-label">BEFORE</span></div>
+        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(191,164,106,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
+      </div>
+      <div class="ba-preview-body">
+        <div class="ba-preview-title">앞니 라미네이트 6본 — 자연스러운 미소 회복</div>
+        <div class="ba-preview-cat">앞니 심미</div>
+      </div>
+    </a>
+    <a href="before-after.html" class="ba-preview">
+      <div class="ba-preview-imgs">
+        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.65rem">BEFORE</div><span class="ba-label">BEFORE</span></div>
+        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(191,164,106,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
+      </div>
+      <div class="ba-preview-body">
+        <div class="ba-preview-title">충치 레진 치료 — 심미적인 자연치아 보존</div>
+        <div class="ba-preview-cat">일반진료</div>
+      </div>
+    </a>
+    <a href="before-after.html" class="ba-preview">
+      <div class="ba-preview-imgs">
+        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.65rem">BEFORE</div><span class="ba-label">BEFORE</span></div>
+        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(191,164,106,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
+      </div>
+      <div class="ba-preview-body">
+        <div class="ba-preview-title">사랑니 발치 후 임플란트 — 어금니 기능 회복</div>
+        <div class="ba-preview-cat">임플란트</div>
+      </div>
+    </a>
   </div>
 </section>
 
 
 <!-- ═══════════════════════════════════════════════
-     4. NOTICES
+     4. NOTICES (Static)
      ═══════════════════════════════════════════════ -->
 <section class="comm-section" id="sec-notice">
   <div class="comm-sec-head">
@@ -351,8 +416,32 @@
     </div>
     <a href="notice.html" class="comm-more">전체 보기 <i class="fas fa-arrow-right"></i></a>
   </div>
-  <div class="notice-list" id="notice-list">
-    <!-- Filled by JS -->
+  <div class="notice-list">
+    <a href="notice.html" class="notice-item">
+      <span class="notice-badge important">중요</span>
+      <span class="notice-title">2026년 4월 진료시간 안내</span>
+      <span class="notice-date">2026.04.01</span>
+    </a>
+    <a href="notice.html" class="notice-item">
+      <span class="notice-badge important">중요</span>
+      <span class="notice-title">봄맞이 스케일링 이벤트 안내</span>
+      <span class="notice-date">2026.03.20</span>
+    </a>
+    <a href="notice.html" class="notice-item">
+      <span class="notice-badge normal">일반</span>
+      <span class="notice-title">주차 안내 — 골드자이프라자 지하 주차장 이용 방법</span>
+      <span class="notice-date">2026.03.15</span>
+    </a>
+    <a href="notice.html" class="notice-item">
+      <span class="notice-badge important">중요</span>
+      <span class="notice-title">카카오톡 예약 시스템 오픈 안내</span>
+      <span class="notice-date">2026.03.05</span>
+    </a>
+    <a href="notice.html" class="notice-item">
+      <span class="notice-badge normal">일반</span>
+      <span class="notice-title">진료 대기 시간 단축 시스템 도입 안내</span>
+      <span class="notice-date">2026.02.20</span>
+    </a>
   </div>
 </section>
 
@@ -527,59 +616,7 @@ document.getElementById('enc-input').addEventListener('keydown', e => {
   if(e.key === 'Enter') goEncyclopedia();
 });
 
-/* ===== Helpers ===== */
-function fmtDate(d){
-  if(!d) return '';
-  const dt = new Date(d);
-  return dt.getFullYear()+'.'+String(dt.getMonth()+1).padStart(2,'0')+'.'+String(dt.getDate()).padStart(2,'0');
-}
-const catMap = {implant:'임플란트', aesthetics:'앞니 심미', endodontics:'신경치료', general:'일반진료', laminate:'라미네이트', crown:'크라운', whitening:'미백', denture:'틀니'};
-
-/* ===== Static fallback content ===== */
-const fallbackBlogs = [
-  {
-    id: 0,
-    title: '임플란트 수술 후 주의사항 — 빠른 회복을 위한 7가지 팁',
-    category: 'implant',
-    excerpt: '임플란트 수술 후 48시간이 가장 중요합니다. 붓기 관리, 식이 조절, 구강 위생까지 빠른 회복을 위한 핵심 정보를 정리했습니다.',
-    created_at: '2026-03-25',
-    icon: 'fa-tooth'
-  },
-  {
-    id: 0,
-    title: '앞니가 벌어졌을 때 — 라미네이트? 교정? 최적의 선택법',
-    category: 'aesthetics',
-    excerpt: '앞니 벌어짐(이개)의 원인과 치료 옵션을 비교합니다. 치아 상태에 따라 최적의 치료가 다릅니다.',
-    created_at: '2026-03-18',
-    icon: 'fa-magic'
-  },
-  {
-    id: 0,
-    title: '신경치료 후 크라운, 왜 꼭 씌워야 할까요?',
-    category: 'endodontics',
-    excerpt: '신경치료를 받은 치아는 혈액 공급이 끊겨 약해집니다. 크라운으로 보호하지 않으면 파절 위험이 높아지는 이유를 설명합니다.',
-    created_at: '2026-03-10',
-    icon: 'fa-microscope'
-  }
-];
-
-const fallbackBa = [
-  { title: '전체 임플란트 — 무치악 환자 풀 마우스', category: 'implant' },
-  { title: '앞니 라미네이트 6본 — 자연스러운 미소 회복', category: 'aesthetics' },
-  { title: '충치 레진 치료 — 심미적인 자연치아 보존', category: 'general' },
-  { title: '사랑니 발치 후 임플란트 — 어금니 기능 회복', category: 'implant' }
-];
-
-const fallbackNotices = [
-  { title: '2026년 4월 진료시간 안내', created_at: '2026-04-01', is_pinned: true },
-  { title: '봄맞이 스케일링 이벤트 안내', created_at: '2026-03-20', is_pinned: true },
-  { title: '주차 안내 — 골드자이프라자 지하 주차장', created_at: '2026-03-15', is_pinned: false },
-  { title: '카카오톡 예약 시스템 오픈 안내', created_at: '2026-03-05', is_pinned: true },
-  { title: '진료 대기 시간 단축 시스템 도입 안내', created_at: '2026-02-20', is_pinned: false }
-];
-
-
-window.addEventListener('DOMContentLoaded', async () => {
+window.addEventListener('DOMContentLoaded', () => {
   /* --- Hero entrance --- */
   const heroLabel = document.querySelector('.page-hero-label');
   const heroTitle = document.querySelector('.page-hero h1');
@@ -589,128 +626,11 @@ window.addEventListener('DOMContentLoaded', async () => {
   if(heroTitle) tl.to(heroTitle, {opacity:1, y:0, duration:.6, ease:'power3.out'}, '-=.4');
   if(heroSub) tl.to(heroSub, {opacity:1, y:0, duration:.5, ease:'power3.out'}, '-=.3');
 
-  /* --- Fetch data from API (with fallback) --- */
-  let blogs = [], bas = [], notices = [], encs = [];
-  let blogTotal = 0, baTotal = 0, noticeTotal = 0, encTotal = 0;
-
-  try {
-    const [blogRes, baRes, noticeRes, encRes] = await Promise.allSettled([
-      fetch('/api/blog?limit=6').then(r=>r.ok?r.json():{posts:[],pagination:{total:0}}),
-      fetch('/api/before-after?limit=4').then(r=>r.ok?r.json():{cases:[],total:0}),
-      fetch('/api/notices?limit=5').then(r=>r.ok?r.json():{notices:[],pagination:{total:0}}),
-      fetch('/api/encyclopedia?limit=100').then(r=>r.ok?r.json():{entries:[],total:0})
-    ]);
-    
-    if(blogRes.status==='fulfilled'){
-      const d = blogRes.value;
-      blogs = d.posts || d.data || [];
-      blogTotal = d.pagination?.total || blogs.length;
-    }
-    if(baRes.status==='fulfilled'){
-      const d = baRes.value;
-      bas = d.cases || d.data || [];
-      baTotal = d.total || bas.length;
-    }
-    if(noticeRes.status==='fulfilled'){
-      const d = noticeRes.value;
-      notices = d.notices || d.data || [];
-      noticeTotal = d.pagination?.total || notices.length;
-    }
-    if(encRes.status==='fulfilled'){
-      const d = encRes.value;
-      encs = d.entries || d.items || d.data || [];
-      encTotal = d.total || encs.length;
-    }
-  } catch(e) {
-    console.log('API fetch error, using fallback content');
-  }
-
-  /* --- Use fallback if API returns empty --- */
-  const useBlogFallback = blogs.length === 0;
-  const useBaFallback = bas.length === 0;
-  const useNoticeFallback = notices.length === 0;
-
-  if(useBlogFallback) blogs = fallbackBlogs;
-  if(useBaFallback) bas = fallbackBa;
-  if(useNoticeFallback) notices = fallbackNotices;
-
-  /* --- Hub card counts --- */
-  document.getElementById('count-blog').innerHTML = '<i class="fas fa-file-alt" style="margin-right:.3rem"></i>' + (blogTotal || blogs.length) + ' 포스트';
-  document.getElementById('count-ba').innerHTML = '<i class="fas fa-camera" style="margin-right:.3rem"></i>' + (baTotal || bas.length) + ' 사례';
-  document.getElementById('count-notice').innerHTML = '<i class="fas fa-bell" style="margin-right:.3rem"></i>' + (noticeTotal || notices.length) + ' 공지';
-  document.getElementById('count-enc').innerHTML = '<i class="fas fa-book" style="margin-right:.3rem"></i>' + (encTotal || encs.length || 8) + ' 항목';
-
-  /* --- BLOG SECTION --- */
-  const blogGrid = document.getElementById('blog-grid');
-  blogGrid.innerHTML = blogs.slice(0,3).map(p => {
-    const cat = catMap[p.category] || p.category || '';
-    const thumb = p.thumbnail_url || '';
-    const excerpt = p.excerpt || (p.content ? p.content.substring(0,100).replace(/<[^>]*>/g,'') : '');
-    const link = p.id ? 'blog-post.html?id='+p.id : 'blog.html';
-    const iconClass = p.icon || 'fa-pen-nib';
-    return `<a href="${link}" class="blog-preview">
-      ${thumb 
-        ? '<div class="blog-preview-thumb"><img src="'+thumb+'" alt="" loading="lazy"></div>' 
-        : '<div class="blog-preview-thumb"><i class="fas '+iconClass+' icon-placeholder"></i></div>'}
-      <div class="blog-preview-body">
-        <span class="blog-preview-cat">${cat}</span>
-        <div class="blog-preview-title">${p.title||''}</div>
-        ${excerpt ? '<div class="blog-preview-excerpt">'+excerpt+'</div>' : ''}
-        <div class="blog-preview-date">${fmtDate(p.created_at||p.published_at)}</div>
-      </div>
-    </a>`;
-  }).join('');
-
-  /* --- BEFORE & AFTER SECTION --- */
-  const baGrid = document.getElementById('ba-grid');
-  if(useBaFallback){
-    baGrid.innerHTML = bas.map(c => {
-      const cat = catMap[c.category] || c.category || '';
-      return `<a href="before-after.html" class="ba-preview">
-        <div class="ba-preview-imgs">
-          <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.65rem">BEFORE</div><span class="ba-label">BEFORE</span></div>
-          <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(191,164,106,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
-        </div>
-        <div class="ba-preview-body">
-          <div class="ba-preview-title">${c.title}</div>
-          <div class="ba-preview-cat">${cat}</div>
-        </div>
-      </a>`;
-    }).join('');
-  } else {
-    baGrid.innerHTML = bas.slice(0,4).map(c => {
-      const befImg = c.intraoral_before_url || c.panorama_before_url || '';
-      const aftImg = c.intraoral_after_url || c.panorama_after_url || '';
-      const cat = catMap[c.category] || c.category || '';
-      return `<a href="before-after.html" class="ba-preview">
-        <div class="ba-preview-imgs">
-          <div>${befImg?'<img src="'+befImg+'" alt="치료 전" loading="lazy">':'<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.7rem">Before</div>'}<span class="ba-label">BEFORE</span></div>
-          <div>${aftImg?'<img src="'+aftImg+'" alt="치료 후" loading="lazy">':'<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.7rem">After</div>'}<span class="ba-label">AFTER</span></div>
-        </div>
-        <div class="ba-preview-body">
-          <div class="ba-preview-title">${c.title||'치료 사례'}</div>
-          <div class="ba-preview-cat">${cat}</div>
-        </div>
-      </a>`;
-    }).join('');
-  }
-
-  /* --- NOTICES SECTION --- */
-  const noticeList = document.getElementById('notice-list');
-  noticeList.innerHTML = notices.slice(0,5).map(n => {
-    const isImportant = n.is_pinned || n.is_important;
-    return `<a href="notice.html" class="notice-item">
-      <span class="notice-badge ${isImportant?'important':'normal'}">${isImportant?'중요':'일반'}</span>
-      <span class="notice-title">${n.title||''}</span>
-      <span class="notice-date">${fmtDate(n.created_at)}</span>
-    </a>`;
-  }).join('');
-
   /* --- GSAP Scroll Reveal --- */
-  gsap.utils.toArray('.hub-card, .comm-section, .comm-cta-box, .knowledge-card, .tip-card').forEach(el => {
+  gsap.utils.toArray('.hub-card, .comm-section, .comm-cta-box, .knowledge-card, .tip-card, .blog-preview, .ba-preview, .notice-item').forEach(el => {
     gsap.from(el, {
-      scrollTrigger:{trigger:el, start:'top 88%', once:true},
-      opacity:0, y:40, duration:.6, ease:'power3.out'
+      scrollTrigger:{trigger:el, start:'top 90%', once:true},
+      opacity:0, y:35, duration:.6, ease:'power3.out'
     });
   });
 
@@ -718,6 +638,24 @@ window.addEventListener('DOMContentLoaded', async () => {
   gsap.from('.hub-card', {
     scrollTrigger:{trigger:'#hub-cards', start:'top 85%', once:true},
     opacity:0, y:50, duration:.7, stagger:.12, ease:'power3.out'
+  });
+
+  /* Blog cards stagger */
+  gsap.from('.blog-preview', {
+    scrollTrigger:{trigger:'#sec-blog', start:'top 85%', once:true},
+    opacity:0, y:40, duration:.6, stagger:.1, ease:'power3.out'
+  });
+
+  /* BA cards stagger */
+  gsap.from('.ba-preview', {
+    scrollTrigger:{trigger:'#sec-ba', start:'top 85%', once:true},
+    opacity:0, y:40, duration:.6, stagger:.08, ease:'power3.out'
+  });
+
+  /* Notice items stagger */
+  gsap.from('.notice-item', {
+    scrollTrigger:{trigger:'#sec-notice', start:'top 85%', once:true},
+    opacity:0, x:-20, duration:.5, stagger:.08, ease:'power3.out'
   });
 
   /* Enc topics stagger */
