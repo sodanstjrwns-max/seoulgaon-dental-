@@ -26,6 +26,7 @@
   .btn-gold:hover{background:var(--gold-b)}
   .auth-error{background:#3a1515;border:1px solid #6b2d2d;color:#ff6b6b;padding:.6rem 1rem;border-radius:8px;font-size:.82rem;margin-bottom:1rem;display:none}
   .auth-icon{font-size:2.5rem;margin-bottom:1rem;opacity:.3}
+  @keyframes spin{to{transform:rotate(360deg)}}
 
   /* ===== GUIDE SCREEN ===== */
   .guide-wrap{display:none;max-width:860px;margin:0 auto;padding:2rem 2rem 6rem}
@@ -95,8 +96,17 @@
         <label>비밀번호</label>
         <input type="password" id="pw-input" placeholder="관리자 비밀번호 입력" autofocus>
       </div>
-      <button type="submit" class="btn-gold">매뉴얼 열기</button>
+      <button type="submit" class="btn-gold" id="auth-btn">
+        <span id="btn-text">매뉴얼 열기</span>
+        <span id="btn-loading" style="display:none"><svg style="animation:spin .8s linear infinite;vertical-align:middle;margin-right:6px" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-opacity=".25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>인증 중…</span>
+      </button>
     </form>
+    <div style="margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid #222;font-size:.78rem;color:#555;text-align:left;line-height:1.8">
+      <div style="color:#888;font-weight:500;margin-bottom:.3rem">초기 접속 정보</div>
+      <div>관리자 주소 — <span style="color:var(--gold)">seoulgaon-dental.pages.dev/admin</span></div>
+      <div>초기 비밀번호 — <span style="color:var(--gold)">gaon2026!</span></div>
+      <div style="color:#444;margin-top:.4rem">※ 로그인 후 반드시 비밀번호를 변경하세요</div>
+    </div>
   </div>
 </div>
 
@@ -127,14 +137,21 @@
   <div class="section" id="s1">
     <h2>1. 관리자 페이지 접속</h2>
     
-    <h3>접속 주소</h3>
-    <p><code>https://seoulgaon-dental.pages.dev/admin</code></p>
+    <h3>접속 정보</h3>
+    <table class="guide-table">
+      <thead><tr><th>항목</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td><strong>홈페이지</strong></td><td><code>https://seoulgaon-dental.pages.dev</code></td></tr>
+        <tr><td><strong>관리자 페이지</strong></td><td><code>https://seoulgaon-dental.pages.dev/admin</code></td></tr>
+        <tr><td><strong>초기 비밀번호</strong></td><td><code>gaon2026!</code></td></tr>
+      </tbody>
+    </table>
 
     <h3>로그인 방법</h3>
-    <div class="step"><div class="step-num">1</div><div class="step-body">위 주소에 접속하면 <strong>비밀번호 입력 화면</strong>이 나옵니다</div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-body">비밀번호를 입력하고 <strong>[로그인]</strong> 클릭</div></div>
+    <div class="step"><div class="step-num">1</div><div class="step-body">관리자 주소에 접속하면 <strong>비밀번호 입력 화면</strong>이 나옵니다</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body">초기 비밀번호 <code>gaon2026!</code> 입력 후 <strong>[로그인]</strong> 클릭</div></div>
 
-    <div class="info-box warn">비밀번호는 로그인 후 좌측 하단 <strong>[비밀번호 변경]</strong> 버튼으로 언제든 변경할 수 있습니다. 변경 후에는 새 비밀번호로만 로그인됩니다.</div>
+    <div class="info-box important">첫 로그인 후 반드시 비밀번호를 변경하세요! 좌측 하단 <strong>[비밀번호 변경]</strong> 버튼으로 언제든 변경할 수 있습니다.</div>
 
     <h3>로그아웃</h3>
     <p>좌측 하단 <strong>[로그아웃]</strong> 버튼을 클릭하세요. 토큰은 7일 후 자동 만료됩니다.</p>
@@ -364,6 +381,12 @@ async function handleAuth(e) {
 
   if (!pw) { errEl.textContent = '비밀번호를 입력해주세요'; errEl.style.display = 'block'; return false; }
 
+  // 로딩 표시
+  const btn = document.getElementById('auth-btn');
+  const btnText = document.getElementById('btn-text');
+  const btnLoad = document.getElementById('btn-loading');
+  btn.disabled = true; btnText.style.display = 'none'; btnLoad.style.display = 'inline-flex';
+
   try {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
@@ -375,6 +398,7 @@ async function handleAuth(e) {
     if (!res.ok || !data.token) {
       errEl.textContent = data.error || '비밀번호가 올바르지 않습니다';
       errEl.style.display = 'block';
+      btn.disabled = false; btnText.style.display = 'inline'; btnLoad.style.display = 'none';
       return false;
     }
 
@@ -386,8 +410,9 @@ async function handleAuth(e) {
     sessionStorage.setItem('guide_auth', '1');
 
   } catch (err) {
-    errEl.textContent = '네트워크 오류가 발생했습니다';
+    errEl.textContent = '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
     errEl.style.display = 'block';
+    btn.disabled = false; btnText.style.display = 'inline'; btnLoad.style.display = 'none';
   }
   return false;
 }
