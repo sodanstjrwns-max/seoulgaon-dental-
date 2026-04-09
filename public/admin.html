@@ -1044,7 +1044,7 @@ function execItalic(){ document.execCommand('italic',false,null); }
 function execLink(){
   const sel = window.getSelection();
   if(sel.rangeCount && !sel.isCollapsed){
-    const url = prompt('링크 URL (예: https://www.seoulgaon.com/treatments.html)');
+    const url = prompt('링크 URL (예: https://seoulgaondc.kr/treatments.html)');
     if(url) document.execCommand('createLink',false,url);
   } else {
     toast('먼저 텍스트를 선택한 후 링크를 삽입해주세요',true);

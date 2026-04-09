@@ -5,86 +5,86 @@
 
   <!-- 메인 (홈) -->
   <url>
-    <loc>https://www.seoulgaon.com/</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.seoulgaon.com/" />
+    <loc>https://seoulgaondc.kr/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://seoulgaondc.kr/" />
     <lastmod>2026-04-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://www.seoulgaon.com/images/og-main.jpg</image:loc>
+      <image:loc>https://seoulgaondc.kr/images/og-main.jpg</image:loc>
       <image:title>서울가온치과 메인 — 의정부 임플란트·심미치료·신경치료</image:title>
     </image:image>
   </url>
 
   <!-- 진료 안내 -->
   <url>
-    <loc>https://www.seoulgaon.com/treatments</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.seoulgaon.com/treatments" />
+    <loc>https://seoulgaondc.kr/treatments</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://seoulgaondc.kr/treatments" />
     <lastmod>2026-04-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
     <image:image>
-      <image:loc>https://www.seoulgaon.com/images/og-treatments.jpg</image:loc>
+      <image:loc>https://seoulgaondc.kr/images/og-treatments.jpg</image:loc>
       <image:title>서울가온치과 진료 안내 — 임플란트, 심미치료, 신경치료, 일반진료</image:title>
     </image:image>
   </url>
 
   <!-- 진료 철학 -->
   <url>
-    <loc>https://www.seoulgaon.com/philosophy</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.seoulgaon.com/philosophy" />
+    <loc>https://seoulgaondc.kr/philosophy</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://seoulgaondc.kr/philosophy" />
     <lastmod>2026-04-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://www.seoulgaon.com/images/og-philosophy.jpg</image:loc>
+      <image:loc>https://seoulgaondc.kr/images/og-philosophy.jpg</image:loc>
       <image:title>서울가온치과 진료 철학</image:title>
     </image:image>
   </url>
 
   <!-- 의료진 소개 -->
   <url>
-    <loc>https://www.seoulgaon.com/doctors</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.seoulgaon.com/doctors" />
+    <loc>https://seoulgaondc.kr/doctors</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://seoulgaondc.kr/doctors" />
     <lastmod>2026-04-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://www.seoulgaon.com/images/og-doctors.jpg</image:loc>
+      <image:loc>https://seoulgaondc.kr/images/og-doctors.jpg</image:loc>
       <image:title>서울가온치과 의료진 소개 — 현진호 대표원장</image:title>
     </image:image>
   </url>
 
   <!-- 내원 안내 -->
   <url>
-    <loc>https://www.seoulgaon.com/guide</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.seoulgaon.com/guide" />
+    <loc>https://seoulgaondc.kr/guide</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://seoulgaondc.kr/guide" />
     <lastmod>2026-04-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <image:image>
-      <image:loc>https://www.seoulgaon.com/images/og-guide.jpg</image:loc>
+      <image:loc>https://seoulgaondc.kr/images/og-guide.jpg</image:loc>
       <image:title>서울가온치과 내원 안내 — 오시는 길, 진료비</image:title>
     </image:image>
   </url>
 
   <!-- 자주 묻는 질문 -->
   <url>
-    <loc>https://www.seoulgaon.com/faq</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.seoulgaon.com/faq" />
+    <loc>https://seoulgaondc.kr/faq</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://seoulgaondc.kr/faq" />
     <lastmod>2026-04-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <image:image>
-      <image:loc>https://www.seoulgaon.com/images/og-guide.jpg</image:loc>
+      <image:loc>https://seoulgaondc.kr/images/og-guide.jpg</image:loc>
       <image:title>서울가온치과 자주 묻는 질문 FAQ</image:title>
     </image:image>
   </url>
 
   <!-- 치과 백과사전 -->
   <url>
-    <loc>https://www.seoulgaon.com/encyclopedia</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.seoulgaon.com/encyclopedia" />
+    <loc>https://seoulgaondc.kr/encyclopedia</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://seoulgaondc.kr/encyclopedia" />
     <lastmod>2026-04-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -92,34 +92,34 @@
 
   <!-- 블로그 -->
   <url>
-    <loc>https://www.seoulgaon.com/blog</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.seoulgaon.com/blog" />
+    <loc>https://seoulgaondc.kr/blog</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://seoulgaondc.kr/blog" />
     <lastmod>2026-04-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <image:image>
-      <image:loc>https://www.seoulgaon.com/images/og-blog.jpg</image:loc>
+      <image:loc>https://seoulgaondc.kr/images/og-blog.jpg</image:loc>
       <image:title>서울가온치과 블로그</image:title>
     </image:image>
   </url>
 
   <!-- 비포 애프터 -->
   <url>
-    <loc>https://www.seoulgaon.com/before-after</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.seoulgaon.com/before-after" />
+    <loc>https://seoulgaondc.kr/before-after</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://seoulgaondc.kr/before-after" />
     <lastmod>2026-04-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <image:image>
-      <image:loc>https://www.seoulgaon.com/images/og-before-after.jpg</image:loc>
+      <image:loc>https://seoulgaondc.kr/images/og-before-after.jpg</image:loc>
       <image:title>서울가온치과 치료 전후 사례</image:title>
     </image:image>
   </url>
 
   <!-- 공지사항 -->
   <url>
-    <loc>https://www.seoulgaon.com/notice</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.seoulgaon.com/notice" />
+    <loc>https://seoulgaondc.kr/notice</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://seoulgaondc.kr/notice" />
     <lastmod>2026-04-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>

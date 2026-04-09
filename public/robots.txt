@@ -1,4 +1,4 @@
-# robots.txt — 서울가온치과 (www.seoulgaon.com)
+# robots.txt — 서울가온치과 (seoulgaondc.kr)
 # Last updated: 2026-04-09
 
 # ── 모든 검색엔진 허용 ──
@@ -97,4 +97,4 @@ User-agent: AhrefsBot
 Disallow: /
 
 # ── 사이트맵 ──
-Sitemap: https://www.seoulgaon.com/sitemap.xml
+Sitemap: https://seoulgaondc.kr/sitemap.xml
