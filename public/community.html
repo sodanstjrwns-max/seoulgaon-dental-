@@ -152,9 +152,8 @@
 .comm-cta-btn.outline{border:1px solid var(--gold);color:var(--gold)}
 .comm-cta-btn.outline:hover{background:var(--gold);color:var(--ink)}
 
-/* === Loading skeleton === */
-.skeleton{background:linear-gradient(90deg,var(--ink-4) 25%,var(--ink-3) 50%,var(--ink-4) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* Force all content visible - override any external CSS opacity:0 rules */
+.hub-card,.blog-preview,.ba-preview,.notice-item,.knowledge-card,.tip-card,.comm-section,.comm-cta-box,.enc-topic{opacity:1!important;visibility:visible!important;transform:none!important}
 
 /* === Responsive === */
 @media(max-width:768px){
@@ -227,9 +226,9 @@
 <!-- ===== HERO ===== -->
 <section class="page-hero">
   <div class="page-hero-bg">COMMUNITY</div>
-  <span class="page-hero-label">Community Hub</span>
-  <h1>커뮤니티</h1>
-  <p class="page-hero-sub">서울가온치과의 이야기, 치료 사례, 치과 지식을 한곳에서 만나보세요</p>
+  <span class="page-hero-label" style="opacity:1;transform:none">Community Hub</span>
+  <h1 style="opacity:1;transform:none">커뮤니티</h1>
+  <p class="page-hero-sub" style="opacity:1;transform:none">서울가온치과의 이야기, 치료 사례, 치과 지식을 한곳에서 만나보세요</p>
 </section>
 
 
