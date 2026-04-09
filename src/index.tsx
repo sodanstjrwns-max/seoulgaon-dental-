@@ -223,6 +223,15 @@ async function initDB(db: D1Database) {
     `CREATE INDEX IF NOT EXISTS idx_doctors_active ON doctors(is_active, sort_order)`,
     `CREATE INDEX IF NOT EXISTS idx_blog_doctor ON blog_posts(doctor_id)`,
     `CREATE INDEX IF NOT EXISTS idx_ba_doctor ON before_after(doctor_id)`,
+    // doctor_id columns (safe ALTER — required for production DB that was created without them)
+    `ALTER TABLE blog_posts ADD COLUMN doctor_id INTEGER`,
+    `ALTER TABLE before_after ADD COLUMN doctor_id INTEGER`,
+    `ALTER TABLE blog_posts ADD COLUMN thumbnail_url TEXT`,
+    // Fix column name mismatch: migration used image_key, code uses r2_key
+    `ALTER TABLE blog_images ADD COLUMN r2_key TEXT DEFAULT ''`,
+    `ALTER TABLE blog_images ADD COLUMN filename TEXT DEFAULT ''`,
+    `ALTER TABLE notice_images ADD COLUMN r2_key TEXT DEFAULT ''`,
+    `ALTER TABLE notice_images ADD COLUMN filename TEXT DEFAULT ''`,
     // view_count columns (safe ALTER — ignore if already exists)
     `ALTER TABLE blog_posts ADD COLUMN view_count INTEGER DEFAULT 0`,
     `ALTER TABLE before_after ADD COLUMN view_count INTEGER DEFAULT 0`,
@@ -808,7 +817,12 @@ app.get('/api/blog/:id', async (c) => {
     // Increment view count
     await db.prepare('UPDATE blog_posts SET view_count = COALESCE(view_count, 0) + 1 WHERE id = ?').bind(id).run()
 
-    const images = await db.prepare('SELECT id, image_url, r2_key, filename, sort_order FROM blog_images WHERE post_id = ? ORDER BY sort_order').bind(id).all()
+    let images: any = { results: [] }
+    try {
+      images = await db.prepare('SELECT id, image_url, COALESCE(r2_key, image_key, \'\') as r2_key, COALESCE(filename, \'\') as filename, sort_order FROM blog_images WHERE post_id = ? ORDER BY sort_order').bind(id).all()
+    } catch {
+      try { images = await db.prepare('SELECT id, image_url, sort_order FROM blog_images WHERE post_id = ? ORDER BY sort_order').bind(id).all() } catch {}
+    }
     return c.json({ post: { ...post, view_count: (post.view_count || 0) + 1 }, images: images.results || [] })
   } catch (e: any) {
     return c.json({ error: '게시글 조회 실패: ' + e.message }, 500)
@@ -914,7 +928,12 @@ app.get('/api/admin/blog/:id', auth, async (c) => {
     const post = await db.prepare('SELECT b.*, d.name as doctor_name, d.photo_url as doctor_photo, d.title as doctor_title FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id WHERE b.id = ?').bind(id).first()
     if (!post) return c.json({ error: '게시글을 찾을 수 없습니다' }, 404)
 
-    const images = await db.prepare('SELECT id, image_url, r2_key, filename, sort_order FROM blog_images WHERE post_id = ? ORDER BY sort_order').bind(id).all()
+    let images: any = { results: [] }
+    try {
+      images = await db.prepare('SELECT id, image_url, COALESCE(r2_key, image_key, \'\') as r2_key, COALESCE(filename, \'\') as filename, sort_order FROM blog_images WHERE post_id = ? ORDER BY sort_order').bind(id).all()
+    } catch {
+      try { images = await db.prepare('SELECT id, image_url, sort_order FROM blog_images WHERE post_id = ? ORDER BY sort_order').bind(id).all() } catch {}
+    }
     return c.json({ post, images: images.results || [] })
   } catch (e: any) {
     return c.json({ error: '게시글 조회 실패: ' + e.message }, 500)
@@ -928,9 +947,12 @@ app.delete('/api/admin/blog/:id', auth, async (c) => {
     const r2 = c.env.R2
     const id = c.req.param('id')
 
-    const images = await db.prepare('SELECT r2_key FROM blog_images WHERE post_id = ?').bind(id).all()
+    let images: any = { results: [] }
+    try { images = await db.prepare('SELECT COALESCE(r2_key, image_key, \'\') as r2_key FROM blog_images WHERE post_id = ?').bind(id).all() } catch {
+      try { images = await db.prepare('SELECT image_key as r2_key FROM blog_images WHERE post_id = ?').bind(id).all() } catch {}
+    }
     for (const img of (images.results || []) as any[]) {
-      await deleteR2Image(r2, img.r2_key)
+      if (img.r2_key) await deleteR2Image(r2, img.r2_key)
     }
 
     await db.prepare('DELETE FROM blog_images WHERE post_id = ?').bind(id).run()
@@ -1172,7 +1194,12 @@ app.get('/api/notices/:id', async (c) => {
     // Increment view count
     await db.prepare('UPDATE notices SET view_count = COALESCE(view_count, 0) + 1 WHERE id = ?').bind(id).run()
 
-    const images = await db.prepare('SELECT id, image_url, r2_key, filename, sort_order FROM notice_images WHERE notice_id = ? ORDER BY sort_order').bind(id).all()
+    let images: any = { results: [] }
+    try {
+      images = await db.prepare('SELECT id, image_url, COALESCE(r2_key, image_key, \'\') as r2_key, COALESCE(filename, \'\') as filename, sort_order FROM notice_images WHERE notice_id = ? ORDER BY sort_order').bind(id).all()
+    } catch {
+      try { images = await db.prepare('SELECT id, image_url, sort_order FROM notice_images WHERE notice_id = ? ORDER BY sort_order').bind(id).all() } catch {}
+    }
     return c.json({ notice: { ...notice, view_count: (notice.view_count || 0) + 1 }, images: images.results || [] })
   } catch (e: any) {
     return c.json({ error: '공지 조회 실패: ' + e.message }, 500)
@@ -1237,7 +1264,10 @@ app.put('/api/admin/notices/:id', auth, async (c) => {
 
     // Replace images if provided
     if (images !== undefined) {
-      const oldImages = await db.prepare('SELECT r2_key FROM notice_images WHERE notice_id = ?').bind(id).all()
+      let oldImages: any = { results: [] }
+      try { oldImages = await db.prepare('SELECT COALESCE(r2_key, image_key, \'\') as r2_key FROM notice_images WHERE notice_id = ?').bind(id).all() } catch {
+        try { oldImages = await db.prepare('SELECT image_key as r2_key FROM notice_images WHERE notice_id = ?').bind(id).all() } catch {}
+      }
       const newKeys = new Set(images.map(i => i.key))
       for (const img of (oldImages.results || []) as any[]) {
         if (img.r2_key && !newKeys.has(img.r2_key)) {
@@ -1285,7 +1315,12 @@ app.get('/api/admin/notices/:id', auth, async (c) => {
     const id = c.req.param('id')
     const notice = await db.prepare('SELECT * FROM notices WHERE id = ?').bind(id).first()
     if (!notice) return c.json({ error: '공지사항을 찾을 수 없습니다' }, 404)
-    const images = await db.prepare('SELECT id, image_url, r2_key, filename, sort_order FROM notice_images WHERE notice_id = ? ORDER BY sort_order').bind(id).all()
+    let images: any = { results: [] }
+    try {
+      images = await db.prepare('SELECT id, image_url, COALESCE(r2_key, image_key, \'\') as r2_key, COALESCE(filename, \'\') as filename, sort_order FROM notice_images WHERE notice_id = ? ORDER BY sort_order').bind(id).all()
+    } catch {
+      try { images = await db.prepare('SELECT id, image_url, sort_order FROM notice_images WHERE notice_id = ? ORDER BY sort_order').bind(id).all() } catch {}
+    }
     return c.json({ notice, images: images.results || [] })
   } catch (e: any) {
     return c.json({ error: '공지 조회 실패: ' + e.message }, 500)
@@ -1299,9 +1334,12 @@ app.delete('/api/admin/notices/:id', auth, async (c) => {
     const id = c.req.param('id')
 
     // Delete R2 images first
-    const images = await db.prepare('SELECT r2_key FROM notice_images WHERE notice_id = ?').bind(id).all()
+    let images: any = { results: [] }
+    try { images = await db.prepare('SELECT COALESCE(r2_key, image_key, \'\') as r2_key FROM notice_images WHERE notice_id = ?').bind(id).all() } catch {
+      try { images = await db.prepare('SELECT image_key as r2_key FROM notice_images WHERE notice_id = ?').bind(id).all() } catch {}
+    }
     for (const img of (images.results || []) as any[]) {
-      await deleteR2Image(r2, img.r2_key)
+      if (img.r2_key) await deleteR2Image(r2, img.r2_key)
     }
     await db.prepare('DELETE FROM notice_images WHERE notice_id = ?').bind(id).run()
     await db.prepare('DELETE FROM notices WHERE id = ?').bind(id).run()

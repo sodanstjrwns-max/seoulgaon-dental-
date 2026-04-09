@@ -192,9 +192,12 @@ function openNoticeImg(src){
   
   try {
     const res = await fetch('/api/notices');
+    if(!res.ok) throw new Error('API error: ' + res.status);
     const data = await res.json();
     dbNotices = data.notices || [];
-  } catch(e){}
+  } catch(e){
+    console.warn('Notices API load failed:', e);
+  }
 
   // Fetch images for each DB notice
   const noticesWithImages = await Promise.all(dbNotices.map(async n => {

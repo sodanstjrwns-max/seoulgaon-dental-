@@ -369,9 +369,12 @@ function makeDBCard(c, idx){
   
   try {
     const res = await fetch('/api/before-after');
+    if(!res.ok) throw new Error('API error: ' + res.status);
     const data = await res.json();
     dbCases = data.cases || [];
-  } catch(e){}
+  } catch(e){
+    console.warn('Before-After API load failed:', e);
+  }
 
   let html = '';
   dbCases.forEach((c, i) => html += makeDBCard(c, i));

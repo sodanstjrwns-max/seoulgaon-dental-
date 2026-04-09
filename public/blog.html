@@ -171,9 +171,12 @@ function makeDBCard(p){
   
   try {
     const res = await fetch('/api/blog');
+    if(!res.ok) throw new Error('API error: ' + res.status);
     const data = await res.json();
     dbPosts = data.posts || [];
-  } catch(e){}
+  } catch(e){
+    console.warn('Blog API load failed:', e);
+  }
 
   // Render DB posts only
   let html = '';
