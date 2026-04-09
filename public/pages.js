@@ -376,10 +376,49 @@ function initFaqNav(){
   }
 }
 
+/* ---------- 16. NAV DROPDOWN — Parent Link Click Navigation ---------- */
+function initDropdownNav(){
+  document.querySelectorAll('.nav-link-drop').forEach(wrap=>{
+    const parentLink = wrap.querySelector(':scope > a');
+    if(!parentLink) return;
+    const href = parentLink.getAttribute('href');
+    if(!href || href === '#') return;
+
+    // Desktop: click parent link -> navigate to page
+    parentLink.addEventListener('click', function(e){
+      window.location.href = href;
+    });
+
+    // Mobile: first tap opens dropdown, second tap navigates
+    let tapped = false;
+    parentLink.addEventListener('touchend', function(e){
+      if(!tapped){
+        tapped = true;
+        e.preventDefault();
+        document.querySelectorAll('.nav-link-drop').forEach(d=>{
+          if(d !== wrap) d.classList.remove('touch-open');
+        });
+        wrap.classList.toggle('touch-open');
+        setTimeout(()=>{ tapped = false; }, 3000);
+      } else {
+        wrap.classList.remove('touch-open');
+        window.location.href = href;
+      }
+    });
+  });
+
+  document.addEventListener('touchstart', function(e){
+    if(!e.target.closest('.nav-link-drop')){
+      document.querySelectorAll('.nav-link-drop.touch-open').forEach(d=>d.classList.remove('touch-open'));
+    }
+  });
+}
+
 /* ---------- INIT ---------- */
 document.addEventListener('DOMContentLoaded',()=>{
   initEncyclopediaNav();
   initFaqNav();
+  initDropdownNav();
   initMemberNav();
   initCursor();
   initHamburger();

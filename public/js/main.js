@@ -316,6 +316,52 @@ function initHamburger(){
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   7-b. NAV DROPDOWN — Parent Link Click Navigation
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function initDropdownNav(){
+  document.querySelectorAll('.nav-link-drop').forEach(wrap=>{
+    const parentLink = wrap.querySelector(':scope > a');
+    if(!parentLink) return;
+    const href = parentLink.getAttribute('href');
+    if(!href || href === '#') return;
+
+    // Desktop: click parent link → navigate to page
+    parentLink.addEventListener('click', function(e){
+      // If dropdown is visible (hover state), still navigate
+      window.location.href = href;
+    });
+
+    // Mobile: first tap opens dropdown, second tap navigates
+    let tapped = false;
+    parentLink.addEventListener('touchend', function(e){
+      if(!tapped){
+        // First tap: show dropdown, prevent navigation
+        tapped = true;
+        e.preventDefault();
+        // Close other dropdowns
+        document.querySelectorAll('.nav-link-drop').forEach(d=>{
+          if(d !== wrap) d.classList.remove('touch-open');
+        });
+        wrap.classList.toggle('touch-open');
+        // Reset after 3 seconds
+        setTimeout(()=>{ tapped = false; }, 3000);
+      } else {
+        // Second tap: navigate
+        wrap.classList.remove('touch-open');
+        window.location.href = href;
+      }
+    });
+  });
+
+  // Close dropdowns when tapping elsewhere
+  document.addEventListener('touchstart', function(e){
+    if(!e.target.closest('.nav-link-drop')){
+      document.querySelectorAll('.nav-link-drop.touch-open').forEach(d=>d.classList.remove('touch-open'));
+    }
+  });
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    8. SMOOTH SCROLL
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function initSmoothScroll(){
@@ -1176,6 +1222,7 @@ function initAfterLoad(){
   initNavSticky();
   initBrandScramble();
   initHamburger();
+  initDropdownNav();
   initSmoothScroll();
   initProgressBar();
   initHeroText();

@@ -33,9 +33,10 @@ ul{list-style:none}
 .nav-links a{font-size:.85rem;letter-spacing:.04em;color:var(--stone-l);transition:color .3s}
 .nav-links a:hover{color:var(--ivory)}
 .nav-link-drop{position:relative}
-.nav-link-drop .drop{position:absolute;top:100%;left:50%;transform:translateX(-50%);background:var(--ink-4);border:1px solid var(--line);border-radius:8px;padding:.75rem 0;min-width:160px;opacity:0;visibility:hidden;transition:opacity .3s,transform .3s;transform:translateX(-50%) translateY(8px);margin-top:0}
-.nav-link-drop .drop::before{content:'';position:absolute;top:-16px;left:0;right:0;height:16px}
-.nav-link-drop:hover .drop{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+.nav-link-drop > a{position:relative;z-index:2;cursor:pointer}
+.nav-link-drop .drop{position:absolute;top:100%;left:50%;transform:translateX(-50%);background:var(--ink-4);border:1px solid var(--line);border-radius:8px;padding:.75rem 0;min-width:160px;opacity:0;visibility:hidden;transition:opacity .3s,transform .3s;transform:translateX(-50%) translateY(8px);margin-top:0;z-index:1}
+.nav-link-drop .drop::before{content:'';position:absolute;top:-16px;left:0;right:0;height:16px;pointer-events:none}
+.nav-link-drop:hover .drop,.nav-link-drop.touch-open .drop{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
 .drop a{display:block;padding:.45rem 1.25rem;font-size:.82rem;white-space:nowrap}
 .drop a:hover{color:var(--gold)}
 .nav-cta{background:var(--gold);color:var(--ink);padding:.55rem 1.5rem;border-radius:100px;font-size:.82rem;font-weight:600;letter-spacing:.03em;transition:background .3s}
