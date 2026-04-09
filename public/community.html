@@ -14,7 +14,6 @@
 <meta name="author" content="서울가온치과의원">
 <link rel="canonical" href="https://seoulgaondc.kr/community">
 <link rel="alternate" hreflang="ko" href="https://seoulgaondc.kr/community">
-<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="서울가온치과">
 <meta property="og:title" content="커뮤니티 | 서울가온치과 — 블로그·비포애프터·공지사항·백과사전">
@@ -24,7 +23,6 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="커뮤니티 | 서울가온치과">
 <meta name="twitter:description" content="블로그, 비포애프터, 공지사항, 치과 백과사전 — 서울가온치과 커뮤니티">
@@ -37,28 +35,114 @@
 <link href="style.css" rel="stylesheet">
 <link href="pages.css" rel="stylesheet">
 <style>
-/* ===== COMMUNITY HUB ===== */
-.comm-grid{max-width:1100px;margin:0 auto;padding:clamp(3rem,6vh,5rem) clamp(1.5rem,4vw,4rem);display:grid;grid-template-columns:1fr 1fr;gap:2rem}
-.comm-card{background:var(--ink-4);border:1px solid var(--line);border-radius:20px;padding:clamp(2rem,3vw,3rem);transition:border-color .4s,transform .4s;position:relative;overflow:hidden;display:flex;flex-direction:column}
-.comm-card:hover{border-color:rgba(191,164,106,.3);transform:translateY(-4px)}
-.comm-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gold);opacity:0;transition:opacity .4s}
-.comm-card:hover::before{opacity:1}
-.comm-icon{width:64px;height:64px;border-radius:16px;background:rgba(191,164,106,.08);display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;font-size:1.6rem;color:var(--gold)}
-.comm-card-label{font-family:var(--ff-en);font-size:.7rem;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:.4rem}
-.comm-card-title{font-family:var(--ff-title);font-size:clamp(1.3rem,2.5vw,1.8rem);margin-bottom:.75rem}
-.comm-card-desc{font-size:.88rem;color:var(--stone-l);line-height:1.8;margin-bottom:1.5rem;flex:1}
-.comm-card-link{display:inline-flex;align-items:center;gap:.5rem;background:rgba(191,164,106,.1);color:var(--gold);padding:.7rem 1.4rem;border-radius:100px;font-size:.85rem;font-weight:600;letter-spacing:.03em;transition:background .3s,color .3s;align-self:flex-start}
-.comm-card-link:hover{background:var(--gold);color:var(--ink)}
-.comm-card-link i{font-size:.75rem;transition:transform .3s}
-.comm-card-link:hover i{transform:translateX(3px)}
+/* ===== COMMUNITY HUB STYLES ===== */
 
-/* Feature tags */
-.comm-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.2rem}
-.comm-tag{font-size:.72rem;padding:.25rem .65rem;border-radius:100px;background:rgba(191,164,106,.06);color:var(--stone-l);border:1px solid var(--line)}
+/* === Hub Cards Grid === */
+.hub-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem) clamp(3rem,5vh,4rem)}
+.hub-card{position:relative;background:var(--ink-4);border:1px solid var(--line);border-radius:20px;padding:clamp(2rem,3vw,2.8rem);overflow:hidden;transition:all .5s cubic-bezier(.4,0,.2,1);cursor:pointer;text-decoration:none;color:inherit;display:flex;flex-direction:column;min-height:280px}
+.hub-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .4s}
+.hub-card:hover{border-color:rgba(191,164,106,.35);transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.hub-card:hover::before{opacity:1}
+.hub-card-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.2rem;transition:transform .4s}
+.hub-card:hover .hub-card-icon{transform:scale(1.1) rotate(-3deg)}
+.hub-card-icon.blog{background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(59,130,246,.05));color:#60a5fa}
+.hub-card-icon.ba{background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(168,85,247,.05));color:#a78bfa}
+.hub-card-icon.notice{background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(245,158,11,.05));color:#fbbf24}
+.hub-card-icon.enc{background:linear-gradient(135deg,rgba(34,197,94,.15),rgba(34,197,94,.05));color:#4ade80}
+.hub-card-label{font-family:var(--ff-en);font-size:.65rem;letter-spacing:3px;color:var(--stone);text-transform:uppercase;margin-bottom:.4rem}
+.hub-card-title{font-family:var(--ff-title);font-size:clamp(1.2rem,2vw,1.5rem);margin-bottom:.6rem;line-height:1.3}
+.hub-card-desc{font-size:.85rem;color:var(--stone-l);line-height:1.7;flex:1}
+.hub-card-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
+.hub-tag{font-size:.68rem;padding:.25rem .7rem;border-radius:100px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03);color:var(--stone-l);transition:all .3s}
+.hub-card:hover .hub-tag{border-color:rgba(191,164,106,.2);color:var(--ivory)}
+.hub-card-arrow{display:inline-flex;align-items:center;gap:.4rem;color:var(--gold);font-size:.82rem;font-weight:500;margin-top:1.2rem;transition:gap .3s}
+.hub-card:hover .hub-card-arrow{gap:.7rem}
+.hub-card-count{position:absolute;top:1.5rem;right:1.5rem;font-family:var(--ff-en);font-size:.72rem;color:var(--stone);padding:.3rem .8rem;background:rgba(255,255,255,.03);border-radius:100px;border:1px solid rgba(255,255,255,.04)}
 
-/* CTA section */
-.comm-cta{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem) clamp(4rem,8vh,6rem);text-align:center}
-.comm-cta-box{background:linear-gradient(135deg,rgba(191,164,106,.08),rgba(191,164,106,.02));border:1px solid rgba(191,164,106,.15);border-radius:24px;padding:clamp(2.5rem,4vw,4rem)}
+/* === Content Sections === */
+.comm-section{max-width:1100px;margin:0 auto;padding:clamp(3rem,6vh,5rem) clamp(1.5rem,4vw,4rem)}
+.comm-section + .comm-section{border-top:1px solid var(--line)}
+.comm-sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;gap:1rem;flex-wrap:wrap}
+.comm-sec-label{font-family:var(--ff-en);font-size:.7rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:.3rem}
+.comm-sec-title{font-family:var(--ff-title);font-size:clamp(1.4rem,2.5vw,1.9rem)}
+.comm-sec-desc{font-size:.85rem;color:var(--stone-l);margin-top:.3rem}
+.comm-more{display:inline-flex;align-items:center;gap:.4rem;color:var(--gold);font-size:.82rem;font-weight:500;padding:.5rem 1.2rem;border:1px solid rgba(191,164,106,.2);border-radius:100px;transition:all .3s;white-space:nowrap}
+.comm-more:hover{background:var(--gold);color:var(--ink)}
+.comm-more i{font-size:.7rem;transition:transform .3s}
+.comm-more:hover i{transform:translateX(3px)}
+
+/* === Blog Preview Cards === */
+.blog-preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.blog-preview{background:var(--ink-4);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:border-color .4s,transform .4s;cursor:pointer;text-decoration:none;color:inherit;display:block}
+.blog-preview:hover{border-color:rgba(191,164,106,.3);transform:translateY(-4px)}
+.blog-preview-thumb{width:100%;height:160px;background:var(--ink-3);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.blog-preview-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.blog-preview:hover .blog-preview-thumb img{transform:scale(1.08)}
+.blog-preview-thumb .icon-placeholder{font-size:2.5rem;color:var(--stone);opacity:.4}
+.blog-preview-body{padding:1.2rem}
+.blog-preview-cat{font-size:.68rem;color:var(--gold);font-weight:600;letter-spacing:.04em;margin-bottom:.4rem;display:inline-block}
+.blog-preview-title{font-size:.9rem;font-weight:600;line-height:1.5;margin-bottom:.4rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.blog-preview-date{font-size:.72rem;color:var(--stone)}
+.blog-preview-excerpt{font-size:.78rem;color:var(--stone-l);line-height:1.6;margin-top:.4rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* === BA Preview === */
+.ba-preview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.ba-preview{background:var(--ink-4);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:all .4s;cursor:pointer;text-decoration:none;color:inherit;display:block}
+.ba-preview:hover{border-color:rgba(191,164,106,.3);transform:translateY(-4px)}
+.ba-preview-imgs{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.ba-preview-imgs div{height:100px;overflow:hidden;position:relative}
+.ba-preview-imgs img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.ba-preview:hover img{transform:scale(1.05)}
+.ba-preview-imgs .ba-label{position:absolute;bottom:3px;left:3px;font-size:.55rem;background:rgba(0,0,0,.7);color:#fff;padding:1px 6px;border-radius:3px;font-weight:600;letter-spacing:.5px}
+.ba-preview-body{padding:.8rem 1rem}
+.ba-preview-title{font-size:.82rem;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.ba-preview-cat{font-size:.65rem;color:var(--gold);margin-top:.2rem}
+
+/* === Notice List === */
+.notice-list{display:flex;flex-direction:column;gap:.6rem}
+.notice-item{display:flex;align-items:center;gap:1rem;padding:1rem 1.5rem;background:var(--ink-4);border:1px solid var(--line);border-radius:12px;transition:all .3s;cursor:pointer;text-decoration:none;color:inherit}
+.notice-item:hover{border-color:rgba(191,164,106,.25);transform:translateX(4px)}
+.notice-badge{font-size:.65rem;font-weight:700;padding:.2rem .6rem;border-radius:6px;white-space:nowrap;flex-shrink:0}
+.notice-badge.important{background:rgba(191,164,106,.15);color:var(--gold)}
+.notice-badge.normal{background:rgba(140,133,120,.1);color:var(--stone-l)}
+.notice-title{font-size:.88rem;font-weight:500;flex:1;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.notice-date{font-size:.72rem;color:var(--stone);white-space:nowrap;flex-shrink:0}
+
+/* === Knowledge Section === */
+.knowledge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.knowledge-card{background:var(--ink-4);border:1px solid var(--line);border-radius:16px;padding:1.5rem;transition:all .4s;cursor:pointer;text-decoration:none;color:inherit;display:block;position:relative;overflow:hidden}
+.knowledge-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .4s}
+.knowledge-card:hover{border-color:rgba(191,164,106,.3);transform:translateY(-3px)}
+.knowledge-card:hover::after{transform:scaleX(1)}
+.knowledge-card-icon{font-size:1.6rem;margin-bottom:.8rem;display:block}
+.knowledge-card-title{font-size:.95rem;font-weight:600;margin-bottom:.4rem;line-height:1.4}
+.knowledge-card-desc{font-size:.78rem;color:var(--stone-l);line-height:1.7}
+.knowledge-card-link{display:inline-flex;align-items:center;gap:.3rem;font-size:.75rem;color:var(--gold);margin-top:.8rem;font-weight:500}
+
+/* === Encyclopedia Section === */
+.enc-search-wrap{max-width:600px;margin:0 auto 2rem}
+.enc-search{display:flex;gap:.5rem}
+.enc-search input{flex:1;padding:.8rem 1.2rem;background:var(--ink-4);border:1px solid var(--line);border-radius:12px;color:var(--ivory);font-size:.9rem;outline:none;transition:border-color .3s}
+.enc-search input:focus{border-color:var(--gold)}
+.enc-search input::placeholder{color:var(--stone)}
+.enc-search button{padding:.8rem 1.5rem;background:var(--gold);color:var(--ink);border:none;border-radius:12px;font-weight:600;font-size:.85rem;cursor:pointer;transition:background .3s;white-space:nowrap}
+.enc-search button:hover{background:var(--gold-b)}
+.enc-topics{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.enc-topic{padding:.5rem 1.2rem;background:var(--ink-4);border:1px solid var(--line);border-radius:100px;font-size:.82rem;color:var(--stone-l);transition:all .3s;cursor:pointer;text-decoration:none}
+.enc-topic:hover{border-color:var(--gold);color:var(--gold)}
+.enc-topic i{margin-right:.3rem;font-size:.7rem}
+
+/* === Quick Tips === */
+.tips-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+.tip-card{background:linear-gradient(135deg,rgba(191,164,106,.06),rgba(191,164,106,.01));border:1px solid rgba(191,164,106,.1);border-radius:16px;padding:1.5rem;transition:all .3s}
+.tip-card:hover{border-color:rgba(191,164,106,.25);transform:translateY(-2px)}
+.tip-card-num{font-family:var(--ff-en);font-size:.65rem;letter-spacing:2px;color:var(--gold);opacity:.6;margin-bottom:.5rem}
+.tip-card-title{font-size:.92rem;font-weight:600;margin-bottom:.5rem;line-height:1.4}
+.tip-card-desc{font-size:.8rem;color:var(--stone-l);line-height:1.7}
+
+/* === CTA Section === */
+.comm-cta{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem) clamp(4rem,8vh,6rem)}
+.comm-cta-box{background:linear-gradient(135deg,rgba(191,164,106,.08),rgba(191,164,106,.02));border:1px solid rgba(191,164,106,.15);border-radius:24px;padding:clamp(2.5rem,4vw,4rem);text-align:center}
 .comm-cta-title{font-family:var(--ff-title);font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1rem}
 .comm-cta-desc{font-size:.9rem;color:var(--stone-l);line-height:1.8;max-width:540px;margin:0 auto 2rem}
 .comm-cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
@@ -68,9 +152,24 @@
 .comm-cta-btn.outline{border:1px solid var(--gold);color:var(--gold)}
 .comm-cta-btn.outline:hover{background:var(--gold);color:var(--ink)}
 
+/* === Loading skeleton === */
+.skeleton{background:linear-gradient(90deg,var(--ink-4) 25%,var(--ink-3) 50%,var(--ink-4) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* === Responsive === */
 @media(max-width:768px){
-  .comm-grid{grid-template-columns:1fr;gap:1.5rem}
+  .hub-grid{grid-template-columns:1fr}
+  .hub-card{min-height:auto;padding:1.5rem}
+  .blog-preview-grid{grid-template-columns:1fr}
+  .ba-preview-grid{grid-template-columns:1fr 1fr}
+  .knowledge-grid{grid-template-columns:1fr}
+  .tips-grid{grid-template-columns:1fr}
+  .comm-sec-head{flex-direction:column;align-items:flex-start}
   .comm-cta-btns{flex-direction:column;align-items:center}
+  .enc-search{flex-direction:column}
+}
+@media(max-width:480px){
+  .ba-preview-grid{grid-template-columns:1fr}
 }
 </style>
 <!-- JSON-LD -->
@@ -82,23 +181,14 @@
   "description": "서울가온치과 커뮤니티 허브. 블로그, 비포 애프터, 공지사항, 치과 백과사전.",
   "url": "https://seoulgaondc.kr/community",
   "inLanguage": "ko",
-  "isPartOf": {
-    "@type": "WebSite",
-    "name": "서울가온치과",
-    "url": "https://seoulgaondc.kr"
-  },
+  "isPartOf": {"@type":"WebSite","name":"서울가온치과","url":"https://seoulgaondc.kr"},
   "hasPart": [
-    {"@type": "Blog", "name": "서울가온치과 블로그", "url": "https://seoulgaondc.kr/blog"},
-    {"@type": "CollectionPage", "name": "비포 애프터", "url": "https://seoulgaondc.kr/before-after"},
-    {"@type": "CollectionPage", "name": "공지사항", "url": "https://seoulgaondc.kr/notice"},
-    {"@type": "CollectionPage", "name": "치과 백과사전", "url": "https://seoulgaondc.kr/encyclopedia"}
+    {"@type":"Blog","name":"서울가온치과 블로그","url":"https://seoulgaondc.kr/blog"},
+    {"@type":"CollectionPage","name":"비포 애프터","url":"https://seoulgaondc.kr/before-after"},
+    {"@type":"CollectionPage","name":"공지사항","url":"https://seoulgaondc.kr/notice"},
+    {"@type":"CollectionPage","name":"치과 백과사전","url":"https://seoulgaondc.kr/encyclopedia"}
   ],
-  "provider": {
-    "@type": "Dentist",
-    "name": "서울가온치과의원",
-    "url": "https://seoulgaondc.kr",
-    "telephone": "0507-1325-3377"
-  }
+  "provider": {"@type":"Dentist","name":"서울가온치과의원","url":"https://seoulgaondc.kr","telephone":"0507-1325-3377"}
 }
 </script>
 <script type="application/ld+json">
@@ -109,21 +199,6 @@
     {"@type":"ListItem","position":1,"name":"홈","item":"https://seoulgaondc.kr/"},
     {"@type":"ListItem","position":2,"name":"커뮤니티","item":"https://seoulgaondc.kr/community"}
   ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "커뮤니티 | 서울가온치과",
-  "description": "서울가온치과 커뮤니티 허브 — 블로그, 비포 애프터, 공지사항, 치과 백과사전",
-  "url": "https://seoulgaondc.kr/community",
-  "inLanguage": "ko",
-  "dateModified": "2026-04-09",
-  "speakable": {
-    "@type": "SpeakableSpecification",
-    "cssSelector": ["h1", ".comm-card-title", ".comm-card-desc"]
-  }
 }
 </script>
 </head>
@@ -149,76 +224,263 @@
 
 <main id="main-content" role="main">
 
+<!-- ===== HERO ===== -->
 <section class="page-hero">
   <div class="page-hero-bg">COMMUNITY</div>
-  <span class="page-hero-label">Community</span>
+  <span class="page-hero-label">Community Hub</span>
   <h1>커뮤니티</h1>
-  <p class="page-hero-sub">서울가온치과의 소식과 이야기를 만나보세요</p>
+  <p class="page-hero-sub">서울가온치과의 이야기, 치료 사례, 치과 지식을 한곳에서 만나보세요</p>
 </section>
 
-<!-- ===== COMMUNITY CARDS ===== -->
-<div class="comm-grid">
 
-  <!-- 1. 블로그 -->
-  <div class="comm-card" data-reveal>
-    <div class="comm-icon"><i class="fas fa-pen-nib"></i></div>
-    <span class="comm-card-label">Blog</span>
-    <h2 class="comm-card-title">블로그</h2>
-    <div class="comm-tags">
-      <span class="comm-tag">치료 후기</span>
-      <span class="comm-tag">진료 정보</span>
-      <span class="comm-tag">원장 칼럼</span>
-      <span class="comm-tag">구강건강 팁</span>
+<!-- ═══════════════════════════════════════════════
+     1. HUB NAVIGATION CARDS
+     ═══════════════════════════════════════════════ -->
+<div class="hub-grid" id="hub-cards">
+
+  <!-- Blog Card -->
+  <a href="blog.html" class="hub-card" data-reveal>
+    <div class="hub-card-icon blog"><i class="fas fa-pen-nib"></i></div>
+    <span class="hub-card-label">Blog</span>
+    <h2 class="hub-card-title">블로그</h2>
+    <p class="hub-card-desc">임플란트, 신경치료, 앞니 심미치료 등 다양한 진료 이야기와 구강건강 팁을 전합니다. 현진호·조은비 원장이 직접 쓰는 전문 칼럼.</p>
+    <div class="hub-card-tags">
+      <span class="hub-tag">임플란트</span>
+      <span class="hub-tag">신경치료</span>
+      <span class="hub-tag">심미치료</span>
+      <span class="hub-tag">구강건강</span>
     </div>
-    <p class="comm-card-desc">서울가온치과의 진료 이야기, 치과 상식, 환자분들의 솔직한 후기까지. 네이버 블로그에서 더 많은 이야기를 확인하세요.</p>
-    <a href="blog.html" class="comm-card-link">블로그 보기 <i class="fas fa-arrow-right"></i></a>
-  </div>
+    <span class="hub-card-arrow">블로그 보러 가기 <i class="fas fa-arrow-right"></i></span>
+    <span class="hub-card-count" id="count-blog"><i class="fas fa-file-alt" style="margin-right:.3rem"></i>포스트</span>
+  </a>
 
-  <!-- 2. 비포 애프터 -->
-  <div class="comm-card" data-reveal>
-    <div class="comm-icon"><i class="fas fa-images"></i></div>
-    <span class="comm-card-label">Before & After</span>
-    <h2 class="comm-card-title">비포 애프터</h2>
-    <div class="comm-tags">
-      <span class="comm-tag">임플란트</span>
-      <span class="comm-tag">앞니 심미</span>
-      <span class="comm-tag">라미네이트</span>
-      <span class="comm-tag">치아미백</span>
+  <!-- Before & After Card -->
+  <a href="before-after.html" class="hub-card" data-reveal>
+    <div class="hub-card-icon ba"><i class="fas fa-images"></i></div>
+    <span class="hub-card-label">Before & After</span>
+    <h2 class="hub-card-title">비포 애프터</h2>
+    <p class="hub-card-desc">실제 치료 전·후 사진을 비교해보세요. 임플란트, 라미네이트, 치아미백 등 다양한 증례를 투명하게 공개합니다.</p>
+    <div class="hub-card-tags">
+      <span class="hub-tag">치료 전후 비교</span>
+      <span class="hub-tag">실제 증례</span>
+      <span class="hub-tag">투명한 결과</span>
     </div>
-    <p class="comm-card-desc">실제 치료 전후 사진을 비교해보세요. 임플란트, 라미네이트, 앞니 심미치료 등 다양한 케이스를 투명하게 공개합니다.</p>
-    <a href="before-after.html" class="comm-card-link">사진 보기 <i class="fas fa-arrow-right"></i></a>
-  </div>
+    <span class="hub-card-arrow">사례 보러 가기 <i class="fas fa-arrow-right"></i></span>
+    <span class="hub-card-count" id="count-ba"><i class="fas fa-camera" style="margin-right:.3rem"></i>사례</span>
+  </a>
 
-  <!-- 3. 공지사항 -->
-  <div class="comm-card" data-reveal>
-    <div class="comm-icon"><i class="fas fa-bullhorn"></i></div>
-    <span class="comm-card-label">Notice</span>
-    <h2 class="comm-card-title">공지사항</h2>
-    <div class="comm-tags">
-      <span class="comm-tag">휴진 안내</span>
-      <span class="comm-tag">이벤트</span>
-      <span class="comm-tag">시스템 변경</span>
+  <!-- Notice Card -->
+  <a href="notice.html" class="hub-card" data-reveal>
+    <div class="hub-card-icon notice"><i class="fas fa-bullhorn"></i></div>
+    <span class="hub-card-label">Notice</span>
+    <h2 class="hub-card-title">공지사항</h2>
+    <p class="hub-card-desc">진료시간 변경, 휴진 안내, 이벤트 소식 등 서울가온치과의 최신 공지사항을 확인하세요.</p>
+    <div class="hub-card-tags">
+      <span class="hub-tag">진료시간</span>
+      <span class="hub-tag">휴진 안내</span>
+      <span class="hub-tag">이벤트</span>
+      <span class="hub-tag">시스템 변경</span>
     </div>
-    <p class="comm-card-desc">진료시간 변경, 휴진 안내, 이벤트 소식 등 서울가온치과의 최신 공지사항을 확인하세요.</p>
-    <a href="notice.html" class="comm-card-link">공지 확인 <i class="fas fa-arrow-right"></i></a>
-  </div>
+    <span class="hub-card-arrow">공지사항 보기 <i class="fas fa-arrow-right"></i></span>
+    <span class="hub-card-count" id="count-notice"><i class="fas fa-bell" style="margin-right:.3rem"></i>공지</span>
+  </a>
 
-  <!-- 4. 치과 백과사전 -->
-  <div class="comm-card" data-reveal>
-    <div class="comm-icon"><i class="fas fa-book-medical"></i></div>
-    <span class="comm-card-label">Encyclopedia</span>
-    <h2 class="comm-card-title">치과 백과사전</h2>
-    <div class="comm-tags">
-      <span class="comm-tag">질환 정보</span>
-      <span class="comm-tag">치료 방법</span>
-      <span class="comm-tag">예방 관리</span>
-      <span class="comm-tag">AI 검색</span>
+  <!-- Encyclopedia Card -->
+  <a href="encyclopedia.html" class="hub-card" data-reveal>
+    <div class="hub-card-icon enc"><i class="fas fa-book-medical"></i></div>
+    <span class="hub-card-label">Encyclopedia</span>
+    <h2 class="hub-card-title">치과 백과사전</h2>
+    <p class="hub-card-desc">치과 용어부터 질환, 치료법까지. 궁금했던 치과 지식을 쉽고 정확하게 찾아보세요.</p>
+    <div class="hub-card-tags">
+      <span class="hub-tag">치과 용어</span>
+      <span class="hub-tag">질환 정보</span>
+      <span class="hub-tag">치료법 안내</span>
+      <span class="hub-tag">자가진단</span>
     </div>
-    <p class="comm-card-desc">궁금한 치과 용어, 질환, 치료법을 검색해보세요. 서울대 출신 전문의가 감수한 신뢰할 수 있는 치과 정보입니다.</p>
-    <a href="encyclopedia.html" class="comm-card-link">백과사전 검색 <i class="fas fa-arrow-right"></i></a>
-  </div>
-
+    <span class="hub-card-arrow">백과사전 보기 <i class="fas fa-arrow-right"></i></span>
+    <span class="hub-card-count" id="count-enc"><i class="fas fa-book" style="margin-right:.3rem"></i>항목</span>
+  </a>
 </div>
+
+
+<!-- ═══════════════════════════════════════════════
+     2. LATEST BLOG POSTS
+     ═══════════════════════════════════════════════ -->
+<section class="comm-section" id="sec-blog">
+  <div class="comm-sec-head">
+    <div>
+      <span class="comm-sec-label">Latest Posts</span>
+      <h2 class="comm-sec-title">최신 블로그</h2>
+      <p class="comm-sec-desc">서울가온치과의 진료 이야기, 환자 후기, 구강건강 팁</p>
+    </div>
+    <a href="blog.html" class="comm-more">전체 보기 <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <div class="blog-preview-grid" id="blog-grid">
+    <!-- Filled by JS -->
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     3. BEFORE & AFTER PREVIEW
+     ═══════════════════════════════════════════════ -->
+<section class="comm-section" id="sec-ba">
+  <div class="comm-sec-head">
+    <div>
+      <span class="comm-sec-label">Before & After</span>
+      <h2 class="comm-sec-title">치료 전후 사례</h2>
+      <p class="comm-sec-desc">실제 치료 전·후 사진을 비교해보세요</p>
+    </div>
+    <a href="before-after.html" class="comm-more">전체 보기 <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <div class="ba-preview-grid" id="ba-grid">
+    <!-- Filled by JS -->
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     4. NOTICES
+     ═══════════════════════════════════════════════ -->
+<section class="comm-section" id="sec-notice">
+  <div class="comm-sec-head">
+    <div>
+      <span class="comm-sec-label">Notice</span>
+      <h2 class="comm-sec-title">공지사항</h2>
+      <p class="comm-sec-desc">휴진 안내, 이벤트, 운영 관련 최신 소식</p>
+    </div>
+    <a href="notice.html" class="comm-more">전체 보기 <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <div class="notice-list" id="notice-list">
+    <!-- Filled by JS -->
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     5. DENTAL KNOWLEDGE CORNER
+     ═══════════════════════════════════════════════ -->
+<section class="comm-section" id="sec-knowledge">
+  <div class="comm-sec-head" style="justify-content:center;text-align:center">
+    <div>
+      <span class="comm-sec-label">Dental Knowledge</span>
+      <h2 class="comm-sec-title">알아두면 좋은 치과 상식</h2>
+      <p class="comm-sec-desc">환자분들이 자주 궁금해하시는 치과 지식을 정리했습니다</p>
+    </div>
+  </div>
+  <div class="knowledge-grid">
+    <a href="encyclopedia.html?q=임플란트" class="knowledge-card" data-reveal>
+      <span class="knowledge-card-icon">🦷</span>
+      <h3 class="knowledge-card-title">임플란트, 꼭 해야 하나요?</h3>
+      <p class="knowledge-card-desc">발치 후 방치하면 인접 치아가 기울어지고 교합이 무너질 수 있습니다. 임플란트는 자연치아와 가장 유사한 기능을 회복시켜주는 치료입니다.</p>
+      <span class="knowledge-card-link">자세히 알아보기 <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="encyclopedia.html?q=신경치료" class="knowledge-card" data-reveal>
+      <span class="knowledge-card-icon">🔬</span>
+      <h3 class="knowledge-card-title">신경치료가 아프다는 건 옛말</h3>
+      <p class="knowledge-card-desc">최신 마취 기법과 현미경을 활용하면 거의 통증 없이 치료할 수 있습니다. 신경치료는 자연치아를 살리는 마지막 기회입니다.</p>
+      <span class="knowledge-card-link">자세히 알아보기 <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="encyclopedia.html?q=라미네이트" class="knowledge-card" data-reveal>
+      <span class="knowledge-card-icon">✨</span>
+      <h3 class="knowledge-card-title">라미네이트 vs 올세라믹</h3>
+      <p class="knowledge-card-desc">앞니 형태·색상 개선 시 가장 많이 비교하는 두 치료. 치아 삭제량, 내구성, 자연스러움 등 핵심 차이를 알려드립니다.</p>
+      <span class="knowledge-card-link">자세히 알아보기 <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="encyclopedia.html?q=스케일링" class="knowledge-card" data-reveal>
+      <span class="knowledge-card-icon">🪥</span>
+      <h3 class="knowledge-card-title">스케일링, 1년에 몇 번?</h3>
+      <p class="knowledge-card-desc">건강보험으로 연 1회 스케일링이 가능합니다. 치석 제거는 잇몸 질환 예방의 첫걸음이며, 치주염이 있다면 더 자주 필요할 수 있습니다.</p>
+      <span class="knowledge-card-link">자세히 알아보기 <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="encyclopedia.html?q=사랑니" class="knowledge-card" data-reveal>
+      <span class="knowledge-card-icon">🧊</span>
+      <h3 class="knowledge-card-title">사랑니, 뽑아야 할까?</h3>
+      <p class="knowledge-card-desc">매복·부분 매복 사랑니는 주변 치아와 잇몸에 악영향을 줄 수 있어 조기 발치가 권장됩니다. X-ray로 정확한 판단이 가능합니다.</p>
+      <span class="knowledge-card-link">자세히 알아보기 <i class="fas fa-arrow-right"></i></span>
+    </a>
+    <a href="encyclopedia.html?q=충치" class="knowledge-card" data-reveal>
+      <span class="knowledge-card-icon">🛡️</span>
+      <h3 class="knowledge-card-title">충치 예방의 핵심 3가지</h3>
+      <p class="knowledge-card-desc">올바른 칫솔질, 치실 사용, 정기 검진. 이 세 가지만 지키면 충치 발생률을 80% 이상 줄일 수 있습니다.</p>
+      <span class="knowledge-card-link">자세히 알아보기 <i class="fas fa-arrow-right"></i></span>
+    </a>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     6. ENCYCLOPEDIA QUICK SEARCH
+     ═══════════════════════════════════════════════ -->
+<section class="comm-section" id="sec-enc">
+  <div class="comm-sec-head" style="justify-content:center;text-align:center">
+    <div>
+      <span class="comm-sec-label">Encyclopedia</span>
+      <h2 class="comm-sec-title">치과 백과사전</h2>
+      <p class="comm-sec-desc">궁금한 치과 용어나 질환을 검색해보세요</p>
+    </div>
+  </div>
+  <div class="enc-search-wrap">
+    <div class="enc-search">
+      <input type="text" id="enc-input" placeholder="예: 임플란트, 신경치료, 사랑니..." autocomplete="off">
+      <button onclick="goEncyclopedia()"><i class="fas fa-search"></i> 검색</button>
+    </div>
+  </div>
+  <div class="enc-topics" id="enc-topics">
+    <a href="encyclopedia.html?q=임플란트" class="enc-topic"><i class="fas fa-tooth"></i>임플란트</a>
+    <a href="encyclopedia.html?q=라미네이트" class="enc-topic"><i class="fas fa-magic"></i>라미네이트</a>
+    <a href="encyclopedia.html?q=신경치료" class="enc-topic"><i class="fas fa-microscope"></i>신경치료</a>
+    <a href="encyclopedia.html?q=사랑니" class="enc-topic"><i class="fas fa-teeth"></i>사랑니</a>
+    <a href="encyclopedia.html?q=치주염" class="enc-topic"><i class="fas fa-bacterium"></i>치주염</a>
+    <a href="encyclopedia.html?q=충치" class="enc-topic"><i class="fas fa-shield-virus"></i>충치</a>
+    <a href="encyclopedia.html?q=스케일링" class="enc-topic"><i class="fas fa-broom"></i>스케일링</a>
+    <a href="encyclopedia.html?q=치아미백" class="enc-topic"><i class="fas fa-sun"></i>치아미백</a>
+    <a href="encyclopedia.html?q=크라운" class="enc-topic"><i class="fas fa-crown"></i>크라운</a>
+    <a href="encyclopedia.html?q=틀니" class="enc-topic"><i class="fas fa-teeth-open"></i>틀니</a>
+    <a href="encyclopedia.html?q=치아교정" class="enc-topic"><i class="fas fa-smile-beam"></i>치아교정</a>
+    <a href="encyclopedia.html?q=잇몸치료" class="enc-topic"><i class="fas fa-heartbeat"></i>잇몸치료</a>
+  </div>
+  <div style="text-align:center;margin-top:1.5rem">
+    <a href="encyclopedia.html" class="comm-more">백과사전 둘러보기 <i class="fas fa-arrow-right"></i></a>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     7. ORAL HEALTH TIPS
+     ═══════════════════════════════════════════════ -->
+<section class="comm-section" id="sec-tips">
+  <div class="comm-sec-head" style="justify-content:center;text-align:center">
+    <div>
+      <span class="comm-sec-label">Oral Health Tips</span>
+      <h2 class="comm-sec-title">오늘부터 실천하는 구강관리</h2>
+      <p class="comm-sec-desc">서울가온치과 의료진이 추천하는 일상 속 구강관리 팁</p>
+    </div>
+  </div>
+  <div class="tips-grid">
+    <div class="tip-card" data-reveal>
+      <div class="tip-card-num">TIP 01</div>
+      <h3 class="tip-card-title">식사 후 30분, 칫솔질 타이밍</h3>
+      <p class="tip-card-desc">식사 직후에는 산성 환경으로 법랑질이 약해져 있어요. 30분 뒤 양치하면 치아 마모를 줄이면서 효과적으로 세균을 제거할 수 있습니다.</p>
+    </div>
+    <div class="tip-card" data-reveal>
+      <div class="tip-card-num">TIP 02</div>
+      <h3 class="tip-card-title">치실, 양치보다 먼저!</h3>
+      <p class="tip-card-desc">치실을 먼저 사용한 뒤 양치하면 치간 사이 불소가 더 잘 침투합니다. 칫솔만으로는 치아 사이 40%의 면을 닦을 수 없어요.</p>
+    </div>
+    <div class="tip-card" data-reveal>
+      <div class="tip-card-num">TIP 03</div>
+      <h3 class="tip-card-title">잇몸이 피나면 더 닦으세요</h3>
+      <p class="tip-card-desc">잇몸 출혈은 세균성 염증의 신호입니다. 겁먹지 말고 부드러운 칫솔로 잇몸 경계를 꼼꼼히 닦아주면 1~2주 내에 호전됩니다.</p>
+    </div>
+    <div class="tip-card" data-reveal>
+      <div class="tip-card-num">TIP 04</div>
+      <h3 class="tip-card-title">정기검진은 6개월마다</h3>
+      <p class="tip-card-desc">충치는 초기에 통증이 없습니다. 6개월 간격의 정기검진으로 조기 발견하면 간단한 레진 치료로 해결할 수 있어요.</p>
+    </div>
+  </div>
+</section>
+
 
 <!-- ===== CTA ===== -->
 <div class="comm-cta">
@@ -254,22 +516,226 @@
 <script src="/pages.js"></script>
 <script>
 gsap.registerPlugin(ScrollTrigger);
-window.addEventListener('DOMContentLoaded', () => {
-  // Hero entrance
+
+/* ===== Encyclopedia search ===== */
+function goEncyclopedia(){
+  const q = document.getElementById('enc-input').value.trim();
+  if(q) location.href = 'encyclopedia.html?q=' + encodeURIComponent(q);
+  else location.href = 'encyclopedia.html';
+}
+document.getElementById('enc-input').addEventListener('keydown', e => {
+  if(e.key === 'Enter') goEncyclopedia();
+});
+
+/* ===== Helpers ===== */
+function fmtDate(d){
+  if(!d) return '';
+  const dt = new Date(d);
+  return dt.getFullYear()+'.'+String(dt.getMonth()+1).padStart(2,'0')+'.'+String(dt.getDate()).padStart(2,'0');
+}
+const catMap = {implant:'임플란트', aesthetics:'앞니 심미', endodontics:'신경치료', general:'일반진료', laminate:'라미네이트', crown:'크라운', whitening:'미백', denture:'틀니'};
+
+/* ===== Static fallback content ===== */
+const fallbackBlogs = [
+  {
+    id: 0,
+    title: '임플란트 수술 후 주의사항 — 빠른 회복을 위한 7가지 팁',
+    category: 'implant',
+    excerpt: '임플란트 수술 후 48시간이 가장 중요합니다. 붓기 관리, 식이 조절, 구강 위생까지 빠른 회복을 위한 핵심 정보를 정리했습니다.',
+    created_at: '2026-03-25',
+    icon: 'fa-tooth'
+  },
+  {
+    id: 0,
+    title: '앞니가 벌어졌을 때 — 라미네이트? 교정? 최적의 선택법',
+    category: 'aesthetics',
+    excerpt: '앞니 벌어짐(이개)의 원인과 치료 옵션을 비교합니다. 치아 상태에 따라 최적의 치료가 다릅니다.',
+    created_at: '2026-03-18',
+    icon: 'fa-magic'
+  },
+  {
+    id: 0,
+    title: '신경치료 후 크라운, 왜 꼭 씌워야 할까요?',
+    category: 'endodontics',
+    excerpt: '신경치료를 받은 치아는 혈액 공급이 끊겨 약해집니다. 크라운으로 보호하지 않으면 파절 위험이 높아지는 이유를 설명합니다.',
+    created_at: '2026-03-10',
+    icon: 'fa-microscope'
+  }
+];
+
+const fallbackBa = [
+  { title: '전체 임플란트 — 무치악 환자 풀 마우스', category: 'implant' },
+  { title: '앞니 라미네이트 6본 — 자연스러운 미소 회복', category: 'aesthetics' },
+  { title: '충치 레진 치료 — 심미적인 자연치아 보존', category: 'general' },
+  { title: '사랑니 발치 후 임플란트 — 어금니 기능 회복', category: 'implant' }
+];
+
+const fallbackNotices = [
+  { title: '2026년 4월 진료시간 안내', created_at: '2026-04-01', is_pinned: true },
+  { title: '봄맞이 스케일링 이벤트 안내', created_at: '2026-03-20', is_pinned: true },
+  { title: '주차 안내 — 골드자이프라자 지하 주차장', created_at: '2026-03-15', is_pinned: false },
+  { title: '카카오톡 예약 시스템 오픈 안내', created_at: '2026-03-05', is_pinned: true },
+  { title: '진료 대기 시간 단축 시스템 도입 안내', created_at: '2026-02-20', is_pinned: false }
+];
+
+
+window.addEventListener('DOMContentLoaded', async () => {
+  /* --- Hero entrance --- */
   const heroLabel = document.querySelector('.page-hero-label');
   const heroTitle = document.querySelector('.page-hero h1');
   const heroSub = document.querySelector('.page-hero-sub');
-  const tl = gsap.timeline({delay: .2});
+  const tl = gsap.timeline({delay:.2});
   if(heroLabel) tl.to(heroLabel, {opacity:1, y:0, duration:.6, ease:'power3.out'});
   if(heroTitle) tl.to(heroTitle, {opacity:1, y:0, duration:.6, ease:'power3.out'}, '-=.4');
   if(heroSub) tl.to(heroSub, {opacity:1, y:0, duration:.5, ease:'power3.out'}, '-=.3');
 
-  // Card stagger entrance
-  gsap.utils.toArray('.comm-card, .comm-cta-box').forEach((el, i) => {
+  /* --- Fetch data from API (with fallback) --- */
+  let blogs = [], bas = [], notices = [], encs = [];
+  let blogTotal = 0, baTotal = 0, noticeTotal = 0, encTotal = 0;
+
+  try {
+    const [blogRes, baRes, noticeRes, encRes] = await Promise.allSettled([
+      fetch('/api/blog?limit=6').then(r=>r.ok?r.json():{posts:[],pagination:{total:0}}),
+      fetch('/api/before-after?limit=4').then(r=>r.ok?r.json():{cases:[],total:0}),
+      fetch('/api/notices?limit=5').then(r=>r.ok?r.json():{notices:[],pagination:{total:0}}),
+      fetch('/api/encyclopedia?limit=100').then(r=>r.ok?r.json():{entries:[],total:0})
+    ]);
+    
+    if(blogRes.status==='fulfilled'){
+      const d = blogRes.value;
+      blogs = d.posts || d.data || [];
+      blogTotal = d.pagination?.total || blogs.length;
+    }
+    if(baRes.status==='fulfilled'){
+      const d = baRes.value;
+      bas = d.cases || d.data || [];
+      baTotal = d.total || bas.length;
+    }
+    if(noticeRes.status==='fulfilled'){
+      const d = noticeRes.value;
+      notices = d.notices || d.data || [];
+      noticeTotal = d.pagination?.total || notices.length;
+    }
+    if(encRes.status==='fulfilled'){
+      const d = encRes.value;
+      encs = d.entries || d.items || d.data || [];
+      encTotal = d.total || encs.length;
+    }
+  } catch(e) {
+    console.log('API fetch error, using fallback content');
+  }
+
+  /* --- Use fallback if API returns empty --- */
+  const useBlogFallback = blogs.length === 0;
+  const useBaFallback = bas.length === 0;
+  const useNoticeFallback = notices.length === 0;
+
+  if(useBlogFallback) blogs = fallbackBlogs;
+  if(useBaFallback) bas = fallbackBa;
+  if(useNoticeFallback) notices = fallbackNotices;
+
+  /* --- Hub card counts --- */
+  document.getElementById('count-blog').innerHTML = '<i class="fas fa-file-alt" style="margin-right:.3rem"></i>' + (blogTotal || blogs.length) + ' 포스트';
+  document.getElementById('count-ba').innerHTML = '<i class="fas fa-camera" style="margin-right:.3rem"></i>' + (baTotal || bas.length) + ' 사례';
+  document.getElementById('count-notice').innerHTML = '<i class="fas fa-bell" style="margin-right:.3rem"></i>' + (noticeTotal || notices.length) + ' 공지';
+  document.getElementById('count-enc').innerHTML = '<i class="fas fa-book" style="margin-right:.3rem"></i>' + (encTotal || encs.length || 8) + ' 항목';
+
+  /* --- BLOG SECTION --- */
+  const blogGrid = document.getElementById('blog-grid');
+  blogGrid.innerHTML = blogs.slice(0,3).map(p => {
+    const cat = catMap[p.category] || p.category || '';
+    const thumb = p.thumbnail_url || '';
+    const excerpt = p.excerpt || (p.content ? p.content.substring(0,100).replace(/<[^>]*>/g,'') : '');
+    const link = p.id ? 'blog-post.html?id='+p.id : 'blog.html';
+    const iconClass = p.icon || 'fa-pen-nib';
+    return `<a href="${link}" class="blog-preview">
+      ${thumb 
+        ? '<div class="blog-preview-thumb"><img src="'+thumb+'" alt="" loading="lazy"></div>' 
+        : '<div class="blog-preview-thumb"><i class="fas '+iconClass+' icon-placeholder"></i></div>'}
+      <div class="blog-preview-body">
+        <span class="blog-preview-cat">${cat}</span>
+        <div class="blog-preview-title">${p.title||''}</div>
+        ${excerpt ? '<div class="blog-preview-excerpt">'+excerpt+'</div>' : ''}
+        <div class="blog-preview-date">${fmtDate(p.created_at||p.published_at)}</div>
+      </div>
+    </a>`;
+  }).join('');
+
+  /* --- BEFORE & AFTER SECTION --- */
+  const baGrid = document.getElementById('ba-grid');
+  if(useBaFallback){
+    baGrid.innerHTML = bas.map(c => {
+      const cat = catMap[c.category] || c.category || '';
+      return `<a href="before-after.html" class="ba-preview">
+        <div class="ba-preview-imgs">
+          <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.65rem">BEFORE</div><span class="ba-label">BEFORE</span></div>
+          <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(191,164,106,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
+        </div>
+        <div class="ba-preview-body">
+          <div class="ba-preview-title">${c.title}</div>
+          <div class="ba-preview-cat">${cat}</div>
+        </div>
+      </a>`;
+    }).join('');
+  } else {
+    baGrid.innerHTML = bas.slice(0,4).map(c => {
+      const befImg = c.intraoral_before_url || c.panorama_before_url || '';
+      const aftImg = c.intraoral_after_url || c.panorama_after_url || '';
+      const cat = catMap[c.category] || c.category || '';
+      return `<a href="before-after.html" class="ba-preview">
+        <div class="ba-preview-imgs">
+          <div>${befImg?'<img src="'+befImg+'" alt="치료 전" loading="lazy">':'<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.7rem">Before</div>'}<span class="ba-label">BEFORE</span></div>
+          <div>${aftImg?'<img src="'+aftImg+'" alt="치료 후" loading="lazy">':'<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.7rem">After</div>'}<span class="ba-label">AFTER</span></div>
+        </div>
+        <div class="ba-preview-body">
+          <div class="ba-preview-title">${c.title||'치료 사례'}</div>
+          <div class="ba-preview-cat">${cat}</div>
+        </div>
+      </a>`;
+    }).join('');
+  }
+
+  /* --- NOTICES SECTION --- */
+  const noticeList = document.getElementById('notice-list');
+  noticeList.innerHTML = notices.slice(0,5).map(n => {
+    const isImportant = n.is_pinned || n.is_important;
+    return `<a href="notice.html" class="notice-item">
+      <span class="notice-badge ${isImportant?'important':'normal'}">${isImportant?'중요':'일반'}</span>
+      <span class="notice-title">${n.title||''}</span>
+      <span class="notice-date">${fmtDate(n.created_at)}</span>
+    </a>`;
+  }).join('');
+
+  /* --- GSAP Scroll Reveal --- */
+  gsap.utils.toArray('.hub-card, .comm-section, .comm-cta-box, .knowledge-card, .tip-card').forEach(el => {
     gsap.from(el, {
       scrollTrigger:{trigger:el, start:'top 88%', once:true},
-      opacity:0, y:50, duration:.7, delay: i * .1, ease:'power3.out'
+      opacity:0, y:40, duration:.6, ease:'power3.out'
     });
+  });
+
+  /* Hub cards stagger */
+  gsap.from('.hub-card', {
+    scrollTrigger:{trigger:'#hub-cards', start:'top 85%', once:true},
+    opacity:0, y:50, duration:.7, stagger:.12, ease:'power3.out'
+  });
+
+  /* Enc topics stagger */
+  gsap.from('.enc-topic', {
+    scrollTrigger:{trigger:'#enc-topics', start:'top 90%', once:true},
+    opacity:0, scale:.8, duration:.4, stagger:.06, ease:'back.out(2)'
+  });
+
+  /* Tips stagger */
+  gsap.from('.tip-card', {
+    scrollTrigger:{trigger:'#sec-tips', start:'top 85%', once:true},
+    opacity:0, y:30, duration:.5, stagger:.1, ease:'power3.out'
+  });
+
+  /* Knowledge cards stagger */
+  gsap.from('.knowledge-card', {
+    scrollTrigger:{trigger:'#sec-knowledge', start:'top 85%', once:true},
+    opacity:0, y:30, duration:.5, stagger:.08, ease:'power3.out'
   });
 });
 </script>
