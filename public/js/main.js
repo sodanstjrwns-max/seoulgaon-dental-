@@ -1262,7 +1262,7 @@ function initAfterLoad(){
 
 // Start immediately
 initNoise();
-initCursor();
+// initCursor(); // custom cursor removed
 initLoader();
 
 })();

@@ -420,7 +420,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   initFaqNav();
   initDropdownNav();
   initMemberNav();
-  initCursor();
+  // initCursor(); // custom cursor removed
   initHamburger();
   initProgressBar();
   initHeroEntrance();
