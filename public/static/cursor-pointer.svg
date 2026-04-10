@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="30" viewBox="0 0 26 30">
+  <defs>
+    <filter id="s" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="1" dy="1.5" stdDeviation="1" flood-color="#000" flood-opacity=".4"/>
+    </filter>
+  </defs>
+  <g filter="url(#s)">
+    <!-- index finger -->
+    <rect x="8" y="1" width="5" height="13" rx="2.5" fill="#F2EDE4" stroke="#333" stroke-width="1.2"/>
+    <!-- middle finger -->
+    <rect x="14" y="3.5" width="5" height="11" rx="2.5" fill="#F2EDE4" stroke="#333" stroke-width="1.2"/>
+    <!-- ring finger -->
+    <rect x="20" y="5.5" width="5" height="9.5" rx="2.5" fill="#F2EDE4" stroke="#333" stroke-width="1.2"/>
+    <!-- palm -->
+    <path d="M3 16 C1 13, 4 10, 7 12 L7 14 L8 14 L8 12 Q8 10, 10.5 10 L14 10 Q16 10, 16 12 L16 14 L19 14 Q21 14, 21 12 L21 15 Q25 14, 25 16 L25 20 C25 25, 20 28, 14 28 C8 28, 3 25, 3 20 Z" 
+          fill="#F2EDE4" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+  </g>
+</svg>
