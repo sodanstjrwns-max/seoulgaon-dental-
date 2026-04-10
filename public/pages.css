@@ -4,7 +4,7 @@
 .page-hero{position:relative;padding:clamp(8rem,18vh,12rem) clamp(1.5rem,4vw,6rem) clamp(3rem,6vh,5rem);text-align:center;overflow:hidden}
 .page-hero-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--ff-en);font-size:clamp(10rem,28vw,22rem);color:var(--gold);opacity:.04;line-height:1;pointer-events:none;font-weight:700;white-space:nowrap}
 .page-hero-label{font-family:var(--ff-en);font-size:clamp(.7rem,.9vw,.8rem);letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;display:inline-block;opacity:0;transform:translateY(10px)}
-.page-hero h1{font-family:var(--ff-title);font-size:clamp(2rem,5vw,3.5rem);line-height:1.2;margin-bottom:1rem;opacity:0;transform:translateY(20px)}
+.page-hero h1{font-family:var(--ff-title);font-weight:var(--fw-title);font-size:clamp(2rem,5vw,3.5rem);line-height:1.2;margin-bottom:1rem;opacity:0;transform:translateY(20px)}
 .page-hero-sub{font-size:clamp(.85rem,1.1vw,.95rem);color:var(--stone-l);margin-bottom:2rem;opacity:0;transform:translateY(15px)}
 
 /* ===== PAGE TABS ===== */
@@ -16,7 +16,7 @@
 .tx-section{padding:clamp(4rem,8vh,7rem) clamp(1.5rem,4vw,6rem);max-width:1100px;margin:0 auto;border-bottom:1px solid var(--line)}
 .tx-section:last-child{border-bottom:none}
 .tx-sec-label{font-family:var(--ff-en);font-size:.75rem;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
-.tx-sec-title{font-family:var(--ff-title);font-size:clamp(1.6rem,3vw,2.5rem);margin-bottom:.5rem}
+.tx-sec-title{font-family:var(--ff-title);font-weight:var(--fw-title);font-size:clamp(1.6rem,3vw,2.5rem);margin-bottom:.5rem}
 .tx-sec-sub{font-size:clamp(.85rem,1.1vw,.95rem);color:var(--stone-l);margin-bottom:2.5rem;max-width:600px}
 .tx-sec-highlight{display:inline-flex;align-items:center;gap:.5rem;background:rgba(191,164,106,.1);border:1px solid var(--gold);border-radius:100px;padding:.4rem 1.2rem;font-size:.8rem;color:var(--gold);margin-bottom:2rem}
 .tx-sec-highlight::before{content:'✦';font-size:.6rem}
@@ -25,14 +25,14 @@
 .tx-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;margin-bottom:2.5rem}
 .tx-card-item{background:var(--ink-4);border:1px solid var(--line);border-radius:12px;padding:1.5rem;transition:border-color .3s,transform .3s}
 .tx-card-item:hover{border-color:var(--gold);transform:translateY(-3px)}
-.tx-card-item h4{font-family:var(--ff-title);font-size:1rem;margin-bottom:.4rem}
+.tx-card-item h4{font-family:var(--ff-title);font-weight:var(--fw-title);font-size:1rem;margin-bottom:.4rem}
 .tx-card-item p{font-size:.82rem;color:var(--stone-l);line-height:1.55}
 
 /* ===== TX PROCESS ===== */
 .tx-process{display:flex;gap:1.5rem;margin-bottom:2.5rem;flex-wrap:wrap}
 .tx-step{flex:1;min-width:180px;text-align:center;padding:1.5rem 1rem;background:var(--ink-4);border:1px solid var(--line);border-radius:12px;position:relative}
 .tx-step-num{font-family:var(--ff-en);font-size:2rem;color:var(--gold);opacity:.5;margin-bottom:.5rem}
-.tx-step h4{font-family:var(--ff-title);font-size:.95rem;margin-bottom:.3rem}
+.tx-step h4{font-family:var(--ff-title);font-weight:var(--fw-title);font-size:.95rem;margin-bottom:.3rem}
 .tx-step p{font-size:.78rem;color:var(--stone-l)}
 .tx-step::after{content:'→';position:absolute;right:-1rem;top:50%;transform:translateY(-50%);color:var(--gold);font-size:1.2rem;opacity:.4}
 .tx-step:last-child::after{display:none}
@@ -62,7 +62,7 @@
 .blog-card-body{padding:1.5rem}
 .blog-card-tag{font-family:var(--ff-en);font-size:.68rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
 .blog-card-date{font-size:.72rem;color:var(--stone);margin-bottom:.5rem}
-.blog-card h3{font-family:var(--ff-title);font-size:1.1rem;margin-bottom:.5rem;line-height:1.35}
+.blog-card h3{font-family:var(--ff-title);font-weight:var(--fw-title);font-size:1.1rem;margin-bottom:.5rem;line-height:1.35}
 .blog-card p{font-size:.82rem;color:var(--stone-l);line-height:1.55}
 .blog-card-link{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;color:var(--gold);margin-top:.75rem;transition:gap .3s}
 .blog-card-link:hover{gap:.6rem}
@@ -74,7 +74,7 @@
 .ba-placeholder::before{content:'📷';font-size:1.5rem}
 .ba-card-body{padding:1.5rem}
 .ba-card-tag{font-family:var(--ff-en);font-size:.68rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
-.ba-card h3{font-family:var(--ff-title);font-size:1.05rem;margin-bottom:.3rem}
+.ba-card h3{font-family:var(--ff-title);font-weight:var(--fw-title);font-size:1.05rem;margin-bottom:.3rem}
 .ba-card p{font-size:.82rem;color:var(--stone-l)}
 
 /* ===== NOTICE LIST ===== */

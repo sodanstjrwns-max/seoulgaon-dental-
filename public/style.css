@@ -5,7 +5,8 @@
   --gold:#BFA46A;--gold-b:#D4BA82;
   --ivory:#F2EDE4;--stone:#8C8578;--stone-l:#AFA79D;
   --line:rgba(191,164,106,.1);
-  --ff-title:'Black Han Sans',sans-serif;
+  --ff-title:'Pretendard',sans-serif;
+  --fw-title:700;
   --ff-en:'Bebas Neue',sans-serif;
   --ff-body:'Pretendard',sans-serif;
 }
@@ -27,7 +28,7 @@ ul{list-style:none}
 
 /* ===== NAVIGATION ===== */
 #nav{position:fixed;top:0;left:0;width:100%;z-index:9000;padding:0 clamp(1.5rem,4vw,4rem);height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(5,5,4,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-.nav-logo{font-family:var(--ff-title);font-size:1.3rem;letter-spacing:-0.02em}
+.nav-logo{font-family:var(--ff-title);font-weight:var(--fw-title);font-size:1.3rem;letter-spacing:-0.02em}
 .nav-logo span{color:var(--gold)}
 .nav-links{display:flex;gap:2rem;align-items:center}
 .nav-links a{font-size:.85rem;letter-spacing:.04em;color:var(--stone-l);transition:color .3s}
@@ -67,12 +68,12 @@ ul{list-style:none}
 .hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px)}
 .mob-menu{position:fixed;inset:0;background:var(--ink);z-index:9001;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;clip-path:circle(0% at calc(100% - 3rem) 2.25rem);transition:clip-path .6s cubic-bezier(.77,0,.175,1)}
 .mob-menu.open{clip-path:circle(150% at calc(100% - 3rem) 2.25rem)}
-.mob-menu a{font-family:var(--ff-title);font-size:clamp(1.5rem,5vw,2.5rem);color:var(--ivory);transition:color .3s}
+.mob-menu a{font-family:var(--ff-title);font-weight:var(--fw-title);font-size:clamp(1.5rem,5vw,2.5rem);color:var(--ivory);transition:color .3s}
 .mob-menu a:hover{color:var(--gold)}
 
 /* ===== FOOTER ===== */
 footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp(1.5rem,4vw,4rem);text-align:center}
-.ft-logo{font-family:var(--ff-title);font-size:1.1rem;margin-bottom:.5rem}
+.ft-logo{font-family:var(--ff-title);font-weight:var(--fw-title);font-size:1.1rem;margin-bottom:.5rem}
 .ft-slogan{font-size:.8rem;color:var(--stone);margin-bottom:1rem}
 .ft-copy{font-size:.7rem;color:var(--stone)}
 

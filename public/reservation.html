@@ -31,7 +31,7 @@
 <meta name="twitter:image" content="https://seoulgaondc.kr/images/og-main.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
 <link href="style.css" rel="stylesheet">
@@ -61,7 +61,7 @@
 .rsv-card.kakao .rsv-icon{background:rgba(254,229,0,.08);color:#FEE500}
 .rsv-card.naver .rsv-icon{background:rgba(3,199,90,.08);color:#03C75A}
 
-.rsv-title{font-family:var(--ff-title);font-size:clamp(1.3rem,2.5vw,1.6rem);margin-bottom:.6rem}
+.rsv-title{font-family:var(--ff-title);font-weight:700;font-size:clamp(1.3rem,2.5vw,1.6rem);margin-bottom:.6rem}
 .rsv-desc{font-size:.85rem;color:var(--stone-l);line-height:1.8;margin-bottom:1.5rem;min-height:4.5em}
 .rsv-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 2rem;border-radius:100px;font-size:.88rem;font-weight:600;transition:all .3s;letter-spacing:.02em}
 .rsv-card.phone .rsv-btn{background:var(--gold);color:var(--ink)}
@@ -74,7 +74,7 @@
 
 /* Info Section */
 .rsv-info{border-top:1px solid var(--line);padding-top:clamp(3rem,6vh,5rem)}
-.rsv-info-title{font-family:var(--ff-title);font-size:clamp(1.3rem,2.5vw,1.8rem);text-align:center;margin-bottom:.5rem}
+.rsv-info-title{font-family:var(--ff-title);font-weight:700;font-size:clamp(1.3rem,2.5vw,1.8rem);text-align:center;margin-bottom:.5rem}
 .rsv-info-sub{font-size:.88rem;color:var(--stone-l);text-align:center;margin-bottom:2.5rem}
 
 .rsv-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
@@ -88,7 +88,7 @@
 
 /* Steps */
 .rsv-steps{border-top:1px solid var(--line);padding-top:clamp(3rem,6vh,5rem);margin-top:clamp(3rem,6vh,5rem)}
-.rsv-steps-title{font-family:var(--ff-title);font-size:clamp(1.3rem,2.5vw,1.8rem);text-align:center;margin-bottom:2.5rem}
+.rsv-steps-title{font-family:var(--ff-title);font-weight:700;font-size:clamp(1.3rem,2.5vw,1.8rem);text-align:center;margin-bottom:2.5rem}
 .rsv-step-list{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
 .rsv-step{text-align:center;flex:1;min-width:160px;max-width:220px}
 .rsv-step-num{width:48px;height:48px;border-radius:50%;background:rgba(191,164,106,.1);color:var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;font-family:var(--ff-en);font-size:1.2rem;font-weight:700}
@@ -98,7 +98,7 @@
 
 /* FAQ */
 .rsv-faq{border-top:1px solid var(--line);padding-top:clamp(3rem,6vh,5rem);margin-top:clamp(3rem,6vh,5rem)}
-.rsv-faq-title{font-family:var(--ff-title);font-size:clamp(1.3rem,2.5vw,1.8rem);text-align:center;margin-bottom:2rem}
+.rsv-faq-title{font-family:var(--ff-title);font-weight:700;font-size:clamp(1.3rem,2.5vw,1.8rem);text-align:center;margin-bottom:2rem}
 .rsv-faq-item{border-bottom:1px solid var(--line);padding:1.2rem 0}
 .rsv-faq-q{display:flex;align-items:center;gap:.8rem;cursor:pointer;width:100%;background:none;border:none;color:var(--ivory);font-size:.9rem;font-weight:500;text-align:left;padding:0}
 .rsv-faq-q::before{content:'Q';font-family:var(--ff-en);font-size:.75rem;font-weight:700;color:var(--gold);background:rgba(191,164,106,.1);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -237,7 +237,7 @@
 <div class="rsv-channels">
 
   <!-- 전화 예약 -->
-  <div class="rsv-card phone" data-reveal>
+  <div class="rsv-card phone">
     <span class="rsv-badge">Recommended</span>
     <div class="rsv-icon"><i class="fas fa-phone-alt"></i></div>
     <h2 class="rsv-title">전화 예약</h2>
@@ -247,7 +247,7 @@
   </div>
 
   <!-- 카카오톡 -->
-  <div class="rsv-card kakao" data-reveal>
+  <div class="rsv-card kakao">
     <span class="rsv-badge">24h Available</span>
     <div class="rsv-icon">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="36" height="36">
@@ -260,7 +260,7 @@
   </div>
 
   <!-- 네이버 -->
-  <div class="rsv-card naver" data-reveal>
+  <div class="rsv-card naver">
     <span class="rsv-badge">Easy Booking</span>
     <div class="rsv-icon"><i class="fas fa-calendar-check"></i></div>
     <h2 class="rsv-title">네이버 예약</h2>
@@ -271,7 +271,7 @@
 </div>
 
 <!-- ===== VISIT INFO ===== -->
-<div class="rsv-info" data-reveal>
+<div class="rsv-info">
   <h2 class="rsv-info-title">방문 전 확인하세요</h2>
   <p class="rsv-info-sub">예약 전 알아두시면 좋은 정보를 안내합니다</p>
 
@@ -321,7 +321,7 @@
 </div>
 
 <!-- ===== FIRST VISIT STEPS ===== -->
-<div class="rsv-steps" data-reveal>
+<div class="rsv-steps">
   <h2 class="rsv-steps-title">첫 방문 진료 과정</h2>
   <div class="rsv-step-list">
     <div class="rsv-step">
@@ -351,7 +351,7 @@
 </div>
 
 <!-- ===== FAQ ===== -->
-<div class="rsv-faq" data-reveal>
+<div class="rsv-faq">
   <h2 class="rsv-faq-title">예약 관련 자주 묻는 질문</h2>
 
   <div class="rsv-faq-item">
