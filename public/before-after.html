@@ -67,9 +67,10 @@
 .ba-card-images.cols-3{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
 .ba-card-images.cols-3 .ba-img-wrap:first-child{grid-column:1/-1}
 .ba-card-images.cols-4{grid-template-columns:1fr 1fr}
-.ba-img-wrap{position:relative;overflow:hidden;height:140px}
-.ba-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .3s;content-visibility:auto}
-.ba-card:hover .ba-img-wrap img{transform:scale(1.05)}
+.ba-img-wrap{position:relative;overflow:hidden;height:140px;background:linear-gradient(135deg,#1a1918 0%,#252321 100%)}
+.ba-img-wrap img{width:100%;height:140px;object-fit:cover;opacity:0;transition:opacity .2s ease}
+.ba-img-wrap img.img-ok{opacity:1;transition:opacity .2s ease,transform .3s}
+.ba-card:hover .ba-img-wrap img.img-ok{transform:scale(1.05)}
 .ba-img-label{position:absolute;bottom:4px;left:4px;font-size:.6rem;background:rgba(0,0,0,.7);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;letter-spacing:.5px}
 /* Empty state */
 .empty-state{text-align:center;padding:4rem 2rem;color:#666;font-size:.9rem}
@@ -321,12 +322,12 @@ function makeDBCard(c, idx){
     const cols = imgs.length >= 4 ? 'cols-4' : imgs.length === 3 ? 'cols-3' : imgs.length === 2 ? 'cols-2' : 'cols-1';
     // First 3 cards (idx<3): eager load for instant display
     // Rest: use data-src for lazy loading on scroll
-    const isAboveFold = idx < 3;
+    const isTop = idx < 4;
     imgHTML = `<div class="ba-card-images ${cols}">${imgs.map(i=>{
-      if(isAboveFold){
-        return `<div class="ba-img-wrap"><img src="${i.src}" alt="${i.label}" loading="eager" decoding="async" fetchpriority="high"><div class="ba-img-label">${i.label}</div></div>`;
+      if(isTop){
+        return `<div class="ba-img-wrap"><img src="${i.src}" alt="${i.label}" width="400" height="140" loading="eager" decoding="async" fetchpriority="high" onload="this.classList.add('img-ok')"><div class="ba-img-label">${i.label}</div></div>`;
       } else {
-        return `<div class="ba-img-wrap"><img data-src="${i.src}" alt="${i.label}" class="ba-lazy" style="opacity:0;transition:opacity .3s"><div class="ba-img-label">${i.label}</div></div>`;
+        return `<div class="ba-img-wrap"><img data-src="${i.src}" alt="${i.label}" width="400" height="140" onload="this.classList.add('img-ok')"><div class="ba-img-label">${i.label}</div></div>`;
       }
     }).join('')}</div>`;
   } else {
@@ -386,8 +387,6 @@ async function loadAllCases(){
     }
   }
 
-  // Preload only first 3 cases' images for instant above-fold display
-  preloadTopImages(dbCases.slice(0, 3));
   renderCases();
 }
 
@@ -423,61 +422,28 @@ function renderCases(){
     countEl.className = 'ba-total-count';
   }
 
-  // Cards: first 3 instant, rest fade in on scroll
-  const allCards = document.querySelectorAll('.ba-card');
-  allCards.forEach((c, i)=>{
-    if(i < 3){
-      c.style.opacity='1'; c.style.transform='translateY(0)'; c.style.transition='none';
-    } else {
-      c.style.opacity='0'; c.style.transform='translateY(15px)';
-    }
+  // All cards visible immediately (no card-level animation)
+  document.querySelectorAll('.ba-card').forEach(c=>{
+    c.style.opacity='1'; c.style.transform='none';
   });
 
-  // Lazy-load images when cards scroll into view (with generous rootMargin)
-  const imgObserver = new IntersectionObserver(entries=>{
+  // Lazy-load below-fold images when scrolling near them
+  const lazyObs = new IntersectionObserver(entries=>{
     entries.forEach(e=>{
       if(e.isIntersecting){
-        // Load all lazy images inside this card
-        e.target.querySelectorAll('img.ba-lazy[data-src]').forEach(img=>{
-          img.src = img.dataset.src;
-          img.onload = ()=>{ img.style.opacity='1'; };
-          img.removeAttribute('data-src');
-          img.classList.remove('ba-lazy');
-        });
-        // Fade in the card
-        e.target.style.transition='opacity .3s ease, transform .3s ease';
-        e.target.style.opacity='1';
-        e.target.style.transform='translateY(0)';
-        imgObserver.unobserve(e.target);
+        const img = e.target;
+        if(img.dataset.src){ img.src = img.dataset.src; img.removeAttribute('data-src'); }
+        lazyObs.unobserve(img);
       }
     });
-  },{threshold:0, rootMargin:'300px 0px'}); // 300px ahead = preload before user scrolls there
-  allCards.forEach((c, i)=>{ if(i >= 3) imgObserver.observe(c); });
+  },{rootMargin:'500px 0px'});
+  document.querySelectorAll('.ba-img-wrap img[data-src]').forEach(img=>lazyObs.observe(img));
 
   // Apply current filter
   if(currentFilter !== 'all') applyFilter(currentFilter);
   
   // Re-init filter
   initBAFilter();
-}
-
-// Preload only first 3 cases (above-fold) images via <link preload>
-function preloadTopImages(cases){
-  const urls = [];
-  cases.forEach(c => {
-    if(c.intraoral_before_url) urls.push(c.intraoral_before_url);
-    if(c.intraoral_after_url) urls.push(c.intraoral_after_url);
-    if(c.panorama_before_url) urls.push(c.panorama_before_url);
-    if(c.panorama_after_url) urls.push(c.panorama_after_url);
-  });
-  // Only preload first 6 images (3 cards × 2 images max) to not saturate connections
-  urls.slice(0, 6).forEach(url => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
-    link.href = url;
-    document.head.appendChild(link);
-  });
 }
 
 // Initial load
@@ -489,12 +455,14 @@ function applyFilter(cat){
   cards.forEach(card=>{
     if(cat==='all'||card.dataset.category===cat){
       card.style.display='';
-      card.style.transition='opacity .25s ease';
       card.style.opacity='1';
-      card.style.transform='translateY(0)';
+      card.style.transform='none';
       visibleCount++;
+      // Trigger lazy load for newly visible cards
+      card.querySelectorAll('img[data-src]').forEach(img=>{
+        img.src = img.dataset.src; img.removeAttribute('data-src');
+      });
     } else {
-      card.style.opacity='0';
       card.style.display='none';
     }
   });
