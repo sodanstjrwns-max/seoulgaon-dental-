@@ -76,24 +76,8 @@
 .empty-state i{font-size:3rem;margin-bottom:1rem;display:block;color:#444}
 /* Skeleton loading animation */
 @keyframes skeletonPulse{0%,100%{opacity:.6}50%{opacity:.3}}
-/* ===== BLUR OVERLAY (비회원) ===== */
-.blur-active #ba-grid{filter:blur(6px);pointer-events:none;user-select:none;-webkit-user-select:none;transition:filter .5s ease}
-.blur-active .filter-bar{pointer-events:none;opacity:.6}
-.blur-gate{display:none;position:relative;z-index:100;max-width:520px;margin:-6rem auto 2rem;text-align:center;padding:2.5rem 2rem;background:rgba(10,9,7,.95);border:1px solid var(--gold,#BFA46A);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.blur-active .blur-gate{display:block}
-.blur-gate-icon{width:64px;height:64px;background:rgba(191,164,106,.12);border:2px solid var(--gold,#BFA46A);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;font-size:1.5rem;color:var(--gold,#BFA46A)}
-.blur-gate h3{font-family:var(--ff-title);font-weight:500;font-size:1.3rem;margin-bottom:.5rem;color:#F2EDE4}
-.blur-gate p{font-size:.85rem;color:#AFA79D;line-height:1.6;margin-bottom:1.5rem}
-.blur-gate-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
-.blur-gate-btns a{padding:.7rem 2rem;border-radius:100px;font-size:.85rem;font-weight:600;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem}
-.blur-gate-btns .btn-primary{background:var(--gold,#BFA46A);color:#050504}
-.blur-gate-btns .btn-primary:hover{background:#D4BA82}
-.blur-gate-btns .btn-secondary{border:1px solid var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
-.blur-gate-btns .btn-secondary:hover{background:rgba(191,164,106,.1)}
-.blur-gate-sub{font-size:.72rem;color:#8C8578;margin-top:1rem}
-/* Unlock animation */
-@keyframes unlockFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.unlock-anim #ba-grid{animation:unlockFade .5s ease forwards}
+/* Blur overlay removed — gallery is now public */
+.blur-gate{display:none!important}
 /* Member badge in nav area */
 .member-bar{display:flex;align-items:center;gap:.75rem;justify-content:flex-end;max-width:1100px;margin:0 auto;padding:.5rem clamp(1.5rem,4vw,4rem) 0}
 .member-badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--gold,#BFA46A);padding:.35rem 1rem;border:1px solid rgba(191,164,106,.2);border-radius:100px;background:rgba(191,164,106,.06)}
@@ -237,17 +221,7 @@
   <!-- DB cases + static placeholder cards rendered here -->
 </div>
 
-<!-- Blur gate overlay for non-members -->
-<div class="blur-gate" id="blur-gate">
-  <div class="blur-gate-icon"><i class="fas fa-lock"></i></div>
-  <h3>회원 전용 콘텐츠</h3>
-  <p>비포·애프터 치료 사례는 회원만 열람 가능합니다.<br>간편 가입 후 모든 치료 결과를 확인하세요.</p>
-  <div class="blur-gate-btns">
-    <a href="signup.html?from=before-after&redirect=before-after.html" class="btn-primary"><i class="fas fa-user-plus"></i> 무료 회원가입</a>
-    <a href="signup.html?from=before-after&redirect=before-after.html" class="btn-secondary" onclick="localStorage.setItem('gaon_goto_login','1')"><i class="fas fa-sign-in-alt"></i> 로그인</a>
-  </div>
-  <div class="blur-gate-sub">가입은 30초면 충분합니다 · 이름, 전화번호, 비밀번호만 입력</div>
-</div>
+<!-- Blur gate removed — gallery is public -->
 
 <!-- BA detail modal -->
 <div class="modal-overlay" id="ba-modal">
@@ -292,17 +266,14 @@ function checkMemberAuth(){
     isMember = true;
     document.getElementById('member-bar').style.display = 'flex';
     document.getElementById('member-name').textContent = user.name;
-    document.querySelector('main').classList.remove('blur-active');
-    document.querySelector('main').classList.add('unlock-anim');
-    // Update nav link
     if(navLink){ navLink.innerHTML = '<i class="fas fa-user-check"></i> ' + user.name + '님'; navLink.href = '#'; navLink.onclick = function(e){ e.preventDefault(); memberLogout(); }; }
     if(mobLink){ mobLink.innerHTML = '<i class="fas fa-user-check"></i> ' + user.name + '님 (로그아웃)'; mobLink.href = '#'; mobLink.onclick = function(e){ e.preventDefault(); memberLogout(); }; }
   } else {
     isMember = false;
-    document.querySelector('main').classList.add('blur-active');
     if(navLink){ navLink.innerHTML = '<i class="fas fa-user"></i> 로그인'; navLink.href = 'signup.html'; }
     if(mobLink){ mobLink.innerHTML = '<i class="fas fa-user"></i> 로그인'; mobLink.href = 'signup.html'; }
   }
+  // Gallery is always visible — no blur for non-members
 }
 checkMemberAuth();
 
@@ -311,8 +282,6 @@ function memberLogout(){
   localStorage.removeItem(MEMBER_USER_KEY);
   isMember = false;
   document.getElementById('member-bar').style.display = 'none';
-  document.querySelector('main').classList.remove('unlock-anim');
-  document.querySelector('main').classList.add('blur-active');
 }
 
 const catMap = {'임플란트':'implant','심미치료':'aesthetic','레진빌드업':'resin','기타':'info'};
@@ -545,11 +514,7 @@ function initBAFilter(){
 
 // BA detail modal
 function openBADetail(idx){
-  if(!isMember){
-    // Non-member can't open detail — redirect to signup
-    location.href = 'signup.html?from=before-after&redirect=before-after.html';
-    return;
-  }
+  // Gallery is public — no login required
   const c = dbCases[idx];
   if(!c) return;
   
