@@ -390,42 +390,34 @@ app.post('/api/upload/multiple', auth, async (c) => {
   }
 })
 
-// Serve image from R2 — optimized with conditional requests & CDN caching
+// Serve image from R2 — with Cache API for edge caching
 app.get('/api/images/*', async (c) => {
   try {
     const r2 = c.env.R2
     const key = c.req.path.replace('/api/images/', '')
     if (!key) return c.json({ error: 'key 필요' }, 400)
 
-    // Support conditional requests (If-None-Match) for browser cache revalidation
-    const ifNoneMatch = c.req.header('If-None-Match')
+    // 1) Check Cache API first (edge cache — no R2 roundtrip)
+    const cacheKey = new Request(c.req.url, { method: 'GET' })
+    const cache = caches.default
+    let cachedResp = await cache.match(cacheKey)
+    if (cachedResp) return cachedResp
 
+    // 2) Not in cache — fetch from R2
     const obj = await r2.get(key)
     if (!obj) return c.notFound()
-
-    const etag = obj.etag || `"${obj.key}"`
-    
-    // If browser already has this image cached, return 304
-    if (ifNoneMatch && (ifNoneMatch === etag || ifNoneMatch === `W/${etag}`)) {
-      return new Response(null, {
-        status: 304,
-        headers: {
-          'ETag': etag,
-          'Cache-Control': 'public, max-age=31536000, immutable'
-        }
-      })
-    }
 
     const headers = new Headers()
     headers.set('Content-Type', obj.httpMetadata?.contentType || 'image/jpeg')
     headers.set('Cache-Control', 'public, max-age=31536000, immutable')
-    headers.set('ETag', etag)
-    // Allow Cloudflare CDN to cache at the edge
-    headers.set('CDN-Cache-Control', 'public, max-age=31536000')
-    // Vary only on Accept-Encoding to maximize cache hits
-    headers.set('Vary', 'Accept-Encoding')
+    if (obj.etag) headers.set('ETag', obj.etag)
 
-    return new Response(obj.body, { headers })
+    const resp = new Response(obj.body, { headers })
+
+    // 3) Store in Cache API for future requests (non-blocking)
+    c.executionCtx.waitUntil(cache.put(cacheKey, resp.clone()))
+
+    return resp
   } catch (e: any) {
     return c.json({ error: '이미지를 불러올 수 없습니다' }, 404)
   }
