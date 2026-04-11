@@ -75,8 +75,8 @@
 .empty-state{text-align:center;padding:4rem 2rem;color:#666;font-size:.9rem}
 .empty-state i{font-size:3rem;margin-bottom:1rem;display:block;color:#444}
 /* ===== BLUR OVERLAY (비회원) ===== */
-.blur-active #ba-grid{filter:blur(12px);pointer-events:none;user-select:none;-webkit-user-select:none;transition:filter .5s ease}
-.blur-active .filter-bar{pointer-events:none;opacity:.5}
+.blur-active #ba-grid{filter:blur(6px);pointer-events:none;user-select:none;-webkit-user-select:none;transition:filter .5s ease}
+.blur-active .filter-bar{pointer-events:none;opacity:.6}
 .blur-gate{display:none;position:relative;z-index:100;max-width:520px;margin:-6rem auto 2rem;text-align:center;padding:2.5rem 2rem;background:rgba(10,9,7,.95);border:1px solid var(--gold,#BFA46A);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 .blur-active .blur-gate{display:block}
 .blur-gate-icon{width:64px;height:64px;background:rgba(191,164,106,.12);border:2px solid var(--gold,#BFA46A);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;font-size:1.5rem;color:var(--gold,#BFA46A)}
@@ -319,6 +319,10 @@ const catLabel = {'임플란트':'Implant','심미치료':'Aesthetic','레진빌
 // Static placeholder cases removed — DB only
 
 let dbCases = [];
+let currentPage = 1;
+let totalPages = 1;
+let isLoadingMore = false;
+let currentFilter = 'all';
 
 function makeStaticCard(s){
   return `<div class="ba-card" data-category="${s.category}" data-tilt>
@@ -363,22 +367,45 @@ function makeDBCard(c, idx){
   </div>`;
 }
 
-// Load and render
-(async function(){
+// Load cases from API (all pages)
+async function loadAllCases(){
   const grid = document.getElementById('ba-grid');
+  grid.innerHTML = '<div style="text-align:center;padding:3rem;color:#888"><i class="fas fa-spinner fa-spin" style="font-size:1.5rem;margin-bottom:.5rem;display:block"></i>케이스 불러오는 중...</div>';
   
-  try {
-    const res = await fetch('/api/before-after');
-    if(!res.ok) throw new Error('API error: ' + res.status);
-    const data = await res.json();
-    dbCases = data.cases || [];
-  } catch(e){
-    console.warn('Before-After API load failed:', e);
+  dbCases = [];
+  let page = 1;
+  let hasMore = true;
+  
+  // Fetch ALL pages to get every case
+  while(hasMore){
+    try {
+      const res = await fetch(`/api/before-after?page=${page}&limit=100`);
+      if(!res.ok) throw new Error('API error: ' + res.status);
+      const data = await res.json();
+      const cases = data.cases || [];
+      dbCases = dbCases.concat(cases);
+      totalPages = data.pagination?.pages || 1;
+      if(page >= totalPages || cases.length === 0){
+        hasMore = false;
+      } else {
+        page++;
+      }
+    } catch(e){
+      console.warn('Before-After API load failed:', e);
+      hasMore = false;
+    }
   }
 
+  renderCases();
+}
+
+function renderCases(){
+  const grid = document.getElementById('ba-grid');
   let html = '';
-  dbCases.forEach((c, i) => html += makeDBCard(c, i));
-  if(!dbCases.length){
+  
+  if(dbCases.length){
+    dbCases.forEach((c, i) => html += makeDBCard(c, i));
+  } else {
     // Show placeholder cards for blur effect even when no DB data
     const placeholders = [
       {title:'상악 전체 임플란트', category:'implant', tag:'Implant'},
@@ -391,8 +418,20 @@ function makeDBCard(c, idx){
     placeholders.forEach(s => html += makeStaticCard(s));
   }
   grid.innerHTML = html;
+  
+  // Show count
+  if(dbCases.length){
+    const countEl = document.createElement('div');
+    countEl.style.cssText = 'text-align:center;padding:1rem;color:#666;font-size:.8rem';
+    countEl.textContent = `총 ${dbCases.length}건의 치료 사례`;
+    grid.parentNode.insertBefore(countEl, grid.nextSibling);
+    // Remove previous count if exists
+    const prevCount = grid.parentNode.querySelector('.ba-total-count');
+    if(prevCount) prevCount.remove();
+    countEl.className = 'ba-total-count';
+  }
 
-  // Re-init card animations
+  // Animate cards
   document.querySelectorAll('.ba-card').forEach(c=>{
     c.style.opacity='0';
     c.style.transform='translateY(30px)';
@@ -411,34 +450,52 @@ function makeDBCard(c, idx){
   },{threshold:.05});
   document.querySelectorAll('.ba-card').forEach(c=>observer.observe(c));
 
+  // Apply current filter
+  if(currentFilter !== 'all') applyFilter(currentFilter);
+  
   // Re-init filter
   initBAFilter();
-})();
+}
+
+// Initial load
+loadAllCases();
+
+function applyFilter(cat){
+  const cards = document.querySelectorAll('#ba-grid [data-category]');
+  let visibleCount = 0;
+  cards.forEach(card=>{
+    if(cat==='all'||card.dataset.category===cat){
+      card.style.display='';
+      card.style.opacity='0';
+      card.style.transform='translateY(20px)';
+      visibleCount++;
+      requestAnimationFrame(()=>{
+        card.style.transition='opacity .5s ease, transform .5s ease';
+        card.style.opacity='1';
+        card.style.transform='translateY(0)';
+      });
+    } else {
+      card.style.opacity='0';
+      card.style.transform='translateY(20px)';
+      setTimeout(()=>card.style.display='none',300);
+    }
+  });
+  // Update count
+  const countEl = document.querySelector('.ba-total-count');
+  if(countEl && dbCases.length){
+    const filtered = cat === 'all' ? dbCases.length : dbCases.filter(c => (catMap[c.category]||'implant') === cat).length;
+    countEl.textContent = `총 ${filtered}건의 치료 사례`;
+  }
+}
 
 function initBAFilter(){
   const btns = document.querySelectorAll('.filter-btn');
-  const cards = document.querySelectorAll('#ba-grid [data-category]');
   btns.forEach(btn=>{
     btn.addEventListener('click',()=>{
       btns.forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      const cat = btn.dataset.filter;
-      cards.forEach(card=>{
-        if(cat==='all'||card.dataset.category===cat){
-          card.style.display='';
-          card.style.opacity='0';
-          card.style.transform='translateY(20px)';
-          requestAnimationFrame(()=>{
-            card.style.transition='opacity .5s ease, transform .5s ease';
-            card.style.opacity='1';
-            card.style.transform='translateY(0)';
-          });
-        } else {
-          card.style.opacity='0';
-          card.style.transform='translateY(20px)';
-          setTimeout(()=>card.style.display='none',300);
-        }
-      });
+      currentFilter = btn.dataset.filter;
+      applyFilter(currentFilter);
     });
   });
 }

@@ -1362,6 +1362,8 @@ function showBATab(t){
   document.getElementById('ba-write').style.display=t==='write'?'block':'none';
   document.getElementById('ba-list').style.display=t==='list'?'block':'none';
   document.querySelectorAll('#page-ba .tab-btn').forEach((b,i)=>b.classList.toggle('active',(t==='write'?0:1)===i));
+  // "새 케이스 등록" 탭 클릭 시 수정 모드 초기화
+  if(t==='write' && document.getElementById('ba-edit-id').value) resetBAForm();
   if(t==='list')loadBAList();
 }
 
@@ -1454,17 +1456,17 @@ async function submitBA(){
   finally{btn.disabled=false;btn.textContent=editId?'수정 완료':'케이스 등록'}
 }
 
-async function loadBAList(){
+async function loadBAList(page=1){
   try{
-    const d=await fetch('/api/admin/before-after',{headers:authHeaders()}).then(r=>r.json());
+    const d=await fetch(`/api/admin/before-after?page=${page}&limit=200`,{headers:authHeaders()}).then(r=>r.json());
     if(d.error){toast(d.error,true);return}
     const el=document.getElementById('ba-items');
     if(!(d.cases||[]).length){el.innerHTML='<div style="padding:2rem;text-align:center;color:#666">등록된 케이스가 없습니다. 첫 번째 케이스를 등록해 보세요!</div>';return}
-    el.innerHTML=d.cases.map(c=>{
+    el.innerHTML=`<div style="padding:.5rem 1.5rem;font-size:.78rem;color:#888;border-bottom:1px solid #1a1a1a">총 ${(d.cases||[]).length}건의 케이스 (DB 전체: ${d.pagination?.total||0}건)</div>`+d.cases.map(c=>{
       const imgs=[c.intraoral_before_url,c.intraoral_after_url,c.panorama_before_url,c.panorama_after_url].filter(Boolean).length;
       return `<div class="item-row">
         <div style="flex:1;min-width:0">
-          <div class="item-title">${esc(c.title)}</div>
+          <div class="item-title">#${c.id} ${esc(c.title)}</div>
           <div class="item-meta">${esc(c.category)} · 사진 ${imgs}장 · ${fmtDate(c.created_at)} · <i class="fas fa-eye" style="font-size:.65rem;opacity:.6"></i> ${c.view_count||0} <span class="badge ${c.is_published?'published':'draft'}">${c.is_published?'공개':'비공개'}</span></div>
         </div>
         <div class="item-actions">

@@ -972,7 +972,7 @@ app.get('/api/before-after', async (c) => {
     const db = c.env.DB
     const category = c.req.query('category')
     const page = Math.max(1, parseInt(c.req.query('page') || '1'))
-    const limit = Math.min(100, Math.max(1, parseInt(c.req.query('limit') || '20')))
+    const limit = Math.min(500, Math.max(1, parseInt(c.req.query('limit') || '100')))
     const offset = (page - 1) * limit
 
     let whereParts = ['ba.is_published = 1']
@@ -1111,7 +1111,7 @@ app.get('/api/admin/before-after', auth, async (c) => {
   try {
     const db = c.env.DB
     const page = Math.max(1, parseInt(c.req.query('page') || '1'))
-    const limit = Math.min(100, Math.max(1, parseInt(c.req.query('limit') || '50')))
+    const limit = Math.min(500, Math.max(1, parseInt(c.req.query('limit') || '200')))
     const offset = (page - 1) * limit
 
     const cases = await db.prepare('SELECT * FROM before_after ORDER BY created_at DESC LIMIT ? OFFSET ?').bind(limit, offset).all()
