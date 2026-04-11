@@ -68,12 +68,14 @@
 .ba-card-images.cols-3 .ba-img-wrap:first-child{grid-column:1/-1}
 .ba-card-images.cols-4{grid-template-columns:1fr 1fr}
 .ba-img-wrap{position:relative;overflow:hidden;height:140px}
-.ba-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.ba-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .3s;content-visibility:auto}
 .ba-card:hover .ba-img-wrap img{transform:scale(1.05)}
 .ba-img-label{position:absolute;bottom:4px;left:4px;font-size:.6rem;background:rgba(0,0,0,.7);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;letter-spacing:.5px}
 /* Empty state */
 .empty-state{text-align:center;padding:4rem 2rem;color:#666;font-size:.9rem}
 .empty-state i{font-size:3rem;margin-bottom:1rem;display:block;color:#444}
+/* Skeleton loading animation */
+@keyframes skeletonPulse{0%,100%{opacity:.6}50%{opacity:.3}}
 /* ===== BLUR OVERLAY (비회원) ===== */
 .blur-active #ba-grid{filter:blur(6px);pointer-events:none;user-select:none;-webkit-user-select:none;transition:filter .5s ease}
 .blur-active .filter-bar{pointer-events:none;opacity:.6}
@@ -346,11 +348,13 @@ function makeDBCard(c, idx){
   if(c.panorama_after_url) imgs.push({src:c.panorama_after_url, label:'파노라마 After'});
 
   let imgHTML = '';
+  let imgIdx = idx * 4; // global image index for priority
   if(imgs.length > 0){
     const cols = imgs.length >= 4 ? 'cols-4' : imgs.length === 3 ? 'cols-3' : imgs.length === 2 ? 'cols-2' : 'cols-1';
-    imgHTML = `<div class="ba-card-images ${cols}">${imgs.map(i=>
-      `<div class="ba-img-wrap"><img src="${i.src}" alt="${i.label}" loading="lazy"><div class="ba-img-label">${i.label}</div></div>`
-    ).join('')}</div>`;
+    imgHTML = `<div class="ba-card-images ${cols}">${imgs.map((i, ii)=>{
+      const prio = (imgIdx + ii) < 16 ? 'high' : 'auto';
+      return `<div class="ba-img-wrap"><img src="${i.src}" alt="${i.label}" loading="eager" decoding="async" fetchpriority="${prio}"><div class="ba-img-label">${i.label}</div></div>`;
+    }).join('')}</div>`;
   } else {
     imgHTML = '<div class="ba-placeholder">사진 없음</div>';
   }
@@ -370,7 +374,19 @@ function makeDBCard(c, idx){
 // Load cases from API (all pages)
 async function loadAllCases(){
   const grid = document.getElementById('ba-grid');
-  grid.innerHTML = '<div style="text-align:center;padding:3rem;color:#888"><i class="fas fa-spinner fa-spin" style="font-size:1.5rem;margin-bottom:.5rem;display:block"></i>케이스 불러오는 중...</div>';
+  // Show skeleton loading cards for instant visual feedback
+  let skelHtml = '';
+  for(let i=0;i<6;i++){
+    skelHtml += `<div class="ba-card" style="animation:skeletonPulse 1.2s ease infinite">
+      <div style="background:rgba(255,255,255,.05);height:140px;border-radius:12px 12px 0 0"></div>
+      <div class="ba-card-body">
+        <div style="background:rgba(255,255,255,.08);height:12px;width:60px;border-radius:4px;margin-bottom:8px"></div>
+        <div style="background:rgba(255,255,255,.06);height:16px;width:80%;border-radius:4px;margin-bottom:6px"></div>
+        <div style="background:rgba(255,255,255,.04);height:12px;width:60%;border-radius:4px"></div>
+      </div>
+    </div>`;
+  }
+  grid.innerHTML = skelHtml;
   
   dbCases = [];
   let page = 1;
@@ -396,6 +412,8 @@ async function loadAllCases(){
     }
   }
 
+  // Preload first 8 cases' images (above-fold) for instant display
+  preloadTopImages(dbCases.slice(0, 8));
   renderCases();
 }
 
@@ -431,30 +449,60 @@ function renderCases(){
     countEl.className = 'ba-total-count';
   }
 
-  // Animate cards
-  document.querySelectorAll('.ba-card').forEach(c=>{
-    c.style.opacity='0';
-    c.style.transform='translateY(30px)';
+  // Instant show for first 8 cards, animate rest on scroll
+  const allCards = document.querySelectorAll('.ba-card');
+  allCards.forEach((c, i)=>{
+    if(i < 8){
+      // First 8 cards: show instantly (above fold)
+      c.style.opacity='1';
+      c.style.transform='translateY(0)';
+      c.style.transition='none';
+    } else {
+      c.style.opacity='0';
+      c.style.transform='translateY(20px)';
+    }
   });
+  // Only observe cards beyond first 8 for scroll animation
   const observer = new IntersectionObserver(entries=>{
-    entries.forEach((e,i)=>{
+    entries.forEach(e=>{
       if(e.isIntersecting){
-        setTimeout(()=>{
-          e.target.style.transition='opacity .6s ease, transform .6s ease';
-          e.target.style.opacity='1';
-          e.target.style.transform='translateY(0)';
-        },i*80);
+        e.target.style.transition='opacity .4s ease, transform .4s ease';
+        e.target.style.opacity='1';
+        e.target.style.transform='translateY(0)';
         observer.unobserve(e.target);
       }
     });
-  },{threshold:.05});
-  document.querySelectorAll('.ba-card').forEach(c=>observer.observe(c));
+  },{threshold:.05, rootMargin:'100px'});
+  allCards.forEach((c, i)=>{ if(i >= 8) observer.observe(c); });
 
   // Apply current filter
   if(currentFilter !== 'all') applyFilter(currentFilter);
   
   // Re-init filter
   initBAFilter();
+}
+
+// Preload top images for instant display
+function preloadTopImages(cases){
+  const urls = [];
+  cases.forEach(c => {
+    if(c.intraoral_before_url) urls.push(c.intraoral_before_url);
+    if(c.intraoral_after_url) urls.push(c.intraoral_after_url);
+    if(c.panorama_before_url) urls.push(c.panorama_before_url);
+    if(c.panorama_after_url) urls.push(c.panorama_after_url);
+  });
+  // Use link preload for first batch, Image() for the rest
+  urls.slice(0, 8).forEach(url => {
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = url;
+    document.head.appendChild(link);
+  });
+  urls.slice(8).forEach(url => {
+    const img = new Image();
+    img.src = url;
+  });
 }
 
 // Initial load
@@ -466,18 +514,13 @@ function applyFilter(cat){
   cards.forEach(card=>{
     if(cat==='all'||card.dataset.category===cat){
       card.style.display='';
-      card.style.opacity='0';
-      card.style.transform='translateY(20px)';
+      card.style.transition='opacity .25s ease';
+      card.style.opacity='1';
+      card.style.transform='translateY(0)';
       visibleCount++;
-      requestAnimationFrame(()=>{
-        card.style.transition='opacity .5s ease, transform .5s ease';
-        card.style.opacity='1';
-        card.style.transform='translateY(0)';
-      });
     } else {
       card.style.opacity='0';
-      card.style.transform='translateY(20px)';
-      setTimeout(()=>card.style.display='none',300);
+      card.style.display='none';
     }
   });
   // Update count
@@ -531,8 +574,8 @@ function openBADetail(idx){
     photosHTML += '<div class="photo-section"><div class="photo-section-title">구내사진</div>';
     if(c.intraoral_before_url && c.intraoral_after_url){
       photosHTML += `<div class="photo-compare">
-        <div class="photo-item" onclick="openLightbox('${c.intraoral_before_url}')"><img src="${c.intraoral_before_url}" alt="구내 Before"><div class="photo-label">BEFORE</div></div>
-        <div class="photo-item" onclick="openLightbox('${c.intraoral_after_url}')"><img src="${c.intraoral_after_url}" alt="구내 After"><div class="photo-label after">AFTER</div></div>
+        <div class="photo-item" onclick="openLightbox('${c.intraoral_before_url}')"><img src="${c.intraoral_before_url}" alt="구내 Before" loading="eager" decoding="async"><div class="photo-label">BEFORE</div></div>
+        <div class="photo-item" onclick="openLightbox('${c.intraoral_after_url}')"><img src="${c.intraoral_after_url}" alt="구내 After" loading="eager" decoding="async"><div class="photo-label after">AFTER</div></div>
       </div>`;
     } else {
       const img = c.intraoral_before_url || c.intraoral_after_url;
@@ -547,8 +590,8 @@ function openBADetail(idx){
     photosHTML += '<div class="photo-section"><div class="photo-section-title">파노라마</div>';
     if(c.panorama_before_url && c.panorama_after_url){
       photosHTML += `<div class="photo-compare">
-        <div class="photo-item" onclick="openLightbox('${c.panorama_before_url}')"><img src="${c.panorama_before_url}" alt="파노라마 Before"><div class="photo-label">BEFORE</div></div>
-        <div class="photo-item" onclick="openLightbox('${c.panorama_after_url}')"><img src="${c.panorama_after_url}" alt="파노라마 After"><div class="photo-label after">AFTER</div></div>
+        <div class="photo-item" onclick="openLightbox('${c.panorama_before_url}')"><img src="${c.panorama_before_url}" alt="파노라마 Before" loading="eager" decoding="async"><div class="photo-label">BEFORE</div></div>
+        <div class="photo-item" onclick="openLightbox('${c.panorama_after_url}')"><img src="${c.panorama_after_url}" alt="파노라마 After" loading="eager" decoding="async"><div class="photo-label after">AFTER</div></div>
       </div>`;
     } else {
       const img = c.panorama_before_url || c.panorama_after_url;
