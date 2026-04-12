@@ -1619,10 +1619,102 @@ app.get('/api/admin/stats/encyclopedia', auth, async (c) => {
 })
 
 // ══════════════════════════════════════════════════
+//  DYNAMIC SITEMAP.XML — 블로그·공지 개별 URL 자동 포함
+// ══════════════════════════════════════════════════
+app.get('/sitemap.xml', async (c) => {
+  try {
+    const db = c.env.DB
+    const SITE = 'https://seoulgaondc.kr'
+    const today = new Date().toISOString().split('T')[0]
+
+    // ── 정적 페이지 ──
+    const staticPages = [
+      { loc: '/',               priority: '1.0',  changefreq: 'weekly',  lastmod: today },
+      { loc: '/treatments',     priority: '0.95', changefreq: 'monthly', lastmod: today },
+      { loc: '/philosophy',     priority: '0.9',  changefreq: 'monthly', lastmod: '2026-04-09' },
+      { loc: '/doctors',        priority: '0.9',  changefreq: 'monthly', lastmod: today },
+      { loc: '/guide',          priority: '0.85', changefreq: 'monthly', lastmod: '2026-04-09' },
+      { loc: '/faq',            priority: '0.85', changefreq: 'weekly',  lastmod: '2026-04-09' },
+      { loc: '/encyclopedia',   priority: '0.8',  changefreq: 'monthly', lastmod: '2026-04-09' },
+      { loc: '/blog',           priority: '0.85', changefreq: 'daily',   lastmod: today },
+      { loc: '/before-after',   priority: '0.85', changefreq: 'daily',   lastmod: today },
+      { loc: '/notice',         priority: '0.6',  changefreq: 'weekly',  lastmod: today },
+      { loc: '/community',      priority: '0.8',  changefreq: 'weekly',  lastmod: today },
+      { loc: '/reservation',    priority: '0.9',  changefreq: 'monthly', lastmod: '2026-04-09' },
+    ]
+
+    // ── 블로그 포스트 (개별 URL) ──
+    let blogPosts: any[] = []
+    try {
+      const blogResult = await runQuery(db,
+        `SELECT id, title, created_at, updated_at FROM blog_posts WHERE is_published = 1 ORDER BY created_at DESC`, [])
+      blogPosts = blogResult.results || []
+    } catch (e) { /* ignore */ }
+
+    // ── 공지사항 (개별 URL) ──
+    let notices: any[] = []
+    try {
+      const noticeResult = await runQuery(db,
+        `SELECT id, title, created_at FROM notices WHERE is_published = 1 ORDER BY created_at DESC`, [])
+      notices = noticeResult.results || []
+    } catch (e) { /* ignore */ }
+
+    // ── XML 생성 ──
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`
+
+    // 정적 페이지
+    for (const p of staticPages) {
+      xml += `  <url>
+    <loc>${SITE}${p.loc}</loc>
+    <lastmod>${p.lastmod}</lastmod>
+    <changefreq>${p.changefreq}</changefreq>
+    <priority>${p.priority}</priority>
+  </url>\n`
+    }
+
+    // 블로그 개별 포스트
+    for (const post of blogPosts) {
+      const date = (post.updated_at || post.created_at || today).toString().split('T')[0].split(' ')[0]
+      xml += `  <url>
+    <loc>${SITE}/blog-post.html?id=${post.id}</loc>
+    <lastmod>${date}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>\n`
+    }
+
+    // 공지사항 개별 (notice 페이지에서 모달로 표시하므로 앵커 형태)
+    for (const n of notices) {
+      const date = (n.created_at || today).toString().split('T')[0].split(' ')[0]
+      xml += `  <url>
+    <loc>${SITE}/notice#notice-${n.id}</loc>
+    <lastmod>${date}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>\n`
+    }
+
+    xml += `</urlset>`
+
+    return new Response(xml, {
+      headers: {
+        'Content-Type': 'application/xml; charset=utf-8',
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+      }
+    })
+  } catch (e: any) {
+    // Fallback: 정적 sitemap 서빙은 serveStatic이 처리
+    return c.notFound()
+  }
+})
+
+// ══════════════════════════════════════════════════
 //  HEALTH CHECK
 // ══════════════════════════════════════════════════
 app.get('/api/health', async (c) => {
-  return c.json({ status: 'ok', timestamp: new Date().toISOString(), version: '2.3.0' })
+  return c.json({ status: 'ok', timestamp: new Date().toISOString(), version: '2.4.0' })
 })
 
 // ══════════════════════════════════════════════════
