@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node -e \"const f=require('fs');const d=JSON.parse(f.readFileSync('dist/_routes.json'));d.exclude=d.exclude.filter(x=>x!=='/sitemap.xml');f.writeFileSync('dist/_routes.json',JSON.stringify(d))\"",
     "preview": "wrangler pages dev",
     "deploy": "npm run build && wrangler pages deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
