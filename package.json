@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node -e \"const f=require('fs');const d=JSON.parse(f.readFileSync('dist/_routes.json'));d.exclude=d.exclude.filter(x=>x!=='/sitemap.xml');if(!d.exclude.includes('/aesthetic.html'))d.exclude.push('/aesthetic.html');if(!d.exclude.includes('/resin-buildup.html'))d.exclude.push('/resin-buildup.html');f.writeFileSync('dist/_routes.json',JSON.stringify(d))\"",
+    "build": "vite build && node -e \"const f=require('fs');const d=JSON.parse(f.readFileSync('dist/_routes.json'));d.exclude=d.exclude.filter(x=>x!=='/sitemap.xml');['aesthetic','resin-buildup','implant'].forEach(p=>{if(!d.exclude.includes('/'+p+'.html'))d.exclude.push('/'+p+'.html')});if(!d.exclude.includes('/llms.txt'))d.exclude.push('/llms.txt');f.writeFileSync('dist/_routes.json',JSON.stringify(d))\"",
     "preview": "wrangler pages dev",
     "deploy": "npm run build && wrangler pages deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"

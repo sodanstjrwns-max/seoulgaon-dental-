@@ -98,3 +98,7 @@ Disallow: /
 
 # ── 사이트맵 ──
 Sitemap: https://seoulgaondc.kr/sitemap.xml
+
+# ── AI/LLM 크롤러 최적화 ──
+# llms.txt: AI 검색엔진용 구조화 정보
+# https://seoulgaondc.kr/llms.txt

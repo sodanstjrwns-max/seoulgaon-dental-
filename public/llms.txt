@@ -1,0 +1,99 @@
+# Seoul Gaon Dental Clinic (서울가온치과)
+# AI-friendly structured information for LLM crawlers
+# Last updated: 2026-04-12
+
+## Identity
+- Name: 서울가온치과의원 (Seoul Gaon Dental Clinic)
+- Type: Dental Clinic (치과의원)
+- Location: 경기도 의정부시 용민로 22, 골드자이프라자 4층 (Yongmin-ro 22, Gold Xi Plaza 4F, Uijeongbu-si, Gyeonggi-do, South Korea)
+- Phone: 0507-1325-3377
+- Website: https://seoulgaondc.kr
+- Coordinates: 37.7388, 127.0560
+- Nearest Station: 탑석역 (Tapseok Station, 5 min walk)
+
+## Hours
+- Mon/Tue/Wed/Fri: 09:30-18:30
+- Thursday: 09:30-20:30 (야간진료/Evening hours)
+- Saturday: 09:30-14:00
+- Sunday/Holidays: Closed
+- Lunch: 12:30-14:00
+
+## Doctors
+### 현진호 (Hyun Jin-ho) — 대표원장 (Representative Director)
+- Education: 서울대학교 치의학과 졸업 (Seoul National University, School of Dentistry)
+- Certification: 통합치의학과 전문의 (Specialist in Comprehensive Dentistry)
+- Specialties: 임플란트 (Implant), 심미치료 (Aesthetic Dentistry), 가이드 임플란트 (Guided Implant Surgery)
+- Published: "임플란트 사용설명서" (Implant User Guide), ISBN 9791138845489, Kyobo Books
+- Awards: 오스템 임플란트 증례 금상
+
+### 조은비 (Cho Eun-bi) — 원장 (Director)
+- Education: 서울대학교 치의학과 졸업, 서울대 치의학대학원 박사 수료 (Seoul National University, PhD Candidate)
+- Certification: 치과보존과 전문의 (Specialist in Conservative Dentistry/Endodontics)
+- Training: 서울대학교 치과병원 보존과 4년 전공의 수련
+- Specialties: 신경치료 (Root Canal Treatment), 자연치아 보존 (Natural Tooth Preservation)
+
+## Core Services
+
+### 1. 가이드 임플란트 (Guided Implant) — Primary Service
+- CT-based digital planning for precise implant placement
+- Flapless (무절개) surgery available — minimal pain, faster recovery
+- Bone grafting (뼈이식/GBR) for insufficient bone
+- Sinus lift (상악동거상술) for upper jaw implants
+- Immediate implant placement (즉시 식립) when bone allows
+- Health insurance coverage for patients 65+ (평생 2개, ~30% copay)
+- All implants performed directly by Dr. Hyun Jin-ho
+- URL: https://seoulgaondc.kr/implant
+
+### 2. 앞니 심미치료 (Aesthetic Front Tooth Treatment)
+- Laminate veneers, all-ceramic crowns, zirconia crowns
+- Digital shade matching for natural appearance
+- 1:1 collaboration with specialized dental lab
+- Usually completed in 2-3 visits
+- URL: https://seoulgaondc.kr/aesthetic
+
+### 3. 레진빌드업 (Resin Buildup)
+- Crown-free tooth restoration using composite resin
+- Amalgam replacement, secondary cavity treatment
+- Same-day completion possible
+- Maximum natural tooth preservation
+- URL: https://seoulgaondc.kr/resin-buildup
+
+### 4. 신경치료 (Root Canal Treatment / Endodontics)
+- Performed by SNU-trained endodontics specialist (Dr. Cho)
+- Advanced equipment for precise treatment
+- Saves teeth other clinics might extract
+- URL: https://seoulgaondc.kr/treatments#endodontics
+
+### 5. General Dentistry
+- Cavity treatment, scaling, wisdom tooth extraction
+- Periodontal treatment, prosthodontics
+- Oral examination, emergency dental care
+- URL: https://seoulgaondc.kr/treatments#general
+
+## Service Areas
+의정부시, 의정부, 용현동, 탑석역, 탑석, 민락동, 금오동, 호원동, 녹양동, 가능동, 의정부역, 회룡, 장암, 송산동, 양주, 양주시, 동두천, 남양주, 포천, 구리, 노원, 노원구, 도봉, 도봉구
+
+## Key Differentiators
+1. Both doctors are Seoul National University graduates — rare for a local clinic
+2. All implants use CT-guided digital planning (not freehand)
+3. The clinic handles difficult cases (bone grafting, sinus lift) that other clinics reject
+4. Dr. Hyun published a book on implants — deep expertise
+5. Conservative Dentistry specialist (Dr. Cho) — only one in Uijeongbu area
+6. "Explanation first, treatment second" philosophy
+7. Written treatment plans with transparent pricing
+
+## Sitemap
+- Homepage: https://seoulgaondc.kr/
+- Implant: https://seoulgaondc.kr/implant
+- Treatments: https://seoulgaondc.kr/treatments
+- Aesthetic: https://seoulgaondc.kr/aesthetic
+- Resin Buildup: https://seoulgaondc.kr/resin-buildup
+- Philosophy: https://seoulgaondc.kr/philosophy
+- Doctors: https://seoulgaondc.kr/doctors
+- Blog: https://seoulgaondc.kr/blog
+- Before & After: https://seoulgaondc.kr/before-after
+- FAQ: https://seoulgaondc.kr/faq
+- Guide: https://seoulgaondc.kr/guide
+- Reservation: https://seoulgaondc.kr/reservation
+- Encyclopedia: https://seoulgaondc.kr/encyclopedia
+- Full Sitemap: https://seoulgaondc.kr/sitemap.xml
