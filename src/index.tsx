@@ -1646,12 +1646,20 @@ app.get('/sitemap.xml', async (c) => {
       { loc: '/reservation',    priority: '0.9',  changefreq: 'monthly', lastmod: '2026-04-09' },
     ]
 
-    // ── 블로그 포스트 (개별 URL) ──
+    // ── 블로그 포스트 (개별 URL — 클린 URL) ──
     let blogPosts: any[] = []
     try {
       const blogResult = await runQuery(db,
         `SELECT id, title, created_at, updated_at FROM blog_posts WHERE is_published = 1 ORDER BY created_at DESC`, [])
       blogPosts = blogResult.results || []
+    } catch (e) { /* ignore */ }
+
+    // ── 비포&애프터 (개별 URL — SSR 상세 페이지) ──
+    let baCases: any[] = []
+    try {
+      const baResult = await runQuery(db,
+        `SELECT id, title, created_at, updated_at FROM before_after WHERE is_published = 1 ORDER BY created_at DESC`, [])
+      baCases = baResult.results || []
     } catch (e) { /* ignore */ }
 
     // ── 공지사항 (개별 URL) ──
@@ -1677,14 +1685,25 @@ app.get('/sitemap.xml', async (c) => {
   </url>\n`
     }
 
-    // 블로그 개별 포스트
+    // 블로그 개별 포스트 (클린 URL: /blog/:id)
     for (const post of blogPosts) {
       const date = (post.updated_at || post.created_at || today).toString().split('T')[0].split(' ')[0]
       xml += `  <url>
-    <loc>${SITE}/blog-post.html?id=${post.id}</loc>
+    <loc>${SITE}/blog/${post.id}</loc>
     <lastmod>${date}</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.75</priority>
+  </url>\n`
+    }
+
+    // 비포&애프터 개별 케이스 (클린 URL: /before-after/:id)
+    for (const ba of baCases) {
+      const date = (ba.updated_at || ba.created_at || today).toString().split('T')[0].split(' ')[0]
+      xml += `  <url>
+    <loc>${SITE}/before-after/${ba.id}</loc>
+    <lastmod>${date}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
   </url>\n`
     }
 
@@ -1718,6 +1737,577 @@ app.get('/sitemap.xml', async (c) => {
 // ══════════════════════════════════════════════════
 app.get('/api/health', async (c) => {
   return c.json({ status: 'ok', timestamp: new Date().toISOString(), version: '2.4.0' })
+})
+
+// ══════════════════════════════════════════════════
+//  SSR — 블로그 포스트 (Server-Side Rendering for SEO/AEO)
+// ══════════════════════════════════════════════════
+
+// 공통 HTML 이스케이프
+function escHtml(str: string): string {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')
+}
+// HTML 태그 제거 (plain text 추출)
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
+}
+// 날짜 포맷 (YYYY-MM-DD)
+function fmtDate(d: string | null): string {
+  if (!d) return new Date().toISOString().split('T')[0]
+  return d.toString().split('T')[0].split(' ')[0]
+}
+// 공통 <head> 리소스
+const HEAD_COMMON = `<meta charset="UTF-8">
+<meta name="google-site-verification" content="onzIFMlYzxtJ4ZPiBmecKBQX0OSxqaFZ3GYj8aGsk0w" />
+<meta name="naver-site-verification" content="3acfa2ab85baedd02a79be084c5e8d869112230d" />
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="/style.css" rel="stylesheet">
+<link href="/pages.css" rel="stylesheet">`
+
+// 공통 네비게이션
+const NAV_HTML = `<nav id="nav" role="navigation" aria-label="메인 네비게이션">
+  <a href="/" class="nav-logo">서울가온치과<span>.</span></a>
+  <div class="nav-links">
+    <a href="/philosophy">진료 철학</a>
+    <div class="nav-link-drop"><a href="/treatments">진료 안내 ▾</a><div class="drop"><a href="/treatments#implant">임플란트</a><a href="/treatments#aesthetics">앞니 심미치료</a><a href="/treatments#endodontics">신경치료</a><a href="/treatments#general">일반진료</a></div></div>
+    <div class="nav-link-drop"><a href="/community">커뮤니티 ▾</a><div class="drop"><a href="/blog">블로그</a><a href="/before-after">비포 애프터</a><a href="/notice">공지사항</a></div></div>
+    <a href="/doctors">의료진</a>
+    <div class="nav-link-drop"><a href="/guide">안내 ▾</a><div class="drop"><a href="/guide#visit">오시는 길</a><a href="/guide#fee">수가 안내</a><a href="/faq">자주 묻는 질문</a></div></div>
+  </div>
+  <a href="/reservation" class="nav-cta" data-magnet><i class="fas fa-calendar-check" style="margin-right:.4rem;font-size:.78rem"></i>예약 안내</a>
+  <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu"><a href="/">홈</a><a href="/philosophy">진료 철학</a><a href="/treatments">진료 안내</a><a href="/community">커뮤니티</a><a href="/doctors">의료진</a><a href="/guide">안내</a><a href="/reservation">예약 안내</a><a href="/blog">블로그</a><a href="/before-after">비포 애프터</a><a href="/notice">공지사항</a><a href="/encyclopedia">치과 백과사전</a><a href="/faq">자주 묻는 질문</a></div>`
+
+// 공통 푸터
+const FOOTER_HTML = `<footer role="contentinfo">
+  <div class="ft-logo">서울가온치과<span style="color:var(--gold)">.</span></div>
+  <p class="ft-slogan">치과 치료가 좋은 기억이 될 수 있도록.</p>
+  <div class="ft-biz" style="font-size:.72rem;color:var(--stone);margin-bottom:.5rem">
+    <span>서울가온치과의원</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>대표 현진호</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>사업자등록번호 898-03-02537</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>경기도 의정부시 용민로 22, 4층(용현동)</span><span style="margin:0 .3rem;opacity:.3">|</span>
+    <span>Tel. 0507-1325-3377</span>
+  </div>
+  <p class="ft-copy">© 2022–2026 서울가온치과의원. All rights reserved.</p>
+</footer>`
+
+// 공통 카카오 플로팅 + JS
+const KAKAO_FLOAT = `<div id="kakao-float" onclick="window.open('https://pf.kakao.com/_LLxhwG/chat','_blank')" title="카카오톡 상담">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="32" height="32"><path fill="#3C1E1E" d="M128 36C70.6 36 24 72.8 24 118c0 29.2 19.4 54.8 48.8 69.6l-10 36.8c-.4 1.6.4 2.4 1.6 1.6L106 198c7 1.2 14.4 2 22 2 57.4 0 104-36.8 104-82S185.4 36 128 36z"/></svg>
+  <span class="kakao-float-label">상담하기</span>
+</div>
+<style>
+#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:transform .3s,box-shadow .3s}
+#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(0,0,0,.4)}
+.kakao-float-label{position:absolute;right:72px;background:rgba(5,5,4,.9);color:#F2EDE4;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(191,164,106,.15)}
+.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(5,5,4,.9)}
+#kakao-float:hover .kakao-float-label{opacity:1;transform:translateX(0)}
+@media(max-width:768px){#kakao-float{width:52px;height:52px;bottom:1.2rem;right:1.2rem}#kakao-float svg{width:26px;height:26px}.kakao-float-label{display:none}}
+</style>`
+
+const SITE = 'https://seoulgaondc.kr'
+
+// ── 301 리다이렉트: 구 URL → 클린 URL ──
+app.get('/blog-post.html', (c) => {
+  const id = c.req.query('id')
+  if (id) return c.redirect(`/blog/${id}`, 301)
+  return c.redirect('/blog', 301)
+})
+app.get('/ba-post.html', (c) => {
+  const id = c.req.query('id')
+  if (id) return c.redirect(`/before-after/${id}`, 301)
+  return c.redirect('/before-after', 301)
+})
+
+// ── SSR 블로그 포스트 상세 ──
+app.get('/blog/:id', async (c) => {
+  try {
+    const db = c.env.DB
+    await initDB(db)
+    const id = c.req.param('id')
+    const post: any = await db.prepare(
+      `SELECT b.*, d.name as doctor_name, d.photo_url as doctor_photo, d.title as doctor_title, d.role as doctor_role
+       FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id
+       WHERE b.id = ? AND b.is_published = 1`
+    ).bind(id).first()
+
+    if (!post) {
+      return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>게시글을 찾을 수 없습니다 | 서울가온치과</title>${HEAD_COMMON}</head><body>${NAV_HTML}<main style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:72px"><div><h1 style="color:var(--gold);font-size:2rem;margin-bottom:1rem">404</h1><p style="color:var(--stone-l);margin-bottom:2rem">게시글을 찾을 수 없습니다.</p><a href="/blog" style="color:var(--gold);text-decoration:underline">블로그 목록으로 →</a></div></main>${FOOTER_HTML}${KAKAO_FLOAT}<script src="/pages.js"></script></body></html>`, 404)
+    }
+
+    // 조회수 증가
+    await db.prepare('UPDATE blog_posts SET view_count = COALESCE(view_count, 0) + 1 WHERE id = ?').bind(id).run()
+
+    // 이미지
+    let images: any[] = []
+    try {
+      const imgResult = await db.prepare('SELECT id, image_url, COALESCE(r2_key, image_key, \'\') as r2_key, COALESCE(filename, \'\') as filename, sort_order FROM blog_images WHERE post_id = ? ORDER BY sort_order').bind(id).all()
+      images = imgResult.results || []
+    } catch {
+      try { const r2 = await db.prepare('SELECT id, image_url, sort_order FROM blog_images WHERE post_id = ? ORDER BY sort_order').bind(id).all(); images = r2.results || [] } catch {}
+    }
+
+    const plainText = stripHtml(post.content)
+    const metaDesc = post.meta_description || (plainText.length > 155 ? plainText.substring(0, 155) + '...' : plainText)
+    const pageTitle = `${post.title} | 서울가온치과 블로그`
+    const canonicalUrl = `${SITE}/blog/${id}`
+    const ogImage = post.thumbnail_url || `${SITE}/images/og-blog.jpg`
+    const publishDate = fmtDate(post.created_at)
+    const modifiedDate = fmtDate(post.updated_at || post.created_at)
+    const authorName = post.doctor_name || '서울가온치과'
+    const authorTitle = post.doctor_title || '원장'
+    const catLabel: Record<string, string> = {'임플란트':'Implant','심미치료':'Aesthetic','신경치료':'Endodontics','치과상식':'Info','일반':'Info'}
+    const tag = catLabel[post.category] || post.category || 'Info'
+
+    // 의료진 배지
+    let drHtml = ''
+    if (post.doctor_name) {
+      drHtml = `<a class="bp-doctor" href="/doctors?id=${post.doctor_id}">
+        ${post.doctor_photo ? `<img src="${escHtml(post.doctor_photo)}" alt="${escHtml(post.doctor_name)}" width="28" height="28">` : '<i class="fas fa-user-md"></i>'}
+        ${escHtml(post.doctor_name)}${post.doctor_title ? ' · ' + escHtml(post.doctor_title) : ''}
+      </a>`
+    }
+
+    // 콘텐츠 처리
+    const isHtmlContent = post.content.trim().startsWith('<')
+    let articleContent = ''
+    if (isHtmlContent) {
+      articleContent = post.content
+    } else {
+      articleContent = post.content.split('\n').filter((l: string) => l.trim()).map((l: string) => `<p>${escHtml(l)}</p>`).join('\n')
+      if (images.length) {
+        const cls = images.length === 1 ? 'bp-images single' : 'bp-images'
+        articleContent += `<div class="${cls}">${images.map((img: any) => `<img src="${escHtml(img.image_url)}" alt="${escHtml(img.filename || post.title)}" loading="lazy">`).join('')}</div>`
+      }
+    }
+
+    // 날짜 포맷 (한국어)
+    const dateObj = new Date(post.created_at)
+    const koDate = `${dateObj.getFullYear()}년 ${dateObj.getMonth() + 1}월 ${dateObj.getDate()}일`
+
+    // JSON-LD: BlogPosting + BreadcrumbList + MedicalOrganization
+    const jsonLdBlog = {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": post.title,
+      "description": metaDesc,
+      "url": canonicalUrl,
+      "image": ogImage,
+      "datePublished": publishDate,
+      "dateModified": modifiedDate,
+      "author": { "@type": "Person", "name": authorName, "jobTitle": authorTitle, "worksFor": { "@type": "Dentist", "name": "서울가온치과의원" } },
+      "publisher": {
+        "@type": "Dentist",
+        "name": "서울가온치과의원",
+        "url": SITE,
+        "logo": { "@type": "ImageObject", "url": `${SITE}/images/og-main.jpg` },
+        "address": { "@type": "PostalAddress", "addressLocality": "의정부시", "addressRegion": "경기도", "streetAddress": "용민로 22, 4층", "postalCode": "11697", "addressCountry": "KR" },
+        "telephone": "0507-1325-3377"
+      },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalUrl },
+      "inLanguage": "ko",
+      "articleSection": post.category || "치과 건강정보",
+      "wordCount": plainText.split(/\s+/).length,
+      "keywords": `${post.category || '치과'}, 서울가온치과, 의정부 치과, ${post.title}`
+    }
+
+    const jsonLdBreadcrumb = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "홈", "item": SITE },
+        { "@type": "ListItem", "position": 2, "name": "블로그", "item": `${SITE}/blog` },
+        { "@type": "ListItem", "position": 3, "name": post.title, "item": canonicalUrl }
+      ]
+    }
+
+    // Dentist Organization schema (사이트 전역)
+    const jsonLdOrg = {
+      "@context": "https://schema.org",
+      "@type": "Dentist",
+      "name": "서울가온치과의원",
+      "url": SITE,
+      "logo": `${SITE}/images/og-main.jpg`,
+      "image": `${SITE}/images/og-main.jpg`,
+      "description": "의정부 임플란트·심미치료·신경치료 전문 치과. 서울대학교 출신 의료진이 정직하고 바른 진료를 약속합니다.",
+      "address": { "@type": "PostalAddress", "addressLocality": "의정부시", "addressRegion": "경기도", "streetAddress": "용민로 22, 4층(용현동)", "postalCode": "11697", "addressCountry": "KR" },
+      "geo": { "@type": "GeoCoordinates", "latitude": "37.7381", "longitude": "127.0337" },
+      "telephone": "0507-1325-3377",
+      "openingHoursSpecification": [
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "10:00", "closes": "19:00" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "10:00", "closes": "15:00" }
+      ],
+      "priceRange": "$$",
+      "areaServed": { "@type": "City", "name": "의정부시" },
+      "medicalSpecialty": ["Dentistry", "Implantology", "Cosmetic Dentistry", "Endodontics"],
+      "sameAs": ["https://pf.kakao.com/_LLxhwG"]
+    }
+
+    const html = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+${HEAD_COMMON}
+<title>${escHtml(pageTitle)}</title>
+<meta name="description" content="${escHtml(metaDesc)}">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="author" content="${escHtml(authorName)}">
+<link rel="canonical" href="${canonicalUrl}">
+<link rel="alternate" hreflang="ko" href="${canonicalUrl}">
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="서울가온치과">
+<meta property="og:title" content="${escHtml(pageTitle)}">
+<meta property="og:description" content="${escHtml(metaDesc)}">
+<meta property="og:url" content="${canonicalUrl}">
+<meta property="og:image" content="${escHtml(ogImage)}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="${publishDate}">
+<meta property="article:modified_time" content="${modifiedDate}">
+<meta property="article:author" content="${escHtml(authorName)}">
+<meta property="article:section" content="${escHtml(post.category || '치과')}">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escHtml(pageTitle)}">
+<meta name="twitter:description" content="${escHtml(metaDesc)}">
+<meta name="twitter:image" content="${escHtml(ogImage)}">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">${JSON.stringify(jsonLdBlog)}</script>
+<script type="application/ld+json">${JSON.stringify(jsonLdBreadcrumb)}</script>
+<script type="application/ld+json">${JSON.stringify(jsonLdOrg)}</script>
+<style>
+.bp-wrap{max-width:800px;margin:0 auto;padding:clamp(8rem,15vh,12rem) clamp(1.5rem,4vw,3rem) clamp(4rem,8vh,6rem)}
+.bp-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--stone-l,#AFA79D);margin-bottom:2rem;transition:color .3s;text-decoration:none}
+.bp-back:hover{color:var(--gold,#BFA46A)}
+.bp-back i{font-size:.7rem;transition:transform .3s}
+.bp-back:hover i{transform:translateX(-3px)}
+.bp-meta{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.bp-tag{font-family:var(--ff-en,'Bebas Neue');font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold,#BFA46A);padding:.3rem .8rem;border:1px solid rgba(191,164,106,.2);border-radius:100px}
+.bp-date{font-size:.78rem;color:var(--stone,#8C8578)}
+.bp-title{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.4;margin-bottom:1.5rem;color:var(--ivory,#F2EDE4)}
+.bp-doctor{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(191,164,106,.08);border:1px solid rgba(191,164,106,.15);border-radius:100px;font-size:.82rem;color:var(--stone-l,#AFA79D);text-decoration:none;transition:all .3s;margin-bottom:2.5rem}
+.bp-doctor:hover{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.bp-doctor img{width:28px;height:28px;border-radius:50%;object-fit:cover}
+.bp-divider{width:60px;height:1px;background:linear-gradient(90deg,var(--gold,#BFA46A),transparent);margin-bottom:2.5rem}
+.bp-content{font-size:clamp(.9rem,1vw,.98rem);line-height:2;color:var(--stone-l,#AFA79D);word-break:keep-all;margin-bottom:3rem}
+.bp-content h2{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.25rem,2.5vw,1.6rem);color:var(--ivory,#F2EDE4);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid rgba(191,164,106,.12);line-height:1.4}
+.bp-content h3{font-size:clamp(1.05rem,2vw,1.2rem);color:var(--ivory,#F2EDE4);margin:2rem 0 .8rem;font-weight:600;line-height:1.4}
+.bp-content p{margin-bottom:1.2rem;line-height:2}
+.bp-content strong,.bp-content b{color:var(--ivory,#F2EDE4);font-weight:600}
+.bp-content a{color:var(--gold,#BFA46A);text-decoration:underline;text-underline-offset:3px}
+.bp-content ul,.bp-content ol{margin:1rem 0 1.5rem 1.2rem;line-height:1.9}
+.bp-content li{margin-bottom:.4rem}
+.bp-content li::marker{color:var(--gold,#BFA46A)}
+.bp-content blockquote{border-left:3px solid var(--gold,#BFA46A);padding:.8rem 1.5rem;margin:1.5rem 0;font-style:italic;color:#bbb;background:rgba(191,164,106,.04);border-radius:0 8px 8px 0}
+.bp-content figure{margin:2rem 0;text-align:center}
+.bp-content figure img{max-width:100%;border-radius:12px;border:1px solid rgba(191,164,106,.08)}
+.bp-content figcaption{font-size:.78rem;color:var(--stone,#8C8578);margin-top:.6rem;font-style:italic}
+.bp-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:3rem}
+.bp-images img{width:100%;border-radius:12px;aspect-ratio:4/3;object-fit:cover;border:1px solid rgba(191,164,106,.08)}
+.bp-images.single{grid-template-columns:1fr}
+.bp-images.single img{aspect-ratio:auto;max-height:500px;object-fit:contain;background:var(--ink-3,#111009)}
+.bp-bottom{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid var(--line,rgba(191,164,106,.1));flex-wrap:wrap}
+.bp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.5rem;border-radius:100px;font-size:.82rem;font-weight:500;text-decoration:none;transition:all .3s}
+.bp-btn-back{border:1px solid var(--line,rgba(191,164,106,.1));color:var(--stone-l,#AFA79D)}
+.bp-btn-back:hover{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.bp-btn-cta{background:var(--gold,#BFA46A);color:var(--ink,#050504);font-weight:600}
+.bp-btn-cta:hover{background:var(--gold-b,#D4BA82)}
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10000;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.lb.show{display:flex}
+.lb img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:4px}
+@media(max-width:768px){
+  .bp-wrap{padding:6.5rem 1.25rem 3rem}
+  .bp-title{font-size:clamp(1.3rem,5.5vw,1.8rem)}
+  .bp-content{font-size:.88rem;line-height:1.85}
+  .bp-content h2{font-size:1.2rem;margin:2rem 0 .8rem}
+  .bp-images{grid-template-columns:1fr}
+  .bp-bottom{flex-direction:column;align-items:stretch;gap:.75rem}
+  .bp-btn{justify-content:center;padding:.7rem 1.25rem;min-height:44px}
+}
+</style>
+</head>
+<body>
+<noscript><div style="background:#BFA46A;color:#050504;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
+${NAV_HTML}
+<main id="main-content" role="main">
+<div class="bp-wrap">
+  <a href="/blog" class="bp-back"><i class="fas fa-chevron-left"></i> 블로그 목록으로</a>
+  <div class="bp-meta">
+    <span class="bp-tag">${escHtml(tag)}</span>
+    <time class="bp-date" datetime="${publishDate}">${koDate}</time>
+  </div>
+  <h1 class="bp-title">${escHtml(post.title)}</h1>
+  ${drHtml}
+  <div class="bp-divider"></div>
+  <article class="bp-content" itemprop="articleBody">${articleContent}</article>
+  <div class="bp-bottom">
+    <a href="/blog" class="bp-btn bp-btn-back"><i class="fas fa-arrow-left"></i> 목록으로</a>
+    <a href="tel:0507-1325-3377" class="bp-btn bp-btn-cta"><i class="fas fa-phone"></i> 상담 예약</a>
+  </div>
+</div>
+</main>
+${FOOTER_HTML}
+<div class="lb" id="lb" onclick="this.classList.remove('show')"><img id="lb-img" src="" alt=""></div>
+${KAKAO_FLOAT}
+<script src="/pages.js"></script>
+<script>
+// Lightbox + Nav (hydration)
+document.querySelectorAll('.bp-content figure img, .bp-content img, .bp-images img').forEach(function(img){
+  img.style.cursor='pointer';
+  img.addEventListener('click',function(){document.getElementById('lb-img').src=img.src;document.getElementById('lb').classList.add('show')});
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')document.getElementById('lb').classList.remove('show')});
+var ham=document.querySelector('.hamburger'),mob=document.querySelector('.mob-menu');
+if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open');mob.classList.toggle('open')});mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){ham.classList.remove('open');mob.classList.remove('open')})})}
+</script>
+</body>
+</html>`
+
+    return c.html(html, 200, {
+      'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200',
+      'X-Robots-Tag': 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+    })
+  } catch (e: any) {
+    console.error('[SSR BLOG ERROR]', e.message)
+    return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>오류 | 서울가온치과</title></head><body><p>잠시 후 다시 시도해주세요.</p></body></html>`, 500)
+  }
+})
+
+// ══════════════════════════════════════════════════
+//  SSR — 비포&애프터 상세 (Server-Side Rendering for SEO/AEO)
+// ══════════════════════════════════════════════════
+app.get('/before-after/:id', async (c) => {
+  try {
+    const db = c.env.DB
+    await initDB(db)
+    const id = c.req.param('id')
+    const item: any = await db.prepare(
+      `SELECT ba.*, d.name as doctor_name, d.photo_url as doctor_photo, d.title as doctor_title
+       FROM before_after ba LEFT JOIN doctors d ON ba.doctor_id = d.id
+       WHERE ba.id = ? AND ba.is_published = 1`
+    ).bind(id).first()
+
+    if (!item) {
+      return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>케이스를 찾을 수 없습니다 | 서울가온치과</title>${HEAD_COMMON}</head><body>${NAV_HTML}<main style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:72px"><div><h1 style="color:var(--gold);font-size:2rem;margin-bottom:1rem">404</h1><p style="color:var(--stone-l);margin-bottom:2rem">케이스를 찾을 수 없습니다.</p><a href="/before-after" style="color:var(--gold);text-decoration:underline">비포 애프터 목록으로 →</a></div></main>${FOOTER_HTML}${KAKAO_FLOAT}<script src="/pages.js"></script></body></html>`, 404)
+    }
+
+    // 조회수 증가
+    await db.prepare('UPDATE before_after SET view_count = COALESCE(view_count, 0) + 1 WHERE id = ?').bind(id).run()
+
+    const pageTitle = `${item.title} | 서울가온치과 비포&애프터`
+    const metaDesc = item.description
+      ? (item.description.length > 155 ? item.description.substring(0, 155) + '...' : item.description)
+      : `${item.title} - 서울가온치과 ${item.category || '치과'} 치료 전후 비교 사진. 의정부 임플란트·심미치료 전문.`
+    const canonicalUrl = `${SITE}/before-after/${id}`
+    const ogImage = item.intraoral_after_url || item.intraoral_before_url || `${SITE}/images/og-main.jpg`
+    const publishDate = fmtDate(item.created_at)
+    const modifiedDate = fmtDate(item.updated_at || item.created_at)
+    const authorName = item.doctor_name || '서울가온치과'
+    const authorTitle = item.doctor_title || '원장'
+    const catLabel: Record<string, string> = {'임플란트':'Implant','심미치료':'Aesthetic','신경치료':'Endodontics','치과상식':'Info','일반':'Info'}
+    const tag = catLabel[item.category] || item.category || 'Case'
+
+    // 의료진 배지
+    let drHtml = ''
+    if (item.doctor_name) {
+      drHtml = `<a class="bp-doctor" href="/doctors?id=${item.doctor_id}">
+        ${item.doctor_photo ? `<img src="${escHtml(item.doctor_photo)}" alt="${escHtml(item.doctor_name)}" width="28" height="28">` : '<i class="fas fa-user-md"></i>'}
+        ${escHtml(item.doctor_name)}${item.doctor_title ? ' · ' + escHtml(item.doctor_title) : ''}
+      </a>`
+    }
+
+    const dateObj = new Date(item.created_at)
+    const koDate = `${dateObj.getFullYear()}년 ${dateObj.getMonth() + 1}월 ${dateObj.getDate()}일`
+
+    // 이미지 섹션 구성
+    let imagesHtml = ''
+    if (item.intraoral_before_url || item.intraoral_after_url) {
+      imagesHtml += `<section class="ba-compare"><h2><i class="fas fa-teeth"></i> 구강 내 사진</h2><div class="ba-pair">`
+      if (item.intraoral_before_url) imagesHtml += `<figure><img src="${escHtml(item.intraoral_before_url)}" alt="${escHtml(item.title)} 치료 전 구강 내 사진" loading="lazy" width="600" height="400"><figcaption>Before</figcaption></figure>`
+      if (item.intraoral_after_url) imagesHtml += `<figure><img src="${escHtml(item.intraoral_after_url)}" alt="${escHtml(item.title)} 치료 후 구강 내 사진" loading="lazy" width="600" height="400"><figcaption>After</figcaption></figure>`
+      imagesHtml += `</div></section>`
+    }
+    if (item.panorama_before_url || item.panorama_after_url) {
+      imagesHtml += `<section class="ba-compare"><h2><i class="fas fa-x-ray"></i> 파노라마 사진</h2><div class="ba-pair">`
+      if (item.panorama_before_url) imagesHtml += `<figure><img src="${escHtml(item.panorama_before_url)}" alt="${escHtml(item.title)} 치료 전 파노라마" loading="lazy" width="600" height="300"><figcaption>Before</figcaption></figure>`
+      if (item.panorama_after_url) imagesHtml += `<figure><img src="${escHtml(item.panorama_after_url)}" alt="${escHtml(item.title)} 치료 후 파노라마" loading="lazy" width="600" height="300"><figcaption>After</figcaption></figure>`
+      imagesHtml += `</div></section>`
+    }
+
+    // JSON-LD: MedicalProcedure + BreadcrumbList + Dentist
+    const jsonLdProcedure: any = {
+      "@context": "https://schema.org",
+      "@type": "MedicalWebPage",
+      "name": item.title,
+      "description": metaDesc,
+      "url": canonicalUrl,
+      "image": ogImage,
+      "datePublished": publishDate,
+      "dateModified": modifiedDate,
+      "author": { "@type": "Person", "name": authorName, "jobTitle": authorTitle },
+      "publisher": { "@type": "Dentist", "name": "서울가온치과의원", "url": SITE },
+      "mainEntity": {
+        "@type": "MedicalProcedure",
+        "name": `${item.category || '치과'} 치료`,
+        "procedureType": "http://schema.org/TherapeuticProcedure",
+        "bodyLocation": "Mouth",
+        "status": "http://schema.org/EventCompleted",
+        "performedBy": { "@type": "Dentist", "name": authorName }
+      },
+      "about": {
+        "@type": "MedicalCondition",
+        "name": item.category || "치과 질환",
+        "associatedAnatomy": { "@type": "AnatomicalStructure", "name": "치아" }
+      },
+      "inLanguage": "ko",
+      "keywords": `${item.category || '치과'}, 비포애프터, 치료전후, 서울가온치과, 의정부 치과`
+    }
+
+    // beforeAfter 이미지를 ImageGallery로 추가
+    const galleryImages: any[] = []
+    if (item.intraoral_before_url) galleryImages.push({ "@type": "ImageObject", "url": item.intraoral_before_url, "name": `${item.title} 치료 전 구강 내`, "description": "치료 전 구강 내 사진" })
+    if (item.intraoral_after_url) galleryImages.push({ "@type": "ImageObject", "url": item.intraoral_after_url, "name": `${item.title} 치료 후 구강 내`, "description": "치료 후 구강 내 사진" })
+    if (item.panorama_before_url) galleryImages.push({ "@type": "ImageObject", "url": item.panorama_before_url, "name": `${item.title} 치료 전 파노라마`, "description": "치료 전 파노라마 X-ray" })
+    if (item.panorama_after_url) galleryImages.push({ "@type": "ImageObject", "url": item.panorama_after_url, "name": `${item.title} 치료 후 파노라마`, "description": "치료 후 파노라마 X-ray" })
+    if (galleryImages.length) {
+      jsonLdProcedure["image"] = galleryImages
+    }
+
+    const jsonLdBreadcrumb = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "홈", "item": SITE },
+        { "@type": "ListItem", "position": 2, "name": "비포 애프터", "item": `${SITE}/before-after` },
+        { "@type": "ListItem", "position": 3, "name": item.title, "item": canonicalUrl }
+      ]
+    }
+
+    const html = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+${HEAD_COMMON}
+<title>${escHtml(pageTitle)}</title>
+<meta name="description" content="${escHtml(metaDesc)}">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="author" content="${escHtml(authorName)}">
+<link rel="canonical" href="${canonicalUrl}">
+<link rel="alternate" hreflang="ko" href="${canonicalUrl}">
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="서울가온치과">
+<meta property="og:title" content="${escHtml(pageTitle)}">
+<meta property="og:description" content="${escHtml(metaDesc)}">
+<meta property="og:url" content="${canonicalUrl}">
+<meta property="og:image" content="${escHtml(ogImage)}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="${publishDate}">
+<meta property="article:modified_time" content="${modifiedDate}">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escHtml(pageTitle)}">
+<meta name="twitter:description" content="${escHtml(metaDesc)}">
+<meta name="twitter:image" content="${escHtml(ogImage)}">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">${JSON.stringify(jsonLdProcedure)}</script>
+<script type="application/ld+json">${JSON.stringify(jsonLdBreadcrumb)}</script>
+<style>
+.ba-detail-wrap{max-width:800px;margin:0 auto;padding:clamp(8rem,15vh,12rem) clamp(1.5rem,4vw,3rem) clamp(4rem,8vh,6rem)}
+.bp-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--stone-l,#AFA79D);margin-bottom:2rem;transition:color .3s;text-decoration:none}
+.bp-back:hover{color:var(--gold,#BFA46A)}
+.bp-back i{font-size:.7rem;transition:transform .3s}
+.bp-back:hover i{transform:translateX(-3px)}
+.bp-meta{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.bp-tag{font-family:var(--ff-en,'Bebas Neue');font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold,#BFA46A);padding:.3rem .8rem;border:1px solid rgba(191,164,106,.2);border-radius:100px}
+.bp-date{font-size:.78rem;color:var(--stone,#8C8578)}
+.ba-detail-title{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.4;margin-bottom:1.5rem;color:var(--ivory,#F2EDE4)}
+.bp-doctor{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(191,164,106,.08);border:1px solid rgba(191,164,106,.15);border-radius:100px;font-size:.82rem;color:var(--stone-l,#AFA79D);text-decoration:none;transition:all .3s;margin-bottom:1.5rem}
+.bp-doctor:hover{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.bp-doctor img{width:28px;height:28px;border-radius:50%;object-fit:cover}
+.ba-desc{font-size:clamp(.9rem,1vw,.98rem);line-height:2;color:var(--stone-l,#AFA79D);word-break:keep-all;margin-bottom:2.5rem}
+.ba-compare{margin-bottom:3rem}
+.ba-compare h2{font-family:var(--ff-title);font-weight:500;font-size:1.1rem;color:var(--ivory,#F2EDE4);margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
+.ba-compare h2 i{color:var(--gold,#BFA46A);font-size:.9rem}
+.ba-pair{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.ba-pair figure{text-align:center}
+.ba-pair img{width:100%;border-radius:12px;border:1px solid rgba(191,164,106,.08);cursor:pointer;transition:transform .3s,box-shadow .3s}
+.ba-pair img:hover{transform:scale(1.02);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.ba-pair figcaption{font-size:.75rem;color:var(--stone,#8C8578);margin-top:.5rem;font-weight:600;letter-spacing:2px;text-transform:uppercase}
+.bp-bottom{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid var(--line,rgba(191,164,106,.1));flex-wrap:wrap}
+.bp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.5rem;border-radius:100px;font-size:.82rem;font-weight:500;text-decoration:none;transition:all .3s}
+.bp-btn-back{border:1px solid var(--line,rgba(191,164,106,.1));color:var(--stone-l,#AFA79D)}
+.bp-btn-back:hover{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.bp-btn-cta{background:var(--gold,#BFA46A);color:var(--ink,#050504);font-weight:600}
+.bp-btn-cta:hover{background:var(--gold-b,#D4BA82)}
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10000;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.lb.show{display:flex}
+.lb img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:4px}
+@media(max-width:768px){
+  .ba-detail-wrap{padding:6.5rem 1.25rem 3rem}
+  .ba-detail-title{font-size:clamp(1.3rem,5.5vw,1.8rem)}
+  .ba-pair{grid-template-columns:1fr}
+  .bp-bottom{flex-direction:column;align-items:stretch;gap:.75rem}
+  .bp-btn{justify-content:center;padding:.7rem 1.25rem;min-height:44px}
+}
+</style>
+</head>
+<body>
+<noscript><div style="background:#BFA46A;color:#050504;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
+${NAV_HTML}
+<main id="main-content" role="main">
+<div class="ba-detail-wrap">
+  <a href="/before-after" class="bp-back"><i class="fas fa-chevron-left"></i> 비포 애프터 목록으로</a>
+  <div class="bp-meta">
+    <span class="bp-tag">${escHtml(tag)}</span>
+    <time class="bp-date" datetime="${publishDate}">${koDate}</time>
+  </div>
+  <h1 class="ba-detail-title">${escHtml(item.title)}</h1>
+  ${drHtml}
+  ${item.description ? `<p class="ba-desc">${escHtml(item.description)}</p>` : ''}
+  ${imagesHtml}
+  <div class="bp-bottom">
+    <a href="/before-after" class="bp-btn bp-btn-back"><i class="fas fa-arrow-left"></i> 목록으로</a>
+    <a href="tel:0507-1325-3377" class="bp-btn bp-btn-cta"><i class="fas fa-phone"></i> 상담 예약</a>
+  </div>
+</div>
+</main>
+${FOOTER_HTML}
+<div class="lb" id="lb" onclick="this.classList.remove('show')"><img id="lb-img" src="" alt=""></div>
+${KAKAO_FLOAT}
+<script src="/pages.js"></script>
+<script>
+document.querySelectorAll('.ba-pair img').forEach(function(img){
+  img.addEventListener('click',function(){document.getElementById('lb-img').src=img.src;document.getElementById('lb').classList.add('show')});
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')document.getElementById('lb').classList.remove('show')});
+var ham=document.querySelector('.hamburger'),mob=document.querySelector('.mob-menu');
+if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open');mob.classList.toggle('open')});mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){ham.classList.remove('open');mob.classList.remove('open')})})}
+</script>
+</body>
+</html>`
+
+    return c.html(html, 200, {
+      'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200',
+      'X-Robots-Tag': 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+    })
+  } catch (e: any) {
+    console.error('[SSR BA ERROR]', e.message)
+    return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>오류 | 서울가온치과</title></head><body><p>잠시 후 다시 시도해주세요.</p></body></html>`, 500)
+  }
 })
 
 // ══════════════════════════════════════════════════
