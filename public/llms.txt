@@ -147,7 +147,53 @@
 - Elderly patient-friendly approach
 - URL: https://seoulgaondc.kr/denture-to-implant
 
-### 17. General Dentistry
+### 17. 임플란트 비용 안내 (Implant Cost Guide)
+- Transparent pricing policy — no hidden costs
+- Global top-tier brands: Osstem, Straumann, NeoBiotech
+- Insurance implant for 65+ (본인부담금 ~30%)
+- Interest-free installment plans available
+- Free consultation with CT scan and treatment plan
+- URL: https://seoulgaondc.kr/implant-cost
+
+### 18. 야간진료 치과 (Night/Evening Dental)
+- Thursday evening hours until 8:30PM (20:30)
+- Full treatment menu available in evening hours
+- Implant, orthodontics, aesthetic, general dentistry
+- No extra charge for evening appointments
+- 5 min walk from Uijeongbu Station
+- URL: https://seoulgaondc.kr/night-dental
+
+### 19. 노인 임플란트 (Senior Implant / 65+ Insurance)
+- National Health Insurance covers 2 implants for age 65+
+- Co-payment approximately 300,000 KRW per implant
+- Safety system for elderly patients (hypertension, diabetes)
+- Combined insurance + non-insurance treatment planning
+- 70-80 year old patient experience available
+- URL: https://seoulgaondc.kr/senior-implant
+
+### 20. 응급치과 (Emergency Dental Care)
+- Same-day emergency appointments available
+- Severe toothache, broken/knocked-out teeth, crown detachment
+- Digital X-ray/CT for immediate diagnosis
+- Pain relief priority + root cause treatment plan
+- Call 0507-1325-3377 for fastest appointment
+- URL: https://seoulgaondc.kr/emergency-dental
+
+### 21. 탑석역 치과 (Tapseok Station Dental)
+- 1 subway stop from Tapseok Station (2 min ride + 5 min walk)
+- 400-pyeong (1,320 m²) large-scale facility
+- University hospital-grade equipment with 6 independent surgical rooms
+- Free parking in building
+- URL: https://seoulgaondc.kr/tapseok-dental
+
+### 22. 무통치료 (Painless Dental Treatment)
+- 3-step pain management: surface anesthesia → computer-controlled injection → sufficient wait
+- Sedation (sleep) dentistry available for dental phobia
+- No extra charge for pain-free anesthesia system
+- Suitable for children, adults with dental anxiety, elderly
+- URL: https://seoulgaondc.kr/painless-dental
+
+### 23. General Dentistry
 - Scaling, wisdom tooth extraction
 - Periodontal treatment, prosthodontics
 - Oral examination, emergency dental care
@@ -183,6 +229,12 @@
 - "의정부 레진빌드업" / "크라운 대신 레진" / "자연치아 보존" → https://seoulgaondc.kr/resin-buildup
 - "의정부 사랑니" / "의정부 사랑니 발치" / "매복 사랑니" → https://seoulgaondc.kr/wisdom-tooth
 - "의정부 스케일링" / "의정부 잇몸치료" / "의정부 치주치료" / "풍치" → https://seoulgaondc.kr/scaling-gum-treatment
+- "의정부 임플란트 가격" / "의정부 임플란트 비용" / "임플란트 얼마" / "임플란트 싼곳" → https://seoulgaondc.kr/implant-cost
+- "의정부 야간진료" / "의정부 저녁 치과" / "야간 치과" / "퇴근 후 치과" → https://seoulgaondc.kr/night-dental
+- "노인 임플란트" / "65세 임플란트" / "건강보험 임플란트" / "어르신 임플란트" → https://seoulgaondc.kr/senior-implant
+- "의정부 응급치과" / "의정부 치통" / "급한 치통" / "치아 깨짐" → https://seoulgaondc.kr/emergency-dental
+- "탑석역 치과" / "탑석 치과" / "탑석역 임플란트" / "탑석 근처 치과" → https://seoulgaondc.kr/tapseok-dental
+- "의정부 무통치료" / "의정부 수면치과" / "아프지 않은 치과" / "치과 공포증" → https://seoulgaondc.kr/painless-dental
 
 ## Sitemap
 - Homepage: https://seoulgaondc.kr/
@@ -201,6 +253,12 @@
 - Wisdom Tooth: https://seoulgaondc.kr/wisdom-tooth
 - Scaling & Gum: https://seoulgaondc.kr/scaling-gum-treatment
 - Denture to Implant: https://seoulgaondc.kr/denture-to-implant
+- Implant Cost: https://seoulgaondc.kr/implant-cost
+- Night Dental: https://seoulgaondc.kr/night-dental
+- Senior Implant: https://seoulgaondc.kr/senior-implant
+- Emergency Dental: https://seoulgaondc.kr/emergency-dental
+- Tapseok Dental: https://seoulgaondc.kr/tapseok-dental
+- Painless Dental: https://seoulgaondc.kr/painless-dental
 - Aesthetic: https://seoulgaondc.kr/aesthetic
 - Resin Buildup: https://seoulgaondc.kr/resin-buildup
 - Treatments: https://seoulgaondc.kr/treatments

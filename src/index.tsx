@@ -60,7 +60,7 @@ app.use('*', async (c, next) => {
   c.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self)')
 
   // HTML 페이지 캐시: 짧게 (SEO 크롤러가 최신 콘텐츠 수집)
-  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|invisalign|orthodontics|glownate|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant)$/) || path.match(/^\/(blog|before-after)\/\d+$/)) {
+  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|invisalign|orthodontics|glownate|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant|implant-cost|night-dental|senior-implant|emergency-dental|tapseok-dental|painless-dental)$/) || path.match(/^\/(blog|before-after)\/\d+$/)) {
     c.header('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200')
     c.header('X-Robots-Tag', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')
   }
@@ -1700,6 +1700,12 @@ app.get('/sitemap.xml', async (c) => {
       { loc: '/wisdom-tooth',         priority: '0.85', changefreq: 'weekly',  lastmod: today },
       { loc: '/scaling-gum-treatment',priority: '0.85', changefreq: 'weekly',  lastmod: today },
       { loc: '/denture-to-implant',   priority: '0.90', changefreq: 'weekly',  lastmod: today },
+      { loc: '/implant-cost',         priority: '0.95', changefreq: 'weekly',  lastmod: today },
+      { loc: '/night-dental',         priority: '0.85', changefreq: 'weekly',  lastmod: today },
+      { loc: '/senior-implant',       priority: '0.90', changefreq: 'weekly',  lastmod: today },
+      { loc: '/emergency-dental',     priority: '0.85', changefreq: 'weekly',  lastmod: today },
+      { loc: '/tapseok-dental',       priority: '0.85', changefreq: 'weekly',  lastmod: today },
+      { loc: '/painless-dental',      priority: '0.85', changefreq: 'weekly',  lastmod: today },
     ]
 
     // ── 블로그 포스트 (개별 URL — 클린 URL) ──
@@ -2263,8 +2269,9 @@ app.get('/blog/:id', async (c) => {
       "geo": { "@type": "GeoCoordinates", "latitude": "37.7381", "longitude": "127.0337" },
       "telephone": "0507-1325-3377",
       "openingHoursSpecification": [
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "10:00", "closes": "19:00" },
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "10:00", "closes": "15:00" }
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Friday"], "opens": "09:30", "closes": "18:30" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "09:30", "closes": "20:30" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:30", "closes": "14:00" }
       ],
       "priceRange": "$$",
       "areaServed": { "@type": "City", "name": "의정부시" },
@@ -3365,6 +3372,333 @@ const LANDING_PAGES: LandingPageData[] = [
       { href: '/doctors', label: '의료진 소개' },
     ]
   },
+  // ── 15. 의정부 임플란트 가격/비용 ──
+  {
+    slug: 'implant-cost',
+    title: '의정부 임플란트 가격 비용 | 서울가온치과 — 합리적 임플란트 비용 안내',
+    metaDesc: '의정부 임플란트 가격이 궁금하세요? 서울가온치과 임플란트 비용 투명 안내. 건강보험 임플란트 본인부담금 약 30만원. 비보험 임플란트도 합리적 가격. 무이자 할부 가능. 현진호 대표원장 직접 수술. ☎ 0507-1325-3377',
+    h1: '의정부 임플란트 가격 — 투명하고 합리적인 비용 안내',
+    heroSub: '감추지 않는 가격, 믿을 수 있는 진료. 서울가온치과 임플란트 비용을 확인하세요',
+    keywords: '의정부 임플란트 가격, 의정부 임플란트 비용, 임플란트 가격, 임플란트 비용, 저렴한 임플란트, 임플란트 보험 가격, 임플란트 할부, 의정부 임플란트 싼 곳',
+    category: '임플란트 비용',
+    sections: [
+      {
+        heading: '임플란트 가격, 왜 병원마다 다를까요?',
+        content: `<p>임플란트 가격은 <strong>사용하는 임플란트 브랜드(픽스쳐)</strong>, <strong>보철물(크라운) 재질</strong>, <strong>수술 난이도(뼈이식 여부)</strong>, 그리고 <strong>의료진의 전문성과 경험</strong>에 따라 달라집니다.</p>
+<p>서울가온치과는 <strong>"가격은 합리적으로, 품질은 타협 없이"</strong>를 원칙으로 합니다. 세계적으로 검증된 임플란트 브랜드만 사용하고, 저가형 임플란트로 가격을 낮추는 방식은 절대 하지 않습니다.</p>
+<p>⚕️ 사용 브랜드: <strong>오스템(Osstem), 스트라우만(Straumann), 네오(NeoBiotech)</strong> — 글로벌 점유율 1~3위</p>`
+      },
+      {
+        heading: '서울가온치과 임플란트 비용 가이드',
+        content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
+<tr style="background:var(--gold);color:#fff"><th style="padding:10px;border:1px solid #ddd">항목</th><th style="padding:10px;border:1px solid #ddd">비용 (1개 기준)</th><th style="padding:10px;border:1px solid #ddd">비고</th></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>건강보험 임플란트</strong><br>(만 65세 이상)</td><td style="padding:10px;border:1px solid #ddd">본인부담금 약 <strong>30만원대</strong></td><td style="padding:10px;border:1px solid #ddd">평생 2개 / 위·아래 각 1개</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>일반 임플란트</strong></td><td style="padding:10px;border:1px solid #ddd"><strong>상담 후 안내</strong></td><td style="padding:10px;border:1px solid #ddd">브랜드·보철 재질에 따라 상이</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>뼈이식 동반 시</strong></td><td style="padding:10px;border:1px solid #ddd"><strong>별도 추가</strong></td><td style="padding:10px;border:1px solid #ddd">뼈 부족 정도에 따라 상이</td></tr>
+</table>
+<p><strong>💳 무이자 할부 가능</strong> — 경제적 부담을 줄이고 필요한 치료를 미루지 마세요.</p>
+<p>📋 정확한 비용은 CT 촬영 후 맞춤 치료 계획과 함께 안내드립니다. <strong>상담은 무료</strong>이며, 추가 비용 없이 치료 계획서를 받아보실 수 있습니다.</p>`
+      },
+      {
+        heading: '싼 임플란트가 위험한 이유',
+        content: `<p>"임플란트 1개 29만원" 같은 초저가 광고를 보셨나요? <strong>가격이 비정상적으로 낮은 경우</strong> 다음을 확인하세요:</p>
+<ul>
+<li><strong>검증되지 않은 브랜드</strong> — 임상 데이터가 부족한 저가형 픽스쳐 사용</li>
+<li><strong>보철물 별도</strong> — 픽스쳐 가격만 표시, 크라운·지대주 비용 추가</li>
+<li><strong>뼈이식 별도</strong> — 기본 가격에 포함되지 않는 숨은 비용</li>
+<li><strong>전문의가 아닌 시술</strong> — 경력 부족 의사의 수술</li>
+</ul>
+<p>서울가온치과는 <strong>모든 비용을 사전에 투명하게 안내</strong>하며, 현진호 대표원장이 모든 수술을 직접 진행합니다.</p>`
+      }
+    ],
+    faqs: [
+      { q: '의정부에서 임플란트 가격이 가장 저렴한 곳은 어디인가요?', a: '단순히 가격이 낮은 것보다 사용하는 브랜드, 보철 재질, 의료진 경험을 함께 비교하는 것이 중요합니다. 서울가온치과는 세계 1~3위 브랜드만 사용하면서도 합리적 가격을 유지합니다.' },
+      { q: '임플란트 1개 비용에 뭐가 포함되나요?', a: '일반적으로 픽스쳐(나사), 지대주(연결부), 크라운(보철)이 포함됩니다. 서울가온치과는 상담 시 CT 촬영 후 뼈이식 포함 여부까지 전체 비용을 투명하게 안내드립니다.' },
+      { q: '만 65세 이상 건강보험 임플란트 조건이 뭔가요?', a: '만 65세 이상이면 평생 2개까지 건강보험이 적용됩니다 (본인부담금 약 30%). 위·아래 각 1개씩 가능하며, 무치악이 아니더라도 발치 후 적용 가능합니다.' },
+      { q: '임플란트 무이자 할부가 되나요?', a: '네, 서울가온치과에서는 카드 무이자 할부를 지원합니다. 경제적 부담 없이 치료를 진행하실 수 있도록 다양한 결제 방법을 안내드립니다.' },
+    ],
+    ctaText: '임플란트 비용 무료 상담',
+    relatedLinks: [
+      { href: '/implant', label: '임플란트 상세 안내' },
+      { href: '/implant-best', label: '의정부 임플란트 잘하는 곳' },
+      { href: '/senior-implant', label: '노인 임플란트' },
+      { href: '/bone-graft-implant', label: '뼈이식 임플란트' },
+      { href: '/before-after', label: '전후 사례 보기' },
+    ]
+  },
+  // ── 16. 의정부 야간진료 치과 ──
+  {
+    slug: 'night-dental',
+    title: '의정부 야간진료 치과 | 서울가온치과 — 목요일 밤 8시 30분까지',
+    metaDesc: '의정부 야간진료 치과 서울가온치과. 매주 목요일 밤 8시 30분까지 야간진료. 직장인·학생도 퇴근 후 내원 가능. 임플란트·교정·충치치료 등 전 진료과목 저녁 진료. 탑석역 도보 5분. ☎ 0507-1325-3377',
+    h1: '의정부 야간진료 치과 — 목요일 밤 8시 30분까지',
+    heroSub: '바쁜 일상에도 치과 진료를 미루지 마세요. 매주 목요일 야간진료 운영합니다',
+    keywords: '의정부 야간진료 치과, 의정부 저녁 진료 치과, 의정부 늦게까지 하는 치과, 야간 치과, 퇴근 후 치과, 의정부 목요일 야간 치과, 저녁 치과 진료',
+    category: '야간진료',
+    sections: [
+      {
+        heading: '왜 야간진료 치과가 필요한가요?',
+        content: `<p>직장인, 학생, 육아로 바쁜 분들은 <strong>평일 낮 시간에 치과를 방문하기 어렵습니다</strong>. 그래서 치과 치료를 계속 미루게 되고, 작은 충치가 신경치료로, 살릴 수 있던 치아가 발치로 이어지는 경우가 많습니다.</p>
+<p>서울가온치과는 <strong>매주 목요일 밤 8시 30분(20:30)까지</strong> 야간진료를 운영합니다. 퇴근 후 7시, 7시 30분에 오셔도 충분히 진료 받으실 수 있습니다.</p>`
+      },
+      {
+        heading: '서울가온치과 진료시간 안내',
+        content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
+<tr style="background:var(--gold);color:#fff"><th style="padding:10px;border:1px solid #ddd">요일</th><th style="padding:10px;border:1px solid #ddd">진료시간</th><th style="padding:10px;border:1px solid #ddd">비고</th></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>월·화·수·금</strong></td><td style="padding:10px;border:1px solid #ddd">09:30 ~ <strong>18:30</strong></td><td style="padding:10px;border:1px solid #ddd">점심시간 12:30~14:00</td></tr>
+<tr style="background:#fff8e8"><td style="padding:10px;border:1px solid #ddd"><strong>🌙 목요일</strong></td><td style="padding:10px;border:1px solid #ddd">09:30 ~ <strong style="color:#BFA46A;font-size:1.1em">20:30</strong></td><td style="padding:10px;border:1px solid #ddd"><strong>야간진료</strong> · 점심 12:30~14:00</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>토요일</strong></td><td style="padding:10px;border:1px solid #ddd">09:30 ~ <strong>14:00</strong></td><td style="padding:10px;border:1px solid #ddd">점심시간 없이 연속 진료</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>일요일·공휴일</strong></td><td style="padding:10px;border:1px solid #ddd" colspan="2">휴진</td></tr>
+</table>
+<p>📍 <strong>탑석역 도보 5분</strong> — 대중교통으로도 접근이 편리합니다.<br>🅿️ <strong>건물 내 무료주차</strong> — 차로 오셔도 주차 걱정 없습니다.</p>`
+      },
+      {
+        heading: '목요일 야간에도 모든 진료 가능',
+        content: `<p>일부 치과에서는 야간 시간에 <strong>간단한 진료만</strong> 가능한 경우가 있습니다. 서울가온치과는 목요일 야간에도 아래 <strong>모든 진료</strong>를 동일하게 제공합니다:</p>
+<ul>
+<li>🦷 <strong>임플란트</strong> — 상담, CT 촬영, 수술 모두 가능</li>
+<li>😁 <strong>교정</strong> — 인비절라인·세라믹 교정 상담 및 조정</li>
+<li>🪥 <strong>일반 진료</strong> — 충치, 신경치료, 발치, 스케일링</li>
+<li>✨ <strong>심미치료</strong> — 라미네이트, 레진빌드업, 미백</li>
+<li>🏥 <strong>응급 처치</strong> — 급성 치통, 보철물 탈락, 외상</li>
+</ul>`
+      }
+    ],
+    faqs: [
+      { q: '의정부에서 야간진료 하는 치과가 있나요?', a: '네, 서울가온치과는 매주 목요일 밤 8시 30분까지 야간진료를 운영합니다. 퇴근 후 7시에 오셔도 충분히 진료 가능합니다.' },
+      { q: '목요일 야간에도 임플란트 수술이 가능한가요?', a: '네, 서울가온치과는 목요일 야간에도 임플란트 상담과 수술을 포함한 모든 진료를 동일하게 진행합니다.' },
+      { q: '야간 진료에 추가 비용이 있나요?', a: '아니요, 진료 시간에 따른 추가 비용은 없습니다. 낮 시간과 동일한 비용으로 진료 받으실 수 있습니다.' },
+    ],
+    ctaText: '야간 진료 예약하기',
+    relatedLinks: [
+      { href: '/emergency-dental', label: '응급치과 안내' },
+      { href: '/uijeongbu-dental', label: '의정부 치과 추천' },
+      { href: '/tapseok-dental', label: '탑석역 치과' },
+      { href: '/reservation', label: '온라인 예약' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 17. 노인 임플란트 / 65세 보험 임플란트 ──
+  {
+    slug: 'senior-implant',
+    title: '의정부 노인 임플란트 | 서울가온치과 — 65세 이상 건강보험 임플란트',
+    metaDesc: '의정부 노인 임플란트 서울가온치과. 만 65세 이상 건강보험 임플란트 본인부담금 약 30만원. 고령 환자 전문 안전 시스템. 뼈이식·전체임플란트 가능. 70~80대 시술 경험 풍부. ☎ 0507-1325-3377',
+    h1: '노인 임플란트 — 만 65세 이상 건강보험으로 부담 없이',
+    heroSub: '나이는 숫자일 뿐. 안전한 시스템으로 어르신도 편안하게 임플란트 받으세요',
+    keywords: '노인 임플란트, 65세 임플란트, 건강보험 임플란트, 임플란트 보험, 노인 임플란트 비용, 의정부 노인 임플란트, 고령 임플란트, 어르신 임플란트',
+    category: '노인 임플란트',
+    sections: [
+      {
+        heading: '만 65세 이상 임플란트 건강보험 제도',
+        content: `<p>대한민국 국민건강보험은 <strong>만 65세 이상</strong>이면 <strong>평생 2개까지</strong> 임플란트에 건강보험을 적용합니다.</p>
+<table style="width:100%;border-collapse:collapse;margin:1em 0">
+<tr style="background:var(--gold);color:#fff"><th style="padding:10px;border:1px solid #ddd">항목</th><th style="padding:10px;border:1px solid #ddd">내용</th></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>대상</strong></td><td style="padding:10px;border:1px solid #ddd">만 65세 이상 건강보험 가입자</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>개수</strong></td><td style="padding:10px;border:1px solid #ddd">평생 2개 (위·아래 각 1개씩 가능)</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>본인부담금</strong></td><td style="padding:10px;border:1px solid #ddd">약 <strong>30%</strong> (약 30만원대)</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>조건</strong></td><td style="padding:10px;border:1px solid #ddd">치아가 빠진 부위 (발치 후 가능)</td></tr>
+</table>
+<p>💡 무치악(이가 하나도 없는 상태)이 아니더라도 <strong>치아가 상실된 부위</strong>이면 보험이 적용됩니다.</p>`
+      },
+      {
+        heading: '고령 환자를 위한 안전 시스템',
+        content: `<p>어르신 환자분들은 <strong>고혈압, 당뇨, 골다공증, 혈액응고제 복용</strong> 등 고려해야 할 사항이 많습니다. 서울가온치과는 고령 환자 안전을 위해 다음 시스템을 운영합니다:</p>
+<ul>
+<li><strong>전신 건강 사전 평가</strong> — 복용 약물, 기저질환, 혈액검사 등 종합 확인</li>
+<li><strong>단계별 치료 계획</strong> — 한꺼번에 무리하지 않고 단계적으로 진행</li>
+<li><strong>안전한 마취 관리</strong> — 고혈압·당뇨 환자에 맞춘 마취 프로토콜</li>
+<li><strong>편안한 진료 환경</strong> — 독립 수술실, 환자 모니터링 시스템</li>
+</ul>
+<p>서울가온치과는 <strong>70~80대 환자분들의 전체 임플란트 수술</strong>을 다수 경험하였으며, 안전하게 진행합니다.</p>`
+      },
+      {
+        heading: '보험 임플란트 + 비보험 임플란트 병행',
+        content: `<p>보험 2개 외에 <strong>추가로 더 많은 임플란트가 필요</strong>한 경우, 비보험으로 추가 식립이 가능합니다. 서울가온치과에서는 보험·비보험을 함께 계획하여 <strong>최적의 저작 기능을 회복</strong>할 수 있도록 안내합니다.</p>
+<p>틀니를 사용 중이시라면 <strong>틀니→임플란트 전환</strong>도 상담 가능합니다.</p>`
+      }
+    ],
+    faqs: [
+      { q: '만 65세인데 보험 임플란트 받으려면 어떻게 하나요?', a: '서울가온치과에 내원하시면 보험 적용 대상 여부를 바로 확인해 드립니다. 건강보험증과 신분증만 지참하시면 됩니다.' },
+      { q: '당뇨가 있는데 임플란트가 가능한가요?', a: '당화혈색소(HbA1c) 수치가 8% 이하로 관리되면 대부분 가능합니다. 내과 주치의와 협진하여 안전하게 진행합니다.' },
+      { q: '혈압약·혈액응고제를 먹는데 괜찮나요?', a: '복용 약물에 따라 수술 전 일시적 조정이 필요할 수 있습니다. 사전 상담에서 정확한 약물 리스트를 확인하고 안전한 치료 계획을 세웁니다.' },
+      { q: '보험 2개 외에 추가 임플란트도 가능한가요?', a: '네, 보험 2개와 함께 비보험으로 추가 식립이 가능합니다. 전체적인 비용과 치료 계획을 함께 안내드립니다.' },
+    ],
+    ctaText: '보험 임플란트 상담 예약',
+    relatedLinks: [
+      { href: '/implant-cost', label: '임플란트 비용 안내' },
+      { href: '/denture-to-implant', label: '틀니→임플란트 전환' },
+      { href: '/full-mouth-implant', label: '전체 임플란트' },
+      { href: '/bone-graft-implant', label: '뼈이식 임플란트' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 18. 의정부 응급치과 ──
+  {
+    slug: 'emergency-dental',
+    title: '의정부 응급치과 | 서울가온치과 — 급한 치통, 즉시 대응',
+    metaDesc: '의정부 응급치과 서울가온치과. 갑작스러운 치통, 보철물 탈락, 치아 외상 즉시 대응. 평일 저녁 7시·토요일 3시까지 진료. 당일 진료 가능. 의정부역 도보 5분. ☎ 0507-1325-3377',
+    h1: '의정부 응급치과 — 급한 치통, 빠르게 해결',
+    heroSub: '갑자기 이가 아프세요? 참지 마시고 지금 바로 연락하세요',
+    keywords: '의정부 응급치과, 의정부 치통, 응급 치과, 급한 치통, 치아 외상, 보철물 탈락, 의정부 당일 치과, 의정부 아픈 이',
+    category: '응급치과',
+    sections: [
+      {
+        heading: '이런 증상이면 즉시 방문하세요',
+        content: `<ul>
+<li>🔴 <strong>극심한 치통</strong> — 진통제를 먹어도 안 가라앉는 통증</li>
+<li>🔴 <strong>잇몸 붓기·고름</strong> — 잇몸이 부어오르고 열감이 있을 때</li>
+<li>🔴 <strong>치아 깨짐·빠짐</strong> — 넘어지거나 부딪혀 치아가 손상되었을 때</li>
+<li>🔴 <strong>보철물 탈락</strong> — 크라운, 브릿지, 임플란트 보철이 빠졌을 때</li>
+<li>🔴 <strong>출혈이 멈추지 않을 때</strong> — 발치 후 또는 외상 후 지혈이 안 될 때</li>
+</ul>
+<p>💡 <strong>서울가온치과는 당일 진료가 가능합니다.</strong> 전화로 증상을 말씀해 주시면, 가장 빠른 시간에 진료를 안내드립니다.</p>`
+      },
+      {
+        heading: '응급 상황 대처법',
+        content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
+<tr style="background:var(--gold);color:#fff"><th style="padding:10px;border:1px solid #ddd">상황</th><th style="padding:10px;border:1px solid #ddd">응급 처치</th></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>극심한 치통</strong></td><td style="padding:10px;border:1px solid #ddd">진통제(이부프로펜) 복용 후 최대한 빨리 내원</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>치아가 빠졌을 때</strong></td><td style="padding:10px;border:1px solid #ddd">빠진 치아를 우유에 담가 30분 이내 내원 (재식립 가능)</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>보철물 탈락</strong></td><td style="padding:10px;border:1px solid #ddd">탈락된 보철물 보관 후 내원 (재부착 가능)</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>잇몸 출혈</strong></td><td style="padding:10px;border:1px solid #ddd">깨끗한 거즈로 10분간 눌러 지혈, 이후 내원</td></tr>
+</table>`
+      },
+      {
+        heading: '서울가온치과 응급 진료 시스템',
+        content: `<p>서울가온치과는 <strong>응급 환자를 위한 당일 슬롯</strong>을 확보하고 있습니다:</p>
+<ul>
+<li>📞 <strong>전화 우선 안내</strong> — 전화 시 증상 확인 후 가장 빠른 시간대 배정</li>
+<li>🏥 <strong>즉시 진단</strong> — 디지털 X-ray·CT로 원인 즉시 파악</li>
+<li>💉 <strong>통증 완화 우선</strong> — 진단과 동시에 통증 완화 처치 진행</li>
+<li>📋 <strong>근본 치료 계획</strong> — 응급 처치 후 원인에 따른 근본 치료 안내</li>
+</ul>
+<p>⏰ 진료시간: <strong>평일 09:30~18:30 / 목요일 야간 ~20:30 / 토요일 09:30~14:00</strong></p>`
+      }
+    ],
+    faqs: [
+      { q: '갑자기 이가 너무 아픈데 오늘 바로 진료 받을 수 있나요?', a: '네, 서울가온치과는 당일 진료가 가능합니다. 전화(0507-1325-3377)로 증상을 말씀해 주시면 가장 빠른 시간에 안내드립니다.' },
+      { q: '밤에 치통이 생기면 어떻게 하나요?', a: '진통제(이부프로펜 등)를 복용하고, 차가운 물로 입을 헹궈주세요. 다음날 아침 바로 내원해 주시면 빠르게 처치해 드립니다.' },
+      { q: '넘어져서 앞니가 빠졌어요. 다시 붙일 수 있나요?', a: '빠진 치아를 우유나 식염수에 담가 30분 이내에 방문하시면 재식립(다시 심기)이 가능할 수 있습니다. 치아를 만지지 말고 뿌리 부분이 아닌 머리 부분을 잡아주세요.' },
+    ],
+    ctaText: '응급 진료 전화하기',
+    relatedLinks: [
+      { href: '/night-dental', label: '야간진료 안내' },
+      { href: '/cavity-treatment', label: '충치치료 안내' },
+      { href: '/uijeongbu-dental', label: '의정부 치과 추천' },
+      { href: '/reservation', label: '온라인 예약' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 19. 탑석역 치과 ──
+  {
+    slug: 'tapseok-dental',
+    title: '탑석역 치과 | 서울가온치과 — 탑석역 근처 믿을 수 있는 치과',
+    metaDesc: '탑석역 치과 서울가온치과. 의정부역에서 1정거장, 탑석역에서 가까운 종합 치과. 임플란트·교정·심미·일반진료 전 과목. 400평 규모 최첨단 시설. 현진호 대표원장. ☎ 0507-1325-3377',
+    h1: '탑석역 치과 — 서울가온치과에서 가까이 만나세요',
+    heroSub: '탑석역에서 한 정거장. 규모와 실력을 갖춘 종합 치과를 만나보세요',
+    keywords: '탑석역 치과, 탑석 치과, 탑석역 임플란트, 탑석역 교정, 탑석 근처 치과, 의정부 탑석 치과, 탑석역 치과 추천',
+    category: '탑석역 치과',
+    sections: [
+      {
+        heading: '탑석역에서 서울가온치과 오시는 길',
+        content: `<p>서울가온치과는 <strong>의정부역 도보 5분</strong> 거리에 있어, 탑석역에서도 매우 가깝습니다.</p>
+<ul>
+<li>🚇 <strong>지하철</strong> — 1호선 탑석역 → 의정부역 (1정거장, 2분) → 도보 5분</li>
+<li>🚌 <strong>버스</strong> — 탑석역 앞 정류장에서 의정부역 방면 다수 노선 이용 (약 5분)</li>
+<li>🚗 <strong>차량</strong> — 탑석역에서 약 5분 거리 / 건물 내 무료주차</li>
+</ul>
+<p>📍 주소: <strong>경기도 의정부시 용민로 22, 4층(용현동)</strong></p>`
+      },
+      {
+        heading: '왜 탑석 주민들이 서울가온치과를 선택할까요?',
+        content: `<p>탑석·민락·장암 지역 주민분들이 서울가온치과를 찾는 이유:</p>
+<ul>
+<li><strong>400평 규모 종합 시설</strong> — 대학병원급 장비와 독립 수술실 6개</li>
+<li><strong>전 진료과목 원스톱</strong> — 임플란트, 교정, 심미, 일반 진료 모두 한 곳에서</li>
+<li><strong>현진호 대표원장 직접 진료</strong> — 임플란트 전문, 서울대 출신</li>
+<li><strong>평일 저녁 7시까지</strong> — 퇴근 후에도 편하게 내원</li>
+<li><strong>철저한 감염관리</strong> — 에어샤워, 개별 수술실, 1회용 소독 키트</li>
+</ul>`
+      },
+      {
+        heading: '서울가온치과 주요 진료과목',
+        content: `<ul>
+<li>🦷 <strong>임플란트</strong> — 단일·전체·뼈이식·상악동거상술 / 건강보험 적용</li>
+<li>😁 <strong>교정</strong> — 인비절라인·세라믹 교정·부분교정</li>
+<li>✨ <strong>심미치료</strong> — 라미네이트·레진빌드업·미백</li>
+<li>🪥 <strong>일반 진료</strong> — 충치·신경치료·발치·스케일링</li>
+<li>🦴 <strong>사랑니</strong> — 매복사랑니 전문 발치</li>
+<li>💪 <strong>잇몸치료</strong> — 치주치료·잇몸수술</li>
+</ul>
+<p>탑석역에서 조금만 오시면, <strong>대학병원 수준의 진료</strong>를 동네 치과의 편안함으로 받으실 수 있습니다.</p>`
+      }
+    ],
+    faqs: [
+      { q: '탑석역에서 서울가온치과까지 얼마나 걸리나요?', a: '지하철로 1정거장(2분) + 도보 5분, 총 약 10분 이내입니다. 차량으로는 약 5분이며 건물 내 무료주차가 가능합니다.' },
+      { q: '탑석 근처에서 임플란트 잘하는 치과를 찾고 있어요', a: '서울가온치과는 현진호 대표원장이 모든 임플란트 수술을 직접 진행하며, 독립 수술실 6개와 CT 등 대학병원급 장비를 갖추고 있습니다.' },
+      { q: '주차가 가능한가요?', a: '네, 건물 내 무료주차가 가능합니다. 차량으로 편하게 오실 수 있습니다.' },
+    ],
+    ctaText: '탑석역 → 서울가온치과 상담 예약',
+    relatedLinks: [
+      { href: '/uijeongbu-dental', label: '의정부 치과 추천' },
+      { href: '/implant', label: '임플란트 안내' },
+      { href: '/night-dental', label: '야간진료 안내' },
+      { href: '/treatments', label: '진료과목 안내' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 20. 의정부 무통치료 / 수면치과 ──
+  {
+    slug: 'painless-dental',
+    title: '의정부 무통치료 치과 | 서울가온치과 — 아프지 않은 치과 치료',
+    metaDesc: '의정부 무통치료 서울가온치과. 치과 공포증 전문 관리. 무통마취 시스템, 진정(수면) 치료, 세심한 통증 관리로 편안한 치과 경험. 아이부터 어르신까지. ☎ 0507-1325-3377',
+    h1: '의정부 무통치료 — 아프지 않은 치과, 서울가온치과',
+    heroSub: '치과가 무서우셨나요? 서울가온치과는 다릅니다. 아프지 않게, 편안하게',
+    keywords: '의정부 무통치료, 의정부 수면치과, 무통 치과, 치과 공포증, 아프지 않은 치과, 무통 마취, 진정 치료, 의정부 편안한 치과',
+    category: '무통치료',
+    sections: [
+      {
+        heading: '왜 치과가 무서울까요?',
+        content: `<p><strong>치과 공포증</strong>은 매우 흔합니다. 성인 약 40%가 치과 방문에 불안을 느끼며, 이로 인해 치료를 미루다 병을 키우는 경우가 많습니다.</p>
+<p>서울가온치과는 <strong>"모든 치료는 통증 관리부터"</strong>라는 원칙으로, 환자의 불안과 통증을 최소화하는 시스템을 운영합니다.</p>`
+      },
+      {
+        heading: '서울가온치과 무통 시스템',
+        content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
+<tr style="background:var(--gold);color:#fff"><th style="padding:10px;border:1px solid #ddd">단계</th><th style="padding:10px;border:1px solid #ddd">방법</th><th style="padding:10px;border:1px solid #ddd">효과</th></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>1단계</strong></td><td style="padding:10px;border:1px solid #ddd">표면마취제 도포</td><td style="padding:10px;border:1px solid #ddd">주사 바늘이 들어갈 때 통증 제거</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>2단계</strong></td><td style="padding:10px;border:1px solid #ddd">컴퓨터 제어 마취 (전동주사기)</td><td style="padding:10px;border:1px solid #ddd">일정한 속도·압력으로 통증 최소화</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>3단계</strong></td><td style="padding:10px;border:1px solid #ddd">충분한 마취 대기</td><td style="padding:10px;border:1px solid #ddd">마취가 완전히 될 때까지 기다린 후 시술</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>선택</strong></td><td style="padding:10px;border:1px solid #ddd">진정(수면) 치료</td><td style="padding:10px;border:1px solid #ddd">극도의 불안감 해소, 편안한 상태에서 치료</td></tr>
+</table>`
+      },
+      {
+        heading: '이런 분들께 추천합니다',
+        content: `<ul>
+<li>😰 <strong>치과 공포증</strong>이 있어 치료를 계속 미루신 분</li>
+<li>👶 <strong>아이</strong>가 치과를 무서워해서 치료가 어려운 경우</li>
+<li>🦷 <strong>임플란트 수술</strong>이 무서워서 망설이시는 분</li>
+<li>👴 <strong>어르신</strong>으로 전신 질환이 있어 안전한 마취가 필요한 분</li>
+<li>🤢 <strong>구역질 반사</strong>가 심해서 치과 기구가 입에 들어가면 힘든 분</li>
+</ul>
+<p>서울가온치과에서는 환자 한 분 한 분의 <strong>불안 정도를 사전에 파악</strong>하고, 맞춤형 통증 관리 플랜을 제공합니다.</p>`
+      }
+    ],
+    faqs: [
+      { q: '정말 안 아프게 치료할 수 있나요?', a: '100% 통증 제로를 보장할 수는 없지만, 표면마취 + 전동주사기 + 충분한 마취 대기의 3단계 시스템으로 대부분의 환자분들이 "생각보다 안 아팠다"고 말씀하십니다.' },
+      { q: '수면치료(진정치료)는 어떻게 하나요?', a: '정맥진정법을 통해 반수면 상태에서 치료를 진행합니다. 잠든 것처럼 편안한 상태이며, 치료가 끝나면 자연스럽게 깨어나십니다.' },
+      { q: '아이도 무통치료가 가능한가요?', a: '네, 소아 환자에게도 표면마취와 전동주사기를 사용하며, 아이의 심리적 안정을 위한 단계적 적응 프로그램도 운영합니다.' },
+      { q: '무통치료에 추가 비용이 있나요?', a: '일반적인 무통마취(표면마취, 전동주사기)는 별도 추가 비용 없이 제공됩니다. 진정(수면) 치료는 별도 비용이 발생하며, 상담 시 안내드립니다.' },
+    ],
+    ctaText: '무통 치료 상담 예약',
+    relatedLinks: [
+      { href: '/implant', label: '임플란트 안내' },
+      { href: '/cavity-treatment', label: '충치치료 안내' },
+      { href: '/uijeongbu-dental', label: '의정부 치과 추천' },
+      { href: '/emergency-dental', label: '응급치과 안내' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
 ]
 
 // ── SSR 랜딩페이지 렌더러 ──
@@ -3391,8 +3725,9 @@ function renderLandingPage(page: LandingPageData): string {
       "geo": { "@type": "GeoCoordinates", "latitude": "37.7381", "longitude": "127.0337" },
       "telephone": "0507-1325-3377",
       "openingHoursSpecification": [
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "10:00", "closes": "19:00" },
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "10:00", "closes": "15:00" }
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Friday"], "opens": "09:30", "closes": "18:30" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "09:30", "closes": "20:30" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:30", "closes": "14:00" }
       ],
       "priceRange": "$$",
       "areaServed": [
@@ -3454,6 +3789,34 @@ function renderLandingPage(page: LandingPageData): string {
     `<a href="${l.href}" class="related-link"><i class="fas fa-chevron-right"></i> ${escHtml(l.label)}</a>`
   ).join('')
 
+  // OG 이미지 차별화 — 카테고리/슬러그별 적절한 이미지 매핑
+  const ogImageMap: Record<string, string> = {
+    'implant': '/images/clinic-implant-center.jpg',
+    'implant-best': '/images/clinic-implant-center.jpg',
+    'implant-cost': '/images/clinic-consult-room.jpg',
+    'full-mouth-implant': '/images/clinic-implant-center.jpg',
+    'front-tooth-implant': '/images/clinic-treatment.jpg',
+    'bone-graft-implant': '/images/clinic-implant-center.jpg',
+    'senior-implant': '/images/clinic-consult.jpg',
+    'denture-to-implant': '/images/clinic-consult.jpg',
+    'aesthetic': '/images/clinic-makeup-close.jpg',
+    'resin-buildup': '/images/clinic-makeup.jpg',
+    'laminate': '/images/clinic-makeup-close.jpg',
+    'glownate': '/images/clinic-makeup.jpg',
+    'invisalign': '/images/clinic-treatment.jpg',
+    'orthodontics': '/images/clinic-treatment.jpg',
+    'endodontics': '/images/clinic-unit-1.jpg',
+    'cavity-treatment': '/images/clinic-unit-1.jpg',
+    'wisdom-tooth': '/images/clinic-treatment.jpg',
+    'scaling-gum-treatment': '/images/clinic-unit-1.jpg',
+    'uijeongbu-dental': '/images/clinic-lobby-1.jpg',
+    'tapseok-dental': '/images/clinic-lobby-2.jpg',
+    'night-dental': '/images/clinic-waiting.jpg',
+    'emergency-dental': '/images/clinic-treatment.jpg',
+    'painless-dental': '/images/clinic-consult-room.jpg',
+  }
+  const ogImage = `${SITE}${ogImageMap[page.slug] || '/images/og-main.jpg'}`
+
   return `<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -3471,7 +3834,7 @@ ${HEAD_COMMON}
 <meta property="og:title" content="${escHtml(page.title)}">
 <meta property="og:description" content="${escHtml(page.metaDesc)}">
 <meta property="og:url" content="${canonicalUrl}">
-<meta property="og:image" content="${SITE}/images/og-main.jpg">
+<meta property="og:image" content="${ogImage}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
@@ -3479,7 +3842,7 @@ ${HEAD_COMMON}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${escHtml(page.title)}">
 <meta name="twitter:description" content="${escHtml(page.metaDesc)}">
-<meta name="twitter:image" content="${SITE}/images/og-main.jpg">
+<meta name="twitter:image" content="${ogImage}">
 <!-- JSON-LD -->
 <script type="application/ld+json">${JSON.stringify(jsonLdPage)}</script>
 <script type="application/ld+json">${JSON.stringify(jsonLdFaq)}</script>
