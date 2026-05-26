@@ -2021,7 +2021,7 @@ app.get('/before-after', async (c) => {
     const whereClause = cat ? `WHERE ba.category = ?` : ''
     const bindParams = cat ? [cat, size, offset] : [size, offset]
 
-    const countSql = cat ? `SELECT COUNT(*) as cnt FROM before_after_cases ba WHERE ba.category = ?` : `SELECT COUNT(*) as cnt FROM before_after_cases ba`
+    const countSql = cat ? `SELECT COUNT(*) as cnt FROM before_after ba WHERE ba.category = ?` : `SELECT COUNT(*) as cnt FROM before_after ba`
     const countRow: any = cat
       ? await db.prepare(countSql).bind(cat).first()
       : await db.prepare(countSql).first()
@@ -2032,20 +2032,20 @@ app.get('/before-after', async (c) => {
       ? await db.prepare(
           `SELECT ba.id, ba.title, ba.description, ba.category, ba.intraoral_before_url, ba.intraoral_after_url, ba.created_at,
                   d.name as doctor_name
-           FROM before_after_cases ba LEFT JOIN doctors d ON ba.doctor_id = d.id
+           FROM before_after ba LEFT JOIN doctors d ON ba.doctor_id = d.id
            ${whereClause} ORDER BY ba.created_at DESC LIMIT ? OFFSET ?`
         ).bind(cat, size, offset).all()
       : await db.prepare(
           `SELECT ba.id, ba.title, ba.description, ba.category, ba.intraoral_before_url, ba.intraoral_after_url, ba.created_at,
                   d.name as doctor_name
-           FROM before_after_cases ba LEFT JOIN doctors d ON ba.doctor_id = d.id
+           FROM before_after ba LEFT JOIN doctors d ON ba.doctor_id = d.id
            ORDER BY ba.created_at DESC LIMIT ? OFFSET ?`
         ).bind(size, offset).all()
 
     const cases = result.results || []
 
     // 카테고리 목록 가져오기
-    const catResult = await db.prepare(`SELECT DISTINCT category FROM before_after_cases ORDER BY category`).all()
+    const catResult = await db.prepare(`SELECT DISTINCT category FROM before_after ORDER BY category`).all()
     const categories = (catResult.results || []).map((r: any) => r.category)
 
     const catButtons = [`<a href="/before-after" style="padding:.4rem .8rem;border-radius:4px;font-size:.85rem;text-decoration:none;${!cat ? 'background:var(--gold);color:#fff' : 'background:rgba(191,164,106,.15);color:var(--gold)'}">전체</a>`]
