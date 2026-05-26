@@ -33,7 +33,7 @@ app.use('*', async (c, next) => {
   c.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self)')
 
   // HTML 페이지 캐시: 짧게 (SEO 크롤러가 최신 콘텐츠 수집)
-  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant)$/)) {
+  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|invisalign|orthodontics|glownate|cavity-treatment)$/) || path.match(/^\/(blog|before-after)\/\d+$/)) {
     c.header('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200')
     c.header('X-Robots-Tag', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')
   }
@@ -1644,6 +1644,13 @@ app.get('/sitemap.xml', async (c) => {
       { loc: '/notice',         priority: '0.6',  changefreq: 'weekly',  lastmod: today },
       { loc: '/community',      priority: '0.8',  changefreq: 'weekly',  lastmod: today },
       { loc: '/reservation',    priority: '0.9',  changefreq: 'monthly', lastmod: '2026-04-09' },
+      // 지역명+핵심진료 SEO 랜딩페이지
+      { loc: '/uijeongbu-dental', priority: '0.95', changefreq: 'weekly',  lastmod: today },
+      { loc: '/endodontics',      priority: '0.95', changefreq: 'weekly',  lastmod: today },
+      { loc: '/invisalign',       priority: '0.95', changefreq: 'weekly',  lastmod: today },
+      { loc: '/orthodontics',     priority: '0.95', changefreq: 'weekly',  lastmod: today },
+      { loc: '/glownate',         priority: '0.95', changefreq: 'weekly',  lastmod: today },
+      { loc: '/cavity-treatment', priority: '0.95', changefreq: 'weekly',  lastmod: today },
     ]
 
     // ── 블로그 포스트 (개별 URL — 클린 URL) ──
@@ -2309,6 +2316,585 @@ if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open'
     return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>오류 | 서울가온치과</title></head><body><p>잠시 후 다시 시도해주세요.</p></body></html>`, 500)
   }
 })
+
+// ══════════════════════════════════════════════════
+//  SSR — 지역명+핵심진료 SEO 랜딩페이지 (구글 상위노출용)
+// ══════════════════════════════════════════════════
+
+// 랜딩페이지 데이터 정의
+interface LandingPageData {
+  slug: string
+  title: string
+  metaDesc: string
+  h1: string
+  heroSub: string
+  keywords: string
+  category: string
+  sections: Array<{
+    heading: string
+    content: string
+  }>
+  faqs: Array<{
+    q: string
+    a: string
+  }>
+  ctaText: string
+  relatedLinks: Array<{ href: string; label: string }>
+}
+
+const LANDING_PAGES: LandingPageData[] = [
+  // ── 1. 의정부 치과 (대표 키워드) ──
+  {
+    slug: 'uijeongbu-dental',
+    title: '의정부 치과 추천 | 서울가온치과 — 서울대 출신 의료진, 탑석역 5분',
+    metaDesc: '의정부 치과 찾으시나요? 서울가온치과는 서울대학교 치의학과 출신 의료진이 임플란트·심미치료·신경치료를 직접 진료합니다. 탑석역 1번출구 도보 5분. 과잉진료 없는 정직한 치과. ☎ 0507-1325-3377',
+    h1: '의정부 치과 추천 — 서울가온치과',
+    heroSub: '서울대학교 출신 의료진이 직접 진료하는 의정부 치과',
+    keywords: '의정부 치과, 의정부 치과 추천, 의정부치과, 의정부 치과의원, 탑석역 치과, 용현동 치과, 의정부 좋은치과, 의정부역 치과, 민락동 치과, 가능동 치과',
+    category: '종합진료',
+    sections: [
+      {
+        heading: '왜 의정부에서 서울가온치과를 선택할까요?',
+        content: `<p>서울가온치과는 <strong>서울대학교 치의학과</strong> 출신 의료진이 직접 진료하는 의정부 전문 치과입니다. '가온'은 대표원장의 딸 이름으로, <strong>"내 아이에게 하듯 정직하게"</strong>라는 진료 철학을 담고 있습니다.</p>
+<p>의정부시 용민로에 위치하며 <strong>탑석역 1번출구에서 도보 5분</strong> 거리입니다. 임플란트, 심미치료(라미네이트·올세라믹), 신경치료, 레진빌드업, 일반진료까지 원스톱으로 진료합니다.</p>`
+      },
+      {
+        heading: '서울가온치과의 핵심 진료 분야',
+        content: `<ul>
+<li><strong>가이드 임플란트</strong> — CT 기반 정밀 식립, 뼈이식·상악동거상술 가능, 만 65세 이상 건강보험 적용</li>
+<li><strong>앞니 심미치료</strong> — 라미네이트, 올세라믹·지르코니아 크라운, 디지털 쉐이드 매칭</li>
+<li><strong>신경치료</strong> — 서울대 보존과 전문의 조은비 원장 직접 시행, 미세현미경 활용</li>
+<li><strong>레진빌드업</strong> — 크라운 없이 자연치아 최대 보존, 당일 완료 가능</li>
+<li><strong>인비절라인 교정</strong> — 투명 교정장치로 심미적인 치아교정</li>
+<li><strong>일반진료</strong> — 스케일링, 충치치료, 사랑니 발치 등</li>
+</ul>`
+      },
+      {
+        heading: '서울가온치과 의료진',
+        content: `<p><strong>현진호 대표원장</strong> — 서울대학교 치의학과 졸업. 임플란트·보철 전문. CT 기반 가이드 수술로 정확성과 안전성을 확보합니다.</p>
+<p><strong>조은비 원장</strong> — 서울대학교 치의학대학원 보존과 전문의. 신경치료·심미수복 전문. 미세현미경으로 정밀한 치료를 시행합니다.</p>`
+      },
+      {
+        heading: '오시는 길 · 진료시간',
+        content: `<p>📍 <strong>경기도 의정부시 용민로 22, 4층</strong> (용현동, 탑석역 1번출구 도보 5분)</p>
+<p>🕐 <strong>진료시간</strong>: 월~금 10:00~19:00 / 토 10:00~15:00 / 일·공휴일 휴진</p>
+<p>☎ <strong>전화예약</strong>: <a href="tel:0507-1325-3377">0507-1325-3377</a></p>
+<p>💬 <strong>카카오톡 상담</strong>: <a href="https://pf.kakao.com/_LLxhwG/chat" target="_blank" rel="noopener">카카오톡으로 상담하기</a></p>`
+      }
+    ],
+    faqs: [
+      { q: '의정부 서울가온치과 위치가 어디인가요?', a: '경기도 의정부시 용민로 22, 4층(용현동)에 위치해 있습니다. 탑석역 1번출구에서 도보 5분 거리입니다.' },
+      { q: '진료 예약은 어떻게 하나요?', a: '전화(0507-1325-3377) 또는 카카오톡 채널(서울가온치과)을 통해 예약 가능합니다.' },
+      { q: '주차가 가능한가요?', a: '건물 지하 주차장 이용 가능합니다. 1시간 무료 주차를 제공합니다.' },
+      { q: '의정부 서울가온치과 진료비는 어떻게 되나요?', a: '건강보험 적용 진료는 보험 수가로 진행되며, 비급여 항목은 진료 전 상세히 안내해 드립니다. 수가표는 홈페이지 안내 페이지에서 확인하실 수 있습니다.' },
+    ],
+    ctaText: '의정부 치과 상담 예약하기',
+    relatedLinks: [
+      { href: '/implant', label: '의정부 임플란트' },
+      { href: '/aesthetic', label: '의정부 심미치료' },
+      { href: '/resin-buildup', label: '의정부 레진빌드업' },
+      { href: '/endodontics', label: '의정부 신경치료' },
+      { href: '/invisalign', label: '의정부 인비절라인' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 2. 의정부 신경치료 ──
+  {
+    slug: 'endodontics',
+    title: '의정부 신경치료 | 서울가온치과 — 서울대 보존과 전문의 직접 시행',
+    metaDesc: '의정부 신경치료 전문 서울가온치과. 서울대학교 보존과 전문의 조은비 원장이 미세현미경으로 직접 시행합니다. 정확한 진단, 최소 삭제, 높은 성공률. 탑석역 5분. ☎ 0507-1325-3377',
+    h1: '의정부 신경치료 전문 — 서울대 보존과 전문의',
+    heroSub: '서울대학교 보존과 전문의가 미세현미경으로 직접 시행하는 정밀 신경치료',
+    keywords: '의정부 신경치료, 의정부 신경치료 잘하는곳, 의정부 치과 신경치료, 탑석역 신경치료, 신경치료 통증, 신경치료 비용, 의정부 보존과, 의정부 치아살리기',
+    category: '신경치료',
+    sections: [
+      {
+        heading: '신경치료, 왜 서울가온치과일까요?',
+        content: `<p>신경치료는 <strong>치아를 뽑지 않고 살리는 마지막 기회</strong>입니다. 서울가온치과에서는 <strong>서울대학교 보존과 전문의 조은비 원장</strong>이 미세현미경을 활용하여 직접 신경치료를 시행합니다.</p>
+<p>보존과 전문의란 <strong>충치와 신경치료를 전문적으로 수련한 의사</strong>를 말합니다. 일반 치과의사와 달리 2~3년의 추가 수련을 통해 복잡한 신경관 구조를 정밀하게 치료할 수 있는 전문성을 갖추고 있습니다.</p>`
+      },
+      {
+        heading: '서울가온치과 신경치료의 차이점',
+        content: `<ul>
+<li><strong>미세현미경 사용</strong> — 육안으로 보이지 않는 미세 신경관까지 정확히 확인하고 치료합니다</li>
+<li><strong>Ni-Ti 파일 사용</strong> — 유연한 니켈-티타늄 기구로 곡선형 신경관도 안전하게 성형합니다</li>
+<li><strong>최소 삭제 원칙</strong> — 건강한 치아 조직은 최대한 보존하며 감염 부위만 정밀 제거합니다</li>
+<li><strong>전문의 직접 시행</strong> — 처음부터 끝까지 조은비 원장(서울대 보존과 전문의)이 직접 치료합니다</li>
+</ul>`
+      },
+      {
+        heading: '신경치료가 필요한 경우',
+        content: `<p>다음과 같은 증상이 있다면 신경치료가 필요할 수 있습니다:</p>
+<ul>
+<li>찬물이나 뜨거운 음식에 <strong>심한 통증</strong>이 있는 경우</li>
+<li><strong>가만히 있어도 욱신거리는</strong> 통증이 있는 경우</li>
+<li>씹을 때 <strong>특정 치아가 아픈</strong> 경우</li>
+<li>잇몸에 <strong>고름이 나오는</strong> 경우</li>
+<li>충치가 심해 <strong>치아 내부 신경까지 감염</strong>된 경우</li>
+</ul>
+<p>이런 증상이 있다면 빠른 시일 내에 내원하셔서 정확한 진단을 받으시기 바랍니다.</p>`
+      },
+      {
+        heading: '신경치료 과정',
+        content: `<ol>
+<li><strong>정밀 진단</strong> — X-ray·CT 촬영으로 신경관 상태를 정확히 파악합니다</li>
+<li><strong>마취 후 감염 제거</strong> — 충분한 마취 후 감염된 신경 조직을 미세현미경 하에 제거합니다</li>
+<li><strong>신경관 성형·세척</strong> — Ni-Ti 파일로 신경관을 성형하고 소독액으로 철저히 세척합니다</li>
+<li><strong>밀봉 충전</strong> — 생체적합성 재료로 신경관을 빈틈없이 밀봉합니다</li>
+<li><strong>보철 수복</strong> — 크라운 또는 레진빌드업으로 치아를 원래 형태로 복원합니다</li>
+</ol>`
+      }
+    ],
+    faqs: [
+      { q: '신경치료는 아프나요?', a: '충분한 마취 후 진행하므로 치료 중에는 거의 통증이 없습니다. 치료 후 1~2일 정도 약간의 불편감이 있을 수 있으나 진통제로 조절 가능합니다.' },
+      { q: '신경치료 비용은 얼마인가요?', a: '신경치료는 건강보험이 적용되어 본인부담금은 1만~3만원 수준입니다. 이후 크라운 수복 비용은 재료에 따라 다르며, 진료 전 상세히 안내해 드립니다.' },
+      { q: '신경치료 몇 번 와야 하나요?', a: '일반적으로 2~3회 내원이 필요합니다. 감염 정도와 치아 상태에 따라 달라질 수 있으며, 첫 내원 시 정확한 치료 계획을 설명드립니다.' },
+      { q: '신경치료 후 크라운을 꼭 해야 하나요?', a: '서울가온치과에서는 반드시 크라운이 필요한 경우와 레진빌드업으로 충분한 경우를 정확히 구분하여 안내합니다. 불필요한 크라운 치료는 권하지 않습니다.' },
+    ],
+    ctaText: '의정부 신경치료 상담 예약',
+    relatedLinks: [
+      { href: '/resin-buildup', label: '레진빌드업' },
+      { href: '/implant', label: '의정부 임플란트' },
+      { href: '/cavity-treatment', label: '의정부 충치치료' },
+      { href: '/doctors', label: '의료진 소개' },
+      { href: '/blog', label: '치과 건강 정보' },
+    ]
+  },
+  // ── 3. 의정부 인비절라인 ──
+  {
+    slug: 'invisalign',
+    title: '의정부 인비절라인 | 서울가온치과 — 투명교정 전문, 탑석역 5분',
+    metaDesc: '의정부 인비절라인 투명교정 서울가온치과. 눈에 띄지 않는 투명 교정장치로 가지런한 치아를 만듭니다. 정밀 3D 시뮬레이션, 맞춤 치료 계획. 탑석역 5분. ☎ 0507-1325-3377',
+    h1: '의정부 인비절라인 — 투명교정 전문',
+    heroSub: '눈에 띄지 않는 투명 교정장치로 가지런한 치아를 완성합니다',
+    keywords: '의정부 인비절라인, 의정부 투명교정, 의정부 치아교정, 인비절라인 비용, 인비절라인 후기, 의정부 교정치과, 탑석역 교정, 인비절라인 기간',
+    category: '치아교정',
+    sections: [
+      {
+        heading: '인비절라인이란?',
+        content: `<p>인비절라인은 <strong>투명한 플라스틱 장치</strong>를 이용한 치아교정 방법입니다. 전통적인 금속 브라켓과 달리 <strong>눈에 거의 보이지 않아</strong> 교정 중에도 자연스러운 미소를 유지할 수 있습니다.</p>
+<p>서울가온치과에서는 <strong>3D 디지털 스캔과 시뮬레이션</strong>을 통해 치료 시작 전부터 최종 결과를 미리 확인할 수 있습니다.</p>`
+      },
+      {
+        heading: '인비절라인의 장점',
+        content: `<ul>
+<li><strong>심미성</strong> — 투명하여 착용 중에도 티가 나지 않습니다</li>
+<li><strong>편의성</strong> — 탈착이 가능하여 식사와 양치에 불편이 없습니다</li>
+<li><strong>위생적</strong> — 장치를 분리하고 깨끗이 세척할 수 있어 충치·잇몸병 위험이 낮습니다</li>
+<li><strong>편안함</strong> — 금속 브라켓 없이 부드러운 장치로 구강 점막 자극이 적습니다</li>
+<li><strong>예측 가능</strong> — 3D 시뮬레이션으로 치료 결과를 사전에 확인합니다</li>
+</ul>`
+      },
+      {
+        heading: '서울가온치과 인비절라인 치료 과정',
+        content: `<ol>
+<li><strong>상담 및 정밀 검사</strong> — 구강 검진, X-ray, 3D 스캔으로 현재 상태를 정확히 파악합니다</li>
+<li><strong>맞춤 치료 계획</strong> — 3D 시뮬레이션으로 치료 과정과 최종 결과를 시각적으로 확인합니다</li>
+<li><strong>맞춤 장치 제작</strong> — 개인의 치아에 정확히 맞는 투명 교정장치를 제작합니다</li>
+<li><strong>교정 진행</strong> — 2주마다 새 장치로 교체하며 치아를 점진적으로 이동시킵니다</li>
+<li><strong>정기 검진</strong> — 4~6주 간격으로 내원하여 진행 상황을 확인합니다</li>
+<li><strong>유지 관리</strong> — 교정 완료 후 유지장치로 결과를 안정적으로 유지합니다</li>
+</ol>`
+      },
+      {
+        heading: '인비절라인이 적합한 경우',
+        content: `<ul>
+<li>앞니가 <strong>삐뚤빼뚤</strong>한 경우</li>
+<li><strong>치아 사이 공간</strong>이 벌어진 경우</li>
+<li><strong>앞니 돌출</strong>(덧니)이 있는 경우</li>
+<li><strong>이전 교정 후 재발</strong>한 경우</li>
+<li>직업상 <strong>보이지 않는 교정</strong>을 원하는 경우</li>
+</ul>
+<p>심한 부정교합의 경우 다른 교정 방법이 더 적합할 수 있으므로, 정확한 상담 후 최적의 방법을 안내해 드립니다.</p>`
+      }
+    ],
+    faqs: [
+      { q: '인비절라인 비용은 얼마인가요?', a: '교정 범위와 난이도에 따라 다르며, 상담 후 정확한 비용을 안내해 드립니다. 무이자 분할 납부도 가능합니다.' },
+      { q: '인비절라인 교정 기간은 얼마나 되나요?', a: '간단한 배열의 경우 6개월~1년, 전체 교정의 경우 1년~2년 정도 소요됩니다. 3D 시뮬레이션으로 예상 기간을 미리 확인하실 수 있습니다.' },
+      { q: '인비절라인은 아프나요?', a: '새 장치로 교체 후 1~2일 정도 가벼운 압박감이 있을 수 있지만, 금속 교정에 비해 통증이 적습니다.' },
+      { q: '하루에 몇 시간 착용해야 하나요?', a: '하루 20~22시간 착용을 권장합니다. 식사와 양치 시에만 분리합니다.' },
+    ],
+    ctaText: '인비절라인 무료 상담 예약',
+    relatedLinks: [
+      { href: '/orthodontics', label: '의정부 치아교정' },
+      { href: '/aesthetic', label: '의정부 심미치료' },
+      { href: '/glownate', label: '의정부 글로우네이트' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 4. 의정부 치아교정 ──
+  {
+    slug: 'orthodontics',
+    title: '의정부 치아교정 | 서울가온치과 — 인비절라인·투명교정 전문',
+    metaDesc: '의정부 치아교정 전문 서울가온치과. 인비절라인 투명교정, 부분교정, 심미교정까지. 3D 디지털 시뮬레이션으로 정확한 치료 계획. 탑석역 5분. ☎ 0507-1325-3377',
+    h1: '의정부 치아교정 — 인비절라인·투명교정 전문',
+    heroSub: '가지런한 치아, 건강한 교합 — 나에게 맞는 최적의 교정 방법을 찾아드립니다',
+    keywords: '의정부 치아교정, 의정부 교정치과, 의정부 교정, 의정부 투명교정, 의정부 부분교정, 의정부 치아교정 비용, 탑석역 교정치과, 의정부 성인교정',
+    category: '치아교정',
+    sections: [
+      {
+        heading: '치아교정이 필요한 이유',
+        content: `<p>치아교정은 단순히 <strong>미용 목적</strong>만이 아닙니다. 가지런하지 않은 치아는 충치와 잇몸병의 원인이 되고, <strong>잘못된 교합은 턱관절 장애</strong>를 유발할 수 있습니다.</p>
+<p>서울가온치과에서는 환자의 교합 상태를 정밀하게 분석하여 <strong>건강한 교합과 아름다운 미소</strong>를 동시에 달성하는 교정 치료를 제공합니다.</p>`
+      },
+      {
+        heading: '서울가온치과 교정 치료 종류',
+        content: `<ul>
+<li><strong>인비절라인</strong> — 투명 교정장치. 눈에 보이지 않으며 탈착 가능. 심미성 최고</li>
+<li><strong>부분교정</strong> — 앞니 부분만 교정. 기간 짧고 비용 효율적</li>
+<li><strong>심미교정</strong> — 세라믹·투명 브라켓을 사용하여 눈에 덜 띄는 교정</li>
+</ul>
+<p>환자의 치아 상태와 라이프스타일에 맞는 최적의 교정 방법을 상담 후 추천해 드립니다.</p>`
+      },
+      {
+        heading: '교정 치료 과정',
+        content: `<ol>
+<li><strong>무료 상담</strong> — 현재 치아 상태 확인 및 교정 필요성 판단</li>
+<li><strong>정밀 검사</strong> — X-ray, 3D 구강 스캔, 교합 분석</li>
+<li><strong>치료 계획 수립</strong> — 3D 시뮬레이션으로 예상 결과 확인</li>
+<li><strong>교정 장치 장착</strong> — 맞춤 제작된 장치로 교정 시작</li>
+<li><strong>정기 내원</strong> — 월 1회 내원으로 진행 상황 체크</li>
+<li><strong>교정 완료 + 유지</strong> — 유지장치로 결과 안정화</li>
+</ol>`
+      }
+    ],
+    faqs: [
+      { q: '성인도 치아교정이 가능한가요?', a: '네, 성인 교정은 충분히 가능합니다. 오히려 성인은 치료 계획을 잘 따라주시기 때문에 좋은 결과를 얻는 경우가 많습니다.' },
+      { q: '치아교정 비용은 어떻게 되나요?', a: '교정 종류와 범위에 따라 다릅니다. 상담 시 정확한 비용을 안내드리며, 무이자 분할 납부가 가능합니다.' },
+      { q: '교정 기간은 보통 얼마나 걸리나요?', a: '부분교정은 6개월~1년, 전체 교정은 1년~2년 정도 소요됩니다. 개인 차이가 있으므로 상담 시 정확히 안내드립니다.' },
+    ],
+    ctaText: '치아교정 무료 상담 예약',
+    relatedLinks: [
+      { href: '/invisalign', label: '의정부 인비절라인' },
+      { href: '/aesthetic', label: '의정부 심미치료' },
+      { href: '/glownate', label: '의정부 글로우네이트' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 5. 의정부 글로우네이트 ──
+  {
+    slug: 'glownate',
+    title: '의정부 글로우네이트 | 서울가온치과 — 최소삭제 심미보철, 탑석역 5분',
+    metaDesc: '의정부 글로우네이트 전문 서울가온치과. 치아 삭제를 최소화한 심미보철로 자연스럽고 아름다운 앞니를 완성합니다. 라미네이트보다 보존적, 치아 손상 최소. ☎ 0507-1325-3377',
+    h1: '의정부 글로우네이트 — 최소삭제 심미보철',
+    heroSub: '치아를 최소한으로 삭제하여 자연스럽고 아름다운 미소를 완성합니다',
+    keywords: '의정부 글로우네이트, 글로우네이트, 글로우네이트 비용, 글로우네이트 후기, 의정부 라미네이트, 의정부 심미보철, 최소삭제 라미네이트, 의정부 앞니치료',
+    category: '심미치료',
+    sections: [
+      {
+        heading: '글로우네이트란 무엇인가요?',
+        content: `<p>글로우네이트는 <strong>치아 삭제를 최소화</strong>한 심미보철 방법입니다. 기존 라미네이트가 치아 표면을 0.5~0.7mm 정도 삭제하는 데 비해, 글로우네이트는 <strong>0.1~0.3mm만 삭제</strong>하거나 경우에 따라 삭제 없이도 시술이 가능합니다.</p>
+<p><strong>자연치아를 최대한 보존</strong>하면서도 색상, 형태, 배열을 아름답게 개선할 수 있어 최근 가장 주목받는 심미치료 방법입니다.</p>`
+      },
+      {
+        heading: '글로우네이트 vs 라미네이트',
+        content: `<ul>
+<li><strong>삭제량</strong> — 글로우네이트: 0.1~0.3mm (최소) / 라미네이트: 0.5~0.7mm</li>
+<li><strong>치아 보존</strong> — 글로우네이트가 자연치아를 더 많이 보존합니다</li>
+<li><strong>시린 증상</strong> — 글로우네이트는 삭제량이 적어 시린 증상이 거의 없습니다</li>
+<li><strong>강도</strong> — 최신 세라믹 소재로 충분한 강도를 확보합니다</li>
+<li><strong>자연스러움</strong> — 초박형 세라믹으로 자연치아에 가장 가까운 투명감을 구현합니다</li>
+</ul>`
+      },
+      {
+        heading: '글로우네이트가 적합한 경우',
+        content: `<ul>
+<li>앞니 <strong>색상이 변한</strong> 경우 (테트라사이클린 변색 등)</li>
+<li>앞니 <strong>형태가 마음에 들지 않는</strong> 경우</li>
+<li>앞니 사이에 <strong>벌어진 공간</strong>이 있는 경우</li>
+<li><strong>치아 삭제를 최소화</strong>하고 싶은 경우</li>
+<li>이전에 레진 보수를 반복한 앞니를 <strong>깔끔하게 수복</strong>하고 싶은 경우</li>
+</ul>`
+      },
+      {
+        heading: '치료 과정',
+        content: `<ol>
+<li><strong>상담 · 진단</strong> — 현재 치아 상태 파악, 원하는 결과 상담</li>
+<li><strong>디지털 디자인</strong> — 디지털 쉐이드 매칭으로 색상·형태 사전 설계</li>
+<li><strong>최소 삭제 · 인상</strong> — 0.1~0.3mm 삭제 후 정밀 인상 채득</li>
+<li><strong>전문 기공소 제작</strong> — 1:1 맞춤 초박형 세라믹 제작</li>
+<li><strong>접착 · 완성</strong> — 특수 접착제로 견고하게 부착, 즉시 자연스러운 미소 완성</li>
+</ol>`
+      }
+    ],
+    faqs: [
+      { q: '글로우네이트 비용은 얼마인가요?', a: '치아 수와 상태에 따라 달라지며, 상담 후 정확한 비용을 안내해 드립니다. 분할 납부도 가능합니다.' },
+      { q: '글로우네이트는 얼마나 유지되나요?', a: '적절한 관리 시 10년 이상 유지됩니다. 일반적인 치아 관리(양치, 정기 검진)를 잘 해주시면 오래 사용하실 수 있습니다.' },
+      { q: '글로우네이트 시술은 아프나요?', a: '삭제량이 매우 적어 마취 없이도 가능한 경우가 많으며, 시술 후 시린 증상도 거의 없습니다.' },
+      { q: '글로우네이트와 라미네이트 중 어떤 것이 좋나요?', a: '치아 상태에 따라 다릅니다. 서울가온치과에서는 환자의 치아 상태를 정확히 진단한 후 가장 적합한 방법을 추천드립니다.' },
+    ],
+    ctaText: '글로우네이트 상담 예약',
+    relatedLinks: [
+      { href: '/aesthetic', label: '의정부 심미치료' },
+      { href: '/invisalign', label: '의정부 인비절라인' },
+      { href: '/before-after', label: '비포 애프터' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 6. 의정부 충치치료 ──
+  {
+    slug: 'cavity-treatment',
+    title: '의정부 충치치료 | 서울가온치과 — 최소삭제·자연치아 보존 원칙',
+    metaDesc: '의정부 충치치료 서울가온치과. 충치 부위만 정밀 제거, 건강한 치아 최대 보존. 레진 직접수복·레진빌드업으로 자연스러운 결과. 서울대 보존과 전문의. 탑석역 5분. ☎ 0507-1325-3377',
+    h1: '의정부 충치치료 — 자연치아 보존 원칙',
+    heroSub: '충치 부위만 정밀하게 제거하고, 건강한 치아는 최대한 보존합니다',
+    keywords: '의정부 충치치료, 의정부 충치, 의정부 치과 충치, 충치치료 비용, 의정부 레진, 의정부 레진치료, 탑석역 충치, 충치 통증, 의정부 어금니 충치',
+    category: '충치치료',
+    sections: [
+      {
+        heading: '서울가온치과의 충치치료 원칙',
+        content: `<p>서울가온치과는 <strong>"필요한 만큼만 치료"</strong>하는 원칙을 지킵니다. 충치가 있는 부분만 정밀하게 제거하고, 건강한 치아 조직은 최대한 보존하는 <strong>최소침습(MI) 치료</strong>를 시행합니다.</p>
+<p>서울대 보존과 전문의 조은비 원장이 직접 진단하여, 불필요한 크라운이나 인레이 대신 <strong>레진 직접수복 또는 레진빌드업</strong>으로 자연스럽게 치료합니다.</p>`
+      },
+      {
+        heading: '충치 진행 단계별 치료',
+        content: `<ul>
+<li><strong>초기 충치 (법랑질)</strong> — 불소 도포 또는 실란트로 진행을 막습니다. 삭제 불필요</li>
+<li><strong>중기 충치 (상아질)</strong> — 충치 부분만 제거 후 레진으로 자연스럽게 수복합니다</li>
+<li><strong>깊은 충치 (신경 근접)</strong> — 신경 보존 치료 후 레진빌드업으로 원래 형태로 복원합니다</li>
+<li><strong>심한 충치 (신경 감염)</strong> — 신경치료 후 크라운 또는 레진빌드업으로 수복합니다</li>
+</ul>`
+      },
+      {
+        heading: '레진 직접수복의 장점',
+        content: `<p>서울가온치과에서는 가능한 경우 <strong>레진 직접수복</strong>을 우선 시행합니다:</p>
+<ul>
+<li><strong>당일 완료</strong> — 한 번의 내원으로 치료가 끝납니다</li>
+<li><strong>자연치아색</strong> — 치아 색상과 동일한 레진으로 수복하여 자연스럽습니다</li>
+<li><strong>최소 삭제</strong> — 충치 부분만 제거하므로 건강한 치아가 더 많이 남습니다</li>
+<li><strong>합리적 비용</strong> — 인레이나 크라운에 비해 비용이 절약됩니다</li>
+</ul>`
+      }
+    ],
+    faqs: [
+      { q: '충치치료 비용은 얼마인가요?', a: '충치치료는 대부분 건강보험이 적용됩니다. 레진수복의 경우 재료와 범위에 따라 차이가 있으며, 진료 전 정확한 비용을 안내드립니다.' },
+      { q: '충치치료는 아프나요?', a: '충분한 마취 후 진행하므로 치료 중 통증은 거의 없습니다. 마취 주사도 최대한 부드럽게 시행합니다.' },
+      { q: '충치를 오래 방치하면 어떻게 되나요?', a: '초기 충치는 레진으로 간단히 치료되지만, 방치하면 신경까지 감염되어 신경치료가 필요해지고, 최악의 경우 발치 후 임플란트가 필요할 수 있습니다. 빨리 치료할수록 치아를 더 많이 보존할 수 있습니다.' },
+      { q: '아말감(은색 충전물)을 레진으로 교체할 수 있나요?', a: '네, 가능합니다. 서울가온치과에서는 오래된 아말감을 안전하게 제거하고 자연스러운 레진으로 교체해 드립니다.' },
+    ],
+    ctaText: '충치치료 상담 예약',
+    relatedLinks: [
+      { href: '/resin-buildup', label: '레진빌드업' },
+      { href: '/endodontics', label: '의정부 신경치료' },
+      { href: '/implant', label: '의정부 임플란트' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+]
+
+// ── SSR 랜딩페이지 렌더러 ──
+function renderLandingPage(page: LandingPageData): string {
+  const canonicalUrl = `${SITE}/${page.slug}`
+
+  // JSON-LD: MedicalWebPage
+  const jsonLdPage = {
+    "@context": "https://schema.org",
+    "@type": "MedicalWebPage",
+    "name": page.h1,
+    "description": page.metaDesc,
+    "url": canonicalUrl,
+    "inLanguage": "ko",
+    "isPartOf": { "@type": "WebSite", "name": "서울가온치과", "url": SITE },
+    "about": { "@type": "MedicalSpecialty", "name": page.category },
+    "dateModified": new Date().toISOString().split('T')[0],
+    "publisher": {
+      "@type": "Dentist",
+      "name": "서울가온치과의원",
+      "url": SITE,
+      "logo": `${SITE}/images/og-main.jpg`,
+      "address": { "@type": "PostalAddress", "addressLocality": "의정부시", "addressRegion": "경기도", "streetAddress": "용민로 22, 4층(용현동)", "postalCode": "11697", "addressCountry": "KR" },
+      "geo": { "@type": "GeoCoordinates", "latitude": "37.7381", "longitude": "127.0337" },
+      "telephone": "0507-1325-3377",
+      "openingHoursSpecification": [
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "10:00", "closes": "19:00" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "10:00", "closes": "15:00" }
+      ],
+      "priceRange": "$$",
+      "areaServed": [
+        { "@type": "City", "name": "의정부시" },
+        { "@type": "AdministrativeArea", "name": "경기도" }
+      ],
+      "medicalSpecialty": ["Dentistry","Implantology","Cosmetic Dentistry","Endodontics","Orthodontics"]
+    },
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": ["h1", ".landing-section h2", ".landing-section p"]
+    }
+  }
+
+  // JSON-LD: FAQPage
+  const jsonLdFaq = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": page.faqs.map(f => ({
+      "@type": "Question",
+      "name": f.q,
+      "acceptedAnswer": { "@type": "Answer", "text": f.a }
+    }))
+  }
+
+  // JSON-LD: BreadcrumbList
+  const jsonLdBreadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "홈", "item": SITE },
+      { "@type": "ListItem", "position": 2, "name": page.h1, "item": canonicalUrl }
+    ]
+  }
+
+  // 섹션 HTML
+  const sectionsHtml = page.sections.map((s, i) => `
+    <section class="landing-section" ${i === 0 ? '' : ''}>
+      <h2>${s.heading}</h2>
+      <div class="landing-content">${s.content}</div>
+    </section>
+  `).join('')
+
+  // FAQ HTML (SEO + 사용자 경험)
+  const faqHtml = page.faqs.map((f, i) => `
+    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+      <button class="faq-q" aria-expanded="false" onclick="this.parentElement.classList.toggle('open');this.setAttribute('aria-expanded',this.parentElement.classList.contains('open'))">
+        <span itemprop="name">${escHtml(f.q)}</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+        <div itemprop="text"><p>${escHtml(f.a)}</p></div>
+      </div>
+    </div>
+  `).join('')
+
+  // 내부 링크 섹션
+  const linksHtml = page.relatedLinks.map(l =>
+    `<a href="${l.href}" class="related-link"><i class="fas fa-chevron-right"></i> ${escHtml(l.label)}</a>`
+  ).join('')
+
+  return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+${HEAD_COMMON}
+<title>${escHtml(page.title)}</title>
+<meta name="description" content="${escHtml(page.metaDesc)}">
+<meta name="keywords" content="${escHtml(page.keywords)}">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="author" content="서울가온치과의원">
+<link rel="canonical" href="${canonicalUrl}">
+<link rel="alternate" hreflang="ko" href="${canonicalUrl}">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="서울가온치과">
+<meta property="og:title" content="${escHtml(page.title)}">
+<meta property="og:description" content="${escHtml(page.metaDesc)}">
+<meta property="og:url" content="${canonicalUrl}">
+<meta property="og:image" content="${SITE}/images/og-main.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escHtml(page.title)}">
+<meta name="twitter:description" content="${escHtml(page.metaDesc)}">
+<meta name="twitter:image" content="${SITE}/images/og-main.jpg">
+<!-- JSON-LD -->
+<script type="application/ld+json">${JSON.stringify(jsonLdPage)}</script>
+<script type="application/ld+json">${JSON.stringify(jsonLdFaq)}</script>
+<script type="application/ld+json">${JSON.stringify(jsonLdBreadcrumb)}</script>
+<style>
+.landing-hero{padding:clamp(10rem,18vh,14rem) clamp(1.5rem,4vw,3rem) clamp(3rem,6vh,5rem);text-align:center;max-width:800px;margin:0 auto}
+.landing-hero h1{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.8rem,4.5vw,2.8rem);color:var(--ivory);line-height:1.3;margin-bottom:1rem}
+.landing-hero-sub{font-size:clamp(.9rem,1.2vw,1.05rem);color:var(--stone-l);line-height:1.8;margin-bottom:2rem}
+.landing-cta-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.landing-cta{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 2rem;border-radius:100px;font-size:.9rem;font-weight:600;text-decoration:none;transition:all .3s}
+.landing-cta-primary{background:var(--gold);color:var(--ink)}
+.landing-cta-primary:hover{background:var(--gold-b)}
+.landing-cta-secondary{border:1px solid var(--gold);color:var(--gold)}
+.landing-cta-secondary:hover{background:var(--gold);color:var(--ink)}
+.landing-body{max-width:800px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem) clamp(4rem,8vh,6rem)}
+.landing-section{margin-bottom:3rem}
+.landing-section h2{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.2rem,2.5vw,1.6rem);color:var(--ivory);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid rgba(191,164,106,.12)}
+.landing-content{font-size:clamp(.88rem,1vw,.96rem);line-height:2;color:var(--stone-l);word-break:keep-all}
+.landing-content p{margin-bottom:1rem}
+.landing-content strong{color:var(--ivory);font-weight:600}
+.landing-content ul,.landing-content ol{margin:1rem 0 1.5rem 1.2rem;line-height:1.9}
+.landing-content li{margin-bottom:.5rem}
+.landing-content li::marker{color:var(--gold)}
+.landing-content a{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
+.landing-faq{margin-bottom:3rem}
+.landing-faq h2{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.2rem,2.5vw,1.6rem);color:var(--ivory);margin-bottom:1.5rem;padding-bottom:.5rem;border-bottom:1px solid rgba(191,164,106,.12)}
+.faq-item{border:1px solid var(--line);border-radius:12px;margin-bottom:.75rem;overflow:hidden;transition:border-color .3s}
+.faq-item.open{border-color:rgba(191,164,106,.3)}
+.faq-q{width:100%;text-align:left;padding:1rem 1.25rem;font-size:.92rem;color:var(--ivory);font-weight:500;display:flex;justify-content:space-between;align-items:center;gap:1rem;cursor:pointer;background:none;border:none;font-family:inherit}
+.faq-q i{color:var(--gold);font-size:.7rem;transition:transform .3s}
+.faq-item.open .faq-q i{transform:rotate(180deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s}
+.faq-item.open .faq-a{max-height:400px;padding:0 1.25rem 1rem}
+.faq-a p{font-size:.88rem;color:var(--stone-l);line-height:1.8}
+.landing-links{margin-bottom:3rem}
+.landing-links h3{font-family:var(--ff-title);font-weight:500;font-size:1rem;color:var(--stone-l);margin-bottom:1rem;letter-spacing:.05em}
+.related-link{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1.2rem;border:1px solid var(--line);border-radius:100px;font-size:.82rem;color:var(--stone-l);text-decoration:none;transition:all .3s;margin:0 .5rem .5rem 0}
+.related-link:hover{border-color:var(--gold);color:var(--gold)}
+.related-link i{font-size:.6rem}
+.landing-bottom-cta{text-align:center;padding:3rem 1.5rem;border-top:1px solid var(--line)}
+.landing-bottom-cta p{font-size:.9rem;color:var(--stone-l);margin-bottom:1.5rem}
+@media(max-width:768px){
+  .landing-hero{padding:7rem 1.25rem 2rem}
+  .landing-hero h1{font-size:clamp(1.5rem,6vw,2rem)}
+  .landing-body{padding:0 1.25rem 3rem}
+  .landing-cta-row{flex-direction:column;align-items:stretch}
+  .landing-cta{justify-content:center;min-height:48px}
+  .faq-q{padding:.85rem 1rem;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<noscript><div style="background:#BFA46A;color:#050504;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
+${NAV_HTML}
+<main id="main-content" role="main">
+  <div class="landing-hero">
+    <h1>${page.h1}</h1>
+    <p class="landing-hero-sub">${escHtml(page.heroSub)}</p>
+    <div class="landing-cta-row">
+      <a href="tel:0507-1325-3377" class="landing-cta landing-cta-primary"><i class="fas fa-phone"></i> ${escHtml(page.ctaText)}</a>
+      <a href="https://pf.kakao.com/_LLxhwG/chat" target="_blank" rel="noopener" class="landing-cta landing-cta-secondary"><i class="fas fa-comment"></i> 카카오톡 상담</a>
+    </div>
+  </div>
+  <div class="landing-body">
+    ${sectionsHtml}
+    <div class="landing-faq" itemscope itemtype="https://schema.org/FAQPage">
+      <h2>자주 묻는 질문</h2>
+      ${faqHtml}
+    </div>
+    <div class="landing-links">
+      <h3>관련 진료 안내</h3>
+      ${linksHtml}
+    </div>
+    <div class="landing-bottom-cta">
+      <p>궁금한 점이 있으시면 언제든지 상담해 주세요.</p>
+      <a href="tel:0507-1325-3377" class="landing-cta landing-cta-primary"><i class="fas fa-phone"></i> 전화 상담: 0507-1325-3377</a>
+    </div>
+  </div>
+</main>
+${FOOTER_HTML}
+${KAKAO_FLOAT}
+<script src="/pages.js"></script>
+<script>
+var ham=document.querySelector('.hamburger'),mob=document.querySelector('.mob-menu');
+if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open');mob.classList.toggle('open')});mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){ham.classList.remove('open');mob.classList.remove('open')})})}
+</script>
+</body>
+</html>`
+}
+
+// ── 각 랜딩페이지에 대해 라우트 등록 ──
+for (const page of LANDING_PAGES) {
+  app.get(`/${page.slug}`, (c) => {
+    const html = renderLandingPage(page)
+    return c.html(html, 200, {
+      'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200',
+      'X-Robots-Tag': 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+    })
+  })
+}
 
 // ══════════════════════════════════════════════════
 //  STATIC FILES (must be last)
