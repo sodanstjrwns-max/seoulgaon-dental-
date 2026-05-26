@@ -2,7 +2,7 @@
 
 ## Project Overview
 - **Name**: 서울가온치과 (Seoul Gaon Dental Clinic)
-- **Version**: v10 — SEO Super Upgrade v3
+- **Version**: v11 — SEO Super Upgrade v4
 - **Type**: Hono + Cloudflare Pages (SSR + Static) — D1 Database + R2 Storage
 - **Target**: 의정부 서울가온치과의원 (현진호 대표원장)
 
@@ -10,11 +10,11 @@
 - **Production**: https://seoulgaondc.kr (custom domain)
 - **Cloudflare**: https://seoulgaon-dental.pages.dev
 - **GitHub**: https://github.com/sodanstjrwns-max/seoulgaon-dental-
-- **Sitemap**: https://seoulgaondc.kr/sitemap.xml (244 URLs)
+- **Sitemap**: https://seoulgaondc.kr/sitemap.xml (250 URLs)
 - **LLMs.txt**: https://seoulgaondc.kr/llms.txt (AI 검색엔진용)
 - **Phone**: 0507-1325-3377
 
-## SEO 랜딩페이지 (20개 — SSR)
+## SEO 랜딩페이지 (26개 — SSR)
 | # | Page | URL | Target Keywords |
 |---|------|-----|-----------------|
 | 1 | 심미치료 | `/aesthetic` | 의정부 심미치료 |
@@ -40,6 +40,12 @@
 | 21 | 응급치과 | `/emergency-dental` | 의정부 응급치과 치통 |
 | 22 | 탑석역 치과 | `/tapseok-dental` | 탑석역 치과 |
 | 23 | 무통치료 | `/painless-dental` | 의정부 무통치료 수면치과 |
+| 24 | 소아치과 | `/pediatric-dental` | 의정부 소아치과 어린이 치과 |
+| 25 | 크라운 | `/crown` | 의정부 크라운 지르코니아 |
+| 26 | 치아미백 | `/teeth-whitening` | 의정부 치아미백 |
+| 27 | 정기검진 | `/dental-checkup` | 치과 정기검진 구강검진 |
+| 28 | 임플란트 과정 | `/implant-process` | 임플란트 과정 기간 단계 |
+| 29 | 민락동 치과 | `/minrak-dental` | 민락동 치과 민락2지구 |
 
 ## SSR 페이지 (블로그/BA)
 | Page | URL | Description |
@@ -53,12 +59,12 @@
 메인(`/`), 진료안내(`/treatments`), 진료철학(`/philosophy`), 의료진(`/doctors`), 내원안내(`/guide`), FAQ(`/faq`), 공지사항(`/notice`), 백과사전(`/encyclopedia`), 예약(`/reservation`), 커뮤니티(`/community`), 회원가입(`/signup`), 관리자(`/admin`)
 
 ## SEO/AEO Features
-- **20개 SSR 랜딩페이지** — MedicalWebPage + FAQPage + BreadcrumbList + Dentist JSON-LD
+- **26개 SSR 랜딩페이지** — MedicalWebPage + FAQPage + BreadcrumbList + Dentist JSON-LD
 - **SSR Blog/BA** — BlogPosting + MedicalProcedure + CollectionPage JSON-LD
-- **페이지별 OG 이미지 차별화** — 23개 카테고리별 다른 OG 이미지
-- **llms.txt** — AI 검색엔진(ChatGPT, Perplexity) 최적화, 22개 서비스 + 키워드 매핑
+- **페이지별 OG 이미지 차별화** — 26개+ 카테고리별 다른 OG 이미지
+- **llms.txt** — AI 검색엔진(ChatGPT, Perplexity) 최적화, 28개 서비스 + 40+ 키워드 매핑
 - **IndexNow API** — 블로그/BA 생성·수정 시 Bing/Yandex 자동 제출
-- **Dynamic Sitemap** — 244+ URL, DB 기반 자동 생성
+- **Dynamic Sitemap** — 250+ URL, DB 기반 자동 생성
 - **301 Redirects** — `blog-post.html?id=X` → `/blog/X`, `ba-post.html?id=X` → `/before-after/X`
 - **Clean URLs** — 전체 사이트 .html 확장자 제거
 - **SpeakableSpecification** — Google Voice Search 최적화
@@ -94,6 +100,7 @@
 - **Last Updated**: 2026-05-26
 
 ## Version History
+- v11 (2026-05-26): SEO v4 — 6 new pages (pediatric, crown, whitening, checkup, implant-process, minrak), crosslinks
 - v10 (2026-05-26): SEO v3 — 6 new landing pages, OG image differentiation, corrected opening hours
 - v9 (2026-05-26): SEO v2 — 8 new landing pages, blog/BA list SSR, IndexNow, llms.txt expansion
 - v8 (2026-05-26): SEO v1 — 6 landing pages, blog/BA SSR, clean URLs, 301 redirects
