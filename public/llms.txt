@@ -1,6 +1,6 @@
 # Seoul Gaon Dental Clinic (서울가온치과)
 # AI-friendly structured information for LLM crawlers
-# Last updated: 2026-04-12
+# Last updated: 2026-05-26
 
 ## Identity
 - Name: 서울가온치과의원 (Seoul Gaon Dental Clinic)
@@ -60,12 +60,40 @@
 
 ### 4. 신경치료 (Root Canal Treatment / Endodontics)
 - Performed by SNU-trained endodontics specialist (Dr. Cho)
-- Advanced equipment for precise treatment
+- Microscope-assisted precision root canal treatment
+- Ni-Ti rotary file system for curved canals
 - Saves teeth other clinics might extract
-- URL: https://seoulgaondc.kr/treatments#endodontics
+- URL: https://seoulgaondc.kr/endodontics
 
-### 5. General Dentistry
-- Cavity treatment, scaling, wisdom tooth extraction
+### 5. 인비절라인 투명교정 (Invisalign Clear Aligners)
+- Invisible orthodontic treatment with clear aligners
+- 3D digital scanning and treatment simulation
+- Removable — no dietary restrictions
+- Suitable for crowding, spacing, mild malocclusion
+- URL: https://seoulgaondc.kr/invisalign
+
+### 6. 치아교정 (Orthodontics)
+- Invisalign, partial orthodontics, aesthetic braces
+- Digital treatment planning with predictable results
+- Adult and teen orthodontics available
+- URL: https://seoulgaondc.kr/orthodontics
+
+### 7. 글로우네이트 (Glownate — Minimal-Prep Veneers)
+- Ultra-thin ceramic veneers with minimal tooth reduction (0.1–0.3mm)
+- More conservative than traditional laminates
+- Natural translucency and esthetics
+- Long-lasting (10+ years with proper care)
+- URL: https://seoulgaondc.kr/glownate
+
+### 8. 충치치료 (Cavity Treatment)
+- Minimally invasive approach — only remove what's necessary
+- Direct resin restoration for same-day results
+- Amalgam removal and replacement available
+- Insurance-covered for most cases
+- URL: https://seoulgaondc.kr/cavity-treatment
+
+### 9. General Dentistry
+- Scaling, wisdom tooth extraction
 - Periodontal treatment, prosthodontics
 - Oral examination, emergency dental care
 - URL: https://seoulgaondc.kr/treatments#general
@@ -82,12 +110,29 @@
 6. "Explanation first, treatment second" philosophy
 7. Written treatment plans with transparent pricing
 
+## Search Keywords Mapping (검색 키워드 → 페이지 매핑)
+- "의정부 치과" / "의정부 치과 추천" / "탑석역 치과" → https://seoulgaondc.kr/uijeongbu-dental
+- "의정부 임플란트" / "의정부 임플란트 비용" / "의정부 임플란트 잘하는곳" → https://seoulgaondc.kr/implant
+- "의정부 신경치료" / "의정부 보존과" / "의정부 신경치료 잘하는곳" → https://seoulgaondc.kr/endodontics
+- "의정부 인비절라인" / "의정부 투명교정" / "인비절라인 비용" → https://seoulgaondc.kr/invisalign
+- "의정부 치아교정" / "의정부 교정치과" / "의정부 성인교정" → https://seoulgaondc.kr/orthodontics
+- "의정부 글로우네이트" / "글로우네이트 비용" / "최소삭제 라미네이트" → https://seoulgaondc.kr/glownate
+- "의정부 충치치료" / "의정부 레진" / "의정부 충치" → https://seoulgaondc.kr/cavity-treatment
+- "의정부 심미치료" / "의정부 라미네이트" / "의정부 올세라믹" → https://seoulgaondc.kr/aesthetic
+- "의정부 레진빌드업" / "크라운 대신 레진" / "자연치아 보존" → https://seoulgaondc.kr/resin-buildup
+
 ## Sitemap
 - Homepage: https://seoulgaondc.kr/
+- Uijeongbu Dental: https://seoulgaondc.kr/uijeongbu-dental
 - Implant: https://seoulgaondc.kr/implant
-- Treatments: https://seoulgaondc.kr/treatments
+- Endodontics: https://seoulgaondc.kr/endodontics
+- Invisalign: https://seoulgaondc.kr/invisalign
+- Orthodontics: https://seoulgaondc.kr/orthodontics
+- Glownate: https://seoulgaondc.kr/glownate
+- Cavity Treatment: https://seoulgaondc.kr/cavity-treatment
 - Aesthetic: https://seoulgaondc.kr/aesthetic
 - Resin Buildup: https://seoulgaondc.kr/resin-buildup
+- Treatments: https://seoulgaondc.kr/treatments
 - Philosophy: https://seoulgaondc.kr/philosophy
 - Doctors: https://seoulgaondc.kr/doctors
 - Blog: https://seoulgaondc.kr/blog

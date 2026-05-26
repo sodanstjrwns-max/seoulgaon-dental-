@@ -747,7 +747,7 @@ async function loadDashboard(){
     // Recent activity
     let html='';
     const all=[];
-    (d.recent?.blogs||[]).forEach(i=>all.push({...i,type:'블로그',link:'/blog-post.html?id='+i.id}));
+    (d.recent?.blogs||[]).forEach(i=>all.push({...i,type:'블로그',link:'/blog/'+i.id}));
     (d.recent?.cases||[]).forEach(i=>all.push({...i,type:'비포&애프터',link:'/before-after.html'}));
     (d.recent?.notices||[]).forEach(i=>all.push({...i,type:'공지사항',link:'/notice.html'}));
     all.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
@@ -1340,7 +1340,7 @@ async function loadBlogList(){
         </div>
       </div>
       <div class="item-actions">
-        <a href="/blog-post.html?id=${p.id}" target="_blank" class="btn-sm preview" title="사이트에서 보기"><i class="fas fa-eye"></i></a>
+        <a href="/blog/${p.id}" target="_blank" class="btn-sm preview" title="사이트에서 보기"><i class="fas fa-eye"></i></a>
         <button class="btn-sm edit" onclick="editBlog(${p.id})" title="수정"><i class="fas fa-pen"></i></button>
         <button class="btn-sm" onclick="togglePublish('blog',${p.id},${p.is_published?0:1})" title="${p.is_published?'비공개로':'공개로'}"><i class="fas fa-${p.is_published?'eye-slash':'globe'}"></i></button>
         <button class="btn-sm danger" onclick="deleteBlog(${p.id})" title="삭제"><i class="fas fa-trash"></i></button>
