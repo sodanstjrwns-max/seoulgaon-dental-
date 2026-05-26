@@ -60,7 +60,7 @@ app.use('*', async (c, next) => {
   c.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self)')
 
   // HTML 페이지 캐시: 짧게 (SEO 크롤러가 최신 콘텐츠 수집)
-  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|invisalign|orthodontics|glownate|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant|implant-cost|night-dental|senior-implant|emergency-dental|tapseok-dental|painless-dental)$/) || path.match(/^\/(blog|before-after)\/\d+$/)) {
+  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|invisalign|orthodontics|glownate|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant|implant-cost|night-dental|senior-implant|emergency-dental|tapseok-dental|painless-dental|pediatric-dental|crown|teeth-whitening|dental-checkup|implant-process|minrak-dental)$/) || path.match(/^\/(blog|before-after)\/\d+$/)) {
     c.header('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200')
     c.header('X-Robots-Tag', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')
   }
@@ -1706,6 +1706,12 @@ app.get('/sitemap.xml', async (c) => {
       { loc: '/emergency-dental',     priority: '0.85', changefreq: 'weekly',  lastmod: today },
       { loc: '/tapseok-dental',       priority: '0.85', changefreq: 'weekly',  lastmod: today },
       { loc: '/painless-dental',      priority: '0.85', changefreq: 'weekly',  lastmod: today },
+      { loc: '/pediatric-dental',    priority: '0.85', changefreq: 'weekly',  lastmod: today },
+      { loc: '/crown',               priority: '0.85', changefreq: 'weekly',  lastmod: today },
+      { loc: '/teeth-whitening',     priority: '0.80', changefreq: 'weekly',  lastmod: today },
+      { loc: '/dental-checkup',      priority: '0.80', changefreq: 'weekly',  lastmod: today },
+      { loc: '/implant-process',     priority: '0.90', changefreq: 'weekly',  lastmod: today },
+      { loc: '/minrak-dental',       priority: '0.85', changefreq: 'weekly',  lastmod: today },
     ]
 
     // ── 블로그 포스트 (개별 URL — 클린 URL) ──
@@ -2710,9 +2716,9 @@ const LANDING_PAGES: LandingPageData[] = [
     relatedLinks: [
       { href: '/implant', label: '의정부 임플란트' },
       { href: '/aesthetic', label: '의정부 심미치료' },
-      { href: '/resin-buildup', label: '의정부 레진빌드업' },
-      { href: '/endodontics', label: '의정부 신경치료' },
-      { href: '/invisalign', label: '의정부 인비절라인' },
+      { href: '/night-dental', label: '야간진료 안내' },
+      { href: '/dental-checkup', label: '정기검진 안내' },
+      { href: '/pediatric-dental', label: '소아치과 안내' },
       { href: '/doctors', label: '의료진 소개' },
     ]
   },
@@ -2772,10 +2778,10 @@ const LANDING_PAGES: LandingPageData[] = [
     ctaText: '의정부 신경치료 상담 예약',
     relatedLinks: [
       { href: '/resin-buildup', label: '레진빌드업' },
+      { href: '/crown', label: '크라운 치료' },
       { href: '/implant', label: '의정부 임플란트' },
       { href: '/cavity-treatment', label: '의정부 충치치료' },
       { href: '/doctors', label: '의료진 소개' },
-      { href: '/blog', label: '치과 건강 정보' },
     ]
   },
   // ── 3. 의정부 인비절라인 ──
@@ -3047,10 +3053,10 @@ const LANDING_PAGES: LandingPageData[] = [
     ctaText: '임플란트 상담 예약하기',
     relatedLinks: [
       { href: '/implant', label: '임플란트 상세 안내' },
+      { href: '/implant-process', label: '임플란트 과정 안내' },
+      { href: '/implant-cost', label: '임플란트 비용 안내' },
       { href: '/full-mouth-implant', label: '전체 임플란트' },
-      { href: '/bone-graft-implant', label: '뼈이식 임플란트' },
       { href: '/before-after', label: '임플란트 전후 사례' },
-      { href: '/doctors', label: '의료진 소개' },
     ]
   },
   // ── 8. 의정부 전체 임플란트 ──
@@ -3699,6 +3705,333 @@ const LANDING_PAGES: LandingPageData[] = [
       { href: '/doctors', label: '의료진 소개' },
     ]
   },
+  // ── 21. 의정부 소아치과 ──
+  {
+    slug: 'pediatric-dental',
+    title: '의정부 소아치과 | 서울가온치과 — 아이가 무서워하지 않는 치과',
+    metaDesc: '의정부 소아치과 서울가온치과. 아이 눈높이 진료, 단계적 적응 프로그램, 무통마취 시스템. 유치 충치, 실란트, 불소도포, 소아 교정 상담. 보호자 동반 진료 가능. ☎ 0507-1325-3377',
+    h1: '의정부 소아치과 — 아이가 웃으며 다니는 치과',
+    heroSub: '무서움 없이, 울음 없이. 아이 눈높이에서 시작하는 치과 진료',
+    keywords: '의정부 소아치과, 의정부 어린이 치과, 소아 충치, 유치 치료, 실란트, 불소도포, 의정부 아이 치과, 소아 치과 추천',
+    category: '소아치과',
+    sections: [
+      {
+        heading: '아이가 치과를 무서워하는 이유',
+        content: `<p>아이들은 낯선 환경, 치과 기구 소리, 통증에 대한 두려움으로 치과를 무서워합니다. <strong>첫 치과 경험이 부정적이면</strong> 평생 치과 공포증으로 이어질 수 있습니다.</p>
+<p>서울가온치과는 <strong>아이의 심리적 안정을 최우선</strong>으로 하는 소아 진료 시스템을 운영합니다. 첫 방문에서 바로 치료하지 않고, <strong>단계적으로 치과에 적응</strong>시킨 뒤 치료를 시작합니다.</p>`
+      },
+      {
+        heading: '소아 진료 프로그램',
+        content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
+<tr style="background:var(--gold);color:#fff"><th style="padding:10px;border:1px solid #ddd">진료</th><th style="padding:10px;border:1px solid #ddd">대상</th><th style="padding:10px;border:1px solid #ddd">설명</th></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>실란트</strong></td><td style="padding:10px;border:1px solid #ddd">만 6~14세</td><td style="padding:10px;border:1px solid #ddd">어금니 홈 메우기 — <strong>건강보험 적용</strong></td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>불소도포</strong></td><td style="padding:10px;border:1px solid #ddd">만 5세~</td><td style="padding:10px;border:1px solid #ddd">치아 표면 강화, 충치 예방</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>유치 충치치료</strong></td><td style="padding:10px;border:1px solid #ddd">유치 시기</td><td style="padding:10px;border:1px solid #ddd">레진·글래스아이오노머 충전</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>유치 신경치료</strong></td><td style="padding:10px;border:1px solid #ddd">심한 유치 충치</td><td style="padding:10px;border:1px solid #ddd">영구치 보호를 위한 유치 보존</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>소아 교정 상담</strong></td><td style="padding:10px;border:1px solid #ddd">만 7세~</td><td style="padding:10px;border:1px solid #ddd">부정교합 조기 발견 및 치료 시기 안내</td></tr>
+</table>`
+      },
+      {
+        heading: '서울가온치과 소아 진료 특장점',
+        content: `<ul>
+<li>🧸 <strong>단계적 적응</strong> — Tell-Show-Do 방식으로 기구를 보여주고 설명 후 치료</li>
+<li>💉 <strong>무통마취</strong> — 표면마취 + 전동주사기로 아이도 아프지 않게</li>
+<li>👨‍👩‍👧 <strong>보호자 동반</strong> — 부모님이 함께 진료실에 들어오실 수 있습니다</li>
+<li>🎯 <strong>유치 보존 원칙</strong> — 유치가 빠지는 시기까지 최대한 보존하여 영구치 공간 확보</li>
+<li>📋 <strong>양치 교육</strong> — 올바른 칫솔질과 구강 관리법 교육</li>
+</ul>`
+      }
+    ],
+    faqs: [
+      { q: '아이가 너무 무서워하는데 치료가 가능한가요?', a: '네, 처음부터 치료하지 않고 단계적으로 적응시킵니다. 체어에 앉기, 기구 만져보기, 거울로 입안 보기 등 순서대로 진행하며, 아이가 편안해진 뒤 치료를 시작합니다.' },
+      { q: '유치는 어차피 빠지는데 치료해야 하나요?', a: '네, 유치 충치를 방치하면 영구치에 감염이 전파되거나, 조기 탈락으로 영구치 공간이 부족해져 부정교합이 생길 수 있습니다.' },
+      { q: '실란트는 보험이 되나요?', a: '네, 만 6~14세는 제1·제2 대구치(큰 어금니) 실란트에 건강보험이 적용됩니다.' },
+      { q: '소아 교정은 몇 살에 시작하나요?', a: '일반적으로 만 7세 전후 첫 교정 검진을 권장합니다. 턱뼈 성장과 영구치 맹출 상태에 따라 적절한 치료 시기를 안내드립니다.' },
+    ],
+    ctaText: '소아 치과 상담 예약',
+    relatedLinks: [
+      { href: '/painless-dental', label: '무통치료 안내' },
+      { href: '/cavity-treatment', label: '충치치료 안내' },
+      { href: '/orthodontics', label: '교정 안내' },
+      { href: '/dental-checkup', label: '정기검진 안내' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 22. 의정부 크라운 / 지르코니아 ──
+  {
+    slug: 'crown',
+    title: '의정부 크라운 치료 | 서울가온치과 — 지르코니아·올세라믹 크라운',
+    metaDesc: '의정부 크라운 서울가온치과. 지르코니아 크라운, 올세라믹 크라운, PFM 크라운 전문. 자연치아 색상 맞춤, 1:1 기공소 협업. 신경치료 후 크라운, 임플란트 보철 전문. ☎ 0507-1325-3377',
+    h1: '의정부 크라운 치료 — 자연치아처럼 아름답고 튼튼하게',
+    heroSub: '정밀한 보철, 오래가는 크라운. 서울가온치과의 크라운 치료를 만나보세요',
+    keywords: '의정부 크라운, 지르코니아 크라운, 올세라믹 크라운, 의정부 보철, 크라운 비용, 크라운 치료, PFM 크라운, 의정부 지르코니아',
+    category: '크라운',
+    sections: [
+      {
+        heading: '크라운이 필요한 경우',
+        content: `<ul>
+<li>🦷 <strong>신경치료 후</strong> — 신경치료를 받은 치아는 약해져서 크라운으로 보호해야 합니다</li>
+<li>🔨 <strong>치아가 많이 손상</strong> — 충치가 넓거나 치아가 깨져 레진으로 불가능한 경우</li>
+<li>🦴 <strong>임플란트 보철</strong> — 임플란트 식립 후 최종 보철(크라운) 제작</li>
+<li>✨ <strong>심미 목적</strong> — 변색·형태 개선을 위한 올세라믹 크라운</li>
+</ul>`
+      },
+      {
+        heading: '크라운 종류 비교',
+        content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
+<tr style="background:var(--gold);color:#fff"><th style="padding:10px;border:1px solid #ddd">종류</th><th style="padding:10px;border:1px solid #ddd">소재</th><th style="padding:10px;border:1px solid #ddd">장점</th><th style="padding:10px;border:1px solid #ddd">추천 부위</th></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>지르코니아</strong></td><td style="padding:10px;border:1px solid #ddd">산화지르코늄</td><td style="padding:10px;border:1px solid #ddd">최고 강도 + 자연 색상</td><td style="padding:10px;border:1px solid #ddd">어금니·앞니 모두</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>올세라믹</strong></td><td style="padding:10px;border:1px solid #ddd">도자기 세라믹</td><td style="padding:10px;border:1px solid #ddd">최고 심미성, 자연 투명도</td><td style="padding:10px;border:1px solid #ddd">앞니(심미 부위)</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>PFM</strong></td><td style="padding:10px;border:1px solid #ddd">금속+세라믹</td><td style="padding:10px;border:1px solid #ddd">내구성 우수, 합리적 가격</td><td style="padding:10px;border:1px solid #ddd">어금니</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>골드</strong></td><td style="padding:10px;border:1px solid #ddd">금합금</td><td style="padding:10px;border:1px solid #ddd">생체적합성 최고, 초장수명</td><td style="padding:10px;border:1px solid #ddd">어금니(비심미 부위)</td></tr>
+</table>`
+      },
+      {
+        heading: '서울가온치과 크라운 치료의 차이',
+        content: `<p>크라운의 완성도는 <strong>치과의사의 삭제 정밀도</strong>와 <strong>기공사의 제작 실력</strong>에 달려 있습니다.</p>
+<ul>
+<li>🔬 <strong>디지털 인상</strong> — 구강 스캐너로 정밀 채득 (기존 실리콘 인상보다 정확)</li>
+<li>🎨 <strong>1:1 기공소 협업</strong> — 전문 기공소와의 긴밀한 소통으로 자연 색상 재현</li>
+<li>⚕️ <strong>최소 삭제</strong> — 필요한 만큼만 삭제하여 자연치아 최대 보존</li>
+<li>✅ <strong>적합도 검증</strong> — 장착 전 맞물림·색상·형태 꼼꼼히 확인</li>
+</ul>`
+      }
+    ],
+    faqs: [
+      { q: '지르코니아와 올세라믹 중 어떤 게 좋나요?', a: '어금니(저작력 필요)는 강도가 높은 지르코니아, 앞니(심미성 중요)는 투명도가 뛰어난 올세라믹을 추천합니다. 최근에는 심미 지르코니아가 앞니에도 많이 사용됩니다.' },
+      { q: '크라운은 얼마나 오래 가나요?', a: '소재와 관리에 따라 다르지만, 지르코니아·올세라믹은 10~15년 이상, 골드 크라운은 20년 이상 사용 가능합니다.' },
+      { q: '크라운 치료는 몇 번 방문해야 하나요?', a: '일반적으로 2~3회 방문합니다. 치아 삭제·인상(1회) → 기공소 제작(1~2주) → 최종 장착(1회).' },
+      { q: '크라운이 빠졌는데 다시 붙일 수 있나요?', a: '크라운과 치아 상태가 양호하면 재접착이 가능합니다. 빠진 크라운을 보관하시고 가능한 빨리 방문해 주세요.' },
+    ],
+    ctaText: '크라운 상담 예약',
+    relatedLinks: [
+      { href: '/endodontics', label: '신경치료 안내' },
+      { href: '/aesthetic', label: '심미치료 안내' },
+      { href: '/laminate', label: '라미네이트 안내' },
+      { href: '/implant', label: '임플란트 안내' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 23. 의정부 치아미백 ──
+  {
+    slug: 'teeth-whitening',
+    title: '의정부 치아미백 | 서울가온치과 — 전문 미백으로 환하게',
+    metaDesc: '의정부 치아미백 서울가온치과. 전문가 미백(오피스 미백) + 자가 미백 병행 프로그램. 변색·착색 개선. 라미네이트 전 색상 맞춤 미백. 안전한 약제, 시린 증상 최소화. ☎ 0507-1325-3377',
+    h1: '의정부 치아미백 — 자신 있는 밝은 미소',
+    heroSub: '누런 치아, 착색된 치아를 밝고 환하게. 전문 미백 프로그램을 경험하세요',
+    keywords: '의정부 치아미백, 의정부 미백, 치아 미백 비용, 오피스 미백, 자가 미백, 치아 착색, 치아 변색, 의정부 미백 치과',
+    category: '치아미백',
+    sections: [
+      {
+        heading: '치아가 변색되는 원인',
+        content: `<p>치아 변색은 <strong>외인성</strong>(커피·와인·흡연·카레 등 음식물 착색)과 <strong>내인성</strong>(테트라사이클린 항생제, 외상, 노화)으로 나뉩니다.</p>
+<p>외인성 변색은 스케일링과 미백으로 개선이 잘 되며, 내인성 변색은 미백 + 라미네이트 등 복합 치료가 필요할 수 있습니다.</p>`
+      },
+      {
+        heading: '미백 프로그램 안내',
+        content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
+<tr style="background:var(--gold);color:#fff"><th style="padding:10px;border:1px solid #ddd">종류</th><th style="padding:10px;border:1px solid #ddd">방법</th><th style="padding:10px;border:1px solid #ddd">효과</th></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>오피스 미백</strong><br>(전문가 미백)</td><td style="padding:10px;border:1px solid #ddd">병원에서 고농도 미백제 + LED 조사<br>1회 약 40~60분</td><td style="padding:10px;border:1px solid #ddd">즉시 2~4단계 밝아짐<br>빠른 효과</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>자가 미백</strong><br>(홈 블리칭)</td><td style="padding:10px;border:1px solid #ddd">맞춤 트레이 + 저농도 미백제<br>매일 30분~2시간, 2~4주</td><td style="padding:10px;border:1px solid #ddd">점진적 미백<br>유지 효과 우수</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>듀얼 미백</strong><br>(병행)</td><td style="padding:10px;border:1px solid #ddd">오피스 + 자가 병행</td><td style="padding:10px;border:1px solid #ddd"><strong>최고 효과</strong><br>가장 많이 추천</td></tr>
+</table>`
+      },
+      {
+        heading: '미백 시 시린 증상 관리',
+        content: `<p>미백 후 일시적으로 <strong>시린 증상</strong>이 나타날 수 있습니다. 서울가온치과에서는:</p>
+<ul>
+<li>🛡️ <strong>잇몸 보호</strong> — 미백 전 잇몸에 보호 레진 도포</li>
+<li>💊 <strong>탈감작제</strong> — 미백 전후 시린 이 완화제 적용</li>
+<li>⚗️ <strong>안전한 약제</strong> — FDA 승인 미백 약제만 사용</li>
+<li>📋 <strong>개인 맞춤</strong> — 치아 상태에 따라 농도·시간 조절</li>
+</ul>`
+      }
+    ],
+    faqs: [
+      { q: '치아 미백은 안전한가요?', a: '네, FDA 승인 약제를 사용하며 전문가 감독 하에 진행하므로 안전합니다. 일시적 시린 증상이 있을 수 있으나 보통 1~2일 내 사라집니다.' },
+      { q: '미백 효과는 얼마나 지속되나요?', a: '개인 식습관에 따라 다르지만 보통 1~2년 유지됩니다. 커피·와인·흡연을 줄이면 더 오래 유지되고, 자가 미백 트레이로 터치업이 가능합니다.' },
+      { q: '레진이나 크라운도 미백되나요?', a: '아닙니다. 미백은 자연치아에만 효과가 있습니다. 보철물이 있으면 미백 후 보철물 색상 교체를 고려할 수 있습니다.' },
+    ],
+    ctaText: '미백 상담 예약',
+    relatedLinks: [
+      { href: '/aesthetic', label: '심미치료 안내' },
+      { href: '/laminate', label: '라미네이트 안내' },
+      { href: '/glownate', label: '글로우네이트 안내' },
+      { href: '/scaling-gum-treatment', label: '스케일링 안내' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 24. 의정부 치과 검진 ──
+  {
+    slug: 'dental-checkup',
+    title: '의정부 치과 정기검진 | 서울가온치과 — 예방이 최선의 치료',
+    metaDesc: '의정부 치과 정기검진 서울가온치과. 6개월마다 구강검진 + 스케일링으로 충치·잇몸질환 조기 발견. 파노라마·CT 정밀 검사. 건강보험 스케일링 연 1회. ☎ 0507-1325-3377',
+    h1: '의정부 치과 정기검진 — 예방이 최선의 치료입니다',
+    heroSub: '아프기 전에 찾아오세요. 6개월마다 정기검진이 최고의 치과 보험입니다',
+    keywords: '의정부 치과 검진, 치과 정기검진, 구강검진, 의정부 스케일링, 치과 건강검진, 충치 예방, 잇몸 검진',
+    category: '정기검진',
+    sections: [
+      {
+        heading: '왜 정기검진이 중요한가요?',
+        content: `<p>충치와 잇몸질환은 <strong>초기에 증상이 거의 없습니다</strong>. 통증을 느낄 때는 이미 상당히 진행된 상태이며, 그때는 신경치료나 발치가 필요한 경우가 많습니다.</p>
+<p><strong>6개월마다 정기검진</strong>을 받으면:</p>
+<ul>
+<li>초기 충치를 간단한 레진 치료로 끝낼 수 있습니다</li>
+<li>잇몸 질환을 스케일링만으로 관리할 수 있습니다</li>
+<li>치료 비용과 시간을 대폭 절약할 수 있습니다</li>
+<li>자연치아를 더 오래 지킬 수 있습니다</li>
+</ul>`
+      },
+      {
+        heading: '서울가온치과 검진 프로그램',
+        content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
+<tr style="background:var(--gold);color:#fff"><th style="padding:10px;border:1px solid #ddd">검사 항목</th><th style="padding:10px;border:1px solid #ddd">내용</th><th style="padding:10px;border:1px solid #ddd">보험</th></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>구강 검진</strong></td><td style="padding:10px;border:1px solid #ddd">육안 + 탐침 검사, 충치·잇몸 상태 확인</td><td style="padding:10px;border:1px solid #ddd">보험 적용</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>파노라마 X-ray</strong></td><td style="padding:10px;border:1px solid #ddd">전체 치아·턱뼈 촬영, 숨은 충치 발견</td><td style="padding:10px;border:1px solid #ddd">보험 적용</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>스케일링</strong></td><td style="padding:10px;border:1px solid #ddd">치석 제거, 잇몸 건강 유지</td><td style="padding:10px;border:1px solid #ddd"><strong>연 1회 보험</strong> (만 19세+)</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>CT 촬영</strong></td><td style="padding:10px;border:1px solid #ddd">3차원 정밀 검사 (필요 시)</td><td style="padding:10px;border:1px solid #ddd">일부 보험</td></tr>
+</table>
+<p>💡 <strong>국민건강보험</strong>에서는 만 19세 이상 연 1회 스케일링 보험을 지원합니다.</p>`
+      },
+      {
+        heading: '이런 분께 특히 권합니다',
+        content: `<ul>
+<li>☕ <strong>커피·흡연</strong>을 자주 하시는 분 — 착색·치석 관리</li>
+<li>🦷 <strong>충치 경험</strong>이 많으신 분 — 재발 방지</li>
+<li>👴 <strong>어르신</strong> — 잇몸질환·치아 마모 체크</li>
+<li>👶 <strong>아이</strong> — 유치→영구치 교환기 관리</li>
+<li>🦴 <strong>임플란트</strong> 하신 분 — 임플란트 주위염 예방</li>
+</ul>`
+      }
+    ],
+    faqs: [
+      { q: '정기검진은 얼마나 자주 받아야 하나요?', a: '일반적으로 6개월에 1회를 권장합니다. 잇몸질환이 있거나 임플란트를 하신 분은 3~4개월에 1회가 이상적입니다.' },
+      { q: '스케일링 보험은 어떻게 받나요?', a: '만 19세 이상이면 연 1회 건강보험 적용 스케일링을 받으실 수 있습니다. 건강보험증만 지참하시면 됩니다.' },
+      { q: '검진 비용은 얼마인가요?', a: '구강검진과 파노라마는 건강보험이 적용되어 본인부담금이 적습니다. 스케일링도 연 1회 보험 적용됩니다.' },
+    ],
+    ctaText: '정기검진 예약',
+    relatedLinks: [
+      { href: '/scaling-gum-treatment', label: '스케일링·잇몸치료' },
+      { href: '/cavity-treatment', label: '충치치료 안내' },
+      { href: '/pediatric-dental', label: '소아치과 안내' },
+      { href: '/uijeongbu-dental', label: '의정부 치과 추천' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 25. 임플란트 과정 / 시술기간 ──
+  {
+    slug: 'implant-process',
+    title: '임플란트 과정 및 기간 | 서울가온치과 — 단계별 상세 안내',
+    metaDesc: '임플란트 과정이 궁금하세요? 서울가온치과 임플란트 시술 단계별 안내. CT 촬영→수술→치유→보철 완성까지 전 과정. 기간 2~6개월. 당일 임시치아 가능. 현진호 대표원장 직접 수술. ☎ 0507-1325-3377',
+    h1: '임플란트 과정 — 수술부터 보철 완성까지 단계별 안내',
+    heroSub: '처음이라 막막하신가요? 임플란트 전 과정을 알기 쉽게 설명해 드립니다',
+    keywords: '임플란트 과정, 임플란트 시술기간, 임플란트 수술 과정, 임플란트 단계, 임플란트 기간, 임플란트 얼마나 걸리나, 의정부 임플란트 과정',
+    category: '임플란트 과정',
+    sections: [
+      {
+        heading: '임플란트 시술 5단계',
+        content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
+<tr style="background:var(--gold);color:#fff"><th style="padding:10px;border:1px solid #ddd">단계</th><th style="padding:10px;border:1px solid #ddd">내용</th><th style="padding:10px;border:1px solid #ddd">소요 시간</th></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>1단계</strong><br>상담·검사</td><td style="padding:10px;border:1px solid #ddd">CT 촬영, 구강 검진, 치료 계획 수립<br>비용·기간 안내</td><td style="padding:10px;border:1px solid #ddd">약 30~40분</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>2단계</strong><br>임플란트 식립</td><td style="padding:10px;border:1px solid #ddd">CT 가이드 기반 정확한 위치에 픽스쳐(나사) 식립<br>무절개 또는 최소절개</td><td style="padding:10px;border:1px solid #ddd">1개 약 20~30분</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>3단계</strong><br>치유 기간</td><td style="padding:10px;border:1px solid #ddd">뼈와 임플란트가 결합(골유착)되는 기간<br>임시치아 착용 가능</td><td style="padding:10px;border:1px solid #ddd"><strong>위턱 3~4개월</strong><br><strong>아래턱 2~3개월</strong></td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>4단계</strong><br>지대주·인상</td><td style="padding:10px;border:1px solid #ddd">연결 장치(지대주) 장착<br>디지털 인상 채득</td><td style="padding:10px;border:1px solid #ddd">약 20분</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>5단계</strong><br>보철 완성</td><td style="padding:10px;border:1px solid #ddd">최종 크라운(보철물) 장착<br>맞물림·색상 확인</td><td style="padding:10px;border:1px solid #ddd">약 20분</td></tr>
+</table>`
+      },
+      {
+        heading: '총 기간은 얼마나 걸리나요?',
+        content: `<ul>
+<li><strong>일반적인 경우</strong>: <strong>2~4개월</strong> (발치 후 치유 완료 기준)</li>
+<li><strong>발치 즉시 식립</strong>: <strong>2~3개월</strong> (발치와 동시에 임플란트 식립)</li>
+<li><strong>뼈이식 동반</strong>: <strong>4~6개월</strong> (뼈이식 + 골유착 기간)</li>
+<li><strong>상악동거상술</strong>: <strong>6~9개월</strong> (위턱 뼈가 부족한 경우)</li>
+</ul>
+<p>💡 <strong>치유 기간 중에도 임시치아</strong>를 착용할 수 있어 일상생활에 불편이 없습니다.</p>`
+      },
+      {
+        heading: '서울가온치과의 임플란트 수술 방식',
+        content: `<ul>
+<li>🖥️ <strong>CT 가이드 수술</strong> — 3D CT 데이터로 사전 시뮬레이션, 0.1mm 정밀도</li>
+<li>🔬 <strong>무절개/최소절개</strong> — 잇몸 절개 최소화, 출혈·부기 감소</li>
+<li>💉 <strong>무통 마취</strong> — 3단계 마취 시스템으로 수술 중 통증 없음</li>
+<li>🏥 <strong>독립 수술실</strong> — 6개 개별 수술실, 철저한 감염 관리</li>
+<li>👨‍⚕️ <strong>현진호 대표원장 직접</strong> — 모든 임플란트 수술을 직접 진행</li>
+</ul>`
+      }
+    ],
+    faqs: [
+      { q: '임플란트 수술은 아프나요?', a: '수술 중에는 마취가 되어 있어 통증이 없습니다. 수술 후 1~2일 정도 약간의 붓기와 불편감이 있을 수 있으나, 처방된 진통제로 관리됩니다.' },
+      { q: '임플란트 수술 당일 바로 일상생활이 가능한가요?', a: '대부분의 경우 당일 귀가 후 가벼운 일상생활이 가능합니다. 격렬한 운동은 2~3일 피해주시는 것이 좋습니다.' },
+      { q: '발치하고 바로 임플란트를 심을 수 있나요?', a: '뼈 상태가 양호하면 발치 즉시 임플란트 식립(즉시 식립)이 가능합니다. CT 촬영 후 결정합니다.' },
+      { q: '임플란트는 얼마나 오래 가나요?', a: '잘 관리하면 20년 이상 사용 가능합니다. 정기적인 검진과 꼼꼼한 구강 관리가 중요합니다.' },
+    ],
+    ctaText: '임플란트 상담 예약',
+    relatedLinks: [
+      { href: '/implant', label: '임플란트 상세 안내' },
+      { href: '/implant-cost', label: '임플란트 비용 안내' },
+      { href: '/implant-best', label: '임플란트 잘하는 곳' },
+      { href: '/bone-graft-implant', label: '뼈이식 임플란트' },
+      { href: '/before-after', label: '전후 사례 보기' },
+    ]
+  },
+  // ── 26. 민락동 치과 ──
+  {
+    slug: 'minrak-dental',
+    title: '민락동 치과 | 서울가온치과 — 민락 주민이 찾는 종합 치과',
+    metaDesc: '민락동 치과 서울가온치과. 민락동·민락2지구에서 가까운 종합 치과. 임플란트·교정·심미·일반진료 전 과목. 400평 규모 대학병원급 시설. 탑석역 도보 5분. ☎ 0507-1325-3377',
+    h1: '민락동 치과 — 서울가온치과에서 가깝고 편하게',
+    heroSub: '민락동·민락2지구에서 가까운 종합 치과. 규모와 실력을 함께 만나세요',
+    keywords: '민락동 치과, 민락 치과, 민락2지구 치과, 민락동 임플란트, 민락 근처 치과, 의정부 민락 치과, 민락역 치과',
+    category: '민락동 치과',
+    sections: [
+      {
+        heading: '민락동에서 서울가온치과 오시는 길',
+        content: `<p>서울가온치과는 <strong>탑석역 도보 5분</strong> 거리에 있어 민락동·민락2지구에서 매우 가깝습니다.</p>
+<ul>
+<li>🚗 <strong>차량</strong> — 민락동에서 약 5~10분 거리 / 건물 내 <strong>무료주차</strong></li>
+<li>🚌 <strong>버스</strong> — 민락2지구에서 탑석역 방면 다수 노선 (약 10분)</li>
+<li>🚇 <strong>지하철</strong> — 경전철 탑석역 또는 1호선 의정부역 이용</li>
+</ul>
+<p>📍 주소: <strong>경기도 의정부시 용민로 22, 4층(용현동)</strong></p>`
+      },
+      {
+        heading: '민락 주민들이 서울가온치과를 선택하는 이유',
+        content: `<ul>
+<li><strong>400평 규모 종합 시설</strong> — 대학병원급 장비 + 독립 수술실 6개</li>
+<li><strong>전 진료과목 원스톱</strong> — 임플란트, 교정, 심미, 일반 진료, 소아 치과</li>
+<li><strong>서울대 출신 전문의 2인 진료</strong> — 현진호 대표원장(임플란트) + 조은비 원장(보존과)</li>
+<li><strong>목요일 야간 ~20:30</strong> — 직장인도 퇴근 후 내원 가능</li>
+<li><strong>철저한 감염관리</strong> — 에어샤워, 개별 수술실, 1회용 키트</li>
+</ul>
+<p>민락동에서 조금만 오시면 <strong>대학병원 수준의 진료</strong>를 동네 치과의 편안함으로 받으실 수 있습니다.</p>`
+      },
+      {
+        heading: '주요 진료 안내',
+        content: `<ul>
+<li>🦷 <strong>임플란트</strong> — CT 가이드 수술, 뼈이식, 전체임플란트 / 65세 보험</li>
+<li>😁 <strong>교정</strong> — 인비절라인·세라믹·부분교정</li>
+<li>✨ <strong>심미</strong> — 라미네이트·레진빌드업·미백·글로우네이트</li>
+<li>🪥 <strong>일반</strong> — 충치·신경치료·발치·스케일링·사랑니</li>
+<li>👶 <strong>소아</strong> — 실란트·불소도포·유치치료</li>
+<li>🦴 <strong>보철</strong> — 크라운·브릿지·틀니</li>
+</ul>`
+      }
+    ],
+    faqs: [
+      { q: '민락동에서 서울가온치과까지 얼마나 걸리나요?', a: '차량으로 약 5~10분이며, 건물 내 무료주차가 가능합니다. 버스로는 탑석역 방면 노선을 이용하시면 약 10분입니다.' },
+      { q: '민락2지구에서 가까운 치과를 찾고 있어요', a: '서울가온치과는 탑석역 도보 5분 거리에 있어 민락2지구에서 가장 가까운 종합 치과 중 하나입니다.' },
+      { q: '예약 없이 방문해도 되나요?', a: '예약 우선제로 운영하지만, 당일 빈 시간이 있으면 바로 진료 가능합니다. 전화(0507-1325-3377)로 확인 후 방문하시면 대기 시간을 줄일 수 있습니다.' },
+    ],
+    ctaText: '민락동 → 서울가온치과 상담 예약',
+    relatedLinks: [
+      { href: '/tapseok-dental', label: '탑석역 치과' },
+      { href: '/uijeongbu-dental', label: '의정부 치과 추천' },
+      { href: '/implant', label: '임플란트 안내' },
+      { href: '/night-dental', label: '야간진료 안내' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
 ]
 
 // ── SSR 랜딩페이지 렌더러 ──
@@ -3814,6 +4147,12 @@ function renderLandingPage(page: LandingPageData): string {
     'night-dental': '/images/clinic-waiting.jpg',
     'emergency-dental': '/images/clinic-treatment.jpg',
     'painless-dental': '/images/clinic-consult-room.jpg',
+    'pediatric-dental': '/images/clinic-consult.jpg',
+    'crown': '/images/clinic-treatment.jpg',
+    'teeth-whitening': '/images/clinic-makeup-close.jpg',
+    'dental-checkup': '/images/clinic-unit-1.jpg',
+    'implant-process': '/images/clinic-implant-center.jpg',
+    'minrak-dental': '/images/clinic-lobby-1.jpg',
   }
   const ogImage = `${SITE}${ogImageMap[page.slug] || '/images/og-main.jpg'}`
 

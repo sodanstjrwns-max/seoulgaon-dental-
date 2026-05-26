@@ -193,7 +193,55 @@
 - Suitable for children, adults with dental anxiety, elderly
 - URL: https://seoulgaondc.kr/painless-dental
 
-### 23. General Dentistry
+### 23. 소아치과 (Pediatric Dentistry)
+- Child-friendly dental environment with step-by-step adaptation
+- Tell-Show-Do approach — explain before treating
+- Sealant (실란트) for ages 6-14 — National Health Insurance covered
+- Fluoride application, baby tooth cavity treatment
+- Early orthodontic screening from age 7
+- Parent-accompanied treatment available
+- URL: https://seoulgaondc.kr/pediatric-dental
+
+### 24. 크라운/보철 (Crown / Prosthodontics)
+- Zirconia, all-ceramic, PFM, gold crown options
+- Digital impression scanning for precision fit
+- 1:1 collaboration with specialized dental lab
+- Post-root canal crown protection
+- Implant prosthetic (final crown) fabrication
+- URL: https://seoulgaondc.kr/crown
+
+### 25. 치아미백 (Teeth Whitening)
+- Office whitening (professional in-clinic, 40-60 min)
+- Home whitening (custom tray, 2-4 weeks)
+- Dual whitening (best results — combined approach)
+- FDA-approved whitening agents only
+- Sensitivity management with desensitizing agents
+- URL: https://seoulgaondc.kr/teeth-whitening
+
+### 26. 정기검진 (Dental Checkup)
+- Recommended every 6 months
+- Panoramic X-ray + oral examination
+- Annual insurance-covered scaling (age 19+)
+- Early detection of cavities and gum disease
+- Implant maintenance checkup
+- URL: https://seoulgaondc.kr/dental-checkup
+
+### 27. 임플란트 과정 (Implant Process Guide)
+- 5-step process: consultation → surgery → healing → abutment → prosthetic
+- Total duration: 2-6 months depending on bone condition
+- CT-guided surgery with 0.1mm precision
+- Temporary teeth available during healing
+- Flapless/minimal incision technique
+- URL: https://seoulgaondc.kr/implant-process
+
+### 28. 민락동 치과 (Minrak-dong Dental)
+- 5-10 min by car from Minrak-dong / Minrak 2 District
+- Free parking in building
+- Full-service dental clinic for Minrak residents
+- Same facility as Tapseok Dental and Uijeongbu Dental
+- URL: https://seoulgaondc.kr/minrak-dental
+
+### 29. General Dentistry
 - Scaling, wisdom tooth extraction
 - Periodontal treatment, prosthodontics
 - Oral examination, emergency dental care
@@ -235,6 +283,12 @@
 - "의정부 응급치과" / "의정부 치통" / "급한 치통" / "치아 깨짐" → https://seoulgaondc.kr/emergency-dental
 - "탑석역 치과" / "탑석 치과" / "탑석역 임플란트" / "탑석 근처 치과" → https://seoulgaondc.kr/tapseok-dental
 - "의정부 무통치료" / "의정부 수면치과" / "아프지 않은 치과" / "치과 공포증" → https://seoulgaondc.kr/painless-dental
+- "의정부 소아치과" / "의정부 어린이 치과" / "소아 충치" / "실란트" → https://seoulgaondc.kr/pediatric-dental
+- "의정부 크라운" / "지르코니아 크라운" / "올세라믹" / "의정부 보철" → https://seoulgaondc.kr/crown
+- "의정부 미백" / "치아 미백" / "치아 미백 비용" / "의정부 미백 치과" → https://seoulgaondc.kr/teeth-whitening
+- "치과 정기검진" / "치과 검진" / "구강검진" / "의정부 검진" → https://seoulgaondc.kr/dental-checkup
+- "임플란트 과정" / "임플란트 기간" / "임플란트 얼마나 걸리나" / "임플란트 단계" → https://seoulgaondc.kr/implant-process
+- "민락동 치과" / "민락 치과" / "민락2지구 치과" / "민락 근처 치과" → https://seoulgaondc.kr/minrak-dental
 
 ## Sitemap
 - Homepage: https://seoulgaondc.kr/
@@ -259,6 +313,12 @@
 - Emergency Dental: https://seoulgaondc.kr/emergency-dental
 - Tapseok Dental: https://seoulgaondc.kr/tapseok-dental
 - Painless Dental: https://seoulgaondc.kr/painless-dental
+- Pediatric Dental: https://seoulgaondc.kr/pediatric-dental
+- Crown: https://seoulgaondc.kr/crown
+- Teeth Whitening: https://seoulgaondc.kr/teeth-whitening
+- Dental Checkup: https://seoulgaondc.kr/dental-checkup
+- Implant Process: https://seoulgaondc.kr/implant-process
+- Minrak Dental: https://seoulgaondc.kr/minrak-dental
 - Aesthetic: https://seoulgaondc.kr/aesthetic
 - Resin Buildup: https://seoulgaondc.kr/resin-buildup
 - Treatments: https://seoulgaondc.kr/treatments
