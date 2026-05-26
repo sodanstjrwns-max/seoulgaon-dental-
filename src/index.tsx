@@ -17,6 +17,33 @@ type Variables = {
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 // ══════════════════════════════════════════════════
+//  IndexNow — 새 콘텐츠 자동 색인 요청 (Bing, Yandex, Naver)
+// ══════════════════════════════════════════════════
+const INDEXNOW_KEY = 'a1b2c3d4e5f6g7h8i9j0seoulgaon'
+async function submitIndexNow(urls: string[]) {
+  if (!urls.length) return
+  const payload = {
+    host: 'seoulgaondc.kr',
+    key: INDEXNOW_KEY,
+    keyLocation: `https://seoulgaondc.kr/${INDEXNOW_KEY}.txt`,
+    urlList: urls,
+  }
+  // Submit to multiple engines in parallel (fire-and-forget)
+  const engines = [
+    'https://api.indexnow.org/indexnow',
+    'https://www.bing.com/indexnow',
+    'https://yandex.com/indexnow',
+  ]
+  await Promise.allSettled(engines.map(engine =>
+    fetch(engine, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify(payload),
+    }).catch(() => {})
+  ))
+}
+
+// ══════════════════════════════════════════════════
 //  MIDDLEWARE
 // ══════════════════════════════════════════════════
 
@@ -33,7 +60,7 @@ app.use('*', async (c, next) => {
   c.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self)')
 
   // HTML 페이지 캐시: 짧게 (SEO 크롤러가 최신 콘텐츠 수집)
-  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|invisalign|orthodontics|glownate|cavity-treatment)$/) || path.match(/^\/(blog|before-after)\/\d+$/)) {
+  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|invisalign|orthodontics|glownate|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant)$/) || path.match(/^\/(blog|before-after)\/\d+$/)) {
     c.header('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200')
     c.header('X-Robots-Tag', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')
   }
@@ -861,6 +888,9 @@ app.post('/api/admin/blog', auth, async (c) => {
     ).bind(title.trim(), content.trim(), category || '일반', doctor_id || null, thumbnail_url || null, meta_description || '').run()
     const postId = result.meta.last_row_id
 
+    // IndexNow: 새 블로그 포스트 색인 요청
+    c.executionCtx.waitUntil(submitIndexNow([`https://seoulgaondc.kr/blog/${postId}`, 'https://seoulgaondc.kr/blog', 'https://seoulgaondc.kr/sitemap.xml']))
+
     return c.json({ id: postId, message: '블로그 게시글이 등록되었습니다' }, 201)
   } catch (e: any) {
     return c.json({ error: '블로그 등록 실패: ' + e.message }, 500)
@@ -893,6 +923,9 @@ app.put('/api/admin/blog/:id', auth, async (c) => {
 
     vals.push(id)
     await db.prepare(`UPDATE blog_posts SET ${sets.join(', ')} WHERE id = ?`).bind(...vals).run()
+
+    // IndexNow: 수정된 블로그 포스트 재색인 요청
+    c.executionCtx.waitUntil(submitIndexNow([`https://seoulgaondc.kr/blog/${id}`, 'https://seoulgaondc.kr/blog']))
 
     return c.json({ message: '게시글이 수정되었습니다' })
   } catch (e: any) {
@@ -1067,7 +1100,11 @@ app.post('/api/admin/before-after', auth, async (c) => {
       body.panorama_after?.url || null, body.panorama_after?.key || null,
     ).run()
 
-    return c.json({ id: result.meta.last_row_id, message: '비포&애프터 케이스가 등록되었습니다' }, 201)
+    const caseId = result.meta.last_row_id
+    // IndexNow: 새 BA 케이스 색인 요청
+    c.executionCtx.waitUntil(submitIndexNow([`https://seoulgaondc.kr/before-after/${caseId}`, 'https://seoulgaondc.kr/before-after', 'https://seoulgaondc.kr/sitemap.xml']))
+
+    return c.json({ id: caseId, message: '비포&애프터 케이스가 등록되었습니다' }, 201)
   } catch (e: any) {
     return c.json({ error: '케이스 등록 실패: ' + e.message }, 500)
   }
@@ -1113,6 +1150,10 @@ app.put('/api/admin/before-after/:id', auth, async (c) => {
 
     vals.push(id)
     await db.prepare(`UPDATE before_after SET ${sets.join(', ')} WHERE id = ?`).bind(...vals).run()
+
+    // IndexNow: 수정된 BA 케이스 재색인 요청
+    c.executionCtx.waitUntil(submitIndexNow([`https://seoulgaondc.kr/before-after/${id}`, 'https://seoulgaondc.kr/before-after']))
+
     return c.json({ message: '케이스가 수정되었습니다' })
   } catch (e: any) {
     return c.json({ error: '케이스 수정 실패: ' + e.message }, 500)
@@ -1651,6 +1692,14 @@ app.get('/sitemap.xml', async (c) => {
       { loc: '/orthodontics',     priority: '0.95', changefreq: 'weekly',  lastmod: today },
       { loc: '/glownate',         priority: '0.95', changefreq: 'weekly',  lastmod: today },
       { loc: '/cavity-treatment', priority: '0.95', changefreq: 'weekly',  lastmod: today },
+      { loc: '/implant-best',         priority: '0.95', changefreq: 'weekly',  lastmod: today },
+      { loc: '/full-mouth-implant',   priority: '0.95', changefreq: 'weekly',  lastmod: today },
+      { loc: '/front-tooth-implant',  priority: '0.90', changefreq: 'weekly',  lastmod: today },
+      { loc: '/bone-graft-implant',   priority: '0.90', changefreq: 'weekly',  lastmod: today },
+      { loc: '/laminate',             priority: '0.90', changefreq: 'weekly',  lastmod: today },
+      { loc: '/wisdom-tooth',         priority: '0.85', changefreq: 'weekly',  lastmod: today },
+      { loc: '/scaling-gum-treatment',priority: '0.85', changefreq: 'weekly',  lastmod: today },
+      { loc: '/denture-to-implant',   priority: '0.90', changefreq: 'weekly',  lastmod: today },
     ]
 
     // ── 블로그 포스트 (개별 URL — 클린 URL) ──
@@ -1835,6 +1884,268 @@ app.get('/ba-post.html', (c) => {
   const id = c.req.query('id')
   if (id) return c.redirect(`/before-after/${id}`, 301)
   return c.redirect('/before-after', 301)
+})
+
+// ══════════════════════════════════════════════════
+//  SSR — 블로그 목록 (구글 크롤링용)
+// ══════════════════════════════════════════════════
+app.get('/blog', async (c) => {
+  try {
+    const db = c.env.DB
+    await initDB(db)
+    const page = parseInt(c.req.query('page') || '1')
+    const size = 20
+    const offset = (page - 1) * size
+
+    const countRow: any = await db.prepare(`SELECT COUNT(*) as cnt FROM blog_posts WHERE is_published = 1`).first()
+    const total = countRow?.cnt || 0
+    const totalPages = Math.ceil(total / size)
+
+    const result = await db.prepare(
+      `SELECT b.id, b.title, b.content, b.category, b.thumbnail_url, b.created_at,
+              d.name as doctor_name, d.photo_url as doctor_photo
+       FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id
+       WHERE b.is_published = 1 ORDER BY b.created_at DESC LIMIT ? OFFSET ?`
+    ).bind(size, offset).all()
+    const posts = result.results || []
+
+    const postCards = posts.map((p: any) => {
+      const desc = stripHtml(p.content || '').substring(0, 120)
+      const thumb = p.thumbnail_url ? `<img src="${p.thumbnail_url}" alt="${escHtml(p.title)}" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:8px 8px 0 0">` : `<div style="width:100%;height:200px;background:var(--ink);border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center"><i class="fas fa-tooth" style="font-size:3rem;color:var(--gold)"></i></div>`
+      return `<a href="/blog/${p.id}" style="text-decoration:none;color:inherit">
+        <article style="background:var(--ink);border:1px solid rgba(191,164,106,.15);border-radius:8px;overflow:hidden;transition:transform .2s">
+          ${thumb}
+          <div style="padding:1rem">
+            ${p.category ? `<span style="color:var(--gold);font-size:.75rem;text-transform:uppercase">${escHtml(p.category)}</span>` : ''}
+            <h2 style="font-size:1rem;margin:.4rem 0;color:var(--ivory)">${escHtml(p.title)}</h2>
+            <p style="font-size:.85rem;color:var(--stone-l);margin:0">${escHtml(desc)}…</p>
+            <div style="display:flex;align-items:center;gap:.5rem;margin-top:.6rem;font-size:.75rem;color:var(--stone)">
+              ${p.doctor_name ? `<span><i class="fas fa-user-md"></i> ${escHtml(p.doctor_name)}</span>` : ''}
+              <span>${fmtDate(p.created_at)}</span>
+            </div>
+          </div>
+        </article>
+      </a>`
+    }).join('')
+
+    // 페이지네이션
+    let pagination = ''
+    if (totalPages > 1) {
+      const links: string[] = []
+      if (page > 1) links.push(`<a href="/blog?page=${page - 1}" style="color:var(--gold)">← 이전</a>`)
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === page) links.push(`<span style="color:var(--gold);font-weight:bold">${i}</span>`)
+        else links.push(`<a href="/blog?page=${i}" style="color:var(--stone-l)">${i}</a>`)
+      }
+      if (page < totalPages) links.push(`<a href="/blog?page=${page + 1}" style="color:var(--gold)">다음 →</a>`)
+      pagination = `<nav aria-label="블로그 페이지네이션" style="display:flex;gap:1rem;justify-content:center;margin-top:2rem;flex-wrap:wrap">${links.join('')}</nav>`
+    }
+
+    const jsonLd = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "서울가온치과 블로그",
+      "description": "의정부 서울가온치과 블로그. 임플란트, 심미치료, 신경치료 등 치과 건강 정보를 쉽고 정직하게 전합니다.",
+      "url": `${SITE}/blog${page > 1 ? `?page=${page}` : ''}`,
+      "isPartOf": { "@type": "WebSite", "name": "서울가온치과", "url": SITE },
+      "numberOfItems": total,
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": posts.length,
+        "itemListElement": posts.map((p: any, i: number) => ({
+          "@type": "ListItem",
+          "position": offset + i + 1,
+          "url": `${SITE}/blog/${p.id}`,
+          "name": p.title
+        }))
+      }
+    })
+
+    const html = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+${HEAD_COMMON}
+<title>블로그${page > 1 ? ` — ${page}페이지` : ''} | 서울가온치과</title>
+<meta name="description" content="서울가온치과 블로그. 임플란트, 심미치료, 신경치료, 레진빌드업 등 치과 건강 정보와 치료 이야기. 의정부 탑석역 5분.">
+<meta name="keywords" content="의정부 치과 블로그, 서울가온치과 블로그, 임플란트 정보, 치과 건강정보, 의정부 치과">
+<link rel="canonical" href="${SITE}/blog${page > 1 ? `?page=${page}` : ''}">
+<meta property="og:title" content="블로그 | 서울가온치과">
+<meta property="og:description" content="의정부 서울가온치과 블로그. 치과 건강 정보를 쉽고 정직하게.">
+<meta property="og:url" content="${SITE}/blog">
+<meta property="og:type" content="website">
+<meta property="og:image" content="${SITE}/images/og-main.jpg">
+<script type="application/ld+json">${jsonLd}</script>
+</head>
+<body>
+${NAV_HTML}
+<main style="max-width:1100px;margin:0 auto;padding:2rem 1rem">
+  <h1 style="font-family:var(--ff-title);font-size:2rem;color:var(--ivory);margin-bottom:.5rem"><i class="fas fa-blog" style="color:var(--gold)"></i> 서울가온치과 블로그</h1>
+  <p style="color:var(--stone-l);margin-bottom:2rem">치과 건강 정보와 치료 이야기를 쉽고 정직하게 전합니다. <strong>${total}개</strong>의 글</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem">
+    ${postCards}
+  </div>
+  ${pagination}
+</main>
+${FOOTER_HTML}
+${KAKAO_FLOAT}
+<script src="/pages.js"></script>
+<script>
+var ham=document.querySelector('.hamburger'),mob=document.querySelector('.mob-menu');
+if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open');mob.classList.toggle('open')});mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){ham.classList.remove('open');mob.classList.remove('open')})})}
+</script>
+</body>
+</html>`
+
+    return c.html(html, 200, {
+      'Cache-Control': 'public, max-age=1800, s-maxage=3600, stale-while-revalidate=43200',
+      'X-Robots-Tag': 'index, follow, max-snippet:-1, max-image-preview:large',
+    })
+  } catch (e: any) {
+    console.error('[SSR Blog List ERROR]', e.message)
+    return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>블로그 | 서울가온치과</title></head><body><p>잠시 후 다시 시도해주세요.</p></body></html>`, 500)
+  }
+})
+
+// ══════════════════════════════════════════════════
+//  SSR — 비포&애프터 목록 (구글 크롤링용)
+// ══════════════════════════════════════════════════
+app.get('/before-after', async (c) => {
+  try {
+    const db = c.env.DB
+    await initDB(db)
+    const cat = c.req.query('category') || ''
+    const page = parseInt(c.req.query('page') || '1')
+    const size = 20
+    const offset = (page - 1) * size
+
+    const whereClause = cat ? `WHERE ba.category = ?` : ''
+    const bindParams = cat ? [cat, size, offset] : [size, offset]
+
+    const countSql = cat ? `SELECT COUNT(*) as cnt FROM before_after_cases ba WHERE ba.category = ?` : `SELECT COUNT(*) as cnt FROM before_after_cases ba`
+    const countRow: any = cat
+      ? await db.prepare(countSql).bind(cat).first()
+      : await db.prepare(countSql).first()
+    const total = countRow?.cnt || 0
+    const totalPages = Math.ceil(total / size)
+
+    const result = cat
+      ? await db.prepare(
+          `SELECT ba.id, ba.title, ba.description, ba.category, ba.intraoral_before_url, ba.intraoral_after_url, ba.created_at,
+                  d.name as doctor_name
+           FROM before_after_cases ba LEFT JOIN doctors d ON ba.doctor_id = d.id
+           ${whereClause} ORDER BY ba.created_at DESC LIMIT ? OFFSET ?`
+        ).bind(cat, size, offset).all()
+      : await db.prepare(
+          `SELECT ba.id, ba.title, ba.description, ba.category, ba.intraoral_before_url, ba.intraoral_after_url, ba.created_at,
+                  d.name as doctor_name
+           FROM before_after_cases ba LEFT JOIN doctors d ON ba.doctor_id = d.id
+           ORDER BY ba.created_at DESC LIMIT ? OFFSET ?`
+        ).bind(size, offset).all()
+
+    const cases = result.results || []
+
+    // 카테고리 목록 가져오기
+    const catResult = await db.prepare(`SELECT DISTINCT category FROM before_after_cases ORDER BY category`).all()
+    const categories = (catResult.results || []).map((r: any) => r.category)
+
+    const catButtons = [`<a href="/before-after" style="padding:.4rem .8rem;border-radius:4px;font-size:.85rem;text-decoration:none;${!cat ? 'background:var(--gold);color:#fff' : 'background:rgba(191,164,106,.15);color:var(--gold)'}">전체</a>`]
+      .concat(categories.map((c: string) =>
+        `<a href="/before-after?category=${encodeURIComponent(c)}" style="padding:.4rem .8rem;border-radius:4px;font-size:.85rem;text-decoration:none;${cat === c ? 'background:var(--gold);color:#fff' : 'background:rgba(191,164,106,.15);color:var(--gold)'}">${escHtml(c)}</a>`
+      )).join('')
+
+    const caseCards = cases.map((ba: any) => {
+      const beforeImg = ba.intraoral_before_url ? `<img src="${ba.intraoral_before_url}" alt="치료 전 - ${escHtml(ba.title)}" loading="lazy" style="width:50%;height:160px;object-fit:cover">` : `<div style="width:50%;height:160px;background:#333;display:flex;align-items:center;justify-content:center"><span style="color:#666">Before</span></div>`
+      const afterImg = ba.intraoral_after_url ? `<img src="${ba.intraoral_after_url}" alt="치료 후 - ${escHtml(ba.title)}" loading="lazy" style="width:50%;height:160px;object-fit:cover">` : `<div style="width:50%;height:160px;background:#333;display:flex;align-items:center;justify-content:center"><span style="color:#666">After</span></div>`
+      return `<a href="/before-after/${ba.id}" style="text-decoration:none;color:inherit">
+        <article style="background:var(--ink);border:1px solid rgba(191,164,106,.15);border-radius:8px;overflow:hidden">
+          <div style="display:flex">${beforeImg}${afterImg}</div>
+          <div style="padding:.8rem 1rem">
+            <span style="color:var(--gold);font-size:.75rem">${escHtml(ba.category || '')}</span>
+            <h2 style="font-size:.95rem;margin:.3rem 0;color:var(--ivory);line-height:1.4">${escHtml(ba.title)}</h2>
+            <div style="font-size:.75rem;color:var(--stone)">${ba.doctor_name ? `<i class="fas fa-user-md"></i> ${escHtml(ba.doctor_name)} · ` : ''}${fmtDate(ba.created_at)}</div>
+          </div>
+        </article>
+      </a>`
+    }).join('')
+
+    let pagination = ''
+    if (totalPages > 1) {
+      const links: string[] = []
+      const qCat = cat ? `&category=${encodeURIComponent(cat)}` : ''
+      if (page > 1) links.push(`<a href="/before-after?page=${page - 1}${qCat}" style="color:var(--gold)">← 이전</a>`)
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === page) links.push(`<span style="color:var(--gold);font-weight:bold">${i}</span>`)
+        else links.push(`<a href="/before-after?page=${i}${qCat}" style="color:var(--stone-l)">${i}</a>`)
+      }
+      if (page < totalPages) links.push(`<a href="/before-after?page=${page + 1}${qCat}" style="color:var(--gold)">다음 →</a>`)
+      pagination = `<nav aria-label="비포애프터 페이지네이션" style="display:flex;gap:1rem;justify-content:center;margin-top:2rem;flex-wrap:wrap">${links.join('')}</nav>`
+    }
+
+    const pageTitle = cat ? `${cat} 비포&애프터` : '비포&애프터'
+    const jsonLd = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": `서울가온치과 ${pageTitle}`,
+      "description": `서울가온치과 치료 전후 사례. 임플란트, 심미치료, 레진빌드업 실제 치료 결과.`,
+      "url": `${SITE}/before-after${cat ? `?category=${encodeURIComponent(cat)}` : ''}`,
+      "isPartOf": { "@type": "WebSite", "name": "서울가온치과", "url": SITE },
+      "numberOfItems": total,
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": cases.length,
+        "itemListElement": cases.map((ba: any, i: number) => ({
+          "@type": "ListItem",
+          "position": offset + i + 1,
+          "url": `${SITE}/before-after/${ba.id}`,
+          "name": ba.title
+        }))
+      }
+    })
+
+    const html = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+${HEAD_COMMON}
+<title>${pageTitle}${page > 1 ? ` — ${page}페이지` : ''} | 서울가온치과</title>
+<meta name="description" content="서울가온치과 치료 전후 사례. 임플란트, 심미치료(라미네이트·올세라믹), 레진빌드업 실제 치료 결과. ${total}건의 사례.">
+<meta name="keywords" content="의정부 치과 비포애프터, 임플란트 전후, 심미치료 전후, 레진빌드업 전후, 서울가온치과 사례">
+<link rel="canonical" href="${SITE}/before-after${cat ? `?category=${encodeURIComponent(cat)}` : ''}${page > 1 ? `${cat ? '&' : '?'}page=${page}` : ''}">
+<meta property="og:title" content="${pageTitle} | 서울가온치과">
+<meta property="og:description" content="서울가온치과 치료 전후 사례 ${total}건">
+<meta property="og:url" content="${SITE}/before-after">
+<meta property="og:type" content="website">
+<meta property="og:image" content="${SITE}/images/og-main.jpg">
+<script type="application/ld+json">${jsonLd}</script>
+</head>
+<body>
+${NAV_HTML}
+<main style="max-width:1100px;margin:0 auto;padding:2rem 1rem">
+  <h1 style="font-family:var(--ff-title);font-size:2rem;color:var(--ivory);margin-bottom:.5rem"><i class="fas fa-images" style="color:var(--gold)"></i> 치료 전후 비포&amp;애프터</h1>
+  <p style="color:var(--stone-l);margin-bottom:1.5rem">실제 치료 결과를 사진으로 확인하세요. <strong>${total}건</strong>의 사례</p>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem">${catButtons}</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem">
+    ${caseCards}
+  </div>
+  ${pagination}
+</main>
+${FOOTER_HTML}
+${KAKAO_FLOAT}
+<script src="/pages.js"></script>
+<script>
+var ham=document.querySelector('.hamburger'),mob=document.querySelector('.mob-menu');
+if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open');mob.classList.toggle('open')});mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){ham.classList.remove('open');mob.classList.remove('open')})})}
+</script>
+</body>
+</html>`
+
+    return c.html(html, 200, {
+      'Cache-Control': 'public, max-age=1800, s-maxage=3600, stale-while-revalidate=43200',
+      'X-Robots-Tag': 'index, follow, max-snippet:-1, max-image-preview:large',
+    })
+  } catch (e: any) {
+    console.error('[SSR BA List ERROR]', e.message)
+    return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>비포&애프터 | 서울가온치과</title></head><body><p>잠시 후 다시 시도해주세요.</p></body></html>`, 500)
+  }
 })
 
 // ── SSR 블로그 포스트 상세 ──
@@ -2677,6 +2988,380 @@ const LANDING_PAGES: LandingPageData[] = [
       { href: '/resin-buildup', label: '레진빌드업' },
       { href: '/endodontics', label: '의정부 신경치료' },
       { href: '/implant', label: '의정부 임플란트' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 7. 의정부 임플란트 잘하는곳 ──
+  {
+    slug: 'implant-best',
+    title: '의정부 임플란트 잘하는곳 | 서울가온치과 — CT 가이드 수술, 서울대 출신',
+    metaDesc: '의정부 임플란트 잘하는곳 찾으시나요? 서울가온치과는 CT 기반 가이드 임플란트로 정확하게, 최소 절개로 수술합니다. 서울대 출신 현진호 대표원장 직접 수술. 뼈이식·상악동거상술·전체임플란트 전문. ☎ 0507-1325-3377',
+    h1: '의정부 임플란트 잘하는곳 — 서울가온치과',
+    heroSub: 'CT 가이드 수술로 정확하고 안전한 임플란트, 서울대 출신 대표원장 직접 수술',
+    keywords: '의정부 임플란트 잘하는곳, 의정부 임플란트, 의정부 임플란트 추천, 의정부 임플란트 비용, 의정부 임플란트 가격, 탑석역 임플란트, 의정부 치과 임플란트, 의정부 임플란트 후기',
+    category: '임플란트',
+    sections: [
+      {
+        heading: '서울가온치과 임플란트, 왜 다를까요?',
+        content: `<p>서울가온치과는 모든 임플란트 수술에 <strong>CT 기반 가이드 시스템</strong>을 적용합니다. 3D CT 촬영으로 잇몸뼈 상태를 정밀 분석한 뒤, 컴퓨터로 설계한 최적의 위치에 임플란트를 식립합니다.</p>
+<p><strong>현진호 대표원장</strong>(서울대학교 치의학과 졸업)이 상담부터 수술, 보철까지 전 과정을 직접 책임집니다. 경기 북부 지역에서 <strong>전체임플란트, 뼈이식, 상악동거상술</strong>까지 원스톱으로 진행할 수 있는 전문 치과입니다.</p>`
+      },
+      {
+        heading: 'CT 가이드 임플란트의 장점',
+        content: `<ul>
+<li><strong>정확한 식립</strong> — 0.1mm 단위로 계획한 위치에 정확하게 식립하여 보철 결과가 우수합니다</li>
+<li><strong>최소 절개</strong> — 잇몸을 크게 열지 않아 출혈·부종·통증이 적습니다</li>
+<li><strong>빠른 회복</strong> — 무절개 또는 최소절개로 수술 후 일상 복귀가 빠릅니다</li>
+<li><strong>신경·혈관 보호</strong> — CT로 해부학적 구조를 파악하여 안전합니다</li>
+<li><strong>보철 최적화</strong> — 처음부터 보철 형태를 고려한 설계로 자연스러운 결과</li>
+</ul>`
+      },
+      {
+        heading: '임플란트 치료 과정',
+        content: `<ol>
+<li><strong>정밀 진단</strong> — 3D CT 촬영, 구강 검진, 전신 건강 상태 확인</li>
+<li><strong>치료 계획</strong> — 디지털 설계로 최적의 임플란트 위치·각도·길이 결정</li>
+<li><strong>가이드 수술</strong> — CT 가이드를 이용한 정밀 식립 (필요 시 뼈이식 동반)</li>
+<li><strong>치유 기간</strong> — 약 3개월 뼈와 임플란트 결합 대기</li>
+<li><strong>보철 완성</strong> — 맞춤 보철물 장착으로 자연스러운 치아 회복</li>
+</ol>`
+      },
+      {
+        heading: '만 65세 이상 임플란트 건강보험',
+        content: `<p>만 65세 이상이시면 <strong>평생 2개까지 임플란트 건강보험</strong>이 적용됩니다. 본인부담금 약 30%로 합리적인 비용에 임플란트 치료를 받으실 수 있습니다. 서울가온치과에서 보험 적용 여부를 확인해 드립니다.</p>`
+      }
+    ],
+    faqs: [
+      { q: '임플란트 수술은 아프나요?', a: '충분한 마취 후 진행하므로 수술 중 통증은 거의 없습니다. CT 가이드를 사용하면 절개를 최소화하여 수술 후 부종과 통증도 크게 줄어듭니다.' },
+      { q: '임플란트 비용은 얼마인가요?', a: '임플란트 비용은 뼈 상태, 뼈이식 필요 여부, 보철 종류에 따라 달라집니다. 정확한 비용은 CT 촬영 후 상담 시 안내해 드립니다. 만 65세 이상은 건강보험 적용이 가능합니다.' },
+      { q: '뼈가 부족해도 임플란트가 가능한가요?', a: '네, 서울가온치과는 뼈이식과 상악동거상술을 전문적으로 시행합니다. 다른 치과에서 어렵다고 한 경우도 상담해 주세요.' },
+      { q: '임플란트 수명은 얼마나 되나요?', a: '적절한 관리 시 20년 이상 사용 가능합니다. 정기 검진과 올바른 구강 위생 관리가 중요합니다.' },
+    ],
+    ctaText: '임플란트 상담 예약하기',
+    relatedLinks: [
+      { href: '/implant', label: '임플란트 상세 안내' },
+      { href: '/full-mouth-implant', label: '전체 임플란트' },
+      { href: '/bone-graft-implant', label: '뼈이식 임플란트' },
+      { href: '/before-after', label: '임플란트 전후 사례' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 8. 의정부 전체 임플란트 ──
+  {
+    slug: 'full-mouth-implant',
+    title: '의정부 전체임플란트 | 서울가온치과 — 위아래 전악 임플란트 전문',
+    metaDesc: '의정부 전체임플란트(전악임플란트) 전문 서울가온치과. 틀니에서 임플란트로, 위아래 전체 임플란트까지. CT 가이드 수술로 정확한 식립. 현진호 대표원장 직접 수술. 82건+ 전체임플란트 실적. ☎ 0507-1325-3377',
+    h1: '의정부 전체임플란트 전문 — 서울가온치과',
+    heroSub: '틀니에서 임플란트로, 위아래 전악 임플란트까지 원스톱 치료',
+    keywords: '의정부 전체임플란트, 의정부 전악임플란트, 의정부 전체 임플란트 비용, 의정부 틀니 임플란트, 전체 임플란트 잘하는곳, 의정부 위아래 임플란트, 탑석역 전체임플란트',
+    category: '전체임플란트',
+    sections: [
+      {
+        heading: '서울가온치과 전체임플란트 전문성',
+        content: `<p>서울가온치과 현진호 대표원장은 <strong>전체임플란트(전악임플란트) 82건 이상</strong>의 풍부한 수술 경험을 보유하고 있습니다. 오랜 기간 틀니를 사용해오신 분, 치주염으로 치아가 거의 남지 않은 분들에게 <strong>임플란트로 새로운 치아</strong>를 만들어 드립니다.</p>
+<p>CT 기반 가이드 시스템으로 다수의 임플란트를 정확한 위치에 식립하고, 필요한 경우 <strong>상악동거상술·뼈이식</strong>을 동반하여 부족한 잇몸뼈를 보강합니다.</p>`
+      },
+      {
+        heading: '전체임플란트가 필요한 경우',
+        content: `<ul>
+<li><strong>틀니가 불편한 분</strong> — 잘 씹히지 않거나 자꾸 빠지는 틀니를 고정식 임플란트로 교체</li>
+<li><strong>치주염으로 치아가 흔들리는 분</strong> — 심한 잇몸병으로 대부분의 치아를 살릴 수 없는 경우</li>
+<li><strong>오래된 보철이 망가진 분</strong> — 브릿지 뿌리 파절, 크라운 하방 충치 등으로 재치료가 불가한 경우</li>
+<li><strong>치아가 거의 남지 않은 분</strong> — 윗턱 또는 아래턱에 치아가 몇 개 남지 않은 경우</li>
+</ul>`
+      },
+      {
+        heading: '서울가온치과 전체임플란트 과정',
+        content: `<ol>
+<li><strong>정밀 진단</strong> — 3D CT·파노라마·구강 스캔으로 잇몸뼈 상태 정밀 분석</li>
+<li><strong>디지털 설계</strong> — 최적의 임플란트 개수·위치·보철 형태를 컴퓨터로 설계</li>
+<li><strong>1차 수술</strong> — CT 가이드로 임플란트 식립 + 필요 시 뼈이식·상악동거상술</li>
+<li><strong>치유 기간</strong> — 약 3~6개월 뼈와 임플란트 결합 대기 (임시치아 사용 가능)</li>
+<li><strong>보철 완성</strong> — 맞춤 보철물 장착, 교합 조정으로 마무리</li>
+</ol>`
+      }
+    ],
+    faqs: [
+      { q: '전체임플란트 비용은 얼마인가요?', a: '임플란트 개수, 뼈이식 범위, 보철 종류에 따라 달라집니다. 일반적으로 한쪽(위 또는 아래) 전체임플란트는 CT 촬영 후 정확한 견적을 안내드립니다.' },
+      { q: '고령인데 전체임플란트가 가능한가요?', a: '네, 서울가온치과에서는 70~80대 환자분들도 안전하게 전체임플란트를 진행하고 있습니다. 전신 건강 상태를 확인하고, 복용 중인 약물을 검토한 뒤 수술 여부를 판단합니다.' },
+      { q: '틀니를 쓰다가 임플란트로 바꿀 수 있나요?', a: '네, 가능합니다. 오래 틀니를 사용하면 잇몸뼈가 흡수되어 있을 수 있는데, 뼈이식과 상악동거상술로 보강한 뒤 임플란트를 식립합니다.' },
+      { q: '수술 중 치아 없이 지내야 하나요?', a: '아닙니다. 치유 기간 동안 임시치아(임시틀니)를 착용하실 수 있어 일상생활에 큰 불편 없이 지내실 수 있습니다.' },
+    ],
+    ctaText: '전체임플란트 상담 예약',
+    relatedLinks: [
+      { href: '/implant', label: '임플란트 상세 안내' },
+      { href: '/implant-best', label: '임플란트 잘하는곳' },
+      { href: '/bone-graft-implant', label: '뼈이식 임플란트' },
+      { href: '/before-after', label: '전후 사례 보기' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 9. 의정부 앞니 임플란트 ──
+  {
+    slug: 'front-tooth-implant',
+    title: '의정부 앞니임플란트 | 서울가온치과 — 심미적 앞니 복원 전문',
+    metaDesc: '의정부 앞니임플란트 전문 서울가온치과. 앞니는 심미성이 특히 중요합니다. CT 가이드 수술로 정확한 위치에 식립, PFZ 보철로 자연스러운 앞니를 완성합니다. 현진호 대표원장 직접 수술. ☎ 0507-1325-3377',
+    h1: '의정부 앞니임플란트 — 자연스러운 심미 복원',
+    heroSub: '앞니는 얼굴의 인상을 결정합니다. CT 가이드 + PFZ 보철로 자연스럽게',
+    keywords: '의정부 앞니 임플란트, 의정부 앞니 치료, 앞니 임플란트 비용, 앞니 임플란트 후기, 의정부 앞니 보철, 앞니 깨짐, 앞니 부러짐, 앞니 크라운',
+    category: '앞니임플란트',
+    sections: [
+      {
+        heading: '앞니 임플란트, 왜 전문성이 중요한가요?',
+        content: `<p>앞니는 단순히 씹는 기능뿐 아니라 <strong>얼굴의 인상과 미소</strong>를 결정하는 중요한 치아입니다. 앞니 임플란트는 일반 어금니 임플란트와 달리 <strong>잇몸 라인, 치아 형태, 색상, 투명도</strong>까지 세밀하게 고려해야 합니다.</p>
+<p>서울가온치과 현진호 대표원장은 앞니 임플란트에서 <strong>CT 가이드 수술</strong>로 보철에 최적화된 위치에 식립하고, <strong>PFZ(Porcelain Fused to Zirconia) 보철</strong>로 반대편 자연치아와 구분이 안 되는 결과를 만들어냅니다.</p>`
+      },
+      {
+        heading: '앞니 치료가 필요한 상황',
+        content: `<ul>
+<li><strong>외상으로 앞니 파절</strong> — 넘어지거나 부딪혀서 앞니가 깨지거나 부러진 경우</li>
+<li><strong>치주염으로 앞니 흔들림</strong> — 잇몸뼈가 녹아 앞니가 흔들리는 경우</li>
+<li><strong>오래된 앞니 브릿지</strong> — 기존 보철물이 떨어지거나 하방 치아 뿌리가 파절된 경우</li>
+<li><strong>앞니 심한 충치</strong> — 신경치료로도 살리기 어려운 심한 충치</li>
+</ul>`
+      },
+      {
+        heading: '앞니 임플란트 결과 — 실제 사례',
+        content: `<p>서울가온치과에서는 다양한 앞니 임플란트 사례를 <strong>비포&amp;애프터</strong>로 공개하고 있습니다. 젊은 여성 환자분부터 70대 환자분까지, 앞니 1개부터 여러 개까지 — 모두 자연스러운 결과를 확인하실 수 있습니다.</p>
+<p>👉 <a href="/before-after"><strong>앞니 임플란트 비포&amp;애프터 보기</strong></a></p>`
+      }
+    ],
+    faqs: [
+      { q: '앞니 임플란트 비용은 얼마인가요?', a: '앞니 임플란트는 심미 보철(PFZ)이 필요하므로 어금니보다 비용이 다소 높을 수 있습니다. 정확한 비용은 진단 후 안내드립니다.' },
+      { q: '앞니 임플란트 치료기간은 얼마나 걸리나요?', a: '수술 후 약 3개월의 치유 기간이 필요하며, 이 기간 동안 임시치아를 착용하여 심미성을 유지합니다. 전체 과정은 약 4~6개월입니다.' },
+      { q: '앞니 임플란트가 티가 나지 않나요?', a: 'PFZ 보철은 자연치아와 거의 동일한 투명도와 색상을 재현합니다. 반대편 자연치아와 구분이 어려울 정도로 자연스럽습니다.' },
+    ],
+    ctaText: '앞니 임플란트 상담 예약',
+    relatedLinks: [
+      { href: '/implant', label: '임플란트 상세 안내' },
+      { href: '/aesthetic', label: '앞니 심미치료' },
+      { href: '/before-after', label: '전후 사례 보기' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 10. 의정부 뼈이식 임플란트 ──
+  {
+    slug: 'bone-graft-implant',
+    title: '의정부 뼈이식 임플란트 | 서울가온치과 — 상악동거상술·뼈이식 전문',
+    metaDesc: '의정부 뼈이식 임플란트 전문 서울가온치과. 잇몸뼈가 부족해 다른 치과에서 안 된다고 하셨나요? 상악동거상술·수직골증강까지. 현진호 대표원장(서울대) 직접 수술. ☎ 0507-1325-3377',
+    h1: '의정부 뼈이식 임플란트 — 뼈가 부족해도 가능합니다',
+    heroSub: '다른 치과에서 안 된다고 하셨나요? 상악동거상술·뼈이식으로 가능하게 만듭니다',
+    keywords: '의정부 뼈이식 임플란트, 의정부 상악동거상술, 뼈이식 임플란트 비용, 임플란트 뼈이식, 의정부 뼈이식, 뼈 부족 임플란트, 수직골증강, 잇몸뼈 이식',
+    category: '뼈이식임플란트',
+    sections: [
+      {
+        heading: '뼈이식, 왜 필요한가요?',
+        content: `<p>임플란트를 식립하려면 충분한 <strong>잇몸뼈(치조골)</strong>가 있어야 합니다. 하지만 오래 전에 치아를 잃었거나, 치주염으로 뼈가 녹았거나, 윗턱 부위의 상악동이 가까운 경우 뼈가 부족할 수 있습니다.</p>
+<p>서울가온치과는 <strong>뼈이식과 상악동거상술</strong>을 전문적으로 시행하여, 다른 치과에서 임플란트가 어렵다고 진단받으신 분들도 안전하게 임플란트 치료를 받으실 수 있습니다.</p>`
+      },
+      {
+        heading: '뼈이식·상악동거상술 종류',
+        content: `<ul>
+<li><strong>상악동거상술(Sinus Lift)</strong> — 윗턱 어금니 부위의 상악동 점막을 올리고 뼈이식재를 채워 임플란트 식립 공간을 확보합니다</li>
+<li><strong>골유도재생술(GBR)</strong> — 부족한 부위에 뼈이식재와 차폐막을 적용하여 뼈를 재생시킵니다</li>
+<li><strong>수직골증강(Vertical Augmentation)</strong> — 뼈 높이가 심하게 부족한 경우 수직으로 뼈를 증강합니다 (고난도 수술)</li>
+<li><strong>블록골이식</strong> — 자가골이나 동종골 블록을 이식하여 넓은 범위의 뼈를 보강합니다</li>
+</ul>`
+      },
+      {
+        heading: '서울가온치과 뼈이식 실력',
+        content: `<p>현진호 대표원장은 <strong>상악동거상술과 뼈이식을 동반한 임플란트 수술</strong>에 풍부한 경험을 보유하고 있습니다. 실제로 "뼈가 종잇장처럼 얇은" 상태에서도 상악동거상술을 성공적으로 시행한 사례, 80대 고령 환자분의 전체임플란트까지 다양한 난이도의 수술을 진행하고 있습니다.</p>
+<p>👉 <a href="/before-after"><strong>뼈이식 임플란트 사례 보기</strong></a></p>`
+      }
+    ],
+    faqs: [
+      { q: '뼈이식하면 아프나요?', a: '수술 중에는 마취로 통증이 없고, 수술 후 2~3일 정도 부종이 있을 수 있으나 처방 약으로 관리 가능합니다.' },
+      { q: '뼈이식 비용은 얼마인가요?', a: '뼈이식 범위와 사용하는 이식재에 따라 달라집니다. CT 촬영 후 정확한 비용을 안내드립니다.' },
+      { q: '다른 치과에서 뼈가 없어 안 된다고 했는데 가능한가요?', a: '상악동거상술, 수직골증강 등 다양한 뼈이식 방법이 있습니다. 서울가온치과에서 CT를 촬영하고 정밀 진단 후 가능 여부를 판단해 드립니다.' },
+    ],
+    ctaText: '뼈이식 임플란트 상담 예약',
+    relatedLinks: [
+      { href: '/implant', label: '임플란트 상세 안내' },
+      { href: '/full-mouth-implant', label: '전체 임플란트' },
+      { href: '/implant-best', label: '임플란트 잘하는곳' },
+      { href: '/before-after', label: '전후 사례 보기' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 11. 의정부 라미네이트 ──
+  {
+    slug: 'laminate',
+    title: '의정부 라미네이트 | 서울가온치과 — 최소삭제 심미보철, 자연스러운 앞니',
+    metaDesc: '의정부 라미네이트 전문 서울가온치과. 앞니 변색·벌어짐·왜소치를 최소삭제 라미네이트로 자연스럽게 개선합니다. 디지털 쉐이드 매칭. 글로우네이트 시술 가능. ☎ 0507-1325-3377',
+    h1: '의정부 라미네이트 — 최소삭제로 자연스러운 앞니',
+    heroSub: '변색·벌어짐·왜소치, 라미네이트로 자연스럽게 개선합니다',
+    keywords: '의정부 라미네이트, 의정부 라미네이트 비용, 의정부 앞니 라미네이트, 라미네이트 가격, 의정부 심미치료, 탑석역 라미네이트, 의정부 치아성형',
+    category: '라미네이트',
+    sections: [
+      {
+        heading: '라미네이트란?',
+        content: `<p>라미네이트는 앞니 표면을 <strong>최소한으로 삭제</strong>한 뒤, 얇은 도자기(세라믹) 쉘을 부착하여 <strong>치아의 형태·색상·크기</strong>를 개선하는 심미치료입니다. 네일아트처럼 얇은 보철물을 붙인다고 생각하시면 됩니다.</p>
+<p>서울가온치과에서는 기존 라미네이트보다 치아 삭제를 더욱 줄인 <strong>글로우네이트(Glownate)</strong> 시술도 가능합니다.</p>`
+      },
+      {
+        heading: '라미네이트가 적합한 경우',
+        content: `<ul>
+<li><strong>앞니 변색</strong> — 미백으로 개선되지 않는 심한 변색</li>
+<li><strong>앞니 벌어짐</strong> — 치아 사이 벌어진 틈(이개)</li>
+<li><strong>왜소치</strong> — 작은 앞니를 정상 크기로 개선</li>
+<li><strong>치아 형태 불만</strong> — 울퉁불퉁하거나 비대칭인 앞니</li>
+<li><strong>미세 파절</strong> — 앞니 끝이 살짝 깨진 경우</li>
+</ul>`
+      },
+      {
+        heading: '라미네이트 vs 올세라믹 크라운 vs 글로우네이트',
+        content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
+<tr style="background:var(--gold);color:#fff"><th style="padding:8px;border:1px solid #ddd">구분</th><th style="padding:8px;border:1px solid #ddd">치아삭제량</th><th style="padding:8px;border:1px solid #ddd">적합한 경우</th></tr>
+<tr><td style="padding:8px;border:1px solid #ddd"><strong>라미네이트</strong></td><td style="padding:8px;border:1px solid #ddd">앞면 최소 삭제</td><td style="padding:8px;border:1px solid #ddd">변색, 형태개선</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd"><strong>글로우네이트</strong></td><td style="padding:8px;border:1px solid #ddd">거의 무삭제</td><td style="padding:8px;border:1px solid #ddd">왜소치, 경미한 벌어짐</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd"><strong>올세라믹 크라운</strong></td><td style="padding:8px;border:1px solid #ddd">전체 삭제</td><td style="padding:8px;border:1px solid #ddd">심한 손상, 신경치료 후</td></tr>
+</table>`
+      }
+    ],
+    faqs: [
+      { q: '라미네이트 수명은 얼마나 되나요?', a: '일반적으로 10~15년 이상 사용 가능합니다. 딱딱한 음식을 직접 씹는 습관을 피하면 더 오래 유지됩니다.' },
+      { q: '라미네이트 시술 후 아프나요?', a: '치아 삭제량이 적어 시술 후 시림이나 통증은 거의 없습니다. 일상생활에 바로 복귀 가능합니다.' },
+      { q: '라미네이트와 글로우네이트 차이가 뭔가요?', a: '글로우네이트는 치아 삭제를 거의 하지 않는 방식입니다. 치아 상태에 따라 적합한 방법을 안내드립니다.' },
+    ],
+    ctaText: '라미네이트 상담 예약',
+    relatedLinks: [
+      { href: '/aesthetic', label: '앞니 심미치료' },
+      { href: '/glownate', label: '글로우네이트' },
+      { href: '/front-tooth-implant', label: '앞니 임플란트' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 12. 의정부 사랑니 발치 ──
+  {
+    slug: 'wisdom-tooth',
+    title: '의정부 사랑니 발치 | 서울가온치과 — 안전한 매복 사랑니 발치',
+    metaDesc: '의정부 사랑니 발치 서울가온치과. 매복사랑니, 누운사랑니도 안전하게. CT 촬영으로 신경관 위치 확인 후 발치. 당일 발치 가능. 건강보험 적용. 탑석역 5분. ☎ 0507-1325-3377',
+    h1: '의정부 사랑니 발치 — 안전하고 빠르게',
+    heroSub: '매복사랑니, 누운사랑니도 CT 확인 후 안전하게 발치합니다',
+    keywords: '의정부 사랑니, 의정부 사랑니 발치, 의정부 매복사랑니, 사랑니 발치 비용, 의정부 치과 사랑니, 탑석역 사랑니, 사랑니 통증, 누운사랑니 발치',
+    category: '사랑니발치',
+    sections: [
+      {
+        heading: '사랑니, 꼭 빼야 하나요?',
+        content: `<p>모든 사랑니를 뽑아야 하는 것은 아닙니다. 하지만 아래와 같은 경우에는 발치가 권장됩니다:</p>
+<ul>
+<li><strong>매복(묻힌) 사랑니</strong> — 뼈 속에 묻혀 주변 조직에 압력을 가하거나 낭종이 생길 위험</li>
+<li><strong>누운 사랑니</strong> — 옆으로 누워 앞 치아를 밀거나, 앞 치아에 충치를 유발</li>
+<li><strong>반복적 염증</strong> — 잇몸이 자주 붓고 아픈 경우 (지치주위염)</li>
+<li><strong>충치 발생</strong> — 사랑니 자체에 충치가 생겼거나, 앞 치아에 충치를 유발하는 경우</li>
+</ul>`
+      },
+      {
+        heading: '서울가온치과의 안전한 사랑니 발치',
+        content: `<p>서울가온치과에서는 사랑니 발치 전 반드시 <strong>CT 촬영</strong>을 통해 사랑니의 위치, 뿌리 형태, <strong>하치조신경관과의 거리</strong>를 정확히 파악합니다. 이를 통해 신경 손상 없이 안전하게 발치합니다.</p>
+<p>간단한 사랑니는 <strong>당일 발치</strong>가 가능하며, 매복사랑니도 풍부한 경험을 바탕으로 빠르고 정확하게 발치합니다.</p>`
+      }
+    ],
+    faqs: [
+      { q: '사랑니 발치 비용은 얼마인가요?', a: '사랑니 발치는 건강보험이 적용됩니다. 단순 발치는 1~2만원대, 매복사랑니는 난이도에 따라 3~5만원대입니다 (본인부담금 기준).' },
+      { q: '사랑니 발치 후 많이 아프나요?', a: '수술 중에는 마취로 통증이 없습니다. 발치 후 2~3일 정도 부종이 있을 수 있으나, 처방 약으로 관리 가능합니다.' },
+      { q: '사랑니 4개를 한번에 뽑을 수 있나요?', a: '환자분의 건강 상태와 사랑니 난이도에 따라 다릅니다. 일반적으로 한쪽(왼쪽 2개 또는 오른쪽 2개)씩 진행하는 것을 권장합니다.' },
+    ],
+    ctaText: '사랑니 상담 예약',
+    relatedLinks: [
+      { href: '/implant', label: '의정부 임플란트' },
+      { href: '/cavity-treatment', label: '의정부 충치치료' },
+      { href: '/uijeongbu-dental', label: '의정부 치과 추천' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 13. 의정부 스케일링·잇몸치료 ──
+  {
+    slug: 'scaling-gum-treatment',
+    title: '의정부 스케일링·잇몸치료 | 서울가온치과 — 치주염 예방과 치료',
+    metaDesc: '의정부 스케일링·잇몸치료 서울가온치과. 연 1회 건강보험 스케일링, 치주염(풍치) 진단 및 치료. 잇몸 출혈·구취·치아 흔들림 증상이 있다면 빠른 치료가 중요합니다. ☎ 0507-1325-3377',
+    h1: '의정부 스케일링·잇몸치료 — 건강한 잇몸이 건강한 치아의 시작',
+    heroSub: '연 1회 보험 스케일링 + 치주염 전문 치료',
+    keywords: '의정부 스케일링, 의정부 잇몸치료, 의정부 치주치료, 잇몸 출혈, 치주염, 풍치, 의정부 잇몸병, 탑석역 스케일링, 스케일링 비용, 잇몸이 아파요',
+    category: '스케일링·잇몸치료',
+    sections: [
+      {
+        heading: '스케일링, 왜 정기적으로 받아야 하나요?',
+        content: `<p><strong>치석</strong>은 칫솔질로 제거할 수 없는 단단한 세균 덩어리입니다. 치석이 쌓이면 잇몸에 염증이 생기고(치은염), 방치하면 잇몸뼈까지 녹는 <strong>치주염(풍치)</strong>으로 진행됩니다. 치주염은 치아를 잃는 가장 큰 원인입니다.</p>
+<p>만 19세 이상이면 <strong>연 1회 건강보험 적용</strong>으로 스케일링을 받을 수 있습니다.</p>`
+      },
+      {
+        heading: '이런 증상이 있다면 잇몸치료가 필요합니다',
+        content: `<ul>
+<li><strong>칫솔질할 때 잇몸에서 피가 나요</strong></li>
+<li><strong>잇몸이 부어오르고 빨갛게 변했어요</strong></li>
+<li><strong>입에서 냄새가 나요</strong> (구취)</li>
+<li><strong>치아가 예전보다 길어 보여요</strong> (잇몸 퇴축)</li>
+<li><strong>치아가 흔들려요</strong></li>
+<li><strong>씹을 때 잇몸이 아파요</strong></li>
+</ul>`
+      },
+      {
+        heading: '서울가온치과 잇몸치료 과정',
+        content: `<ol>
+<li><strong>정밀 검진</strong> — 잇몸 상태 확인, 치주낭 깊이 측정, 필요 시 X-ray 촬영</li>
+<li><strong>스케일링</strong> — 치석 및 치태 제거 (보험 적용)</li>
+<li><strong>치근활택술(SRP)</strong> — 잇몸 아래 깊은 곳의 치석과 감염 조직 제거 (중등도 치주염)</li>
+<li><strong>치주 수술</strong> — 심한 치주염의 경우 잇몸을 열어 깊은 치석을 제거하고 뼈이식 (중증)</li>
+<li><strong>정기 관리</strong> — 3~6개월마다 정기 점검으로 재발 방지</li>
+</ol>`
+      }
+    ],
+    faqs: [
+      { q: '스케일링 비용은 얼마인가요?', a: '만 19세 이상이면 연 1회 건강보험이 적용되어 본인부담금 약 1만 5천원 정도입니다.' },
+      { q: '스케일링 후 이가 시릴 수 있나요?', a: '치석이 제거되면 일시적으로 시림이 있을 수 있으나, 보통 1~2주 내에 자연히 사라집니다.' },
+      { q: '치주염은 완치가 되나요?', a: '치주염은 완치보다는 관리의 개념입니다. 적절한 치료 후 정기적인 스케일링과 관리로 진행을 멈출 수 있습니다.' },
+    ],
+    ctaText: '스케일링·잇몸치료 예약',
+    relatedLinks: [
+      { href: '/implant', label: '의정부 임플란트' },
+      { href: '/cavity-treatment', label: '의정부 충치치료' },
+      { href: '/uijeongbu-dental', label: '의정부 치과 추천' },
+      { href: '/doctors', label: '의료진 소개' },
+    ]
+  },
+  // ── 14. 의정부 틀니 임플란트 ──
+  {
+    slug: 'denture-to-implant',
+    title: '의정부 틀니임플란트 | 서울가온치과 — 틀니에서 임플란트로 전환',
+    metaDesc: '의정부 틀니임플란트 서울가온치과. 불편한 틀니를 고정식 임플란트로 교체하세요. 전체틀니에서 전체임플란트까지. 만 65세 이상 건강보험 적용. 현진호 대표원장 직접 수술. ☎ 0507-1325-3377',
+    h1: '의정부 틀니임플란트 — 불편한 틀니에서 든든한 임플란트로',
+    heroSub: '틀니의 불편함을 끝내세요. 고정식 임플란트로 자신 있게 드세요',
+    keywords: '의정부 틀니 임플란트, 틀니에서 임플란트, 의정부 틀니, 전체틀니 임플란트, 임플란트 틀니 비용, 만 65세 임플란트, 노인 임플란트, 고령 임플란트',
+    category: '틀니임플란트',
+    sections: [
+      {
+        heading: '틀니가 불편하신가요?',
+        content: `<p>틀니는 시간이 지나면서 <strong>잇몸뼈가 흡수</strong>되어 맞지 않게 되고, 음식을 씹기 어렵고, 빠질까 불안하고, 대화 시 불편함이 생깁니다. 임플란트는 이런 틀니의 불편함을 근본적으로 해결합니다.</p>
+<p>서울가온치과에서는 <strong>틀니에서 임플란트로의 전환</strong>을 전문적으로 진행합니다. 오래 틀니를 사용해 잇몸뼈가 부족한 경우에도 뼈이식과 상악동거상술로 가능하게 만듭니다.</p>`
+      },
+      {
+        heading: '틀니 vs 임플란트 비교',
+        content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
+<tr style="background:var(--gold);color:#fff"><th style="padding:8px;border:1px solid #ddd">구분</th><th style="padding:8px;border:1px solid #ddd">틀니</th><th style="padding:8px;border:1px solid #ddd">임플란트</th></tr>
+<tr><td style="padding:8px;border:1px solid #ddd"><strong>저작력</strong></td><td style="padding:8px;border:1px solid #ddd">자연치아의 20~30%</td><td style="padding:8px;border:1px solid #ddd">자연치아의 80~90%</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd"><strong>안정성</strong></td><td style="padding:8px;border:1px solid #ddd">움직임·탈락 가능</td><td style="padding:8px;border:1px solid #ddd">뼈에 고정, 움직이지 않음</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd"><strong>관리</strong></td><td style="padding:8px;border:1px solid #ddd">매일 세척 필요</td><td style="padding:8px;border:1px solid #ddd">자연치아처럼 양치</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd"><strong>수명</strong></td><td style="padding:8px;border:1px solid #ddd">5~7년마다 교체</td><td style="padding:8px;border:1px solid #ddd">20년 이상</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd"><strong>보험</strong></td><td style="padding:8px;border:1px solid #ddd">건강보험 적용</td><td style="padding:8px;border:1px solid #ddd">만 65세 이상 2개 보험</td></tr>
+</table>`
+      },
+      {
+        heading: '만 65세 이상 임플란트 건강보험',
+        content: `<p>만 65세 이상이시면 <strong>평생 2개까지 임플란트 건강보험</strong>이 적용됩니다 (본인부담금 약 30%). 임플란트 보험 적용과 함께, 추가 비용으로 더 많은 임플란트를 식립하여 편안한 식사를 되찾으실 수 있습니다.</p>`
+      }
+    ],
+    faqs: [
+      { q: '틀니를 오래 써서 뼈가 많이 녹았는데 임플란트가 되나요?', a: '네, 뼈이식과 상악동거상술로 부족한 뼈를 보강한 뒤 임플란트를 식립합니다. 서울가온치과에서는 다수의 동일 사례를 성공적으로 치료하고 있습니다.' },
+      { q: '80세인데 수술이 가능한가요?', a: '전신 건강 상태와 복용 약물을 면밀히 확인한 뒤 수술 여부를 판단합니다. 서울가온치과에서는 70~80대 환자분들도 안전하게 전체임플란트를 진행하고 있습니다.' },
+      { q: '임플란트 하는 동안 치아 없이 지내야 하나요?', a: '치유 기간 동안 임시틀니를 착용하실 수 있어 일상생활에 큰 불편이 없습니다.' },
+    ],
+    ctaText: '틀니→임플란트 상담 예약',
+    relatedLinks: [
+      { href: '/full-mouth-implant', label: '전체 임플란트' },
+      { href: '/implant', label: '임플란트 상세 안내' },
+      { href: '/bone-graft-implant', label: '뼈이식 임플란트' },
+      { href: '/before-after', label: '전후 사례 보기' },
       { href: '/doctors', label: '의료진 소개' },
     ]
   },

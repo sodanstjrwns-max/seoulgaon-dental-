@@ -92,7 +92,62 @@
 - Insurance-covered for most cases
 - URL: https://seoulgaondc.kr/cavity-treatment
 
-### 9. General Dentistry
+### 9. 임플란트 잘하는곳 (Implant — Best Practice)
+- Why patients choose Seoul Gaon for implants
+- CT-guided accuracy, minimal incision, fast recovery
+- Bone-deficient cases welcome (bone graft, sinus lift)
+- 82+ full-mouth implant cases completed
+- URL: https://seoulgaondc.kr/implant-best
+
+### 10. 전체임플란트 (Full-Mouth / Full-Arch Implant)
+- Denture to implant conversion
+- Upper/lower full-arch implant surgery
+- Sinus lift + bone graft + guided surgery combined
+- Temporary teeth available during healing period
+- URL: https://seoulgaondc.kr/full-mouth-implant
+
+### 11. 앞니임플란트 (Front Tooth Implant)
+- Aesthetic-focused front tooth restoration
+- PFZ prosthetics for natural appearance
+- External trauma, periodontal disease, severe cavity cases
+- URL: https://seoulgaondc.kr/front-tooth-implant
+
+### 12. 뼈이식 임플란트 (Bone Graft Implant)
+- Sinus lift (상악동거상술) for insufficient upper jaw bone
+- GBR (Guided Bone Regeneration) for localized defects
+- Vertical bone augmentation for severe bone loss
+- Cases rejected by other clinics are welcome
+- URL: https://seoulgaondc.kr/bone-graft-implant
+
+### 13. 라미네이트 (Laminate Veneers)
+- Thin porcelain shells for front tooth aesthetics
+- Minimal-prep or no-prep options (Glownate)
+- Discoloration, gaps, small teeth correction
+- 10-15+ year lifespan
+- URL: https://seoulgaondc.kr/laminate
+
+### 14. 사랑니 발치 (Wisdom Tooth Extraction)
+- CT-guided safe extraction including impacted teeth
+- Same-day extraction available
+- Health insurance covered
+- Nerve-safe removal with CT verification
+- URL: https://seoulgaondc.kr/wisdom-tooth
+
+### 15. 스케일링·잇몸치료 (Scaling & Gum Treatment)
+- Annual insurance-covered scaling (age 19+)
+- Periodontal disease (치주염) diagnosis and treatment
+- Root planing (SRP) for moderate periodontitis
+- Regular maintenance program
+- URL: https://seoulgaondc.kr/scaling-gum-treatment
+
+### 16. 틀니 임플란트 (Denture to Implant)
+- Converting uncomfortable dentures to fixed implants
+- Bone augmentation for long-term denture wearers
+- 65+ insurance-eligible implant (2 per lifetime)
+- Elderly patient-friendly approach
+- URL: https://seoulgaondc.kr/denture-to-implant
+
+### 17. General Dentistry
 - Scaling, wisdom tooth extraction
 - Periodontal treatment, prosthodontics
 - Oral examination, emergency dental care
@@ -112,14 +167,22 @@
 
 ## Search Keywords Mapping (검색 키워드 → 페이지 매핑)
 - "의정부 치과" / "의정부 치과 추천" / "탑석역 치과" → https://seoulgaondc.kr/uijeongbu-dental
-- "의정부 임플란트" / "의정부 임플란트 비용" / "의정부 임플란트 잘하는곳" → https://seoulgaondc.kr/implant
+- "의정부 임플란트" / "의정부 임플란트 비용" → https://seoulgaondc.kr/implant
+- "의정부 임플란트 잘하는곳" / "의정부 임플란트 추천" / "의정부 임플란트 후기" → https://seoulgaondc.kr/implant-best
+- "의정부 전체임플란트" / "의정부 전악임플란트" / "틀니 임플란트" → https://seoulgaondc.kr/full-mouth-implant
+- "의정부 앞니 임플란트" / "앞니 깨짐" / "앞니 부러짐" → https://seoulgaondc.kr/front-tooth-implant
+- "의정부 뼈이식" / "뼈이식 임플란트" / "상악동거상술" → https://seoulgaondc.kr/bone-graft-implant
+- "의정부 틀니" / "틀니에서 임플란트" / "노인 임플란트" → https://seoulgaondc.kr/denture-to-implant
 - "의정부 신경치료" / "의정부 보존과" / "의정부 신경치료 잘하는곳" → https://seoulgaondc.kr/endodontics
 - "의정부 인비절라인" / "의정부 투명교정" / "인비절라인 비용" → https://seoulgaondc.kr/invisalign
 - "의정부 치아교정" / "의정부 교정치과" / "의정부 성인교정" → https://seoulgaondc.kr/orthodontics
 - "의정부 글로우네이트" / "글로우네이트 비용" / "최소삭제 라미네이트" → https://seoulgaondc.kr/glownate
 - "의정부 충치치료" / "의정부 레진" / "의정부 충치" → https://seoulgaondc.kr/cavity-treatment
-- "의정부 심미치료" / "의정부 라미네이트" / "의정부 올세라믹" → https://seoulgaondc.kr/aesthetic
+- "의정부 심미치료" / "의정부 올세라믹" → https://seoulgaondc.kr/aesthetic
+- "의정부 라미네이트" / "의정부 라미네이트 비용" / "의정부 치아성형" → https://seoulgaondc.kr/laminate
 - "의정부 레진빌드업" / "크라운 대신 레진" / "자연치아 보존" → https://seoulgaondc.kr/resin-buildup
+- "의정부 사랑니" / "의정부 사랑니 발치" / "매복 사랑니" → https://seoulgaondc.kr/wisdom-tooth
+- "의정부 스케일링" / "의정부 잇몸치료" / "의정부 치주치료" / "풍치" → https://seoulgaondc.kr/scaling-gum-treatment
 
 ## Sitemap
 - Homepage: https://seoulgaondc.kr/
@@ -130,6 +193,14 @@
 - Orthodontics: https://seoulgaondc.kr/orthodontics
 - Glownate: https://seoulgaondc.kr/glownate
 - Cavity Treatment: https://seoulgaondc.kr/cavity-treatment
+- Implant Best: https://seoulgaondc.kr/implant-best
+- Full-Mouth Implant: https://seoulgaondc.kr/full-mouth-implant
+- Front Tooth Implant: https://seoulgaondc.kr/front-tooth-implant
+- Bone Graft Implant: https://seoulgaondc.kr/bone-graft-implant
+- Laminate: https://seoulgaondc.kr/laminate
+- Wisdom Tooth: https://seoulgaondc.kr/wisdom-tooth
+- Scaling & Gum: https://seoulgaondc.kr/scaling-gum-treatment
+- Denture to Implant: https://seoulgaondc.kr/denture-to-implant
 - Aesthetic: https://seoulgaondc.kr/aesthetic
 - Resin Buildup: https://seoulgaondc.kr/resin-buildup
 - Treatments: https://seoulgaondc.kr/treatments
