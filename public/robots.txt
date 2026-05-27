@@ -98,6 +98,9 @@ Disallow: /
 
 # ── 사이트맵 ──
 Sitemap: https://seoulgaondc.kr/sitemap.xml
+Sitemap: https://seoulgaondc.kr/sitemap-pages.xml
+Sitemap: https://seoulgaondc.kr/sitemap-blog.xml
+Sitemap: https://seoulgaondc.kr/sitemap-before-after.xml
 
 # ── AI/LLM 크롤러 최적화 ──
 # llms.txt: AI 검색엔진용 구조화 정보

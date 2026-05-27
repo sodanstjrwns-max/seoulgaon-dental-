@@ -1660,129 +1660,173 @@ app.get('/api/admin/stats/encyclopedia', auth, async (c) => {
 })
 
 // ══════════════════════════════════════════════════
-//  DYNAMIC SITEMAP.XML — 블로그·공지 개별 URL 자동 포함
+//  SITEMAP INDEX — 사이트맵 분할 (정적+랜딩 / 블로그 / 비포&애프터)
 // ══════════════════════════════════════════════════
-app.get('/sitemap.xml', async (c) => {
-  try {
-    const db = c.env.DB
-    const SITE = 'https://seoulgaondc.kr'
-    const today = new Date().toISOString().split('T')[0]
 
-    // ── 정적 페이지 ──
-    const staticPages = [
-      { loc: '/',               priority: '1.0',  changefreq: 'weekly',  lastmod: today },
-      { loc: '/implant',        priority: '1.0',  changefreq: 'weekly',  lastmod: today },
-      { loc: '/treatments',     priority: '0.95', changefreq: 'monthly', lastmod: today },
-      { loc: '/aesthetic',       priority: '0.95', changefreq: 'monthly', lastmod: today },
-      { loc: '/resin-buildup',   priority: '0.95', changefreq: 'monthly', lastmod: today },
-      { loc: '/philosophy',     priority: '0.9',  changefreq: 'monthly', lastmod: '2026-04-09' },
-      { loc: '/doctors',        priority: '0.9',  changefreq: 'monthly', lastmod: today },
-      { loc: '/guide',          priority: '0.85', changefreq: 'monthly', lastmod: '2026-04-09' },
-      { loc: '/faq',            priority: '0.85', changefreq: 'weekly',  lastmod: '2026-04-09' },
-      { loc: '/encyclopedia',   priority: '0.8',  changefreq: 'monthly', lastmod: '2026-04-09' },
-      { loc: '/blog',           priority: '0.85', changefreq: 'daily',   lastmod: today },
-      { loc: '/before-after',   priority: '0.85', changefreq: 'daily',   lastmod: today },
-      { loc: '/notice',         priority: '0.6',  changefreq: 'weekly',  lastmod: today },
-      { loc: '/community',      priority: '0.8',  changefreq: 'weekly',  lastmod: today },
-      { loc: '/reservation',    priority: '0.9',  changefreq: 'monthly', lastmod: '2026-04-09' },
-      // 지역명+핵심진료 SEO 랜딩페이지
-      { loc: '/uijeongbu-dental', priority: '0.95', changefreq: 'weekly',  lastmod: today },
-      { loc: '/endodontics',      priority: '0.95', changefreq: 'weekly',  lastmod: today },
-      { loc: '/invisalign',       priority: '0.95', changefreq: 'weekly',  lastmod: today },
-      { loc: '/orthodontics',     priority: '0.95', changefreq: 'weekly',  lastmod: today },
-      { loc: '/glownate',         priority: '0.95', changefreq: 'weekly',  lastmod: today },
-      { loc: '/cavity-treatment', priority: '0.95', changefreq: 'weekly',  lastmod: today },
-      { loc: '/implant-best',         priority: '0.95', changefreq: 'weekly',  lastmod: today },
-      { loc: '/full-mouth-implant',   priority: '0.95', changefreq: 'weekly',  lastmod: today },
-      { loc: '/front-tooth-implant',  priority: '0.90', changefreq: 'weekly',  lastmod: today },
-      { loc: '/bone-graft-implant',   priority: '0.90', changefreq: 'weekly',  lastmod: today },
-      { loc: '/laminate',             priority: '0.90', changefreq: 'weekly',  lastmod: today },
-      { loc: '/wisdom-tooth',         priority: '0.85', changefreq: 'weekly',  lastmod: today },
-      { loc: '/scaling-gum-treatment',priority: '0.85', changefreq: 'weekly',  lastmod: today },
-      { loc: '/denture-to-implant',   priority: '0.90', changefreq: 'weekly',  lastmod: today },
-      { loc: '/implant-cost',         priority: '0.95', changefreq: 'weekly',  lastmod: today },
-      { loc: '/night-dental',         priority: '0.85', changefreq: 'weekly',  lastmod: today },
-      { loc: '/senior-implant',       priority: '0.90', changefreq: 'weekly',  lastmod: today },
-      { loc: '/emergency-dental',     priority: '0.85', changefreq: 'weekly',  lastmod: today },
-      { loc: '/tapseok-dental',       priority: '0.85', changefreq: 'weekly',  lastmod: today },
-      { loc: '/painless-dental',      priority: '0.85', changefreq: 'weekly',  lastmod: today },
-      { loc: '/pediatric-dental',    priority: '0.85', changefreq: 'weekly',  lastmod: today },
-      { loc: '/crown',               priority: '0.85', changefreq: 'weekly',  lastmod: today },
-      { loc: '/teeth-whitening',     priority: '0.80', changefreq: 'weekly',  lastmod: today },
-      { loc: '/dental-checkup',      priority: '0.80', changefreq: 'weekly',  lastmod: today },
-      { loc: '/implant-process',     priority: '0.90', changefreq: 'weekly',  lastmod: today },
-      { loc: '/minrak-dental',       priority: '0.85', changefreq: 'weekly',  lastmod: today },
+// 공통: OG 이미지 매핑 (랜딩페이지별 대표 이미지)
+const sitemapImageMap: Record<string, { url: string; title: string }> = {
+  '/':                    { url: '/images/og-main.jpg',               title: '서울가온치과 메인' },
+  '/implant':             { url: '/images/clinic-implant-center.jpg', title: '서울가온치과 임플란트 센터' },
+  '/treatments':          { url: '/images/og-treatments.jpg',         title: '서울가온치과 진료과목' },
+  '/aesthetic':           { url: '/images/clinic-makeup-close.jpg',   title: '심미보철 진료' },
+  '/resin-buildup':       { url: '/images/clinic-makeup.jpg',         title: '레진 치료' },
+  '/philosophy':          { url: '/images/og-philosophy.jpg',         title: '서울가온치과 진료철학' },
+  '/doctors':             { url: '/images/og-doctors.jpg',            title: '서울가온치과 의료진' },
+  '/guide':               { url: '/images/og-guide.jpg',              title: '내원 가이드' },
+  '/faq':                 { url: '/images/og-main.jpg',               title: '자주 묻는 질문' },
+  '/encyclopedia':        { url: '/images/og-main.jpg',               title: '치과 백과사전' },
+  '/blog':                { url: '/images/og-blog.jpg',               title: '서울가온치과 블로그' },
+  '/before-after':        { url: '/images/og-before-after.jpg',       title: '비포&애프터 사례' },
+  '/notice':              { url: '/images/og-notice.jpg',             title: '공지사항' },
+  '/community':           { url: '/images/og-main.jpg',               title: '커뮤니티' },
+  '/reservation':         { url: '/images/og-main.jpg',               title: '예약 안내' },
+  '/uijeongbu-dental':    { url: '/images/clinic-lobby-1.jpg',        title: '의정부 치과 서울가온치과' },
+  '/endodontics':         { url: '/images/clinic-unit-1.jpg',         title: '신경치료 전문' },
+  '/invisalign':          { url: '/images/clinic-treatment.jpg',      title: '인비절라인 교정' },
+  '/orthodontics':        { url: '/images/clinic-treatment.jpg',      title: '치아교정 전문' },
+  '/glownate':            { url: '/images/clinic-makeup.jpg',         title: '글로네이트 심미치료' },
+  '/cavity-treatment':    { url: '/images/clinic-unit-1.jpg',         title: '충치치료 전문' },
+  '/implant-best':        { url: '/images/clinic-implant-center.jpg', title: '임플란트 잘하는 치과' },
+  '/full-mouth-implant':  { url: '/images/clinic-implant-center.jpg', title: '전체 임플란트' },
+  '/front-tooth-implant': { url: '/images/clinic-treatment.jpg',      title: '앞니 임플란트' },
+  '/bone-graft-implant':  { url: '/images/clinic-implant-center.jpg', title: '뼈이식 임플란트' },
+  '/laminate':            { url: '/images/clinic-makeup-close.jpg',   title: '라미네이트 시술' },
+  '/wisdom-tooth':        { url: '/images/clinic-treatment.jpg',      title: '사랑니 발치' },
+  '/scaling-gum-treatment': { url: '/images/clinic-unit-1.jpg',       title: '스케일링·잇몸치료' },
+  '/denture-to-implant':  { url: '/images/clinic-consult.jpg',        title: '틀니에서 임플란트로' },
+  '/implant-cost':        { url: '/images/clinic-consult-room.jpg',   title: '임플란트 비용 안내' },
+  '/night-dental':        { url: '/images/clinic-waiting.jpg',        title: '야간진료 치과' },
+  '/senior-implant':      { url: '/images/clinic-consult.jpg',        title: '어르신 임플란트' },
+  '/emergency-dental':    { url: '/images/clinic-treatment.jpg',      title: '응급 치과 진료' },
+  '/tapseok-dental':      { url: '/images/clinic-lobby-2.jpg',        title: '탑석역 치과' },
+  '/painless-dental':     { url: '/images/clinic-consult-room.jpg',   title: '무통 치과 진료' },
+  '/pediatric-dental':    { url: '/images/clinic-consult.jpg',        title: '소아 치과 진료' },
+  '/crown':               { url: '/images/clinic-treatment.jpg',      title: '크라운 보철 치료' },
+  '/teeth-whitening':     { url: '/images/clinic-makeup-close.jpg',   title: '치아 미백' },
+  '/dental-checkup':      { url: '/images/clinic-unit-1.jpg',         title: '정기 검진' },
+  '/implant-process':     { url: '/images/clinic-implant-center.jpg', title: '임플란트 과정 안내' },
+  '/minrak-dental':       { url: '/images/clinic-lobby-1.jpg',        title: '민락동 치과' },
+}
+
+// ── 사이트맵 인덱스 (메인 sitemap.xml) ──
+app.get('/sitemap.xml', async (c) => {
+  const SITE = 'https://seoulgaondc.kr'
+  const today = new Date().toISOString().split('T')[0]
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${SITE}/sitemap-pages.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>${SITE}/sitemap-blog.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>${SITE}/sitemap-before-after.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
+</sitemapindex>`
+
+  return new Response(xml, {
+    headers: {
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=21600, s-maxage=21600',
+    }
+  })
+})
+
+// ── 정적 페이지 + 랜딩페이지 사이트맵 ──
+app.get('/sitemap-pages.xml', async (c) => {
+  try {
+    const SITE = 'https://seoulgaondc.kr'
+
+    // lastmod: 실제 컨텐츠 수정일 기준 (랜딩페이지는 마지막 배포일 기준)
+    const V1_DATE = '2026-04-09'  // 초기 사이트 구축일
+    const V2_DATE = '2026-05-13'  // SEO v2 (14 랜딩페이지)
+    const V3_DATE = '2026-05-25'  // SEO v3 (6 랜딩페이지 추가)
+    const V4_DATE = '2026-05-27'  // SEO v4 (6 랜딩페이지 추가)
+
+    const staticPages: Array<{ loc: string; priority: string; changefreq: string; lastmod: string }> = [
+      // ── 핵심 페이지 (최고 우선순위) ──
+      { loc: '/',               priority: '1.0',  changefreq: 'weekly',  lastmod: V4_DATE },
+      { loc: '/implant',        priority: '1.0',  changefreq: 'weekly',  lastmod: V2_DATE },
+      { loc: '/reservation',    priority: '0.95', changefreq: 'monthly', lastmod: V1_DATE },
+
+      // ── 진료 정보 페이지 ──
+      { loc: '/treatments',     priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+      { loc: '/aesthetic',      priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+      { loc: '/resin-buildup',  priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+
+      // ── 병원 정보 페이지 ──
+      { loc: '/philosophy',     priority: '0.85', changefreq: 'monthly', lastmod: V1_DATE },
+      { loc: '/doctors',        priority: '0.85', changefreq: 'monthly', lastmod: V1_DATE },
+      { loc: '/guide',          priority: '0.80', changefreq: 'monthly', lastmod: V1_DATE },
+      { loc: '/faq',            priority: '0.80', changefreq: 'monthly', lastmod: V1_DATE },
+      { loc: '/encyclopedia',   priority: '0.75', changefreq: 'monthly', lastmod: V1_DATE },
+
+      // ── 컨텐츠 목록 페이지 (동적 — lastmod는 최신 포스트 기준) ──
+      { loc: '/blog',           priority: '0.85', changefreq: 'daily',   lastmod: V4_DATE },
+      { loc: '/before-after',   priority: '0.85', changefreq: 'daily',   lastmod: V4_DATE },
+      { loc: '/notice',         priority: '0.55', changefreq: 'weekly',  lastmod: V4_DATE },
+      { loc: '/community',      priority: '0.70', changefreq: 'weekly',  lastmod: V1_DATE },
+
+      // ── SEO 랜딩페이지 v2 (2026-05-13 배포) ──
+      { loc: '/uijeongbu-dental',     priority: '0.95', changefreq: 'monthly', lastmod: V4_DATE },
+      { loc: '/endodontics',           priority: '0.90', changefreq: 'monthly', lastmod: V4_DATE },
+      { loc: '/invisalign',            priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+      { loc: '/orthodontics',          priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+      { loc: '/glownate',              priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+      { loc: '/cavity-treatment',      priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+      { loc: '/implant-best',          priority: '0.95', changefreq: 'monthly', lastmod: V4_DATE },
+      { loc: '/full-mouth-implant',    priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+      { loc: '/front-tooth-implant',   priority: '0.85', changefreq: 'monthly', lastmod: V2_DATE },
+      { loc: '/bone-graft-implant',    priority: '0.85', changefreq: 'monthly', lastmod: V2_DATE },
+      { loc: '/laminate',              priority: '0.85', changefreq: 'monthly', lastmod: V2_DATE },
+      { loc: '/wisdom-tooth',          priority: '0.80', changefreq: 'monthly', lastmod: V2_DATE },
+      { loc: '/scaling-gum-treatment', priority: '0.80', changefreq: 'monthly', lastmod: V2_DATE },
+      { loc: '/denture-to-implant',    priority: '0.85', changefreq: 'monthly', lastmod: V2_DATE },
+
+      // ── SEO 랜딩페이지 v3 (2026-05-25 배포) ──
+      { loc: '/implant-cost',     priority: '0.95', changefreq: 'monthly', lastmod: V3_DATE },
+      { loc: '/night-dental',     priority: '0.85', changefreq: 'monthly', lastmod: V3_DATE },
+      { loc: '/senior-implant',   priority: '0.90', changefreq: 'monthly', lastmod: V3_DATE },
+      { loc: '/emergency-dental', priority: '0.85', changefreq: 'monthly', lastmod: V3_DATE },
+      { loc: '/tapseok-dental',   priority: '0.85', changefreq: 'monthly', lastmod: V3_DATE },
+      { loc: '/painless-dental',  priority: '0.85', changefreq: 'monthly', lastmod: V3_DATE },
+
+      // ── SEO 랜딩페이지 v4 (2026-05-27 배포) ──
+      { loc: '/pediatric-dental', priority: '0.85', changefreq: 'monthly', lastmod: V4_DATE },
+      { loc: '/crown',            priority: '0.85', changefreq: 'monthly', lastmod: V4_DATE },
+      { loc: '/teeth-whitening',  priority: '0.80', changefreq: 'monthly', lastmod: V4_DATE },
+      { loc: '/dental-checkup',   priority: '0.80', changefreq: 'monthly', lastmod: V4_DATE },
+      { loc: '/implant-process',  priority: '0.90', changefreq: 'monthly', lastmod: V4_DATE },
+      { loc: '/minrak-dental',    priority: '0.85', changefreq: 'monthly', lastmod: V4_DATE },
     ]
 
-    // ── 블로그 포스트 (개별 URL — 클린 URL) ──
-    let blogPosts: any[] = []
-    try {
-      const blogResult = await runQuery(db,
-        `SELECT id, title, created_at, updated_at FROM blog_posts WHERE is_published = 1 ORDER BY created_at DESC`, [])
-      blogPosts = blogResult.results || []
-    } catch (e) { /* ignore */ }
-
-    // ── 비포&애프터 (개별 URL — SSR 상세 페이지) ──
-    let baCases: any[] = []
-    try {
-      const baResult = await runQuery(db,
-        `SELECT id, title, created_at, updated_at FROM before_after WHERE is_published = 1 ORDER BY created_at DESC`, [])
-      baCases = baResult.results || []
-    } catch (e) { /* ignore */ }
-
-    // ── 공지사항 (개별 URL) ──
-    let notices: any[] = []
-    try {
-      const noticeResult = await runQuery(db,
-        `SELECT id, title, created_at FROM notices WHERE is_published = 1 ORDER BY created_at DESC`, [])
-      notices = noticeResult.results || []
-    } catch (e) { /* ignore */ }
-
-    // ── XML 생성 ──
+    // XML 생성 (Image Sitemap 확장 포함)
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`
 
-    // 정적 페이지
     for (const p of staticPages) {
+      const imgInfo = sitemapImageMap[p.loc]
       xml += `  <url>
     <loc>${SITE}${p.loc}</loc>
     <lastmod>${p.lastmod}</lastmod>
     <changefreq>${p.changefreq}</changefreq>
-    <priority>${p.priority}</priority>
-  </url>\n`
-    }
+    <priority>${p.priority}</priority>`
 
-    // 블로그 개별 포스트 (클린 URL: /blog/:id)
-    for (const post of blogPosts) {
-      const date = (post.updated_at || post.created_at || today).toString().split('T')[0].split(' ')[0]
-      xml += `  <url>
-    <loc>${SITE}/blog/${post.id}</loc>
-    <lastmod>${date}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>\n`
-    }
+      if (imgInfo) {
+        xml += `
+    <image:image>
+      <image:loc>${SITE}${imgInfo.url}</image:loc>
+      <image:title>${imgInfo.title}</image:title>
+    </image:image>`
+      }
 
-    // 비포&애프터 개별 케이스 (클린 URL: /before-after/:id)
-    for (const ba of baCases) {
-      const date = (ba.updated_at || ba.created_at || today).toString().split('T')[0].split(' ')[0]
-      xml += `  <url>
-    <loc>${SITE}/before-after/${ba.id}</loc>
-    <lastmod>${date}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>\n`
-    }
-
-    // 공지사항 개별 (notice 페이지에서 모달로 표시하므로 앵커 형태)
-    for (const n of notices) {
-      const date = (n.created_at || today).toString().split('T')[0].split(' ')[0]
-      xml += `  <url>
-    <loc>${SITE}/notice#notice-${n.id}</loc>
-    <lastmod>${date}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+      xml += `
   </url>\n`
     }
 
@@ -1791,11 +1835,141 @@ app.get('/sitemap.xml', async (c) => {
     return new Response(xml, {
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+        'Cache-Control': 'public, max-age=21600, s-maxage=21600',
       }
     })
   } catch (e: any) {
-    // Fallback: 정적 sitemap 서빙은 serveStatic이 처리
+    return c.notFound()
+  }
+})
+
+// ── 블로그 포스트 사이트맵 ──
+app.get('/sitemap-blog.xml', async (c) => {
+  try {
+    const db = c.env.DB
+    const SITE = 'https://seoulgaondc.kr'
+    const today = new Date().toISOString().split('T')[0]
+
+    let blogPosts: any[] = []
+    try {
+      const blogResult = await runQuery(db,
+        `SELECT id, title, thumbnail_url, created_at, updated_at FROM blog_posts WHERE is_published = 1 ORDER BY created_at DESC`, [])
+      blogPosts = blogResult.results || []
+    } catch (e) { /* ignore */ }
+
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`
+
+    // 블로그 목록 페이지
+    xml += `  <url>
+    <loc>${SITE}/blog</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>${SITE}/images/og-blog.jpg</image:loc>
+      <image:title>서울가온치과 블로그</image:title>
+    </image:image>
+  </url>\n`
+
+    // 블로그 개별 포스트
+    for (const post of blogPosts) {
+      const date = (post.updated_at || post.created_at || today).toString().split('T')[0].split(' ')[0]
+      const safeTitle = (post.title || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+      xml += `  <url>
+    <loc>${SITE}/blog/${post.id}</loc>
+    <lastmod>${date}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>`
+
+      // 블로그 포스트 썸네일 이미지
+      if (post.thumbnail_url) {
+        const imgUrl = post.thumbnail_url.startsWith('http') ? post.thumbnail_url : `${SITE}${post.thumbnail_url}`
+        xml += `
+    <image:image>
+      <image:loc>${imgUrl.replace(/&/g, '&amp;')}</image:loc>
+      <image:title>${safeTitle}</image:title>
+    </image:image>`
+      }
+
+      xml += `
+  </url>\n`
+    }
+
+    xml += `</urlset>`
+
+    return new Response(xml, {
+      headers: {
+        'Content-Type': 'application/xml; charset=utf-8',
+        'Cache-Control': 'public, max-age=21600, s-maxage=21600',
+      }
+    })
+  } catch (e: any) {
+    return c.notFound()
+  }
+})
+
+// ── 비포&애프터 사이트맵 ──
+app.get('/sitemap-before-after.xml', async (c) => {
+  try {
+    const db = c.env.DB
+    const SITE = 'https://seoulgaondc.kr'
+    const today = new Date().toISOString().split('T')[0]
+
+    let baCases: any[] = []
+    try {
+      const baResult = await runQuery(db,
+        `SELECT id, title, created_at, updated_at FROM before_after WHERE is_published = 1 ORDER BY created_at DESC`, [])
+      baCases = baResult.results || []
+    } catch (e) { /* ignore */ }
+
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`
+
+    // 비포&애프터 목록 페이지
+    xml += `  <url>
+    <loc>${SITE}/before-after</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>${SITE}/images/og-before-after.jpg</image:loc>
+      <image:title>서울가온치과 비포&amp;애프터</image:title>
+    </image:image>
+  </url>\n`
+
+    // 비포&애프터 개별 케이스
+    for (const ba of baCases) {
+      const date = (ba.updated_at || ba.created_at || today).toString().split('T')[0].split(' ')[0]
+      const safeTitle = (ba.title || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+      xml += `  <url>
+    <loc>${SITE}/before-after/${ba.id}</loc>
+    <lastmod>${date}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>`
+
+      // 비포&애프터 대표 이미지
+      xml += `
+    <image:image>
+      <image:loc>${SITE}/images/og-before-after.jpg</image:loc>
+      <image:title>${safeTitle}</image:title>
+    </image:image>`
+
+      xml += `
+  </url>\n`
+    }
+
+    xml += `</urlset>`
+
+    return new Response(xml, {
+      headers: {
+        'Content-Type': 'application/xml; charset=utf-8',
+        'Cache-Control': 'public, max-age=21600, s-maxage=21600',
+      }
+    })
+  } catch (e: any) {
     return c.notFound()
   }
 })
