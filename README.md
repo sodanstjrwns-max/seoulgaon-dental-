@@ -2,7 +2,7 @@
 
 ## Project Overview
 - **Name**: 서울가온치과 (Seoul Gaon Dental Clinic)
-- **Version**: v11 — SEO Super Upgrade v4
+- **Version**: v12 — Sitemap Pro Upgrade
 - **Type**: Hono + Cloudflare Pages (SSR + Static) — D1 Database + R2 Storage
 - **Target**: 의정부 서울가온치과의원 (현진호 대표원장)
 
@@ -10,7 +10,10 @@
 - **Production**: https://seoulgaondc.kr (custom domain)
 - **Cloudflare**: https://seoulgaon-dental.pages.dev
 - **GitHub**: https://github.com/sodanstjrwns-max/seoulgaon-dental-
-- **Sitemap**: https://seoulgaondc.kr/sitemap.xml (250 URLs)
+- **Sitemap Index**: https://seoulgaondc.kr/sitemap.xml (3 sub-sitemaps, 251 URLs)
+- **Sitemap Pages**: https://seoulgaondc.kr/sitemap-pages.xml (41 URLs)
+- **Sitemap Blog**: https://seoulgaondc.kr/sitemap-blog.xml (127 URLs)
+- **Sitemap BA**: https://seoulgaondc.kr/sitemap-before-after.xml (83 URLs)
 - **LLMs.txt**: https://seoulgaondc.kr/llms.txt (AI 검색엔진용)
 - **Phone**: 0507-1325-3377
 
@@ -64,7 +67,7 @@
 - **페이지별 OG 이미지 차별화** — 26개+ 카테고리별 다른 OG 이미지
 - **llms.txt** — AI 검색엔진(ChatGPT, Perplexity) 최적화, 28개 서비스 + 40+ 키워드 매핑
 - **IndexNow API** — 블로그/BA 생성·수정 시 Bing/Yandex 자동 제출
-- **Dynamic Sitemap** — 250+ URL, DB 기반 자동 생성
+- **Sitemap Index** — 3개 분할 사이트맵 (pages/blog/BA), Image Sitemap 확장, 실제 lastmod 날짜
 - **301 Redirects** — `blog-post.html?id=X` → `/blog/X`, `ba-post.html?id=X` → `/before-after/X`
 - **Clean URLs** — 전체 사이트 .html 확장자 제거
 - **SpeakableSpecification** — Google Voice Search 최적화
@@ -79,7 +82,10 @@
 | GET/POST | `/api/before-after` | 비포애프터 CRUD (+ IndexNow) |
 | POST | `/api/signup` | 회원가입 |
 | POST | `/api/admin/login` | 관리자 로그인 |
-| GET | `/sitemap.xml` | 동적 사이트맵 (244 URL) |
+| GET | `/sitemap.xml` | 사이트맵 인덱스 (3개 하위 사이트맵) |
+| GET | `/sitemap-pages.xml` | 정적+랜딩 페이지 사이트맵 (41 URL, Image Sitemap) |
+| GET | `/sitemap-blog.xml` | 블로그 사이트맵 (127 URL, Image Sitemap) |
+| GET | `/sitemap-before-after.xml` | 비포&애프터 사이트맵 (83 URL, Image Sitemap) |
 | GET | `/llms.txt` | AI 크롤러용 구조화 데이터 |
 
 ## Tech Stack
@@ -97,9 +103,10 @@
 - **D1 Database**: gaon-dental-db
 - **R2 Bucket**: gaon-dental-images
 - **Status**: Production Live
-- **Last Updated**: 2026-05-26
+- **Last Updated**: 2026-05-27
 
 ## Version History
+- v12 (2026-05-27): Sitemap Pro — sitemap index split (3 sub-sitemaps), image sitemap, notice fragment removal, lastmod accuracy
 - v11 (2026-05-26): SEO v4 — 6 new pages (pediatric, crown, whitening, checkup, implant-process, minrak), crosslinks
 - v10 (2026-05-26): SEO v3 — 6 new landing pages, OG image differentiation, corrected opening hours
 - v9 (2026-05-26): SEO v2 — 8 new landing pages, blog/BA list SSR, IndexNow, llms.txt expansion
