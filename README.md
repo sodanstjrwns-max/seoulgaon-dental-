@@ -106,6 +106,7 @@
 - **Last Updated**: 2026-05-27
 
 ## Version History
+- v13 (2026-06-09): 의료법 준수 정비 (의정부보건소 민원 조치) — 환자 치료경험담(리뷰 카드·경험담 인용) 전량 제거, implant AggregateRating(4.9/387)·Review JSON-LD 스키마 삭제, 전문과목 아닌 진료의 '전문' 표현 정비(임플란트/심미/교정/미백 → 중점 진료·시술명), 보존과/통합치의학과 전문의 자격 표기는 유지
 - v12 (2026-05-27): Sitemap Pro — sitemap index split (3 sub-sitemaps), image sitemap, notice fragment removal, lastmod accuracy
 - v11 (2026-05-26): SEO v4 — 6 new pages (pediatric, crown, whitening, checkup, implant-process, minrak), crosslinks
 - v10 (2026-05-26): SEO v3 — 6 new landing pages, OG image differentiation, corrected opening hours
