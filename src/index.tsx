@@ -1681,11 +1681,11 @@ const sitemapImageMap: Record<string, { url: string; title: string }> = {
   '/community':           { url: '/images/og-main.jpg',               title: '커뮤니티' },
   '/reservation':         { url: '/images/og-main.jpg',               title: '예약 안내' },
   '/uijeongbu-dental':    { url: '/images/clinic-lobby-1.jpg',        title: '의정부 치과 서울가온치과' },
-  '/endodontics':         { url: '/images/clinic-unit-1.jpg',         title: '신경치료 전문' },
+  '/endodontics':         { url: '/images/clinic-unit-1.jpg',         title: '신경치료' },
   '/invisalign':          { url: '/images/clinic-treatment.jpg',      title: '인비절라인 교정' },
-  '/orthodontics':        { url: '/images/clinic-treatment.jpg',      title: '치아교정 전문' },
+  '/orthodontics':        { url: '/images/clinic-treatment.jpg',      title: '치아교정' },
   '/glownate':            { url: '/images/clinic-makeup.jpg',         title: '글로네이트 심미치료' },
-  '/cavity-treatment':    { url: '/images/clinic-unit-1.jpg',         title: '충치치료 전문' },
+  '/cavity-treatment':    { url: '/images/clinic-unit-1.jpg',         title: '충치치료' },
   '/implant-best':        { url: '/images/clinic-implant-center.jpg', title: '임플란트 잘하는 치과' },
   '/full-mouth-implant':  { url: '/images/clinic-implant-center.jpg', title: '전체 임플란트' },
   '/front-tooth-implant': { url: '/images/clinic-treatment.jpg',      title: '앞니 임플란트' },
@@ -2444,7 +2444,7 @@ app.get('/blog/:id', async (c) => {
       "url": SITE,
       "logo": `${SITE}/images/og-main.jpg`,
       "image": `${SITE}/images/og-main.jpg`,
-      "description": "의정부 임플란트·심미치료·신경치료 전문 치과. 서울대학교 출신 의료진이 정직하고 바른 진료를 약속합니다.",
+      "description": "의정부 임플란트·심미치료·신경치료 중점 진료 치과의원. 서울대학교 출신 의료진이 정직하고 바른 진료를 약속합니다.",
       "address": { "@type": "PostalAddress", "addressLocality": "의정부시", "addressRegion": "경기도", "streetAddress": "용민로 22, 4층(용현동)", "postalCode": "11697", "addressCountry": "KR" },
       "geo": { "@type": "GeoCoordinates", "latitude": "37.7381", "longitude": "127.0337" },
       "telephone": "0507-1325-3377",
@@ -2614,7 +2614,7 @@ app.get('/before-after/:id', async (c) => {
     const pageTitle = `${item.title} | 서울가온치과 비포&애프터`
     const metaDesc = item.description
       ? (item.description.length > 155 ? item.description.substring(0, 155) + '...' : item.description)
-      : `${item.title} - 서울가온치과 ${item.category || '치과'} 치료 전후 비교 사진. 의정부 임플란트·심미치료 전문.`
+      : `${item.title} - 서울가온치과 ${item.category || '치과'} 치료 전후 비교 사진. 의정부 임플란트·심미치료 중점 진료.`
     const canonicalUrl = `${SITE}/before-after/${id}`
     const ogImage = item.intraoral_after_url || item.intraoral_before_url || `${SITE}/images/og-main.jpg`
     const publishDate = fmtDate(item.created_at)
@@ -2853,7 +2853,7 @@ const LANDING_PAGES: LandingPageData[] = [
     sections: [
       {
         heading: '왜 의정부에서 서울가온치과를 선택할까요?',
-        content: `<p>서울가온치과는 <strong>서울대학교 치의학과</strong> 출신 의료진이 직접 진료하는 의정부 전문 치과입니다. '가온'은 대표원장의 딸 이름으로, <strong>"내 아이에게 하듯 정직하게"</strong>라는 진료 철학을 담고 있습니다.</p>
+        content: `<p>서울가온치과는 <strong>서울대학교 치의학과</strong> 출신 의료진이 직접 진료하는 의정부 치과의원입니다. '가온'은 대표원장의 딸 이름으로, <strong>"내 아이에게 하듯 정직하게"</strong>라는 진료 철학을 담고 있습니다.</p>
 <p>의정부시 용민로에 위치하며 <strong>탑석역 1번출구에서 도보 5분</strong> 거리입니다. 임플란트, 심미치료(라미네이트·올세라믹), 신경치료, 레진빌드업, 일반진료까지 원스톱으로 진료합니다.</p>`
       },
       {
@@ -2869,8 +2869,8 @@ const LANDING_PAGES: LandingPageData[] = [
       },
       {
         heading: '서울가온치과 의료진',
-        content: `<p><strong>현진호 대표원장</strong> — 서울대학교 치의학과 졸업. 임플란트·보철 전문. CT 기반 가이드 수술로 정확성과 안전성을 확보합니다.</p>
-<p><strong>조은비 원장</strong> — 서울대학교 치의학대학원 보존과 전문의. 신경치료·심미수복 전문. 미세현미경으로 정밀한 치료를 시행합니다.</p>`
+        content: `<p><strong>현진호 대표원장</strong> — 서울대학교 치의학과 졸업. 임플란트·보철 중점 진료. CT 기반 가이드 수술로 정확성과 안전성을 확보합니다.</p>
+<p><strong>조은비 원장</strong> — 서울대학교 치의학대학원 보존과 전문의. 신경치료·심미수복을 중점적으로 진료하며, 미세현미경으로 정밀한 치료를 시행합니다.</p>`
       },
       {
         heading: '오시는 길 · 진료시간',
@@ -2900,8 +2900,8 @@ const LANDING_PAGES: LandingPageData[] = [
   {
     slug: 'endodontics',
     title: '의정부 신경치료 | 서울가온치과 — 서울대 보존과 전문의 직접 시행',
-    metaDesc: '의정부 신경치료 전문 서울가온치과. 서울대학교 보존과 전문의 조은비 원장이 미세현미경으로 직접 시행합니다. 정확한 진단, 최소 삭제, 높은 성공률. 탑석역 5분. ☎ 0507-1325-3377',
-    h1: '의정부 신경치료 전문 — 서울대 보존과 전문의',
+    metaDesc: '의정부 신경치료 서울가온치과. 서울대학교 보존과 전문의 조은비 원장이 미세현미경으로 직접 시행합니다. 정확한 진단, 최소 삭제, 높은 성공률. 탑석역 5분. ☎ 0507-1325-3377',
+    h1: '의정부 신경치료 — 서울대 보존과 전문의',
     heroSub: '서울대학교 보존과 전문의가 미세현미경으로 직접 시행하는 정밀 신경치료',
     keywords: '의정부 신경치료, 의정부 신경치료 잘하는곳, 의정부 치과 신경치료, 탑석역 신경치료, 신경치료 통증, 신경치료 비용, 의정부 보존과, 의정부 치아살리기',
     category: '신경치료',
@@ -2961,9 +2961,9 @@ const LANDING_PAGES: LandingPageData[] = [
   // ── 3. 의정부 인비절라인 ──
   {
     slug: 'invisalign',
-    title: '의정부 인비절라인 | 서울가온치과 — 투명교정 전문, 탑석역 5분',
+    title: '의정부 인비절라인 | 서울가온치과 — 투명교정, 탑석역 5분',
     metaDesc: '의정부 인비절라인 투명교정 서울가온치과. 눈에 띄지 않는 투명 교정장치로 가지런한 치아를 만듭니다. 정밀 3D 시뮬레이션, 맞춤 치료 계획. 탑석역 5분. ☎ 0507-1325-3377',
-    h1: '의정부 인비절라인 — 투명교정 전문',
+    h1: '의정부 인비절라인 — 투명교정 중점 진료',
     heroSub: '눈에 띄지 않는 투명 교정장치로 가지런한 치아를 완성합니다',
     keywords: '의정부 인비절라인, 의정부 투명교정, 의정부 치아교정, 인비절라인 비용, 인비절라인 후기, 의정부 교정치과, 탑석역 교정, 인비절라인 기간',
     category: '치아교정',
@@ -3023,9 +3023,9 @@ const LANDING_PAGES: LandingPageData[] = [
   // ── 4. 의정부 치아교정 ──
   {
     slug: 'orthodontics',
-    title: '의정부 치아교정 | 서울가온치과 — 인비절라인·투명교정 전문',
-    metaDesc: '의정부 치아교정 전문 서울가온치과. 인비절라인 투명교정, 부분교정, 심미교정까지. 3D 디지털 시뮬레이션으로 정확한 치료 계획. 탑석역 5분. ☎ 0507-1325-3377',
-    h1: '의정부 치아교정 — 인비절라인·투명교정 전문',
+    title: '의정부 치아교정 | 서울가온치과 — 인비절라인·투명교정 중점 진료',
+    metaDesc: '의정부 치아교정 서울가온치과. 인비절라인 투명교정, 부분교정, 심미교정까지. 3D 디지털 시뮬레이션으로 정확한 치료 계획. 탑석역 5분. ☎ 0507-1325-3377',
+    h1: '의정부 치아교정 — 인비절라인·투명교정 중점 진료',
     heroSub: '가지런한 치아, 건강한 교합 — 나에게 맞는 최적의 교정 방법을 찾아드립니다',
     keywords: '의정부 치아교정, 의정부 교정치과, 의정부 교정, 의정부 투명교정, 의정부 부분교정, 의정부 치아교정 비용, 탑석역 교정치과, 의정부 성인교정',
     category: '치아교정',
@@ -3182,7 +3182,7 @@ const LANDING_PAGES: LandingPageData[] = [
   {
     slug: 'implant-best',
     title: '의정부 임플란트 잘하는곳 | 서울가온치과 — CT 가이드 수술, 서울대 출신',
-    metaDesc: '의정부 임플란트 잘하는곳 찾으시나요? 서울가온치과는 CT 기반 가이드 임플란트로 정확하게, 최소 절개로 수술합니다. 서울대 출신 현진호 대표원장 직접 수술. 뼈이식·상악동거상술·전체임플란트 전문. ☎ 0507-1325-3377',
+    metaDesc: '의정부 임플란트 잘하는곳 찾으시나요? 서울가온치과는 CT 기반 가이드 임플란트로 정확하게, 최소 절개로 수술합니다. 서울대 출신 현진호 대표원장 직접 수술. 뼈이식·상악동거상술·전체임플란트 진료. ☎ 0507-1325-3377',
     h1: '의정부 임플란트 잘하는곳 — 서울가온치과',
     heroSub: 'CT 가이드 수술로 정확하고 안전한 임플란트, 서울대 출신 대표원장 직접 수술',
     keywords: '의정부 임플란트 잘하는곳, 의정부 임플란트, 의정부 임플란트 추천, 의정부 임플란트 비용, 의정부 임플란트 가격, 탑석역 임플란트, 의정부 치과 임플란트, 의정부 임플란트 후기',
@@ -3191,7 +3191,7 @@ const LANDING_PAGES: LandingPageData[] = [
       {
         heading: '서울가온치과 임플란트, 왜 다를까요?',
         content: `<p>서울가온치과는 모든 임플란트 수술에 <strong>CT 기반 가이드 시스템</strong>을 적용합니다. 3D CT 촬영으로 잇몸뼈 상태를 정밀 분석한 뒤, 컴퓨터로 설계한 최적의 위치에 임플란트를 식립합니다.</p>
-<p><strong>현진호 대표원장</strong>(서울대학교 치의학과 졸업)이 상담부터 수술, 보철까지 전 과정을 직접 책임집니다. 경기 북부 지역에서 <strong>전체임플란트, 뼈이식, 상악동거상술</strong>까지 원스톱으로 진행할 수 있는 전문 치과입니다.</p>`
+<p><strong>현진호 대표원장</strong>(서울대학교 치의학과 졸업)이 상담부터 수술, 보철까지 전 과정을 직접 책임집니다. 경기 북부 지역에서 <strong>전체임플란트, 뼈이식, 상악동거상술</strong>까지 원스톱으로 진행할 수 있는 치과의원입니다.</p>`
       },
       {
         heading: 'CT 가이드 임플란트의 장점',
@@ -3236,15 +3236,15 @@ const LANDING_PAGES: LandingPageData[] = [
   // ── 8. 의정부 전체 임플란트 ──
   {
     slug: 'full-mouth-implant',
-    title: '의정부 전체임플란트 | 서울가온치과 — 위아래 전악 임플란트 전문',
+    title: '의정부 전체임플란트 | 서울가온치과 — 위아래 전악 임플란트',
     metaDesc: '의정부 전체임플란트(전악임플란트) 전문 서울가온치과. 틀니에서 임플란트로, 위아래 전체 임플란트까지. CT 가이드 수술로 정확한 식립. 현진호 대표원장 직접 수술. 82건+ 전체임플란트 실적. ☎ 0507-1325-3377',
-    h1: '의정부 전체임플란트 전문 — 서울가온치과',
+    h1: '의정부 전체임플란트 — 서울가온치과',
     heroSub: '틀니에서 임플란트로, 위아래 전악 임플란트까지 원스톱 치료',
     keywords: '의정부 전체임플란트, 의정부 전악임플란트, 의정부 전체 임플란트 비용, 의정부 틀니 임플란트, 전체 임플란트 잘하는곳, 의정부 위아래 임플란트, 탑석역 전체임플란트',
     category: '전체임플란트',
     sections: [
       {
-        heading: '서울가온치과 전체임플란트 전문성',
+        heading: '서울가온치과 전체임플란트 진료 역량',
         content: `<p>서울가온치과 현진호 대표원장은 <strong>전체임플란트(전악임플란트) 82건 이상</strong>의 풍부한 수술 경험을 보유하고 있습니다. 오랜 기간 틀니를 사용해오신 분, 치주염으로 치아가 거의 남지 않은 분들에게 <strong>임플란트로 새로운 치아</strong>를 만들어 드립니다.</p>
 <p>CT 기반 가이드 시스템으로 다수의 임플란트를 정확한 위치에 식립하고, 필요한 경우 <strong>상악동거상술·뼈이식</strong>을 동반하여 부족한 잇몸뼈를 보강합니다.</p>`
       },
@@ -3286,15 +3286,15 @@ const LANDING_PAGES: LandingPageData[] = [
   // ── 9. 의정부 앞니 임플란트 ──
   {
     slug: 'front-tooth-implant',
-    title: '의정부 앞니임플란트 | 서울가온치과 — 심미적 앞니 복원 전문',
-    metaDesc: '의정부 앞니임플란트 전문 서울가온치과. 앞니는 심미성이 특히 중요합니다. CT 가이드 수술로 정확한 위치에 식립, PFZ 보철로 자연스러운 앞니를 완성합니다. 현진호 대표원장 직접 수술. ☎ 0507-1325-3377',
+    title: '의정부 앞니임플란트 | 서울가온치과 — 심미적 앞니 복원',
+    metaDesc: '의정부 앞니임플란트 서울가온치과. 앞니는 심미성이 특히 중요합니다. CT 가이드 수술로 정확한 위치에 식립, PFZ 보철로 자연스러운 앞니를 완성합니다. 현진호 대표원장 직접 수술. ☎ 0507-1325-3377',
     h1: '의정부 앞니임플란트 — 자연스러운 심미 복원',
     heroSub: '앞니는 얼굴의 인상을 결정합니다. CT 가이드 + PFZ 보철로 자연스럽게',
     keywords: '의정부 앞니 임플란트, 의정부 앞니 치료, 앞니 임플란트 비용, 앞니 임플란트 후기, 의정부 앞니 보철, 앞니 깨짐, 앞니 부러짐, 앞니 크라운',
     category: '앞니임플란트',
     sections: [
       {
-        heading: '앞니 임플란트, 왜 전문성이 중요한가요?',
+        heading: '앞니 임플란트, 왜 정밀한 진료가 중요한가요?',
         content: `<p>앞니는 단순히 씹는 기능뿐 아니라 <strong>얼굴의 인상과 미소</strong>를 결정하는 중요한 치아입니다. 앞니 임플란트는 일반 어금니 임플란트와 달리 <strong>잇몸 라인, 치아 형태, 색상, 투명도</strong>까지 세밀하게 고려해야 합니다.</p>
 <p>서울가온치과 현진호 대표원장은 앞니 임플란트에서 <strong>CT 가이드 수술</strong>로 보철에 최적화된 위치에 식립하고, <strong>PFZ(Porcelain Fused to Zirconia) 보철</strong>로 반대편 자연치아와 구분이 안 되는 결과를 만들어냅니다.</p>`
       },
@@ -3329,8 +3329,8 @@ const LANDING_PAGES: LandingPageData[] = [
   // ── 10. 의정부 뼈이식 임플란트 ──
   {
     slug: 'bone-graft-implant',
-    title: '의정부 뼈이식 임플란트 | 서울가온치과 — 상악동거상술·뼈이식 전문',
-    metaDesc: '의정부 뼈이식 임플란트 전문 서울가온치과. 잇몸뼈가 부족해 다른 치과에서 안 된다고 하셨나요? 상악동거상술·수직골증강까지. 현진호 대표원장(서울대) 직접 수술. ☎ 0507-1325-3377',
+    title: '의정부 뼈이식 임플란트 | 서울가온치과 — 상악동거상술·뼈이식',
+    metaDesc: '의정부 뼈이식 임플란트 서울가온치과. 잇몸뼈가 부족해 다른 치과에서 안 된다고 하셨나요? 상악동거상술·수직골증강까지. 현진호 대표원장(서울대) 직접 수술. ☎ 0507-1325-3377',
     h1: '의정부 뼈이식 임플란트 — 뼈가 부족해도 가능합니다',
     heroSub: '다른 치과에서 안 된다고 하셨나요? 상악동거상술·뼈이식으로 가능하게 만듭니다',
     keywords: '의정부 뼈이식 임플란트, 의정부 상악동거상술, 뼈이식 임플란트 비용, 임플란트 뼈이식, 의정부 뼈이식, 뼈 부족 임플란트, 수직골증강, 잇몸뼈 이식',
@@ -3374,7 +3374,7 @@ const LANDING_PAGES: LandingPageData[] = [
   {
     slug: 'laminate',
     title: '의정부 라미네이트 | 서울가온치과 — 최소삭제 심미보철, 자연스러운 앞니',
-    metaDesc: '의정부 라미네이트 전문 서울가온치과. 앞니 변색·벌어짐·왜소치를 최소삭제 라미네이트로 자연스럽게 개선합니다. 디지털 쉐이드 매칭. 글로우네이트 시술 가능. ☎ 0507-1325-3377',
+    metaDesc: '의정부 라미네이트 서울가온치과. 앞니 변색·벌어짐·왜소치를 최소삭제 라미네이트로 자연스럽게 개선합니다. 디지털 쉐이드 매칭. 글로우네이트 시술 가능. ☎ 0507-1325-3377',
     h1: '의정부 라미네이트 — 최소삭제로 자연스러운 앞니',
     heroSub: '변색·벌어짐·왜소치, 라미네이트로 자연스럽게 개선합니다',
     keywords: '의정부 라미네이트, 의정부 라미네이트 비용, 의정부 앞니 라미네이트, 라미네이트 가격, 의정부 심미치료, 탑석역 라미네이트, 의정부 치아성형',
@@ -3795,7 +3795,7 @@ const LANDING_PAGES: LandingPageData[] = [
 <ul>
 <li><strong>400평 규모 종합 시설</strong> — 대학병원급 장비와 독립 수술실 6개</li>
 <li><strong>전 진료과목 원스톱</strong> — 임플란트, 교정, 심미, 일반 진료 모두 한 곳에서</li>
-<li><strong>현진호 대표원장 직접 진료</strong> — 임플란트 전문, 서울대 출신</li>
+<li><strong>현진호 대표원장 직접 진료</strong> — 임플란트 중점 진료, 서울대 출신</li>
 <li><strong>평일 저녁 7시까지</strong> — 퇴근 후에도 편하게 내원</li>
 <li><strong>철저한 감염관리</strong> — 에어샤워, 개별 수술실, 1회용 소독 키트</li>
 </ul>`
@@ -3807,7 +3807,7 @@ const LANDING_PAGES: LandingPageData[] = [
 <li>😁 <strong>교정</strong> — 인비절라인·세라믹 교정·부분교정</li>
 <li>✨ <strong>심미치료</strong> — 라미네이트·레진빌드업·미백</li>
 <li>🪥 <strong>일반 진료</strong> — 충치·신경치료·발치·스케일링</li>
-<li>🦴 <strong>사랑니</strong> — 매복사랑니 전문 발치</li>
+<li>🦴 <strong>사랑니</strong> — 매복사랑니 발치</li>
 <li>💪 <strong>잇몸치료</strong> — 치주치료·잇몸수술</li>
 </ul>
 <p>탑석역에서 조금만 오시면, <strong>대학병원 수준의 진료</strong>를 동네 치과의 편안함으로 받으실 수 있습니다.</p>`
@@ -3935,7 +3935,7 @@ const LANDING_PAGES: LandingPageData[] = [
   {
     slug: 'crown',
     title: '의정부 크라운 치료 | 서울가온치과 — 지르코니아·올세라믹 크라운',
-    metaDesc: '의정부 크라운 서울가온치과. 지르코니아 크라운, 올세라믹 크라운, PFM 크라운 전문. 자연치아 색상 맞춤, 1:1 기공소 협업. 신경치료 후 크라운, 임플란트 보철 전문. ☎ 0507-1325-3377',
+    metaDesc: '의정부 크라운 서울가온치과. 지르코니아 크라운, 올세라믹 크라운, PFM 크라운 맞춤 제작. 자연치아 색상 맞춤, 1:1 기공소 협업. 신경치료 후 크라운, 임플란트 보철 진료. ☎ 0507-1325-3377',
     h1: '의정부 크라운 치료 — 자연치아처럼 아름답고 튼튼하게',
     heroSub: '정밀한 보철, 오래가는 크라운. 서울가온치과의 크라운 치료를 만나보세요',
     keywords: '의정부 크라운, 지르코니아 크라운, 올세라믹 크라운, 의정부 보철, 크라운 비용, 크라운 치료, PFM 크라운, 의정부 지르코니아',
@@ -3989,10 +3989,10 @@ const LANDING_PAGES: LandingPageData[] = [
   // ── 23. 의정부 치아미백 ──
   {
     slug: 'teeth-whitening',
-    title: '의정부 치아미백 | 서울가온치과 — 전문 미백으로 환하게',
-    metaDesc: '의정부 치아미백 서울가온치과. 전문가 미백(오피스 미백) + 자가 미백 병행 프로그램. 변색·착색 개선. 라미네이트 전 색상 맞춤 미백. 안전한 약제, 시린 증상 최소화. ☎ 0507-1325-3377',
+    title: '의정부 치아미백 | 서울가온치과 — 치아미백으로 환하게',
+    metaDesc: '의정부 치아미백 서울가온치과. 오피스 미백 + 자가 미백 병행 프로그램. 변색·착색 개선. 라미네이트 전 색상 맞춤 미백. 안전한 약제, 시린 증상 최소화. ☎ 0507-1325-3377',
     h1: '의정부 치아미백 — 자신 있는 밝은 미소',
-    heroSub: '누런 치아, 착색된 치아를 밝고 환하게. 전문 미백 프로그램을 경험하세요',
+    heroSub: '누런 치아, 착색된 치아를 밝고 환하게. 맞춤 미백 프로그램을 경험하세요',
     keywords: '의정부 치아미백, 의정부 미백, 치아 미백 비용, 오피스 미백, 자가 미백, 치아 착색, 치아 변색, 의정부 미백 치과',
     category: '치아미백',
     sections: [
@@ -4005,7 +4005,7 @@ const LANDING_PAGES: LandingPageData[] = [
         heading: '미백 프로그램 안내',
         content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
 <tr style="background:var(--gold);color:#fff"><th style="padding:10px;border:1px solid #ddd">종류</th><th style="padding:10px;border:1px solid #ddd">방법</th><th style="padding:10px;border:1px solid #ddd">효과</th></tr>
-<tr><td style="padding:10px;border:1px solid #ddd"><strong>오피스 미백</strong><br>(전문가 미백)</td><td style="padding:10px;border:1px solid #ddd">병원에서 고농도 미백제 + LED 조사<br>1회 약 40~60분</td><td style="padding:10px;border:1px solid #ddd">즉시 2~4단계 밝아짐<br>빠른 효과</td></tr>
+<tr><td style="padding:10px;border:1px solid #ddd"><strong>오피스 미백</strong><br>(치과 미백)</td><td style="padding:10px;border:1px solid #ddd">병원에서 고농도 미백제 + LED 조사<br>1회 약 40~60분</td><td style="padding:10px;border:1px solid #ddd">즉시 2~4단계 밝아짐<br>빠른 효과</td></tr>
 <tr><td style="padding:10px;border:1px solid #ddd"><strong>자가 미백</strong><br>(홈 블리칭)</td><td style="padding:10px;border:1px solid #ddd">맞춤 트레이 + 저농도 미백제<br>매일 30분~2시간, 2~4주</td><td style="padding:10px;border:1px solid #ddd">점진적 미백<br>유지 효과 우수</td></tr>
 <tr><td style="padding:10px;border:1px solid #ddd"><strong>듀얼 미백</strong><br>(병행)</td><td style="padding:10px;border:1px solid #ddd">오피스 + 자가 병행</td><td style="padding:10px;border:1px solid #ddd"><strong>최고 효과</strong><br>가장 많이 추천</td></tr>
 </table>`
