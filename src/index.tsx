@@ -60,7 +60,7 @@ app.use('*', async (c, next) => {
   c.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self)')
 
   // HTML 페이지 캐시: 짧게 (SEO 크롤러가 최신 콘텐츠 수집)
-  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|invisalign|orthodontics|glownate|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant|implant-cost|night-dental|senior-implant|emergency-dental|tapseok-dental|painless-dental|pediatric-dental|crown|teeth-whitening|dental-checkup|implant-process|minrak-dental)$/) || path.match(/^\/(blog|before-after)\/\d+$/)) {
+  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|invisalign|orthodontics|glownate|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant|implant-cost|night-dental|senior-implant|emergency-dental|tapseok-dental|painless-dental|pediatric-dental|crown|teeth-whitening|dental-checkup|implant-process|minrak-dental)$/) || path.match(/^\/(blog|before-after)\/\d+$/) || path.match(/^\/encyclopedia\/[^\/]+$/)) {
     c.header('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200')
     c.header('X-Robots-Tag', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')
   }
@@ -1582,7 +1582,11 @@ app.post('/api/admin/encyclopedia', auth, async (c) => {
       d.related_treatment || '', d.seo_title || '', d.seo_description || '', d.seo_keywords || '',
       d.is_published !== false ? 1 : 0, d.sort_order || 0
     ).run()
-    return c.json({ id: result.meta.last_row_id, slug }, 201)
+    // IndexNow: 새 백과사전 용어 자동 색인 요청
+    const newId = result.meta.last_row_id
+    const encUrl = /^[가-힣a-zA-Z0-9-]+$/.test(slug) ? `https://seoulgaondc.kr/encyclopedia/${encodeURIComponent(slug)}` : `https://seoulgaondc.kr/encyclopedia/${newId}`
+    c.executionCtx.waitUntil(submitIndexNow([encUrl, 'https://seoulgaondc.kr/encyclopedia']))
+    return c.json({ id: newId, slug }, 201)
   } catch (e: any) {
     return c.json({ error: e.message }, 500)
   }
@@ -1607,6 +1611,9 @@ app.put('/api/admin/encyclopedia/:id', auth, async (c) => {
       d.related_treatment || '', d.seo_title || '', d.seo_description || '', d.seo_keywords || '',
       d.is_published ? 1 : 0, d.sort_order || 0, id
     ).run()
+    // IndexNow: 수정된 용어 재색인 요청
+    const encUrl2 = d.slug && /^[가-힣a-zA-Z0-9-]+$/.test(d.slug) ? `https://seoulgaondc.kr/encyclopedia/${encodeURIComponent(d.slug)}` : `https://seoulgaondc.kr/encyclopedia/${id}`
+    c.executionCtx.waitUntil(submitIndexNow([encUrl2, 'https://seoulgaondc.kr/encyclopedia']))
     return c.json({ success: true })
   } catch (e: any) {
     return c.json({ error: e.message }, 500)
@@ -1727,6 +1734,10 @@ app.get('/sitemap.xml', async (c) => {
     <loc>${SITE}/sitemap-before-after.xml</loc>
     <lastmod>${today}</lastmod>
   </sitemap>
+  <sitemap>
+    <loc>${SITE}/sitemap-encyclopedia.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
 </sitemapindex>`
 
   return new Response(xml, {
@@ -1764,7 +1775,7 @@ app.get('/sitemap-pages.xml', async (c) => {
       { loc: '/doctors',        priority: '0.85', changefreq: 'monthly', lastmod: V1_DATE },
       { loc: '/guide',          priority: '0.80', changefreq: 'monthly', lastmod: V1_DATE },
       { loc: '/faq',            priority: '0.80', changefreq: 'monthly', lastmod: V1_DATE },
-      { loc: '/encyclopedia',   priority: '0.75', changefreq: 'monthly', lastmod: V1_DATE },
+      // /encyclopedia는 sitemap-encyclopedia.xml에서 관리 (중복 방지)
 
       // ── 컨텐츠 목록 페이지 (동적 — lastmod는 최신 포스트 기준) ──
       { loc: '/blog',           priority: '0.85', changefreq: 'daily',   lastmod: V4_DATE },
@@ -1974,6 +1985,111 @@ app.get('/sitemap-before-after.xml', async (c) => {
   }
 })
 
+// ── 치과 백과사전 사이트맵 (283+ 용어 개별 페이지) ──
+app.get('/sitemap-encyclopedia.xml', async (c) => {
+  try {
+    const db = c.env.DB
+    const SITE = 'https://seoulgaondc.kr'
+    const today = new Date().toISOString().split('T')[0]
+
+    let entries: any[] = []
+    try {
+      const r = await db.prepare(
+        `SELECT id, term, slug, updated_at, created_at FROM encyclopedia WHERE is_published = 1 ORDER BY sort_order ASC, term ASC`
+      ).all()
+      entries = r.results || []
+    } catch (e) { /* ignore */ }
+
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`
+
+    // 백과사전 목록 페이지
+    xml += `  <url>
+    <loc>${SITE}/encyclopedia</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>\n`
+
+    for (const e of entries) {
+      const date = (e.updated_at || e.created_at || today).toString().split('T')[0].split(' ')[0]
+      const loc = `${SITE}${encPath(e)}`
+      xml += `  <url>
+    <loc>${loc}</loc>
+    <lastmod>${date}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>\n`
+    }
+
+    xml += `</urlset>`
+
+    return new Response(xml, {
+      headers: {
+        'Content-Type': 'application/xml; charset=utf-8',
+        'Cache-Control': 'public, max-age=21600, s-maxage=21600',
+      }
+    })
+  } catch (e: any) {
+    return c.notFound()
+  }
+})
+
+// ── RSS 2.0 피드 (블로그 — 네이버/구글/AI 크롤러 콘텐츠 신선도 신호) ──
+app.get('/rss.xml', async (c) => {
+  try {
+    const db = c.env.DB
+    const SITE = 'https://seoulgaondc.kr'
+    const xmlEsc = (s: string) => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+
+    let posts: any[] = []
+    try {
+      const r = await db.prepare(
+        `SELECT id, title, content, category, thumbnail_url, created_at, updated_at FROM blog_posts WHERE is_published = 1 ORDER BY created_at DESC LIMIT 30`
+      ).all()
+      posts = r.results || []
+    } catch (e) { /* ignore */ }
+
+    const items = posts.map((p: any) => {
+      const desc = (p.content || '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().substring(0, 300)
+      const pub = new Date(p.created_at || Date.now()).toUTCString()
+      return `    <item>
+      <title>${xmlEsc(p.title)}</title>
+      <link>${SITE}/blog/${p.id}</link>
+      <guid isPermaLink="true">${SITE}/blog/${p.id}</guid>
+      <pubDate>${pub}</pubDate>
+      ${p.category ? `<category>${xmlEsc(p.category)}</category>` : ''}
+      <description>${xmlEsc(desc)}</description>
+    </item>`
+    }).join('\n')
+
+    const lastBuild = posts.length ? new Date(posts[0].created_at).toUTCString() : new Date().toUTCString()
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>서울가온치과 블로그</title>
+    <link>${SITE}/blog</link>
+    <atom:link href="${SITE}/rss.xml" rel="self" type="application/rss+xml"/>
+    <description>의정부 서울가온치과 블로그 — 임플란트, 심미치료, 신경치료 등 치과 건강 정보를 쉽고 정직하게 전합니다.</description>
+    <language>ko-kr</language>
+    <lastBuildDate>${lastBuild}</lastBuildDate>
+    <ttl>360</ttl>
+${items}
+  </channel>
+</rss>`
+
+    return new Response(xml, {
+      headers: {
+        'Content-Type': 'application/rss+xml; charset=utf-8',
+        'Cache-Control': 'public, max-age=3600, s-maxage=21600',
+      }
+    })
+  } catch (e: any) {
+    return c.notFound()
+  }
+})
+
 // ══════════════════════════════════════════════════
 //  HEALTH CHECK
 // ══════════════════════════════════════════════════
@@ -2013,7 +2129,8 @@ const HEAD_COMMON = `<meta charset="UTF-8">
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
 <link href="/style.css" rel="stylesheet">
-<link href="/pages.css" rel="stylesheet">`
+<link href="/pages.css" rel="stylesheet">
+<link rel="alternate" type="application/rss+xml" title="서울가온치과 블로그 RSS" href="https://seoulgaondc.kr/rss.xml">`
 
 // 공통 네비게이션
 const NAV_HTML = `<nav id="nav" role="navigation" aria-label="메인 네비게이션">
@@ -2812,6 +2929,442 @@ if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open'
   } catch (e: any) {
     console.error('[SSR BA ERROR]', e.message)
     return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>오류 | 서울가온치과</title></head><body><p>잠시 후 다시 시도해주세요.</p></body></html>`, 500)
+  }
+})
+
+// ══════════════════════════════════════════════════
+//  SSR — 치과 백과사전 (283+ 용어 → 개별 SEO/AEO 페이지)
+// ══════════════════════════════════════════════════
+
+// slug가 URL-safe한지 검사 (한글/영문/숫자/하이픈만)
+function encSlugClean(slug: string): boolean {
+  return /^[가-힣a-zA-Z0-9-]+$/.test(slug)
+}
+// 용어의 canonical 경로: 깨끗한 slug면 slug, 아니면 id
+function encPath(e: { id: number; slug: string }): string {
+  return encSlugClean(e.slug) ? `/encyclopedia/${encodeURIComponent(e.slug)}` : `/encyclopedia/${e.id}`
+}
+// 마크다운-ish 콘텐츠 → HTML (서버사이드, 리스트 wrapping 포함)
+function encFormatContent(text: string): string {
+  if (!text) return ''
+  if (/<[a-z][\s\S]*>/i.test(text)) return text
+  const lines = text.split('\n')
+  let html = ''
+  let inList = false
+  for (let raw of lines) {
+    const line = raw.trim()
+    if (!line) continue
+    if (line.startsWith('- ')) {
+      if (!inList) { html += '<ul>'; inList = true }
+      html += `<li>${escHtml(line.slice(2))}</li>`
+    } else {
+      if (inList) { html += '</ul>'; inList = false }
+      if (line.startsWith('## ')) html += `<h2>${escHtml(line.slice(3))}</h2>`
+      else if (line.startsWith('### ')) html += `<h3>${escHtml(line.slice(4))}</h3>`
+      else html += `<p>${escHtml(line)}</p>`
+    }
+  }
+  if (inList) html += '</ul>'
+  return html
+}
+
+const ENC_CAT_ORDER = ['임플란트','보철','보존','교정','예방','구강외과','심미','소아·청소년','진단·검사','잇몸','일반']
+
+// ── 301: 구 URL → 클린 URL ──
+app.get('/encyclopedia.html', (c) => {
+  const term = c.req.query('term')
+  if (term) return c.redirect(`/encyclopedia/${encodeURIComponent(term)}`, 301)
+  return c.redirect('/encyclopedia', 301)
+})
+
+// ── SSR: 백과사전 목록 (283개 용어 전체 내부링크 — 크롤러 완전 노출) ──
+app.get('/encyclopedia', async (c) => {
+  try {
+    // 구 쿼리스트링 (?term=slug) → 상세페이지 301
+    const term = c.req.query('term')
+    if (term) return c.redirect(`/encyclopedia/${encodeURIComponent(term)}`, 301)
+
+    const db = c.env.DB
+    await initDB(db)
+    const result = await db.prepare(
+      `SELECT id, term, slug, category, summary FROM encyclopedia WHERE is_published = 1 ORDER BY sort_order ASC, term ASC`
+    ).all()
+    const entries: any[] = result.results || []
+    const total = entries.length
+
+    // 카테고리별 그룹핑
+    const byCat: Record<string, any[]> = {}
+    for (const e of entries) {
+      const cat = e.category || '일반'
+      if (!byCat[cat]) byCat[cat] = []
+      byCat[cat].push(e)
+    }
+    const cats = Object.keys(byCat).sort((a, b) => {
+      const ia = ENC_CAT_ORDER.indexOf(a), ib = ENC_CAT_ORDER.indexOf(b)
+      return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib)
+    })
+
+    // 카테고리 탭 + 섹션 HTML
+    const tabsHtml = cats.map(cat => `<a href="#cat-${encodeURIComponent(cat)}" class="enc-tab">${escHtml(cat)} <span>${byCat[cat].length}</span></a>`).join('')
+    const sectionsHtml = cats.map(cat => `
+    <section id="cat-${escHtml(cat)}" class="enc-section">
+      <h2><i class="fas fa-folder-open" style="color:var(--gold);margin-right:.5rem"></i>${escHtml(cat)} <span class="enc-count">(${byCat[cat].length}개 용어)</span></h2>
+      <div class="enc-grid">
+        ${byCat[cat].map((e: any) => `<a href="${encPath(e)}" class="enc-item" data-term="${escHtml(e.term.toLowerCase())} ${escHtml((e.summary || '').toLowerCase())}">
+          <strong>${escHtml(e.term)}</strong>
+          <span>${escHtml((e.summary || '').substring(0, 80))}${(e.summary || '').length > 80 ? '…' : ''}</span>
+        </a>`).join('')}
+      </div>
+    </section>`).join('')
+
+    // JSON-LD: CollectionPage + DefinedTermSet
+    const jsonLd = JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "name": "치과 백과사전 — 서울가온치과",
+          "description": `치과 용어 ${total}개를 서울대 출신 의료진이 쉽게 풀어 설명하는 치과 백과사전. 임플란트, 보철, 신경치료, 교정, 잇몸 등 카테고리별 정리.`,
+          "url": `${SITE}/encyclopedia`,
+          "isPartOf": { "@type": "WebSite", "name": "서울가온치과", "url": SITE },
+          "numberOfItems": total,
+          "publisher": { "@type": "Dentist", "name": "서울가온치과의원", "url": SITE, "telephone": "0507-1325-3377" }
+        },
+        {
+          "@type": "DefinedTermSet",
+          "@id": `${SITE}/encyclopedia#termset`,
+          "name": "서울가온치과 치과 백과사전",
+          "description": `치과 의료 용어 ${total}개 정의 모음`,
+          "hasDefinedTerm": entries.slice(0, 100).map((e: any) => ({
+            "@type": "DefinedTerm",
+            "name": e.term,
+            "description": e.summary || '',
+            "url": `${SITE}${encPath(e)}`
+          }))
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "홈", "item": SITE },
+            { "@type": "ListItem", "position": 2, "name": "치과 백과사전", "item": `${SITE}/encyclopedia` }
+          ]
+        }
+      ]
+    })
+
+    const html = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+${HEAD_COMMON}
+<title>치과 백과사전 — ${total}개 치과 용어 총정리 | 서울가온치과</title>
+<meta name="description" content="임플란트, 보철, 신경치료, 교정, 잇몸질환 등 치과 용어 ${total}개를 서울대 출신 의료진이 쉽게 설명합니다. 의정부 서울가온치과 치과 백과사전.">
+<meta name="keywords" content="치과 용어, 치과 백과사전, 임플란트 용어, 치과 상식, 치과 용어 정리, 의정부 치과">
+<link rel="canonical" href="${SITE}/encyclopedia">
+<meta property="og:title" content="치과 백과사전 — ${total}개 치과 용어 총정리 | 서울가온치과">
+<meta property="og:description" content="치과 용어 ${total}개를 서울대 출신 의료진이 쉽게 설명합니다.">
+<meta property="og:url" content="${SITE}/encyclopedia">
+<meta property="og:type" content="website">
+<meta property="og:image" content="${SITE}/images/og-main.jpg">
+<script type="application/ld+json">${jsonLd}</script>
+<style>
+.enc-hero{padding:7.5rem 1.5rem 2.5rem;text-align:center;max-width:900px;margin:0 auto}
+.enc-hero h1{font-size:clamp(1.7rem,4vw,2.4rem);color:var(--ivory);margin-bottom:.6rem}
+.enc-hero p{color:var(--stone-l);font-size:.95rem}
+.enc-search-wrap{max-width:560px;margin:1.5rem auto 0;position:relative}
+.enc-search-wrap input{width:100%;padding:.85rem 1.1rem .85rem 2.6rem;background:var(--ink);border:1px solid rgba(191,164,106,.25);border-radius:8px;color:var(--ivory);font-size:.95rem}
+.enc-search-wrap i{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--gold)}
+.enc-tabs{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;max-width:900px;margin:1.5rem auto 0;padding:0 1rem}
+.enc-tab{padding:.4rem .85rem;background:var(--ink);border:1px solid rgba(191,164,106,.2);border-radius:20px;color:var(--stone-l);font-size:.8rem;text-decoration:none;transition:all .2s}
+.enc-tab:hover{border-color:var(--gold);color:var(--gold)}
+.enc-tab span{color:var(--gold);font-size:.72rem}
+.enc-main{max-width:1100px;margin:0 auto;padding:1rem 1.5rem 4rem}
+.enc-section{margin-top:2.5rem}
+.enc-section h2{font-size:1.3rem;color:var(--ivory);border-bottom:1px solid rgba(191,164,106,.2);padding-bottom:.6rem;margin-bottom:1rem}
+.enc-count{font-size:.8rem;color:var(--stone);font-weight:400}
+.enc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.8rem}
+.enc-item{display:flex;flex-direction:column;gap:.3rem;padding:.9rem 1rem;background:var(--ink);border:1px solid rgba(191,164,106,.12);border-radius:8px;text-decoration:none;transition:border-color .2s,transform .2s}
+.enc-item:hover{border-color:var(--gold);transform:translateY(-2px)}
+.enc-item strong{color:var(--gold);font-size:.92rem}
+.enc-item span{color:var(--stone-l);font-size:.78rem;line-height:1.45}
+.enc-item.hide{display:none}
+@media(max-width:768px){.enc-grid{grid-template-columns:1fr 1fr}.enc-item span{display:none}}
+</style>
+</head>
+<body>
+${NAV_HTML}
+<main id="main-content" role="main">
+  <div class="enc-hero">
+    <h1><i class="fas fa-book-medical" style="color:var(--gold);margin-right:.5rem"></i>치과 백과사전</h1>
+    <p>치과 용어 <strong style="color:var(--gold)">${total}개</strong>를 서울대 출신 의료진이 쉽고 정확하게 설명합니다.</p>
+    <div class="enc-search-wrap">
+      <i class="fas fa-search"></i>
+      <input type="search" id="enc-search" placeholder="용어 검색 (예: 임플란트, 신경치료, 골이식)" aria-label="치과 용어 검색">
+    </div>
+  </div>
+  <nav class="enc-tabs" aria-label="카테고리">${tabsHtml}</nav>
+  <div class="enc-main">
+    ${sectionsHtml}
+  </div>
+</main>
+${FOOTER_HTML}
+${KAKAO_FLOAT}
+<script src="/pages.js"></script>
+<script>
+var ham=document.querySelector('.hamburger'),mob=document.querySelector('.mob-menu');
+if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open');mob.classList.toggle('open')});mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){ham.classList.remove('open');mob.classList.remove('open')})})}
+// 클라이언트 검색 필터 (SSR된 DOM 필터링 — SEO 영향 없음)
+var si=document.getElementById('enc-search');
+if(si){si.addEventListener('input',function(){var q=this.value.trim().toLowerCase();document.querySelectorAll('.enc-item').forEach(function(el){el.classList.toggle('hide',q&&el.getAttribute('data-term').indexOf(q)===-1)});document.querySelectorAll('.enc-section').forEach(function(s){var vis=s.querySelectorAll('.enc-item:not(.hide)').length;s.style.display=vis?'':'none'})})}
+</script>
+</body>
+</html>`
+
+    return c.html(html, 200, {
+      'Cache-Control': 'public, max-age=3600, s-maxage=43200, stale-while-revalidate=43200',
+      'X-Robots-Tag': 'index, follow, max-snippet:-1, max-image-preview:large',
+    })
+  } catch (e: any) {
+    console.error('[SSR Encyclopedia List ERROR]', e.message)
+    return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>치과 백과사전 | 서울가온치과</title></head><body><p>잠시 후 다시 시도해주세요.</p></body></html>`, 500)
+  }
+})
+
+// ── SSR: 백과사전 상세 (id 또는 slug — DefinedTerm + FAQPage + MedicalWebPage) ──
+app.get('/encyclopedia/:key', async (c) => {
+  try {
+    const db = c.env.DB
+    await initDB(db)
+    const key = decodeURIComponent(c.req.param('key'))
+
+    let entry: any = null
+    if (/^\d+$/.test(key)) {
+      entry = await db.prepare('SELECT * FROM encyclopedia WHERE id = ? AND is_published = 1').bind(parseInt(key)).first()
+    }
+    if (!entry) {
+      entry = await db.prepare('SELECT * FROM encyclopedia WHERE slug = ? AND is_published = 1').bind(key).first()
+    }
+    if (!entry) {
+      // term 명으로도 시도 (관용성)
+      entry = await db.prepare('SELECT * FROM encyclopedia WHERE term = ? AND is_published = 1').bind(key).first()
+    }
+
+    if (!entry) {
+      return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>용어를 찾을 수 없습니다 | 서울가온치과</title>${HEAD_COMMON}</head><body>${NAV_HTML}<main style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:72px"><div><h1 style="color:var(--gold);font-size:2rem;margin-bottom:1rem">404</h1><p style="color:var(--stone-l);margin-bottom:2rem">해당 용어를 찾을 수 없습니다.</p><a href="/encyclopedia" style="color:var(--gold);text-decoration:underline">백과사전 목록으로 →</a></div></main>${FOOTER_HTML}${KAKAO_FLOAT}<script src="/pages.js"></script></body></html>`, 404)
+    }
+
+    // 조회수 증가 (fire-and-forget)
+    c.executionCtx.waitUntil(
+      db.prepare('UPDATE encyclopedia SET view_count = view_count + 1 WHERE id = ?').bind(entry.id).run().catch(() => {})
+    )
+
+    // 관련 용어 (같은 카테고리, 결정적 정렬 — 크롤러 안정성)
+    const relResult = await db.prepare(
+      'SELECT id, term, slug, summary FROM encyclopedia WHERE category = ? AND id != ? AND is_published = 1 ORDER BY view_count DESC, term ASC LIMIT 6'
+    ).bind(entry.category, entry.id).all()
+    const related: any[] = relResult.results || []
+
+    // FAQ 수집
+    const faqs: Array<{ q: string; a: string }> = []
+    for (let i = 1; i <= 10; i++) {
+      const q = entry[`faq_q${i}`], a = entry[`faq_a${i}`]
+      if (q && a) faqs.push({ q, a })
+    }
+
+    const canonicalPath = encPath(entry)
+    const canonicalUrl = `${SITE}${canonicalPath}`
+    const pageTitle = entry.seo_title || `${entry.term}이란? 뜻과 치료 정보 | 서울가온치과 치과 백과사전`
+    const metaDesc = entry.seo_description || (entry.summary || '').substring(0, 155)
+    const modDate = fmtDate(entry.updated_at || entry.created_at)
+    const pubDate = fmtDate(entry.created_at)
+
+    // JSON-LD: DefinedTerm + MedicalWebPage + FAQPage + BreadcrumbList
+    const graph: any[] = [
+      {
+        "@type": "DefinedTerm",
+        "@id": `${canonicalUrl}#term`,
+        "name": entry.term,
+        "description": entry.summary || metaDesc,
+        "inDefinedTermSet": { "@type": "DefinedTermSet", "name": "서울가온치과 치과 백과사전", "url": `${SITE}/encyclopedia` },
+        "url": canonicalUrl
+      },
+      {
+        "@type": "MedicalWebPage",
+        "@id": canonicalUrl,
+        "name": pageTitle,
+        "description": metaDesc,
+        "url": canonicalUrl,
+        "inLanguage": "ko",
+        "datePublished": pubDate,
+        "dateModified": modDate,
+        "about": { "@type": "MedicalEntity", "name": entry.term },
+        "mainEntity": { "@id": `${canonicalUrl}#term` },
+        "speakable": { "@type": "SpeakableSpecification", "cssSelector": ["h1", ".enc-summary"] },
+        "publisher": {
+          "@type": "Dentist",
+          "name": "서울가온치과의원",
+          "url": SITE,
+          "telephone": "0507-1325-3377",
+          "address": { "@type": "PostalAddress", "addressLocality": "의정부시", "addressRegion": "경기도", "streetAddress": "용민로 22, 4층", "postalCode": "11697", "addressCountry": "KR" }
+        },
+        "reviewedBy": { "@type": "Person", "name": "현진호", "jobTitle": "대표원장 (통합치의학과 전문의)", "worksFor": { "@type": "Dentist", "name": "서울가온치과의원" } },
+        "lastReviewed": modDate
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "홈", "item": SITE },
+          { "@type": "ListItem", "position": 2, "name": "치과 백과사전", "item": `${SITE}/encyclopedia` },
+          { "@type": "ListItem", "position": 3, "name": entry.term, "item": canonicalUrl }
+        ]
+      }
+    ]
+    if (faqs.length) {
+      graph.push({
+        "@type": "FAQPage",
+        "@id": `${canonicalUrl}#faq`,
+        "mainEntity": faqs.map(f => ({
+          "@type": "Question",
+          "name": f.q,
+          "acceptedAnswer": { "@type": "Answer", "text": f.a }
+        }))
+      })
+    }
+    const jsonLd = JSON.stringify({ "@context": "https://schema.org", "@graph": graph })
+
+    const faqHtml = faqs.length ? `
+    <section class="encd-faq" id="faq">
+      <h2><i class="fas fa-question-circle" style="color:var(--gold);margin-right:.5rem"></i>${escHtml(entry.term)} 자주 묻는 질문</h2>
+      ${faqs.map(f => `<details class="encd-faq-item">
+        <summary>${escHtml(f.q)}</summary>
+        <p>${escHtml(f.a)}</p>
+      </details>`).join('')}
+    </section>` : ''
+
+    const relatedHtml = related.length ? `
+    <section class="encd-related">
+      <h2><i class="fas fa-link" style="color:var(--gold);margin-right:.5rem"></i>관련 용어</h2>
+      <div class="encd-related-grid">
+        ${related.map((r: any) => `<a href="${encPath(r)}" class="encd-related-card"><strong>${escHtml(r.term)}</strong><span>${escHtml((r.summary || '').substring(0, 70))}…</span></a>`).join('')}
+      </div>
+    </section>` : ''
+
+    const treatmentLinks = (entry.related_treatment || '').split(/[,·]/).map((t: string) => t.trim()).filter(Boolean)
+    const treatMap: Record<string, string> = {
+      '임플란트': '/implant', '가이드 임플란트': '/implant', '뼈이식': '/bone-graft-implant',
+      '신경치료': '/endodontics', '보존치료': '/endodontics', '심미치료': '/aesthetic',
+      '라미네이트': '/laminate', '교정': '/orthodontics', '치아교정': '/orthodontics',
+      '인비절라인': '/invisalign', '충치치료': '/cavity-treatment', '레진': '/cavity-treatment',
+      '레진빌드업': '/resin-buildup', '잇몸치료': '/scaling-gum-treatment', '스케일링': '/scaling-gum-treatment',
+      '크라운': '/crown', '보철': '/crown', '보철치료': '/crown', '미백': '/teeth-whitening', '치아미백': '/teeth-whitening',
+      '사랑니': '/wisdom-tooth', '발치': '/wisdom-tooth', '소아치과': '/pediatric-dental', '정기검진': '/dental-checkup'
+    }
+    const treatHtml = treatmentLinks.length ? `
+    <aside class="encd-treat">
+      <h3>이 용어와 관련된 진료</h3>
+      <div class="encd-treat-tags">${treatmentLinks.map((t: string) => {
+        const href = treatMap[t] || '/treatments'
+        return `<a href="${href}">${escHtml(t)}</a>`
+      }).join('')}</div>
+    </aside>` : ''
+
+    const html = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+${HEAD_COMMON}
+<title>${escHtml(pageTitle)}</title>
+<meta name="description" content="${escHtml(metaDesc)}">
+${entry.seo_keywords ? `<meta name="keywords" content="${escHtml(entry.seo_keywords)}">` : ''}
+<link rel="canonical" href="${canonicalUrl}">
+<meta property="og:title" content="${escHtml(pageTitle)}">
+<meta property="og:description" content="${escHtml(metaDesc)}">
+<meta property="og:url" content="${canonicalUrl}">
+<meta property="og:type" content="article">
+<meta property="og:image" content="${SITE}/images/og-main.jpg">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="${pubDate}">
+<meta property="article:modified_time" content="${modDate}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="${escHtml(pageTitle)}">
+<meta name="twitter:description" content="${escHtml(metaDesc)}">
+<script type="application/ld+json">${jsonLd}</script>
+<style>
+.encd-wrap{max-width:820px;margin:0 auto;padding:7.5rem 1.5rem 4rem}
+.encd-bc{font-size:.78rem;color:var(--stone);margin-bottom:1.2rem}
+.encd-bc a{color:var(--stone-l);text-decoration:none}
+.encd-bc a:hover{color:var(--gold)}
+.encd-cat{display:inline-block;padding:.25rem .7rem;background:rgba(191,164,106,.12);border:1px solid rgba(191,164,106,.3);border-radius:14px;color:var(--gold);font-size:.75rem;margin-bottom:.8rem}
+.encd-wrap h1{font-size:clamp(1.6rem,4vw,2.2rem);color:var(--ivory);margin-bottom:.8rem;line-height:1.3}
+.enc-summary{font-size:1.02rem;color:var(--stone-l);line-height:1.7;padding:1rem 1.2rem;background:var(--ink);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;margin-bottom:2rem}
+.encd-body{color:var(--stone-l);line-height:1.8;font-size:.95rem}
+.encd-body h2{font-size:1.25rem;color:var(--ivory);margin:2rem 0 .8rem;padding-bottom:.4rem;border-bottom:1px solid rgba(191,164,106,.15)}
+.encd-body h3{font-size:1.05rem;color:var(--gold);margin:1.4rem 0 .6rem}
+.encd-body p{margin:.7rem 0}
+.encd-body ul{margin:.7rem 0;padding-left:1.3rem}
+.encd-body li{margin:.35rem 0}
+.encd-body strong{color:var(--ivory)}
+.encd-faq{margin-top:2.5rem}
+.encd-faq h2{font-size:1.25rem;color:var(--ivory);margin-bottom:1rem}
+.encd-faq-item{background:var(--ink);border:1px solid rgba(191,164,106,.15);border-radius:8px;margin-bottom:.6rem;overflow:hidden}
+.encd-faq-item summary{padding:.9rem 1.1rem;cursor:pointer;color:var(--ivory);font-size:.92rem;font-weight:600;list-style:none;position:relative}
+.encd-faq-item summary::after{content:'+';position:absolute;right:1.1rem;color:var(--gold);font-size:1.1rem}
+.encd-faq-item[open] summary::after{content:'−'}
+.encd-faq-item p{padding:0 1.1rem 1rem;margin:0;color:var(--stone-l);font-size:.88rem;line-height:1.7}
+.encd-related{margin-top:2.5rem}
+.encd-related h2{font-size:1.25rem;color:var(--ivory);margin-bottom:1rem}
+.encd-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.7rem}
+.encd-related-card{display:flex;flex-direction:column;gap:.25rem;padding:.85rem 1rem;background:var(--ink);border:1px solid rgba(191,164,106,.12);border-radius:8px;text-decoration:none;transition:border-color .2s}
+.encd-related-card:hover{border-color:var(--gold)}
+.encd-related-card strong{color:var(--gold);font-size:.88rem}
+.encd-related-card span{color:var(--stone-l);font-size:.75rem;line-height:1.4}
+.encd-treat{margin-top:2rem;padding:1.1rem 1.3rem;background:rgba(191,164,106,.06);border:1px solid rgba(191,164,106,.2);border-radius:10px}
+.encd-treat h3{font-size:.95rem;color:var(--ivory);margin-bottom:.7rem}
+.encd-treat-tags{display:flex;flex-wrap:wrap;gap:.5rem}
+.encd-treat-tags a{padding:.35rem .8rem;background:var(--ink);border:1px solid rgba(191,164,106,.3);border-radius:16px;color:var(--gold);font-size:.8rem;text-decoration:none}
+.encd-treat-tags a:hover{background:rgba(191,164,106,.15)}
+.encd-local{margin-top:2rem;font-size:.72rem;color:var(--stone);line-height:1.8}
+.encd-cta{margin-top:2.5rem;text-align:center;padding:1.8rem;background:var(--ink);border:1px solid rgba(191,164,106,.2);border-radius:12px}
+.encd-cta p{color:var(--stone-l);margin-bottom:1rem;font-size:.92rem}
+.encd-cta a{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.6rem;background:var(--gold);color:#050504;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem}
+.encd-meta{margin-top:1.5rem;font-size:.72rem;color:var(--stone)}
+</style>
+</head>
+<body>
+${NAV_HTML}
+<main id="main-content" role="main">
+  <article class="encd-wrap" itemscope itemtype="https://schema.org/MedicalWebPage">
+    <nav class="encd-bc" aria-label="브레드크럼"><a href="/">홈</a> › <a href="/encyclopedia">치과 백과사전</a> › ${escHtml(entry.term)}</nav>
+    <span class="encd-cat">${escHtml(entry.category || '일반')}</span>
+    <h1 itemprop="name">${escHtml(entry.term)}</h1>
+    ${entry.summary ? `<p class="enc-summary" itemprop="description">${escHtml(entry.summary)}</p>` : ''}
+    <div class="encd-body" itemprop="text">${encFormatContent(entry.content)}</div>
+    ${faqHtml}
+    ${treatHtml}
+    ${relatedHtml}
+    <div class="encd-cta">
+      <p><strong style="color:var(--ivory)">${escHtml(entry.term)}</strong>에 대해 더 궁금하신가요? 서울대 출신 의료진이 직접 상담해 드립니다.</p>
+      <a href="tel:0507-1325-3377"><i class="fas fa-phone"></i> 전화 상담: 0507-1325-3377</a>
+    </div>
+    <p class="encd-local">의정부 ${escHtml(entry.term)} · 탑석역 ${escHtml(entry.term)} · 민락동 ${escHtml(entry.term)} — 의정부시 용현동 서울가온치과 치과 백과사전</p>
+    <p class="encd-meta">의학 정보 검수: 현진호 대표원장 (통합치의학과 전문의) · 최종 수정일: ${modDate} · <a href="/encyclopedia" style="color:var(--gold)">전체 용어 보기 →</a></p>
+  </article>
+</main>
+${FOOTER_HTML}
+${KAKAO_FLOAT}
+<script src="/pages.js"></script>
+<script>
+var ham=document.querySelector('.hamburger'),mob=document.querySelector('.mob-menu');
+if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open');mob.classList.toggle('open')});mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){ham.classList.remove('open');mob.classList.remove('open')})})}
+</script>
+</body>
+</html>`
+
+    return c.html(html, 200, {
+      'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200',
+      'X-Robots-Tag': 'index, follow, max-snippet:-1, max-image-preview:large',
+    })
+  } catch (e: any) {
+    console.error('[SSR Encyclopedia Detail ERROR]', e.message)
+    return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>치과 백과사전 | 서울가온치과</title></head><body><p>잠시 후 다시 시도해주세요.</p></body></html>`, 500)
   }
 })
 
