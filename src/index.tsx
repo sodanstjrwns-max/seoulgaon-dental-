@@ -3065,21 +3065,40 @@ function autoCrossLink(html: string, terms: Array<{ id: number; term: string; sl
     }
     if (skipDepth > 0 || !part.trim() || linkCount >= maxLinks) continue
 
-    let text = part
+    // 1) 원본 텍스트에서 매칭 위치 수집 (겹침 방지) — 치환은 마지막에 한 번에
+    const text = part
+    const matches: Array<{ start: number; end: number; t: { id: number; term: string; slug: string } }> = []
+    const taken: Array<[number, number]> = []
     for (const t of candidates) {
-      if (linked.has(t.id) || linkCount >= maxLinks) continue
-      const idx = text.indexOf(t.term)
-      if (idx === -1) continue
-      // 한글 용어: 앞뒤가 한글이면 단어 중간 매칭이므로 스킵 (예: "치아교정" 안의 "교정")
-      const before = idx > 0 ? text[idx - 1] : ''
-      const after = idx + t.term.length < text.length ? text[idx + t.term.length] : ''
-      if (/[가-힣a-zA-Z]/.test(before) || /[가-힣a-zA-Z]/.test(after)) continue
-      const href = encSlugClean(t.slug) ? `/encyclopedia/${encodeURIComponent(t.slug)}` : `/encyclopedia/${t.id}`
-      text = text.slice(0, idx) + `<a href="${href}" class="enc-xlink" title="${escHtml(t.term)} — 치과 백과사전">${t.term}</a>` + text.slice(idx + t.term.length)
-      linked.add(t.id)
+      if (linked.has(t.id) || linkCount + matches.length >= maxLinks) continue
+      let from = 0
+      while (from < text.length) {
+        const idx = text.indexOf(t.term, from)
+        if (idx === -1) break
+        const end = idx + t.term.length
+        const before = idx > 0 ? text[idx - 1] : ''
+        const after = end < text.length ? text[end] : ''
+        const wordBoundaryOk = !/[가-힣a-zA-Z]/.test(before) && !/[가-힣a-zA-Z]/.test(after)
+        const overlaps = taken.some(([s, e]) => idx < e && end > s)
+        if (wordBoundaryOk && !overlaps) {
+          matches.push({ start: idx, end, t })
+          taken.push([idx, end])
+          linked.add(t.id)
+          break  // 용어당 첫 등장 1회만
+        }
+        from = idx + 1
+      }
+    }
+    if (!matches.length) continue
+    // 2) 뒤에서부터 치환 (인덱스 안정성)
+    matches.sort((a, b) => b.start - a.start)
+    let out = text
+    for (const m of matches) {
+      const href = encSlugClean(m.t.slug) ? `/encyclopedia/${encodeURIComponent(m.t.slug)}` : `/encyclopedia/${m.t.id}`
+      out = out.slice(0, m.start) + `<a href="${href}" class="enc-xlink" title="${escHtml(m.t.term)} — 치과 백과사전">${m.t.term}</a>` + out.slice(m.end)
       linkCount++
     }
-    parts[i] = text
+    parts[i] = out
   }
   return parts.join('')
 }
@@ -3256,6 +3275,10 @@ app.get('/encyclopedia/:key', async (c) => {
     let entry: any = null
     if (/^\d+$/.test(key)) {
       entry = await db.prepare('SELECT * FROM encyclopedia WHERE id = ? AND is_published = 1').bind(parseInt(key)).first()
+      // id 접근인데 클린 slug 보유 → canonical URL로 301 (중복 콘텐츠 방지)
+      if (entry && encSlugClean(entry.slug)) {
+        return c.redirect(`/encyclopedia/${encodeURIComponent(entry.slug)}`, 301)
+      }
     }
     if (!entry) {
       entry = await db.prepare('SELECT * FROM encyclopedia WHERE slug = ? AND is_published = 1').bind(key).first()
