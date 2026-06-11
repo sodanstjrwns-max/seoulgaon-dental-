@@ -122,6 +122,7 @@
 - **Last Updated**: 2026-06-11
 
 ## Version History
+- v15 (2026-06-11): 자동 크로스링크 엔진(백과사전↔블로그 양방향, 중첩 방지), 클린 slug 정규화 275건(영문 slug 자산화), id→slug canonical 301, 백과사전→관련 블로그 섹션, llms-full.txt 전체 풀덤프(618KB)
 - v14 (2026-06-11): SEO/AEO Machine — 백과사전 283개 용어 SSR 개별 페이지화(/encyclopedia/:slug, DefinedTerm+FAQPage+MedicalWebPage+E-E-A-T 검수표기), 백과사전 목록 SSR 전환(280+ 내부링크), sitemap-encyclopedia.xml, RSS 2.0 피드, robots.txt AI봇 10종 추가 허용, llms.txt 백과사전 섹션, IndexNow 백과사전 연동, 카테고리 정규화 SQL
 - v13 (2026-06-09): 의료법 준수 정비 (의정부보건소 민원 조치) — 환자 치료경험담(리뷰 카드·경험담 인용) 전량 제거, implant AggregateRating(4.9/387)·Review JSON-LD 스키마 삭제, 전문과목 아닌 진료의 '전문' 표현 정비(임플란트/심미/교정/미백 → 중점 진료·시술명), 보존과/통합치의학과 전문의 자격 표기는 유지
 - v12 (2026-05-27): Sitemap Pro — sitemap index split (3 sub-sitemaps), image sitemap, notice fragment removal, lastmod accuracy
