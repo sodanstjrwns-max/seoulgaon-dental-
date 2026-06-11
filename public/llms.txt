@@ -364,6 +364,7 @@ Categories: 임플란트 (Implant), 보철 (Prosthodontics), 보존 (Conservativ
 - Index page: https://seoulgaondc.kr/encyclopedia
 - Term URL pattern: https://seoulgaondc.kr/encyclopedia/{slug-or-id}
 - All term URLs: https://seoulgaondc.kr/sitemap-encyclopedia.xml
+- FULL TEXT DUMP (all 280+ terms in one file, ideal for LLM ingestion): https://seoulgaondc.kr/llms-full.txt
 - Example terms: 임플란트, 골유착, GBR(뼈이식), 상악동거상술, 신경치료, 라미네이트, 지르코니아
 
 When users ask about dental terminology, procedures, or "what does X mean in dentistry",

@@ -2035,6 +2035,63 @@ app.get('/sitemap-encyclopedia.xml', async (c) => {
   }
 })
 
+// ── llms-full.txt: 전체 백과사전 풀덤프 (AI 크롤러가 한 번에 전체 지식 수집) ──
+app.get('/llms-full.txt', async (c) => {
+  try {
+    const db = c.env.DB
+    let entries: any[] = []
+    try {
+      const r = await db.prepare(
+        `SELECT id, term, slug, category, summary, content,
+                faq_q1, faq_a1, faq_q2, faq_a2, faq_q3, faq_a3,
+                related_treatment, updated_at
+         FROM encyclopedia WHERE is_published = 1 ORDER BY category, sort_order ASC, term ASC`
+      ).all()
+      entries = r.results || []
+    } catch { /* ignore */ }
+
+    const SITE = 'https://seoulgaondc.kr'
+    const cleanMd = (s: string) => (s || '').replace(/<[^>]*>/g, '').trim()
+    let out = `# 서울가온치과 치과 백과사전 — 전체 ${entries.length}개 용어 (Full Dump for LLMs)
+# Seoul Gaon Dental Clinic Encyclopedia — Medically reviewed by SNU-trained dentists
+# Clinic: 경기도 의정부시 용민로 22, 골드자이프라자 4층 | Tel: 0507-1325-3377
+# Index: ${SITE}/encyclopedia | Per-term URL: ${SITE}/encyclopedia/{slug}
+# License: Citation with link to source page is appreciated.
+# Last updated: ${new Date().toISOString().split('T')[0]}
+
+`
+    let currentCat = ''
+    for (const e of entries) {
+      if (e.category !== currentCat) {
+        currentCat = e.category
+        out += `\n# ═══ 카테고리: ${currentCat} ═══\n\n`
+      }
+      const url = `${SITE}${/^[가-힣a-zA-Z0-9-]+$/.test(e.slug) ? '/encyclopedia/' + e.slug : '/encyclopedia/' + e.id}`
+      out += `## ${e.term}\n`
+      out += `- URL: ${url}\n`
+      if (e.summary) out += `- 요약: ${cleanMd(e.summary)}\n`
+      if (e.related_treatment) out += `- 관련 진료: ${e.related_treatment}\n`
+      const body = cleanMd(e.content).replace(/\n{2,}/g, '\n')
+      if (body) out += `${body}\n`
+      for (let i = 1; i <= 3; i++) {
+        const q = e[`faq_q${i}`], a = e[`faq_a${i}`]
+        if (q && a) out += `Q: ${q}\nA: ${a}\n`
+      }
+      out += '\n'
+    }
+
+    return new Response(out, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'public, max-age=21600, s-maxage=86400',
+        'X-Robots-Tag': 'index, follow',
+      }
+    })
+  } catch (e: any) {
+    return c.notFound()
+  }
+})
+
 // ── RSS 2.0 피드 (블로그 — 네이버/구글/AI 크롤러 콘텐츠 신선도 신호) ──
 app.get('/rss.xml', async (c) => {
   try {
@@ -2513,6 +2570,13 @@ app.get('/blog/:id', async (c) => {
       }
     }
 
+    // 블로그 본문 → 백과사전 용어 자동 크로스링크 (최대 12개)
+    try {
+      const tr = await db.prepare('SELECT id, term, slug FROM encyclopedia WHERE is_published = 1').all()
+      const encTerms = (tr.results || []) as any[]
+      if (encTerms.length) articleContent = autoCrossLink(articleContent, encTerms, undefined, 12)
+    } catch { /* encyclopedia 없어도 블로그는 정상 */ }
+
     // 날짜 포맷 (한국어)
     const dateObj = new Date(post.created_at)
     const koDate = `${dateObj.getFullYear()}년 ${dateObj.getMonth() + 1}월 ${dateObj.getDate()}일`
@@ -2636,6 +2700,8 @@ ${HEAD_COMMON}
 .bp-content figure{margin:2rem 0;text-align:center}
 .bp-content figure img{max-width:100%;border-radius:12px;border:1px solid rgba(191,164,106,.08)}
 .bp-content figcaption{font-size:.78rem;color:var(--stone,#8C8578);margin-top:.6rem;font-style:italic}
+.enc-xlink{color:var(--gold);text-decoration:none;border-bottom:1px dotted rgba(191,164,106,.5)}
+.enc-xlink:hover{border-bottom-style:solid}
 .bp-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:3rem}
 .bp-images img{width:100%;border-radius:12px;aspect-ratio:4/3;object-fit:cover;border:1px solid rgba(191,164,106,.08)}
 .bp-images.single{grid-template-columns:1fr}
@@ -2970,6 +3036,57 @@ function encFormatContent(text: string): string {
 
 const ENC_CAT_ORDER = ['임플란트','보철','보존','교정','예방','구강외과','심미','소아·청소년','진단·검사','잇몸','일반']
 
+// ── 자동 크로스링크 엔진 ──
+// HTML 본문의 텍스트 노드에서 백과사전 용어를 찾아 첫 등장 1회만 링크로 치환.
+// 긴 용어 우선 매칭("가이드 임플란트" > "임플란트"), 자기 자신 제외, 페이지당 최대 20개.
+function autoCrossLink(html: string, terms: Array<{ id: number; term: string; slug: string }>, selfId?: number, maxLinks = 20): string {
+  if (!html || !terms.length) return html
+  // 2글자 이상 용어만, 길이 내림차순
+  const candidates = terms
+    .filter(t => t.id !== selfId && t.term && t.term.length >= 2 && /^[가-힣a-zA-Z0-9 ·-]+$/.test(t.term))
+    .sort((a, b) => b.term.length - a.term.length)
+  if (!candidates.length) return html
+
+  const linked = new Set<number>()
+  let linkCount = 0
+
+  // HTML을 태그/텍스트로 분할 — a 태그와 heading 내부는 건드리지 않음
+  const parts = html.split(/(<[^>]+>)/g)
+  let skipDepth = 0  // <a>, <h1-h6>, <script>, <style> 내부 스킵
+  const skipOpen = /^<(a|h[1-6]|script|style|summary)[\s>]/i
+  const skipClose = /^<\/(a|h[1-6]|script|style|summary)>/i
+
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i]
+    if (part.startsWith('<')) {
+      if (skipOpen.test(part)) skipDepth++
+      else if (skipClose.test(part)) skipDepth = Math.max(0, skipDepth - 1)
+      continue
+    }
+    if (skipDepth > 0 || !part.trim() || linkCount >= maxLinks) continue
+
+    let text = part
+    for (const t of candidates) {
+      if (linked.has(t.id) || linkCount >= maxLinks) continue
+      const idx = text.indexOf(t.term)
+      if (idx === -1) continue
+      // 한글 용어: 앞뒤가 한글이면 단어 중간 매칭이므로 스킵 (예: "치아교정" 안의 "교정")
+      const before = idx > 0 ? text[idx - 1] : ''
+      const after = idx + t.term.length < text.length ? text[idx + t.term.length] : ''
+      if (/[가-힣a-zA-Z]/.test(before) || /[가-힣a-zA-Z]/.test(after)) continue
+      const href = encSlugClean(t.slug) ? `/encyclopedia/${encodeURIComponent(t.slug)}` : `/encyclopedia/${t.id}`
+      text = text.slice(0, idx) + `<a href="${href}" class="enc-xlink" title="${escHtml(t.term)} — 치과 백과사전">${t.term}</a>` + text.slice(idx + t.term.length)
+      linked.add(t.id)
+      linkCount++
+    }
+    parts[i] = text
+  }
+  return parts.join('')
+}
+
+const ENC_XLINK_CSS = `.enc-xlink{color:var(--gold);text-decoration:none;border-bottom:1px dotted rgba(191,164,106,.5)}
+.enc-xlink:hover{border-bottom-style:solid}`
+
 // ── 301: 구 URL → 클린 URL ──
 app.get('/encyclopedia.html', (c) => {
   const term = c.req.query('term')
@@ -3163,6 +3280,22 @@ app.get('/encyclopedia/:key', async (c) => {
     ).bind(entry.category, entry.id).all()
     const related: any[] = relResult.results || []
 
+    // 전체 용어 (자동 크로스링크용 — 가벼운 3컬럼만)
+    let allTerms: any[] = []
+    try {
+      const tr = await db.prepare('SELECT id, term, slug FROM encyclopedia WHERE is_published = 1').all()
+      allTerms = tr.results || []
+    } catch { /* ignore */ }
+
+    // 관련 블로그 글 (제목/내용에 용어 포함 — 콘텐츠 허브 내부링크)
+    let relatedBlogs: any[] = []
+    try {
+      const br = await db.prepare(
+        `SELECT id, title, created_at FROM blog_posts WHERE is_published = 1 AND (title LIKE ? OR content LIKE ?) ORDER BY created_at DESC LIMIT 4`
+      ).bind(`%${entry.term}%`, `%${entry.term}%`).all()
+      relatedBlogs = br.results || []
+    } catch { /* ignore */ }
+
     // FAQ 수집
     const faqs: Array<{ q: string; a: string }> = []
     for (let i = 1; i <= 10; i++) {
@@ -3267,6 +3400,18 @@ app.get('/encyclopedia/:key', async (c) => {
       }).join('')}</div>
     </aside>` : ''
 
+    // 관련 블로그 글 섹션 (콘텐츠 허브 — 백과사전 ↔ 블로그 양방향 링크)
+    const blogsHtml = relatedBlogs.length ? `
+    <section class="encd-blogs">
+      <h2><i class="fas fa-newspaper" style="color:var(--gold);margin-right:.5rem"></i>${escHtml(entry.term)} 관련 블로그 글</h2>
+      <ul class="encd-blogs-list">
+        ${relatedBlogs.map((b: any) => `<li><a href="/blog/${b.id}">${escHtml(b.title)}</a><time datetime="${fmtDate(b.created_at)}">${fmtDate(b.created_at)}</time></li>`).join('')}
+      </ul>
+    </section>` : ''
+
+    // 본문 자동 크로스링크 (다른 백과사전 용어 → 링크)
+    const bodyHtml = autoCrossLink(encFormatContent(entry.content), allTerms, entry.id)
+
     const html = `<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -3326,6 +3471,14 @@ ${entry.seo_keywords ? `<meta name="keywords" content="${escHtml(entry.seo_keywo
 .encd-cta p{color:var(--stone-l);margin-bottom:1rem;font-size:.92rem}
 .encd-cta a{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.6rem;background:var(--gold);color:#050504;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem}
 .encd-meta{margin-top:1.5rem;font-size:.72rem;color:var(--stone)}
+.encd-blogs{margin-top:2.5rem}
+.encd-blogs h2{font-size:1.25rem;color:var(--ivory);margin-bottom:1rem}
+.encd-blogs-list{list-style:none;padding:0;margin:0}
+.encd-blogs-list li{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.7rem 1rem;background:var(--ink);border:1px solid rgba(191,164,106,.12);border-radius:8px;margin-bottom:.5rem}
+.encd-blogs-list a{color:var(--stone-l);text-decoration:none;font-size:.9rem;flex:1}
+.encd-blogs-list a:hover{color:var(--gold)}
+.encd-blogs-list time{color:var(--stone);font-size:.72rem;white-space:nowrap}
+${ENC_XLINK_CSS}
 </style>
 </head>
 <body>
@@ -3336,9 +3489,10 @@ ${NAV_HTML}
     <span class="encd-cat">${escHtml(entry.category || '일반')}</span>
     <h1 itemprop="name">${escHtml(entry.term)}</h1>
     ${entry.summary ? `<p class="enc-summary" itemprop="description">${escHtml(entry.summary)}</p>` : ''}
-    <div class="encd-body" itemprop="text">${encFormatContent(entry.content)}</div>
+    <div class="encd-body" itemprop="text">${bodyHtml}</div>
     ${faqHtml}
     ${treatHtml}
+    ${blogsHtml}
     ${relatedHtml}
     <div class="encd-cta">
       <p><strong style="color:var(--ivory)">${escHtml(entry.term)}</strong>에 대해 더 궁금하신가요? 서울대 출신 의료진이 직접 상담해 드립니다.</p>
