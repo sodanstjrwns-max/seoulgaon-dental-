@@ -2,7 +2,7 @@
 
 ## Project Overview
 - **Name**: 서울가온치과 (Seoul Gaon Dental Clinic)
-- **Version**: v12 — Sitemap Pro Upgrade
+- **Version**: v14 — SEO/AEO Machine (Encyclopedia SSR + RSS + AI Crawler Expansion)
 - **Type**: Hono + Cloudflare Pages (SSR + Static) — D1 Database + R2 Storage
 - **Target**: 의정부 서울가온치과의원 (현진호 대표원장)
 
@@ -14,6 +14,8 @@
 - **Sitemap Pages**: https://seoulgaondc.kr/sitemap-pages.xml (41 URLs)
 - **Sitemap Blog**: https://seoulgaondc.kr/sitemap-blog.xml (127 URLs)
 - **Sitemap BA**: https://seoulgaondc.kr/sitemap-before-after.xml (83 URLs)
+- **Sitemap Encyclopedia**: https://seoulgaondc.kr/sitemap-encyclopedia.xml (280+ URLs)
+- **RSS Feed**: https://seoulgaondc.kr/rss.xml (블로그 최신 30개)
 - **LLMs.txt**: https://seoulgaondc.kr/llms.txt (AI 검색엔진용)
 - **Phone**: 0507-1325-3377
 
@@ -50,18 +52,30 @@
 | 28 | 임플란트 과정 | `/implant-process` | 임플란트 과정 기간 단계 |
 | 29 | 민락동 치과 | `/minrak-dental` | 민락동 치과 민락2지구 |
 
-## SSR 페이지 (블로그/BA)
+## SSR 페이지 (블로그/BA/백과사전)
 | Page | URL | Description |
 |------|-----|-------------|
 | 블로그 목록 | `/blog` | SSR 목록 + CollectionPage/ItemList JSON-LD + 페이지네이션 |
 | 블로그 상세 | `/blog/:id` | SSR 상세 + BlogPosting JSON-LD + 전체 meta/OG |
 | BA 목록 | `/before-after` | SSR 목록 + 카테고리 필터 + CollectionPage JSON-LD |
 | BA 상세 | `/before-after/:id` | SSR 상세 + MedicalProcedure JSON-LD |
+| 백과사전 목록 | `/encyclopedia` | **SSR** 카테고리별 280+ 용어 전체 내부링크 + CollectionPage/DefinedTermSet JSON-LD + 클라이언트 검색 |
+| 백과사전 상세 | `/encyclopedia/:slug` | **SSR** 용어별 독립 페이지 + DefinedTerm/MedicalWebPage/FAQPage/BreadcrumbList JSON-LD + 의학 검수 표기(E-E-A-T) |
+
+### 백과사전 URL 규칙
+- 깨끗한 slug (한글/영문/숫자/하이픈): `/encyclopedia/implant`
+- 더러운 slug (공백·쉼표 포함 — 프로덕션 283개 중 208개): `/encyclopedia/{id}` (id 기반 canonical)
+- 구 URL `/encyclopedia.html?term=X` 및 `/encyclopedia?term=X` → 301 리다이렉트
 
 ## Static 페이지 (12개)
 메인(`/`), 진료안내(`/treatments`), 진료철학(`/philosophy`), 의료진(`/doctors`), 내원안내(`/guide`), FAQ(`/faq`), 공지사항(`/notice`), 백과사전(`/encyclopedia`), 예약(`/reservation`), 커뮤니티(`/community`), 회원가입(`/signup`), 관리자(`/admin`)
 
-## SEO/AEO Features
+## SEO/AEO Features (v14 — "SEO/AEO 머신")
+- **백과사전 SSR 280+ 페이지** — 용어별 독립 URL, DefinedTerm + FAQPage(용어당 최대 10 Q&A) + MedicalWebPage(reviewedBy/lastReviewed E-E-A-T 신호)
+- **RSS 2.0 피드** — `/rss.xml` 블로그 콘텐츠 신선도 신호 (네이버/구글/AI 크롤러)
+- **AI 크롤러 robots.txt 전면 확장** — OAI-SearchBot, Perplexity-User, Claude-User/SearchBot, Applebot(-Extended), Amazonbot, DuckAssistBot, MistralAI-User, meta-externalagent 명시 허용
+- **llms.txt 백과사전 섹션** — AI 답변엔진이 치과 용어 질문에 인용하도록 안내
+- **IndexNow 백과사전 연동** — 용어 생성/수정 시 자동 색인 제출
 - **26개 SSR 랜딩페이지** — MedicalWebPage + FAQPage + BreadcrumbList + Dentist JSON-LD
 - **SSR Blog/BA** — BlogPosting + MedicalProcedure + CollectionPage JSON-LD
 - **페이지별 OG 이미지 차별화** — 26개+ 카테고리별 다른 OG 이미지
@@ -86,6 +100,8 @@
 | GET | `/sitemap-pages.xml` | 정적+랜딩 페이지 사이트맵 (41 URL, Image Sitemap) |
 | GET | `/sitemap-blog.xml` | 블로그 사이트맵 (127 URL, Image Sitemap) |
 | GET | `/sitemap-before-after.xml` | 비포&애프터 사이트맵 (83 URL, Image Sitemap) |
+| GET | `/sitemap-encyclopedia.xml` | 백과사전 사이트맵 (280+ URL, 실제 lastmod) |
+| GET | `/rss.xml` | RSS 2.0 피드 (블로그 최신 30개) |
 | GET | `/llms.txt` | AI 크롤러용 구조화 데이터 |
 
 ## Tech Stack
@@ -103,9 +119,10 @@
 - **D1 Database**: gaon-dental-db
 - **R2 Bucket**: gaon-dental-images
 - **Status**: Production Live
-- **Last Updated**: 2026-05-27
+- **Last Updated**: 2026-06-11
 
 ## Version History
+- v14 (2026-06-11): SEO/AEO Machine — 백과사전 283개 용어 SSR 개별 페이지화(/encyclopedia/:slug, DefinedTerm+FAQPage+MedicalWebPage+E-E-A-T 검수표기), 백과사전 목록 SSR 전환(280+ 내부링크), sitemap-encyclopedia.xml, RSS 2.0 피드, robots.txt AI봇 10종 추가 허용, llms.txt 백과사전 섹션, IndexNow 백과사전 연동, 카테고리 정규화 SQL
 - v13 (2026-06-09): 의료법 준수 정비 (의정부보건소 민원 조치) — 환자 치료경험담(리뷰 카드·경험담 인용) 전량 제거, implant AggregateRating(4.9/387)·Review JSON-LD 스키마 삭제, 전문과목 아닌 진료의 '전문' 표현 정비(임플란트/심미/교정/미백 → 중점 진료·시술명), 보존과/통합치의학과 전문의 자격 표기는 유지
 - v12 (2026-05-27): Sitemap Pro — sitemap index split (3 sub-sitemaps), image sitemap, notice fragment removal, lastmod accuracy
 - v11 (2026-05-26): SEO v4 — 6 new pages (pediatric, crown, whitening, checkup, implant-process, minrak), crosslinks
