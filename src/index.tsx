@@ -47,6 +47,44 @@ async function submitIndexNow(urls: string[]) {
 //  MIDDLEWARE
 // ══════════════════════════════════════════════════
 
+// URL 정규화 301 리다이렉트 — 중복 콘텐츠 방지 (끝슬래시 제거, 경로 소문자화)
+// 구글봇이 /encyclopedia/implant/ 또는 /ENCYCLOPEDIA/implant 같은 변형으로
+// 들어오면 SPA fallback(홈)으로 떨어져 canonical이 깨지는 문제를 차단
+app.use('*', async (c, next) => {
+  const url = new URL(c.req.url)
+  let path = url.pathname
+
+  // API·정적파일·루트는 정규화 제외
+  const isAsset = path.startsWith('/api/') || path.startsWith('/static/') ||
+    /\.[a-zA-Z0-9]{2,5}$/.test(path)
+  if (path !== '/' && !isAsset) {
+    let normalized = path
+
+    // 1) 끝 슬래시 제거 (/encyclopedia/implant/ -> /encyclopedia/implant)
+    if (normalized.length > 1 && normalized.endsWith('/')) {
+      normalized = normalized.replace(/\/+$/, '')
+    }
+
+    // 2) 경로의 라우트 prefix만 소문자화 (slug 부분은 이미 소문자라 안전)
+    //    /ENCYCLOPEDIA/implant -> /encyclopedia/implant
+    const segMatch = normalized.match(/^\/([^\/]+)(\/.*)?$/)
+    if (segMatch) {
+      const prefix = segMatch[1]
+      const knownPrefixes = ['encyclopedia', 'blog', 'before-after', 'treatments',
+        'doctors', 'philosophy', 'guide', 'faq', 'notice', 'community', 'reservation']
+      if (knownPrefixes.includes(prefix.toLowerCase()) && prefix !== prefix.toLowerCase()) {
+        normalized = '/' + prefix.toLowerCase() + (segMatch[2] || '')
+      }
+    }
+
+    if (normalized !== path) {
+      return c.redirect(normalized + url.search, 301)
+    }
+  }
+
+  await next()
+})
+
 // SEO & Security Headers — 모든 응답에 적용
 app.use('*', async (c, next) => {
   await next()
