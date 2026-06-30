@@ -3289,6 +3289,14 @@ app.get('/encyclopedia/:key', async (c) => {
     }
 
     if (!entry) {
+      // 옛 slug → 새 slug 301 리다이렉트 (2026-06-30 slug 정규화 대응)
+      const redirect = await db.prepare('SELECT new_slug FROM slug_redirects WHERE old_slug = ?').bind(key).first() as any
+      if (redirect && redirect.new_slug) {
+        return c.redirect(`/encyclopedia/${encodeURIComponent(redirect.new_slug)}`, 301)
+      }
+    }
+
+    if (!entry) {
       return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>용어를 찾을 수 없습니다 | 서울가온치과</title>${HEAD_COMMON}</head><body>${NAV_HTML}<main style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:72px"><div><h1 style="color:var(--gold);font-size:2rem;margin-bottom:1rem">404</h1><p style="color:var(--stone-l);margin-bottom:2rem">해당 용어를 찾을 수 없습니다.</p><a href="/encyclopedia" style="color:var(--gold);text-decoration:underline">백과사전 목록으로 →</a></div></main>${FOOTER_HTML}${KAKAO_FLOAT}<script src="/pages.js"></script></body></html>`, 404)
     }
 
