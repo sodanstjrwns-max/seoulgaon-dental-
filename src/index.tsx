@@ -474,8 +474,11 @@ app.get('/api/images/*', async (c) => {
 
     const headers = new Headers()
     headers.set('Content-Type', obj.httpMetadata?.contentType || 'image/jpeg')
+    // 브라우저 캐시 1년(immutable) + CF 엣지 캐시 1년 → 첫 방문 후 재방문은 즉시 로딩
     headers.set('Cache-Control', 'public, max-age=31536000, immutable')
+    headers.set('CDN-Cache-Control', 'public, max-age=31536000, immutable')
     if (obj.etag) headers.set('ETag', obj.etag)
+    if (obj.size) headers.set('Content-Length', String(obj.size))
 
     const resp = new Response(obj.body, { headers })
 
@@ -2413,7 +2416,7 @@ app.get('/before-after', async (c) => {
     await initDB(db)
     const cat = c.req.query('category') || ''
     const page = parseInt(c.req.query('page') || '1')
-    const size = 20
+    const size = 9   // 성능 최적화: 20 → 9 (이미지 40장 → 18장, 첫 로딩 속도 개선)
     const offset = (page - 1) * size
 
     const whereClause = cat ? `WHERE ba.category = ?` : ''
@@ -2451,9 +2454,15 @@ app.get('/before-after', async (c) => {
         `<a href="/before-after?category=${encodeURIComponent(c)}" style="padding:.4rem .8rem;border-radius:4px;font-size:.85rem;text-decoration:none;${cat === c ? 'background:var(--gold);color:#fff' : 'background:rgba(191,164,106,.15);color:var(--gold)'}">${escHtml(c)}</a>`
       )).join('')
 
-    const caseCards = cases.map((ba: any) => {
-      const beforeImg = ba.intraoral_before_url ? `<img src="${ba.intraoral_before_url}" alt="치료 전 - ${escHtml(ba.title)}" loading="lazy" style="width:50%;height:160px;object-fit:cover">` : `<div style="width:50%;height:160px;background:#333;display:flex;align-items:center;justify-content:center"><span style="color:#666">Before</span></div>`
-      const afterImg = ba.intraoral_after_url ? `<img src="${ba.intraoral_after_url}" alt="치료 후 - ${escHtml(ba.title)}" loading="lazy" style="width:50%;height:160px;object-fit:cover">` : `<div style="width:50%;height:160px;background:#333;display:flex;align-items:center;justify-content:center"><span style="color:#666">After</span></div>`
+    const caseCards = cases.map((ba: any, idx: number) => {
+      // 성능 최적화: 첫 줄(상단 3개) 이미지는 즉시 로딩(eager+high priority),
+      // 나머지는 lazy 로딩. 모든 img에 width/height 명시로 CLS(레이아웃 흔들림) 방지 + decoding async.
+      const eager = idx < 3
+      const imgAttrs = eager
+        ? 'loading="eager" fetchpriority="high" decoding="async"'
+        : 'loading="lazy" fetchpriority="low" decoding="async"'
+      const beforeImg = ba.intraoral_before_url ? `<img src="${ba.intraoral_before_url}" alt="치료 전 - ${escHtml(ba.title)}" ${imgAttrs} width="300" height="160" style="width:50%;height:160px;object-fit:cover">` : `<div style="width:50%;height:160px;background:#333;display:flex;align-items:center;justify-content:center"><span style="color:#666">Before</span></div>`
+      const afterImg = ba.intraoral_after_url ? `<img src="${ba.intraoral_after_url}" alt="치료 후 - ${escHtml(ba.title)}" ${imgAttrs} width="300" height="160" style="width:50%;height:160px;object-fit:cover">` : `<div style="width:50%;height:160px;background:#333;display:flex;align-items:center;justify-content:center"><span style="color:#666">After</span></div>`
       return `<a href="/before-after/${ba.id}" style="text-decoration:none;color:inherit">
         <article style="background:var(--ink);border:1px solid rgba(191,164,106,.15);border-radius:8px;overflow:hidden">
           <div style="display:flex">${beforeImg}${afterImg}</div>
