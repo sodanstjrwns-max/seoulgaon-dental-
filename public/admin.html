@@ -536,8 +536,9 @@
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem">
           <div>
-            <label style="font-size:.75rem;color:#888;display:block;margin-bottom:.3rem">Slug (URL용, 영문)</label>
-            <input type="text" id="enc-slug" class="input" placeholder="자동 생성">
+            <label style="font-size:.75rem;color:#888;display:block;margin-bottom:.3rem">Slug (URL용, 영문 소문자-하이픈만) <span style="color:#e0a800">⚠️ 한글·공백·대문자 불가</span></label>
+            <input type="text" id="enc-slug" class="input" placeholder="예: dental-floss (비우면 자동 생성)" oninput="normalizeSlugInput(this)">
+            <div style="font-size:.7rem;color:#888;margin-top:.25rem">입력하면 자동으로 소문자·하이픈으로 변환됩니다. 예) <code>Dental Floss</code> → <code>dental-floss</code></div>
           </div>
           <div>
             <label style="font-size:.75rem;color:#888;display:block;margin-bottom:.3rem">관련 진료</label>
@@ -1785,6 +1786,20 @@ function resetEncForm(){
   document.getElementById('enc-save-btn').textContent='등록';
 }
 
+// slug 실시간 정규화: 입력 즉시 소문자-영문-숫자-하이픈만 남김 (깨진 slug 원천 차단)
+function normSlug(raw){
+  if(!raw)return '';
+  return raw.trim().toLowerCase()
+    .replace(/[\s/\\_.,;:!?()\[\]{}'"“”‘’]+/g,'-')
+    .replace(/[^a-z0-9-]/g,'')
+    .replace(/-+/g,'-').replace(/^-+|-+$/g,'');
+}
+function normalizeSlugInput(el){
+  const pos=el.selectionStart;
+  el.value=normSlug(el.value);
+  try{el.setSelectionRange(el.value.length,el.value.length)}catch(e){}
+}
+
 async function saveEncEntry(){
   const btn=document.getElementById('enc-save-btn');
   const editId=document.getElementById('enc-edit-id').value;
@@ -1792,9 +1807,14 @@ async function saveEncEntry(){
   const content=document.getElementById('enc-content').value.trim();
   if(!term){toast('용어명을 입력해주세요',true);return}
   if(!content){toast('본문을 입력해주세요',true);return}
+  // 저장 직전 slug 최종 정규화
+  const slugVal=normSlug(document.getElementById('enc-slug').value);
+  if(document.getElementById('enc-slug').value.trim() && !slugVal){
+    toast('slug는 영문 소문자·숫자·하이픈만 가능합니다 (예: dental-floss)',true);return;
+  }
   
   const body={
-    term, slug:document.getElementById('enc-slug').value.trim(),
+    term, slug:slugVal,
     category:document.getElementById('enc-category').value,
     summary:document.getElementById('enc-summary').value.trim(),
     content,

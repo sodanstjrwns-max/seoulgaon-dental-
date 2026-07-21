@@ -17,6 +17,28 @@ type Variables = {
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 // ══════════════════════════════════════════════════
+//  slug 안전 정규화 — 깨진 slug 저장 원천 차단 (2026-07-21)
+//  대문자/공백/슬래시/특수문자/한글이 slug에 들어가면 URL이 깨져 색인 불가.
+//  이 함수를 거치면 반드시 소문자-영문-숫자-하이픈 형태만 남는다.
+// ══════════════════════════════════════════════════
+function normalizeSlug(raw: string): string {
+  if (!raw) return ''
+  let s = raw.trim().toLowerCase()
+  // 슬래시·공백·언더스코어·점 등 구분자를 하이픈으로
+  s = s.replace(/[\s/\\_.,;:!?()[\]{}'"“”‘’]+/g, '-')
+  // 영문 소문자/숫자/하이픈만 남기고 나머지(한글·특수문자·악센트) 제거
+  s = s.replace(/[^a-z0-9-]/g, '')
+  // 연속 하이픈 압축 + 양끝 하이픈 제거
+  s = s.replace(/-+/g, '-').replace(/^-+|-+$/g, '')
+  return s
+}
+
+// slug가 안전한 형식인지 검증 (소문자-영문-숫자-하이픈, 한글/대문자/공백 불가)
+function isValidSlug(s: string): boolean {
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s)
+}
+
+// ══════════════════════════════════════════════════
 //  IndexNow — 새 콘텐츠 자동 색인 요청 (Bing, Yandex, Naver)
 // ══════════════════════════════════════════════════
 const INDEXNOW_KEY = 'a1b2c3d4e5f6g7h8i9j0seoulgaon'
@@ -1608,9 +1630,14 @@ app.post('/api/admin/encyclopedia', auth, async (c) => {
     const d = await c.req.json<any>()
     if (!d.term?.trim()) return c.json({ error: '용어명을 입력해주세요' }, 400)
     if (!d.content?.trim()) return c.json({ error: '본문을 입력해주세요' }, 400)
-    const slug = d.slug?.trim() || d.term.trim().toLowerCase().replace(/[^가-힣a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    // slug 안전 정규화: 사용자 입력 slug → 정규화, 없으면 term에서 생성
+    let slug = normalizeSlug(d.slug || '') || normalizeSlug(d.term || '')
+    if (!slug || !isValidSlug(slug)) {
+      // term이 순수 한글이면 자동 생성 불가 → 영문 slug 직접 입력 요구
+      return c.json({ error: 'slug는 영문 소문자·숫자·하이픈만 가능합니다. 영문 slug를 입력해주세요 (예: dental-floss)' }, 400)
+    }
     const exists = await db.prepare('SELECT id FROM encyclopedia WHERE slug = ?').bind(slug).first()
-    if (exists) return c.json({ error: '이미 존재하는 slug입니다' }, 409)
+    if (exists) return c.json({ error: `이미 존재하는 slug입니다: ${slug}` }, 409)
     const result = await db.prepare(
       `INSERT INTO encyclopedia (term, slug, category, summary, content, faq_q1, faq_a1, faq_q2, faq_a2, faq_q3, faq_a3, faq_q4, faq_a4, faq_q5, faq_a5, faq_q6, faq_a6, faq_q7, faq_a7, faq_q8, faq_a8, faq_q9, faq_a9, faq_q10, faq_a10, related_treatment, seo_title, seo_description, seo_keywords, is_published, sort_order)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
@@ -1638,6 +1665,15 @@ app.put('/api/admin/encyclopedia/:id', auth, async (c) => {
     const db = c.env.DB
     const id = c.req.param('id')
     const d = await c.req.json<any>()
+    // slug 안전 정규화 + 검증 (깨진 slug 저장 차단)
+    const cleanSlug = normalizeSlug(d.slug || '') || normalizeSlug(d.term || '')
+    if (!cleanSlug || !isValidSlug(cleanSlug)) {
+      return c.json({ error: 'slug는 영문 소문자·숫자·하이픈만 가능합니다. 영문 slug를 입력해주세요 (예: dental-floss)' }, 400)
+    }
+    // 다른 글이 이미 이 slug를 쓰고 있는지 확인 (본인 제외)
+    const dup = await db.prepare('SELECT id FROM encyclopedia WHERE slug = ? AND id != ?').bind(cleanSlug, id).first()
+    if (dup) return c.json({ error: `이미 존재하는 slug입니다: ${cleanSlug}` }, 409)
+    d.slug = cleanSlug
     await db.prepare(
       `UPDATE encyclopedia SET term=?, slug=?, category=?, summary=?, content=?, faq_q1=?, faq_a1=?, faq_q2=?, faq_a2=?, faq_q3=?, faq_a3=?,
        faq_q4=?, faq_a4=?, faq_q5=?, faq_a5=?, faq_q6=?, faq_a6=?, faq_q7=?, faq_a7=?, faq_q8=?, faq_a8=?,
