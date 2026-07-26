@@ -1768,7 +1768,7 @@ const sitemapImageMap: Record<string, { url: string; title: string }> = {
   '/endodontics':         { url: '/images/clinic-unit-1.jpg',         title: '신경치료' },
   '/invisalign':          { url: '/images/clinic-treatment.jpg',      title: '인비절라인 교정' },
   '/orthodontics':        { url: '/images/clinic-treatment.jpg',      title: '치아교정' },
-  '/glownate':            { url: '/images/clinic-makeup.jpg',         title: '글로네이트 심미치료' },
+  '/glownate':            { url: '/images/clinic-makeup.jpg',         title: '최소삭제 라미네이트' },
   '/cavity-treatment':    { url: '/images/clinic-unit-1.jpg',         title: '충치치료' },
   '/implant-best':        { url: '/images/clinic-implant-center.jpg', title: '임플란트 잘하는 치과' },
   '/full-mouth-implant':  { url: '/images/clinic-implant-center.jpg', title: '전체 임플란트' },
@@ -3837,7 +3837,7 @@ const LANDING_PAGES: LandingPageData[] = [
     relatedLinks: [
       { href: '/orthodontics', label: '의정부 치아교정' },
       { href: '/aesthetic', label: '의정부 심미치료' },
-      { href: '/glownate', label: '의정부 글로우네이트' },
+      { href: '/glownate', label: '의정부 최소삭제 라미네이트' },
       { href: '/doctors', label: '의료진 소개' },
     ]
   },
@@ -3886,37 +3886,37 @@ const LANDING_PAGES: LandingPageData[] = [
     relatedLinks: [
       { href: '/invisalign', label: '의정부 인비절라인' },
       { href: '/aesthetic', label: '의정부 심미치료' },
-      { href: '/glownate', label: '의정부 글로우네이트' },
+      { href: '/glownate', label: '의정부 최소삭제 라미네이트' },
       { href: '/doctors', label: '의료진 소개' },
     ]
   },
-  // ── 5. 의정부 글로우네이트 ──
+  // ── 5. 의정부 최소삭제 라미네이트 ──
   {
     slug: 'glownate',
-    title: '의정부 글로우네이트 | 서울가온치과 — 최소삭제 심미보철, 탑석역 5분',
-    metaDesc: '의정부 글로우네이트 전문 서울가온치과. 치아 삭제를 최소화한 심미보철로 자연스럽고 아름다운 앞니를 완성합니다. 라미네이트보다 보존적, 치아 손상 최소. ☎ 0507-1325-3377',
-    h1: '의정부 글로우네이트 — 최소삭제 심미보철',
+    title: '의정부 최소삭제 라미네이트 | 서울가온치과 — 자연치아 보존, 탑석역 5분',
+    metaDesc: '의정부 최소삭제 라미네이트 서울가온치과. 치아 삭제를 최소화한 라미네이트로 자연스럽고 아름다운 앞니를 완성합니다. 자연치아 보존, 치아 손상 최소. ☎ 0507-1325-3377',
+    h1: '의정부 최소삭제 라미네이트 — 자연치아 보존 심미보철',
     heroSub: '치아를 최소한으로 삭제하여 자연스럽고 아름다운 미소를 완성합니다',
-    keywords: '의정부 글로우네이트, 글로우네이트, 글로우네이트 비용, 글로우네이트 후기, 의정부 라미네이트, 의정부 심미보철, 최소삭제 라미네이트, 의정부 앞니치료',
+    keywords: '의정부 라미네이트, 최소삭제 라미네이트, 라미네이트 비용, 라미네이트 후기, 의정부 심미보철, 무삭제 라미네이트, 의정부 앞니치료',
     category: '심미치료',
     sections: [
       {
-        heading: '글로우네이트란 무엇인가요?',
-        content: `<p>글로우네이트는 <strong>치아 삭제를 최소화</strong>한 심미보철 방법입니다. 기존 라미네이트가 치아 표면을 0.5~0.7mm 정도 삭제하는 데 비해, 글로우네이트는 <strong>0.1~0.3mm만 삭제</strong>하거나 경우에 따라 삭제 없이도 시술이 가능합니다.</p>
+        heading: '최소삭제 라미네이트란?',
+        content: `<p>최소삭제 라미네이트는 <strong>치아 삭제를 최소화</strong>한 심미보철 방법입니다. 기존 라미네이트가 치아 표면을 0.5~0.7mm 정도 삭제하는 데 비해, 최소삭제 방식은 <strong>0.1~0.3mm만 삭제</strong>하거나 경우에 따라 삭제 없이도 시술이 가능합니다.</p>
 <p><strong>자연치아를 최대한 보존</strong>하면서도 색상, 형태, 배열을 아름답게 개선할 수 있어 최근 가장 주목받는 심미치료 방법입니다.</p>`
       },
       {
-        heading: '글로우네이트 vs 라미네이트',
+        heading: '최소삭제 라미네이트 vs 일반 라미네이트',
         content: `<ul>
-<li><strong>삭제량</strong> — 글로우네이트: 0.1~0.3mm (최소) / 라미네이트: 0.5~0.7mm</li>
-<li><strong>치아 보존</strong> — 글로우네이트가 자연치아를 더 많이 보존합니다</li>
-<li><strong>시린 증상</strong> — 글로우네이트는 삭제량이 적어 시린 증상이 거의 없습니다</li>
+<li><strong>삭제량</strong> — 최소삭제: 0.1~0.3mm / 일반 라미네이트: 0.5~0.7mm</li>
+<li><strong>치아 보존</strong> — 최소삭제 방식이 자연치아를 더 많이 보존합니다</li>
+<li><strong>시린 증상</strong> — 삭제량이 적어 시린 증상이 거의 없습니다</li>
 <li><strong>강도</strong> — 최신 세라믹 소재로 충분한 강도를 확보합니다</li>
 <li><strong>자연스러움</strong> — 초박형 세라믹으로 자연치아에 가장 가까운 투명감을 구현합니다</li>
 </ul>`
       },
       {
-        heading: '글로우네이트가 적합한 경우',
+        heading: '최소삭제 라미네이트가 적합한 경우',
         content: `<ul>
 <li>앞니 <strong>색상이 변한</strong> 경우 (테트라사이클린 변색 등)</li>
 <li>앞니 <strong>형태가 마음에 들지 않는</strong> 경우</li>
@@ -3937,12 +3937,12 @@ const LANDING_PAGES: LandingPageData[] = [
       }
     ],
     faqs: [
-      { q: '글로우네이트 비용은 얼마인가요?', a: '치아 수와 상태에 따라 달라지며, 상담 후 정확한 비용을 안내해 드립니다. 분할 납부도 가능합니다.' },
-      { q: '글로우네이트는 얼마나 유지되나요?', a: '적절한 관리 시 10년 이상 유지됩니다. 일반적인 치아 관리(양치, 정기 검진)를 잘 해주시면 오래 사용하실 수 있습니다.' },
-      { q: '글로우네이트 시술은 아프나요?', a: '삭제량이 매우 적어 마취 없이도 가능한 경우가 많으며, 시술 후 시린 증상도 거의 없습니다.' },
-      { q: '글로우네이트와 라미네이트 중 어떤 것이 좋나요?', a: '치아 상태에 따라 다릅니다. 서울가온치과에서는 환자의 치아 상태를 정확히 진단한 후 가장 적합한 방법을 추천드립니다.' },
+      { q: '최소삭제 라미네이트 비용은 얼마인가요?', a: '치아 수와 상태에 따라 달라지며, 상담 후 정확한 비용을 안내해 드립니다. 분할 납부도 가능합니다.' },
+      { q: '라미네이트는 얼마나 유지되나요?', a: '적절한 관리 시 10년 이상 유지됩니다. 일반적인 치아 관리(양치, 정기 검진)를 잘 해주시면 오래 사용하실 수 있습니다.' },
+      { q: '최소삭제 라미네이트 시술은 아프나요?', a: '삭제량이 매우 적어 마취 없이도 가능한 경우가 많으며, 시술 후 시린 증상도 거의 없습니다.' },
+      { q: '최소삭제 라미네이트와 일반 라미네이트 중 어떤 것이 좋나요?', a: '치아 상태에 따라 다릅니다. 서울가온치과에서는 환자의 치아 상태를 정확히 진단한 후 가장 적합한 방법을 추천드립니다.' },
     ],
-    ctaText: '글로우네이트 상담 예약',
+    ctaText: '라미네이트 상담 예약',
     relatedLinks: [
       { href: '/aesthetic', label: '의정부 심미치료' },
       { href: '/invisalign', label: '의정부 인비절라인' },
@@ -4195,7 +4195,7 @@ const LANDING_PAGES: LandingPageData[] = [
   {
     slug: 'laminate',
     title: '의정부 라미네이트 | 서울가온치과 — 최소삭제 심미보철, 자연스러운 앞니',
-    metaDesc: '의정부 라미네이트 서울가온치과. 앞니 변색·벌어짐·왜소치를 최소삭제 라미네이트로 자연스럽게 개선합니다. 디지털 쉐이드 매칭. 글로우네이트 시술 가능. ☎ 0507-1325-3377',
+    metaDesc: '의정부 라미네이트 서울가온치과. 앞니 변색·벌어짐·왜소치를 최소삭제 라미네이트로 자연스럽게 개선합니다. 디지털 쉐이드 매칭. 무삭제 라미네이트 시술 가능. ☎ 0507-1325-3377',
     h1: '의정부 라미네이트 — 최소삭제로 자연스러운 앞니',
     heroSub: '변색·벌어짐·왜소치, 라미네이트로 자연스럽게 개선합니다',
     keywords: '의정부 라미네이트, 의정부 라미네이트 비용, 의정부 앞니 라미네이트, 라미네이트 가격, 의정부 심미치료, 탑석역 라미네이트, 의정부 치아성형',
@@ -4204,7 +4204,7 @@ const LANDING_PAGES: LandingPageData[] = [
       {
         heading: '라미네이트란?',
         content: `<p>라미네이트는 앞니 표면을 <strong>최소한으로 삭제</strong>한 뒤, 얇은 도자기(세라믹) 쉘을 부착하여 <strong>치아의 형태·색상·크기</strong>를 개선하는 심미치료입니다. 네일아트처럼 얇은 보철물을 붙인다고 생각하시면 됩니다.</p>
-<p>서울가온치과에서는 기존 라미네이트보다 치아 삭제를 더욱 줄인 <strong>글로우네이트(Glownate)</strong> 시술도 가능합니다.</p>`
+<p>서울가온치과에서는 치아 삭제를 더욱 줄인 <strong>최소삭제·무삭제 라미네이트</strong> 시술도 가능합니다.</p>`
       },
       {
         heading: '라미네이트가 적합한 경우',
@@ -4217,11 +4217,11 @@ const LANDING_PAGES: LandingPageData[] = [
 </ul>`
       },
       {
-        heading: '라미네이트 vs 올세라믹 크라운 vs 글로우네이트',
+        heading: '라미네이트 vs 올세라믹 크라운 vs 최소삭제 라미네이트',
         content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
 <tr style="background:var(--gold);color:#fff"><th style="padding:8px;border:1px solid #ddd">구분</th><th style="padding:8px;border:1px solid #ddd">치아삭제량</th><th style="padding:8px;border:1px solid #ddd">적합한 경우</th></tr>
 <tr><td style="padding:8px;border:1px solid #ddd"><strong>라미네이트</strong></td><td style="padding:8px;border:1px solid #ddd">앞면 최소 삭제</td><td style="padding:8px;border:1px solid #ddd">변색, 형태개선</td></tr>
-<tr><td style="padding:8px;border:1px solid #ddd"><strong>글로우네이트</strong></td><td style="padding:8px;border:1px solid #ddd">거의 무삭제</td><td style="padding:8px;border:1px solid #ddd">왜소치, 경미한 벌어짐</td></tr>
+<tr><td style="padding:8px;border:1px solid #ddd"><strong>최소삭제 라미네이트</strong></td><td style="padding:8px;border:1px solid #ddd">거의 무삭제</td><td style="padding:8px;border:1px solid #ddd">왜소치, 경미한 벌어짐</td></tr>
 <tr><td style="padding:8px;border:1px solid #ddd"><strong>올세라믹 크라운</strong></td><td style="padding:8px;border:1px solid #ddd">전체 삭제</td><td style="padding:8px;border:1px solid #ddd">심한 손상, 신경치료 후</td></tr>
 </table>`
       }
@@ -4229,12 +4229,12 @@ const LANDING_PAGES: LandingPageData[] = [
     faqs: [
       { q: '라미네이트 수명은 얼마나 되나요?', a: '일반적으로 10~15년 이상 사용 가능합니다. 딱딱한 음식을 직접 씹는 습관을 피하면 더 오래 유지됩니다.' },
       { q: '라미네이트 시술 후 아프나요?', a: '치아 삭제량이 적어 시술 후 시림이나 통증은 거의 없습니다. 일상생활에 바로 복귀 가능합니다.' },
-      { q: '라미네이트와 글로우네이트 차이가 뭔가요?', a: '글로우네이트는 치아 삭제를 거의 하지 않는 방식입니다. 치아 상태에 따라 적합한 방법을 안내드립니다.' },
+      { q: '최소삭제 라미네이트는 일반 라미네이트와 뭔가 다른가요?', a: '최소삭제 방식은 치아 삭제를 거의 하지 않는 방식입니다. 치아 상태에 따라 적합한 방법을 안내드립니다.' },
     ],
     ctaText: '라미네이트 상담 예약',
     relatedLinks: [
       { href: '/aesthetic', label: '앞니 심미치료' },
-      { href: '/glownate', label: '글로우네이트' },
+      { href: '/glownate', label: '최소삭제 라미네이트' },
       { href: '/front-tooth-implant', label: '앞니 임플란트' },
       { href: '/doctors', label: '의료진 소개' },
     ]
@@ -4851,7 +4851,7 @@ const LANDING_PAGES: LandingPageData[] = [
     relatedLinks: [
       { href: '/aesthetic', label: '심미치료 안내' },
       { href: '/laminate', label: '라미네이트 안내' },
-      { href: '/glownate', label: '글로우네이트 안내' },
+      { href: '/glownate', label: '최소삭제 라미네이트 안내' },
       { href: '/scaling-gum-treatment', label: '스케일링 안내' },
       { href: '/doctors', label: '의료진 소개' },
     ]
@@ -5006,7 +5006,7 @@ const LANDING_PAGES: LandingPageData[] = [
         content: `<ul>
 <li>🦷 <strong>임플란트</strong> — CT 가이드 수술, 뼈이식, 전체임플란트 / 65세 보험</li>
 <li>😁 <strong>교정</strong> — 인비절라인·세라믹·부분교정</li>
-<li>✨ <strong>심미</strong> — 라미네이트·레진빌드업·미백·글로우네이트</li>
+<li>✨ <strong>심미</strong> — 라미네이트·레진빌드업·미백·최소삭제 라미네이트</li>
 <li>🪥 <strong>일반</strong> — 충치·신경치료·발치·스케일링·사랑니</li>
 <li>👶 <strong>소아</strong> — 실란트·불소도포·유치치료</li>
 <li>🦴 <strong>보철</strong> — 크라운·브릿지·틀니</li>

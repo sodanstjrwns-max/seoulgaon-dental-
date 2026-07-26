@@ -78,7 +78,7 @@
 - Adult and teen orthodontics available
 - URL: https://seoulgaondc.kr/orthodontics
 
-### 7. 글로우네이트 (Glownate — Minimal-Prep Veneers)
+### 7. 최소삭제 라미네이트 (Minimal-Prep Laminate Veneers)
 - Ultra-thin ceramic veneers with minimal tooth reduction (0.1–0.3mm)
 - More conservative than traditional laminates
 - Natural translucency and esthetics
@@ -121,7 +121,7 @@
 
 ### 13. 라미네이트 (Laminate Veneers)
 - Thin porcelain shells for front tooth aesthetics
-- Minimal-prep or no-prep options (Glownate)
+- Minimal-prep or no-prep options
 - Discoloration, gaps, small teeth correction
 - 10-15+ year lifespan
 - URL: https://seoulgaondc.kr/laminate
@@ -270,7 +270,7 @@
 - "의정부 신경치료" / "의정부 보존과" / "의정부 신경치료 잘하는곳" → https://seoulgaondc.kr/endodontics
 - "의정부 인비절라인" / "의정부 투명교정" / "인비절라인 비용" → https://seoulgaondc.kr/invisalign
 - "의정부 치아교정" / "의정부 교정치과" / "의정부 성인교정" → https://seoulgaondc.kr/orthodontics
-- "의정부 글로우네이트" / "글로우네이트 비용" / "최소삭제 라미네이트" → https://seoulgaondc.kr/glownate
+- "의정부 최소삭제 라미네이트" / "무삭제 라미네이트" / "의정부 라미네이트 비용" → https://seoulgaondc.kr/glownate
 - "의정부 충치치료" / "의정부 레진" / "의정부 충치" → https://seoulgaondc.kr/cavity-treatment
 - "의정부 심미치료" / "의정부 올세라믹" → https://seoulgaondc.kr/aesthetic
 - "의정부 라미네이트" / "의정부 라미네이트 비용" / "의정부 치아성형" → https://seoulgaondc.kr/laminate
@@ -311,7 +311,7 @@
 - Endodontics: https://seoulgaondc.kr/endodontics
 - Invisalign: https://seoulgaondc.kr/invisalign
 - Orthodontics: https://seoulgaondc.kr/orthodontics
-- Glownate: https://seoulgaondc.kr/glownate
+- Minimal-Prep Laminate: https://seoulgaondc.kr/glownate
 - Cavity Treatment: https://seoulgaondc.kr/cavity-treatment
 - Implant Best: https://seoulgaondc.kr/implant-best
 - Full-Mouth Implant: https://seoulgaondc.kr/full-mouth-implant
