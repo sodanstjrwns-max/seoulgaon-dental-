@@ -120,7 +120,7 @@ app.use('*', async (c, next) => {
   c.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self)')
 
   // HTML 페이지 캐시: 짧게 (SEO 크롤러가 최신 콘텐츠 수집)
-  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|invisalign|orthodontics|glownate|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant|implant-cost|night-dental|senior-implant|emergency-dental|tapseok-dental|painless-dental|pediatric-dental|crown|teeth-whitening|dental-checkup|implant-process|minrak-dental)$/) || path.match(/^\/(blog|before-after)\/\d+$/) || path.match(/^\/encyclopedia\/[^\/]+$/)) {
+  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|invisalign|orthodontics|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant|implant-cost|night-dental|senior-implant|emergency-dental|tapseok-dental|painless-dental|pediatric-dental|crown|teeth-whitening|dental-checkup|implant-process|minrak-dental)$/) || path.match(/^\/(blog|before-after)\/\d+$/) || path.match(/^\/encyclopedia\/[^\/]+$/)) {
     c.header('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200')
     c.header('X-Robots-Tag', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')
   }
@@ -1768,7 +1768,6 @@ const sitemapImageMap: Record<string, { url: string; title: string }> = {
   '/endodontics':         { url: '/images/clinic-unit-1.jpg',         title: '신경치료' },
   '/invisalign':          { url: '/images/clinic-treatment.jpg',      title: '인비절라인 교정' },
   '/orthodontics':        { url: '/images/clinic-treatment.jpg',      title: '치아교정' },
-  '/glownate':            { url: '/images/clinic-makeup.jpg',         title: '최소삭제 라미네이트' },
   '/cavity-treatment':    { url: '/images/clinic-unit-1.jpg',         title: '충치치료' },
   '/implant-best':        { url: '/images/clinic-implant-center.jpg', title: '임플란트 잘하는 치과' },
   '/full-mouth-implant':  { url: '/images/clinic-implant-center.jpg', title: '전체 임플란트' },
@@ -1865,7 +1864,6 @@ app.get('/sitemap-pages.xml', async (c) => {
       { loc: '/endodontics',           priority: '0.90', changefreq: 'monthly', lastmod: V4_DATE },
       { loc: '/invisalign',            priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
       { loc: '/orthodontics',          priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
-      { loc: '/glownate',              priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
       { loc: '/cavity-treatment',      priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
       { loc: '/implant-best',          priority: '0.95', changefreq: 'monthly', lastmod: V4_DATE },
       { loc: '/full-mouth-implant',    priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
@@ -3837,7 +3835,7 @@ const LANDING_PAGES: LandingPageData[] = [
     relatedLinks: [
       { href: '/orthodontics', label: '의정부 치아교정' },
       { href: '/aesthetic', label: '의정부 심미치료' },
-      { href: '/glownate', label: '의정부 최소삭제 라미네이트' },
+      { href: '/laminate', label: '의정부 최소삭제 라미네이트' },
       { href: '/doctors', label: '의료진 소개' },
     ]
   },
@@ -3886,70 +3884,11 @@ const LANDING_PAGES: LandingPageData[] = [
     relatedLinks: [
       { href: '/invisalign', label: '의정부 인비절라인' },
       { href: '/aesthetic', label: '의정부 심미치료' },
-      { href: '/glownate', label: '의정부 최소삭제 라미네이트' },
+      { href: '/laminate', label: '의정부 최소삭제 라미네이트' },
       { href: '/doctors', label: '의료진 소개' },
     ]
   },
-  // ── 5. 의정부 최소삭제 라미네이트 ──
-  {
-    slug: 'glownate',
-    title: '의정부 최소삭제 라미네이트 | 서울가온치과 — 자연치아 보존, 탑석역 5분',
-    metaDesc: '의정부 최소삭제 라미네이트 서울가온치과. 치아 삭제를 최소화한 라미네이트로 자연스럽고 아름다운 앞니를 완성합니다. 자연치아 보존, 치아 손상 최소. ☎ 0507-1325-3377',
-    h1: '의정부 최소삭제 라미네이트 — 자연치아 보존 심미보철',
-    heroSub: '치아를 최소한으로 삭제하여 자연스럽고 아름다운 미소를 완성합니다',
-    keywords: '의정부 라미네이트, 최소삭제 라미네이트, 라미네이트 비용, 라미네이트 후기, 의정부 심미보철, 무삭제 라미네이트, 의정부 앞니치료',
-    category: '심미치료',
-    sections: [
-      {
-        heading: '최소삭제 라미네이트란?',
-        content: `<p>최소삭제 라미네이트는 <strong>치아 삭제를 최소화</strong>한 심미보철 방법입니다. 기존 라미네이트가 치아 표면을 0.5~0.7mm 정도 삭제하는 데 비해, 최소삭제 방식은 <strong>0.1~0.3mm만 삭제</strong>하거나 경우에 따라 삭제 없이도 시술이 가능합니다.</p>
-<p><strong>자연치아를 최대한 보존</strong>하면서도 색상, 형태, 배열을 아름답게 개선할 수 있어 최근 가장 주목받는 심미치료 방법입니다.</p>`
-      },
-      {
-        heading: '최소삭제 라미네이트 vs 일반 라미네이트',
-        content: `<ul>
-<li><strong>삭제량</strong> — 최소삭제: 0.1~0.3mm / 일반 라미네이트: 0.5~0.7mm</li>
-<li><strong>치아 보존</strong> — 최소삭제 방식이 자연치아를 더 많이 보존합니다</li>
-<li><strong>시린 증상</strong> — 삭제량이 적어 시린 증상이 거의 없습니다</li>
-<li><strong>강도</strong> — 최신 세라믹 소재로 충분한 강도를 확보합니다</li>
-<li><strong>자연스러움</strong> — 초박형 세라믹으로 자연치아에 가장 가까운 투명감을 구현합니다</li>
-</ul>`
-      },
-      {
-        heading: '최소삭제 라미네이트가 적합한 경우',
-        content: `<ul>
-<li>앞니 <strong>색상이 변한</strong> 경우 (테트라사이클린 변색 등)</li>
-<li>앞니 <strong>형태가 마음에 들지 않는</strong> 경우</li>
-<li>앞니 사이에 <strong>벌어진 공간</strong>이 있는 경우</li>
-<li><strong>치아 삭제를 최소화</strong>하고 싶은 경우</li>
-<li>이전에 레진 보수를 반복한 앞니를 <strong>깔끔하게 수복</strong>하고 싶은 경우</li>
-</ul>`
-      },
-      {
-        heading: '치료 과정',
-        content: `<ol>
-<li><strong>상담 · 진단</strong> — 현재 치아 상태 파악, 원하는 결과 상담</li>
-<li><strong>디지털 디자인</strong> — 디지털 쉐이드 매칭으로 색상·형태 사전 설계</li>
-<li><strong>최소 삭제 · 인상</strong> — 0.1~0.3mm 삭제 후 정밀 인상 채득</li>
-<li><strong>전문 기공소 제작</strong> — 1:1 맞춤 초박형 세라믹 제작</li>
-<li><strong>접착 · 완성</strong> — 특수 접착제로 견고하게 부착, 즉시 자연스러운 미소 완성</li>
-</ol>`
-      }
-    ],
-    faqs: [
-      { q: '최소삭제 라미네이트 비용은 얼마인가요?', a: '치아 수와 상태에 따라 달라지며, 상담 후 정확한 비용을 안내해 드립니다. 분할 납부도 가능합니다.' },
-      { q: '라미네이트는 얼마나 유지되나요?', a: '적절한 관리 시 10년 이상 유지됩니다. 일반적인 치아 관리(양치, 정기 검진)를 잘 해주시면 오래 사용하실 수 있습니다.' },
-      { q: '최소삭제 라미네이트 시술은 아프나요?', a: '삭제량이 매우 적어 마취 없이도 가능한 경우가 많으며, 시술 후 시린 증상도 거의 없습니다.' },
-      { q: '최소삭제 라미네이트와 일반 라미네이트 중 어떤 것이 좋나요?', a: '치아 상태에 따라 다릅니다. 서울가온치과에서는 환자의 치아 상태를 정확히 진단한 후 가장 적합한 방법을 추천드립니다.' },
-    ],
-    ctaText: '라미네이트 상담 예약',
-    relatedLinks: [
-      { href: '/aesthetic', label: '의정부 심미치료' },
-      { href: '/invisalign', label: '의정부 인비절라인' },
-      { href: '/before-after', label: '비포 애프터' },
-      { href: '/doctors', label: '의료진 소개' },
-    ]
-  },
+  // (구 5. 글로우네이트 랜딩페이지 제거됨 — /glownate → /laminate 301 리다이렉트로 대체. 2026-07-21)
   // ── 6. 의정부 충치치료 ──
   {
     slug: 'cavity-treatment',
@@ -4234,7 +4173,6 @@ const LANDING_PAGES: LandingPageData[] = [
     ctaText: '라미네이트 상담 예약',
     relatedLinks: [
       { href: '/aesthetic', label: '앞니 심미치료' },
-      { href: '/glownate', label: '최소삭제 라미네이트' },
       { href: '/front-tooth-implant', label: '앞니 임플란트' },
       { href: '/doctors', label: '의료진 소개' },
     ]
@@ -4851,7 +4789,6 @@ const LANDING_PAGES: LandingPageData[] = [
     relatedLinks: [
       { href: '/aesthetic', label: '심미치료 안내' },
       { href: '/laminate', label: '라미네이트 안내' },
-      { href: '/glownate', label: '최소삭제 라미네이트 안내' },
       { href: '/scaling-gum-treatment', label: '스케일링 안내' },
       { href: '/doctors', label: '의료진 소개' },
     ]
@@ -5130,7 +5067,6 @@ function renderLandingPage(page: LandingPageData): string {
     'aesthetic': '/images/clinic-makeup-close.jpg',
     'resin-buildup': '/images/clinic-makeup.jpg',
     'laminate': '/images/clinic-makeup-close.jpg',
-    'glownate': '/images/clinic-makeup.jpg',
     'invisalign': '/images/clinic-treatment.jpg',
     'orthodontics': '/images/clinic-treatment.jpg',
     'endodontics': '/images/clinic-unit-1.jpg',
@@ -5277,6 +5213,12 @@ for (const page of LANDING_PAGES) {
     })
   })
 }
+
+// ══════════════════════════════════════════════════
+//  LEGACY REDIRECT: /glownate → /laminate (301)
+//  글로우네이트(서울비디치과 브랜드) URL 제거 — 기존 색인/방문자 라미네이트로 영구 이전
+// ══════════════════════════════════════════════════
+app.get('/glownate', (c) => c.redirect('/laminate', 301))
 
 // ══════════════════════════════════════════════════
 //  STATIC FILES (must be last)
