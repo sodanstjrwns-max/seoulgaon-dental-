@@ -44,6 +44,7 @@
 
 /* 3 Channel Cards */
 .rsv-channels{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:clamp(3rem,6vh,5rem)}
+.rsv-sla{max-width:640px;margin:1.2rem auto 0;padding:.8rem 1.4rem;background:rgba(191,164,106,.08);border:1px solid rgba(191,164,106,.25);border-radius:12px;font-size:.92rem;line-height:1.6;color:var(--stone)}
 .rsv-card{background:var(--ink-4);border:1px solid var(--line);border-radius:20px;padding:clamp(2rem,3vw,2.5rem);text-align:center;transition:border-color .4s,transform .4s;position:relative;overflow:hidden}
 .rsv-card:hover{border-color:rgba(191,164,106,.3);transform:translateY(-6px)}
 .rsv-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;transition:opacity .4s;opacity:0}
@@ -231,6 +232,7 @@
   <span class="page-hero-label">Reservation</span>
   <h1>예약 안내</h1>
   <p class="page-hero-sub">편한 방법으로 예약하세요. 전화, 카카오톡, 네이버 3가지 채널을 운영합니다.</p>
+  <p class="rsv-sla"><i class="fas fa-clock" style="color:var(--gold);margin-right:.4rem"></i><strong>카카오톡·온라인 문의는 영업일 기준 24시간 이내</strong> 담당자가 직접 답변드립니다.</p>
 </section>
 
 <div class="rsv-section">
@@ -257,7 +259,7 @@
       </svg>
     </div>
     <h2 class="rsv-title">카카오톡 상담</h2>
-    <p class="rsv-desc" style="margin-top:.8rem">사진 첨부, 비용 문의, 예약 변경까지<br>카카오톡으로 편하게 상담하세요.<br>24시간 접수 가능, 진료 시간 내 답변.</p>
+    <p class="rsv-desc" style="margin-top:.8rem">사진 첨부, 비용 문의, 예약 변경까지<br>카카오톡으로 편하게 상담하세요.<br><strong>24시간 접수 · 영업일 기준 24시간 이내 답변.</strong></p>
     <a href="https://pf.kakao.com/_LLxhwG/chat" target="_blank" rel="noopener" class="rsv-btn"><i class="fas fa-comment"></i> 카카오톡 상담</a>
   </div>
 
