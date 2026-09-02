@@ -2013,7 +2013,9 @@ const HEAD_COMMON = `<meta charset="UTF-8">
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
 <link href="/style.css" rel="stylesheet">
-<link href="/pages.css" rel="stylesheet">`
+<link href="/pages.css" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y0XLCZCP4"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Y0XLCZCP4',{anonymize_ip:true});</script>`
 
 // 공통 네비게이션
 const NAV_HTML = `<nav id="nav" role="navigation" aria-label="메인 네비게이션">
