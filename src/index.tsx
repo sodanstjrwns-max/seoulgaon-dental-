@@ -1908,7 +1908,7 @@ app.get('/sitemap-pages.xml', async (c) => {
         xml += `
     <image:image>
       <image:loc>${SITE}${imgInfo.url}</image:loc>
-      <image:title>${imgInfo.title}</image:title>
+      <image:title>${imgInfo.title.replace(/&/g, '&amp;')}</image:title>
     </image:image>`
       }
 
