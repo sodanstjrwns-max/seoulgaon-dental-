@@ -2590,6 +2590,41 @@ if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open'
 })
 
 // ── SSR 블로그 포스트 상세 ──
+// 블로그 본문 도입부 잔재 정리 — AI 작성 잔재(인사말·제목중복·채팅UI 클래스) 제거로 C3(첫 두 줄 직답) 회복
+function sanitizeArticleContent(html: string): string {
+  if (!html) return html
+  let s = html
+  // 1) AI 채팅 UI 클래스/래퍼(font-claude-response-body, standard-markdown, grid 등) 제거
+  //    class 속성만 벗겨 텍스트·구조는 보존
+  s = s.replace(/\sclass="[^"]*(?:font-claude-response-body|standard-markdown|whitespace-(?:normal|pre-wrap)|break-words|grid-cols|border-border-200|text-text-100|leading-\[)[^"]*"/g, '')
+  // 2) 클래스 벗긴 뒤 남은 순수 래퍼 <div> 언랩 (최대 4중첩)
+  for (let i = 0; i < 4; i++) {
+    s = s.replace(/<div>\s*(<(?:p|h[1-6]|ul|ol|hr|div)[\s>])/gi, '$1')
+    s = s.replace(/(<\/(?:p|h[1-6]|ul|ol|div)>)\s*<\/div>/gi, '$1')
+  }
+  // 3) AI 작성 지시문 잔재 제거 ("바로 시작합니다!...📝 블로그 포스팅 N번...메타 설명: ...")
+  s = s.replace(/바로 시작합니다![^<]*?(?:써드릴게요|시작할게요)[^<]*/gi, '')
+  s = s.replace(/📝?\s*블로그 포스팅\s*\d+번[^<]*/gi, '')
+  s = s.replace(/H2 소제목\s*\(본문 맨 앞\)\s*[:：]?[^<]*/gi, '')
+  s = s.replace(/메타 설명\s*[:：][^<]*/gi, '')
+  s = s.replace(/제목\s*[:：]\s*[^<]*\|\s*의정부 서울가온치과/gi, '')
+  // 4) 본문 맨 앞의 제목 중복 <h2>...| 의정부 서울가온치과</h2> 제거 (페이지 h1과 중복)
+  s = s.replace(/^\s*<h2>\s*(?:<strong>)?[^<]*\|\s*의정부 서울가온치과(?:<\/strong>)?<\/h2>\s*/i, '')
+  s = s.replace(/^\s*<p[^>]*>\s*[^<]*\|\s*의정부 서울가온치과가?\s*(?:솔직하게\s*)?설명합니다[^<]*<\/p>\s*/i, '')
+  // 5) 맨 앞 인사말 제거 — (a) 남아있는 첫 <h2> 바로 뒤 인사말, (b) 최상단 인사말
+  //    첫 두 줄이 직답이 되도록 인사말 단락 제거. <p><p> 중첩 방어
+  s = s.replace(/(^\s*<h2>[^<]*<\/h2>\s*)(?:<p>\s*)?<p[^>]*>\s*안녕하세요[^<]*<\/p>\s*/i, '$1')
+  s = s.replace(/^\s*(?:<p>\s*)?<p[^>]*>\s*안녕하세요[^<]*<\/p>\s*/i, '')
+  // 6) 해시태그 뭉치(#가온이아빠의치과이야기 등 브랜드 잔재) 제거
+  s = s.replace(/#가온이아빠의치과이야기/gi, '')
+  // 7) 잔재 제거로 생긴 빈/중첩 <p>·<div>, 이중 </p> 정리
+  s = s.replace(/<p>\s*<p>/gi, '<p>')
+  s = s.replace(/<\/p>\s*<\/p>/gi, '</p>')
+  s = s.replace(/<p[^>]*>\s*<\/p>/gi, '')
+  s = s.replace(/<div>\s*<\/div>/gi, '')
+  return s.trim()
+}
+
 app.get('/blog/:id', async (c) => {
   try {
     const db = c.env.DB
@@ -2617,7 +2652,9 @@ app.get('/blog/:id', async (c) => {
       try { const r2 = await db.prepare('SELECT id, image_url, sort_order FROM blog_images WHERE post_id = ? ORDER BY sort_order').bind(id).all(); images = r2.results || [] } catch {}
     }
 
-    const plainText = stripHtml(post.content)
+    // 도입부 잔재 정리 후 본문 확정 (metaDesc·articleContent 모두 정리된 콘텐츠 기준)
+    const cleanContent = sanitizeArticleContent(post.content)
+    const plainText = stripHtml(cleanContent)
     const metaDesc = post.meta_description || (plainText.length > 155 ? plainText.substring(0, 155) + '...' : plainText)
     const pageTitle = `${post.title} | 서울가온치과 블로그`
     const canonicalUrl = `${SITE}/blog/${id}`
@@ -2639,12 +2676,12 @@ app.get('/blog/:id', async (c) => {
     }
 
     // 콘텐츠 처리
-    const isHtmlContent = post.content.trim().startsWith('<')
+    const isHtmlContent = cleanContent.trim().startsWith('<')
     let articleContent = ''
     if (isHtmlContent) {
-      articleContent = post.content
+      articleContent = cleanContent
     } else {
-      articleContent = post.content.split('\n').filter((l: string) => l.trim()).map((l: string) => `<p>${escHtml(l)}</p>`).join('\n')
+      articleContent = cleanContent.split('\n').filter((l: string) => l.trim()).map((l: string) => `<p>${escHtml(l)}</p>`).join('\n')
       if (images.length) {
         const cls = images.length === 1 ? 'bp-images single' : 'bp-images'
         articleContent += `<div class="${cls}">${images.map((img: any) => `<img src="${escHtml(img.image_url)}" alt="${escHtml(img.filename || post.title)}" loading="lazy">`).join('')}</div>`
@@ -3665,7 +3702,7 @@ const LANDING_PAGES: LandingPageData[] = [
     slug: 'uijeongbu-dental',
     title: '의정부 치과 추천 | 서울가온치과 — 서울대 출신 의료진, 탑석역 5분',
     metaDesc: '의정부 치과 찾으시나요? 서울가온치과는 서울대학교 치의학과 출신 의료진이 임플란트·심미치료·신경치료를 직접 진료합니다. 탑석역 1번출구 도보 5분. 과잉진료 없는 정직한 치과. ☎ 0507-1325-3377',
-    h1: '의정부 치과 추천 — 서울가온치과',
+    h1: '의정부 치과 추천 — 과잉진료가 걱정되어 치과를 못 믿으신다면',
     heroSub: '서울대학교 출신 의료진이 직접 진료하는 의정부 치과',
     keywords: '의정부 치과, 의정부 치과 추천, 의정부치과, 의정부 치과의원, 탑석역 치과, 용현동 치과, 의정부 좋은치과, 의정부역 치과, 민락동 치과, 가능동 치과',
     category: '종합진료',
@@ -3943,7 +3980,7 @@ const LANDING_PAGES: LandingPageData[] = [
     slug: 'implant-best',
     title: '의정부 임플란트 잘하는곳 | 서울가온치과 — CT 가이드 수술, 서울대 출신',
     metaDesc: '의정부 임플란트 잘하는곳 찾으시나요? 서울가온치과는 CT 기반 가이드 임플란트로 정확하게, 최소 절개로 수술합니다. 서울대 출신 현진호 대표원장 직접 수술. 뼈이식·상악동거상술·전체임플란트 진료. ☎ 0507-1325-3377',
-    h1: '의정부 임플란트 잘하는곳 — 서울가온치과',
+    h1: '의정부 임플란트 잘하는곳 — 어디서 받아야 할지 고민이신다면',
     heroSub: 'CT 가이드 수술로 정확하고 안전한 임플란트, 서울대 출신 대표원장 직접 수술',
     keywords: '의정부 임플란트 잘하는곳, 의정부 임플란트, 의정부 임플란트 추천, 의정부 임플란트 비용, 의정부 임플란트 가격, 탑석역 임플란트, 의정부 치과 임플란트, 의정부 임플란트 후기',
     category: '임플란트',
@@ -3998,7 +4035,7 @@ const LANDING_PAGES: LandingPageData[] = [
     slug: 'full-mouth-implant',
     title: '의정부 전체임플란트 | 서울가온치과 — 위아래 전악 임플란트',
     metaDesc: '의정부 전체임플란트(전악임플란트) 전문 서울가온치과. 틀니에서 임플란트로, 위아래 전체 임플란트까지. CT 가이드 수술로 정확한 식립. 현진호 대표원장 직접 수술. 82건+ 전체임플란트 실적. ☎ 0507-1325-3377',
-    h1: '의정부 전체임플란트 — 서울가온치과',
+    h1: '의정부 전체임플란트 — 이가 거의 남지 않으셔도 가능합니다',
     heroSub: '틀니에서 임플란트로, 위아래 전악 임플란트까지 원스톱 치료',
     keywords: '의정부 전체임플란트, 의정부 전악임플란트, 의정부 전체 임플란트 비용, 의정부 틀니 임플란트, 전체 임플란트 잘하는곳, 의정부 위아래 임플란트, 탑석역 전체임플란트',
     category: '전체임플란트',
@@ -4533,7 +4570,7 @@ const LANDING_PAGES: LandingPageData[] = [
     slug: 'tapseok-dental',
     title: '탑석역 치과 | 서울가온치과 — 탑석역 근처 믿을 수 있는 치과',
     metaDesc: '탑석역 치과 서울가온치과. 의정부역에서 1정거장, 탑석역에서 가까운 종합 치과. 임플란트·교정·심미·일반진료 전 과목. 400평 규모 최첨단 시설. 현진호 대표원장. ☎ 0507-1325-3377',
-    h1: '탑석역 치과 — 서울가온치과에서 가까이 만나세요',
+    h1: '탑석역 치과 — 집 근처에서 큰 치과를 찾고 계신다면',
     heroSub: '탑석역에서 한 정거장. 규모와 실력을 갖춘 종합 치과를 만나보세요',
     keywords: '탑석역 치과, 탑석 치과, 탑석역 임플란트, 탑석역 교정, 탑석 근처 치과, 의정부 탑석 치과, 탑석역 치과 추천',
     category: '탑석역 치과',
@@ -4912,7 +4949,7 @@ const LANDING_PAGES: LandingPageData[] = [
     slug: 'minrak-dental',
     title: '민락동 치과 | 서울가온치과 — 민락 주민이 찾는 종합 치과',
     metaDesc: '민락동 치과 서울가온치과. 민락동·민락2지구에서 가까운 종합 치과. 임플란트·교정·심미·일반진료 전 과목. 400평 규모 대학병원급 시설. 탑석역 도보 5분. ☎ 0507-1325-3377',
-    h1: '민락동 치과 — 서울가온치과에서 가깝고 편하게',
+    h1: '민락동 치과 — 걸어서 다닐 수 있는 큰 치과를 찾으신다면',
     heroSub: '민락동·민락2지구에서 가까운 종합 치과. 규모와 실력을 함께 만나세요',
     keywords: '민락동 치과, 민락 치과, 민락2지구 치과, 민락동 임플란트, 민락 근처 치과, 의정부 민락 치과, 민락역 치과',
     category: '민락동 치과',
