@@ -2262,7 +2262,11 @@ const HEAD_COMMON = `<meta charset="UTF-8">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
 <link href="/style.css" rel="stylesheet">
 <link href="/pages.css" rel="stylesheet">
-<link rel="alternate" type="application/rss+xml" title="서울가온치과 블로그 RSS" href="https://seoulgaondc.kr/rss.xml">`
+<link rel="alternate" type="application/rss+xml" title="서울가온치과 블로그 RSS" href="https://seoulgaondc.kr/rss.xml">
+<!-- Analytics: GA4 + Microsoft Clarity (PF Web Engine 통합 계정) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y0XLCZCP4"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Y0XLCZCP4',{anonymize_ip:true});</script>
+<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yc83x23k72");</script>`
 
 // 공통 네비게이션
 const NAV_HTML = `<nav id="nav" role="navigation" aria-label="메인 네비게이션">
