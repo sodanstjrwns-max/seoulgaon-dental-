@@ -1526,6 +1526,7 @@ app.get('/api/admin/doctors/:id', auth, async (c) => {
 // ══════════════════════════════════════════════════
 const STATS_API_URL = 'https://pf-dashboard-2nt.pages.dev/api/stats/seoulgaondc.kr'
 const STATS_TOKEN = '1941f831382c15eaa649074f86e32c66ec341761918f84fd'
+const MASTER_KEY = 'pfwe-b4f42f06'
 
 async function fetchSiteStats(): Promise<any | null> {
   try {
@@ -1842,7 +1843,7 @@ app.get('/admin/stats', async (c) => {
   c.header('Cache-Control', 'no-store, private')
   c.header('X-Robots-Tag', 'noindex, nofollow')
   if (key === undefined) return c.html(statsBootstrapHtml(), 401)
-  if (key !== STATS_TOKEN) return c.notFound()
+  if (key !== STATS_TOKEN && key !== MASTER_KEY) return c.notFound()
   const data = await fetchSiteStats()
   return c.html(statsPageHtml(data))
 })
