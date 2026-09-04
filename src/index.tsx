@@ -1665,6 +1665,53 @@ const ST_AI_LABELS: Record<string, string> = {
   chatgpt: 'ChatGPT', perplexity: 'Perplexity', claude: 'Claude', gemini: 'Gemini', etc: '기타 AI',
 }
 
+// ---------- 행동 분석 (Microsoft Clarity) ----------
+const ST_CLARITY_URL = 'https://clarity.microsoft.com/projects/view/yc83x23k72/dashboard'
+
+function stSecFmt(n: any): string {
+  if (n == null || isNaN(Number(n))) return '—'
+  const s = Math.round(Number(n))
+  return s >= 60 ? `${Math.floor(s / 60)}분 ${s % 60}초` : `${s}초`
+}
+const stPct1 = (n: any) => (n == null || isNaN(Number(n)) ? '—' : `${Number(n).toFixed(1)}%`)
+
+function stClarityInsights(cl: any): string[] {
+  const out: string[] = []
+  if ((cl.rageClickPct ?? 0) >= 1 || (cl.deadClickPct ?? 0) >= 5) out.push('화면 반응이 없어 반복 클릭하는 사용자가 있습니다 (UI 답답 신호)')
+  if (cl.avgScrollDepth != null && cl.avgScrollDepth < 40 && (cl.sessions ?? 0) >= 30) out.push('첫 화면에서 이탈이 많습니다')
+  if ((cl.scriptErrors ?? 0) > 0) out.push(`스크립트 오류 ${stFmt(cl.scriptErrors)}건 감지 — 점검 필요`)
+  if ((cl.quickbackPct ?? 0) >= 8) out.push('들어왔다 바로 나가는 비율이 높습니다')
+  if (!out.length && (cl.sessions ?? 0) > 0) out.push('특이 신호 없음')
+  return out
+}
+
+function stClaritySub(s: string): string {
+  return `<span class="gs-sub">${s}</span>`
+}
+
+function stClaritySection(cl: any): string {
+  let s = `<div class="gs-sec">행동 분석 <span>Clarity · 최근 3일</span><a class="gs-clarity-link" href="${ST_CLARITY_URL}" target="_blank" rel="noopener">Clarity 대시보드 <i class="fas fa-arrow-up-right-from-square"></i></a></div>`
+  if (!cl) {
+    s += `<div class="gs-empty">Clarity 수집 대기 중</div>`
+    return s
+  }
+  s += `<div class="gs-grid">
+    ${stCard('세션', stFmt(cl.sessions), cl.botSessions != null ? stClaritySub(`봇 ${stFmt(cl.botSessions)}`) : '', 'fa-users')}
+    ${stCard('사용자', stFmt(cl.users), '', 'fa-user')}
+    ${stCard('평균 스크롤', stPct1(cl.avgScrollDepth), '', 'fa-angles-down')}
+    ${stCard('참여시간', stSecFmt(cl.engagementSec), cl.activeSec != null ? stClaritySub(`활성 ${stSecFmt(cl.activeSec)}`) : '', 'fa-stopwatch')}
+    ${stCard('레이지 클릭', cl.rageClicks != null ? `${stFmt(cl.rageClicks)}건` : '—', stClaritySub(stPct1(cl.rageClickPct)), 'fa-bolt')}
+    ${stCard('데드 클릭', cl.deadClicks != null ? `${stFmt(cl.deadClicks)}건` : '—', stClaritySub(stPct1(cl.deadClickPct)), 'fa-ban')}
+    ${stCard('퀵백', cl.quickbacks != null ? `${stFmt(cl.quickbacks)}건` : '—', stClaritySub(stPct1(cl.quickbackPct)), 'fa-rotate-left')}
+    ${stCard('스크립트 오류', cl.scriptErrors != null ? `${stFmt(cl.scriptErrors)}건` : '—', stClaritySub(stPct1(cl.scriptErrorPct)), 'fa-bug')}
+  </div>`
+  const ins = stClarityInsights(cl)
+  if (ins.length) {
+    s += `<section class="gs-insight"><h3><i class="fas fa-magnifying-glass-chart"></i> 행동 신호</h3><ul>${ins.map((l) => `<li>${l}</li>`).join('')}</ul></section>`
+  }
+  return s
+}
+
 function statsPageHtml(d: any): string {
   const configured = !!(d && d.configured)
   const g = d?.gsc, a = d?.ga, ai = d?.ai
@@ -1706,6 +1753,8 @@ function statsPageHtml(d: any): string {
     } else {
       inner += `<div class="gs-empty">${d.hasGa ? '애널리틱스 데이터 수집 중입니다' : '애널리틱스 연동 대기 중입니다'}</div>`
     }
+
+    inner += stClaritySection(d?.clarity)
 
     inner += `<section class="gs-insight"><h3><i class="fas fa-lightbulb"></i> 자동 인사이트</h3><ul>${insights.map((l) => `<li>${l}</li>`).join('')}</ul></section>`
 
@@ -1761,6 +1810,10 @@ a{color:inherit;text-decoration:none}
 .gs-pending p{color:#888;font-size:0.86rem;line-height:1.7}
 .gs-sec{font-size:0.95rem;font-weight:700;color:#fff;margin:28px 0 12px}
 .gs-sec span{font-size:0.7rem;color:#777;font-weight:400;margin-left:8px}
+.gs-clarity-link{font-size:0.7rem;color:var(--gold);font-weight:600;margin-left:10px;border:1px solid rgba(191,164,106,0.4);padding:3px 10px;border-radius:99px;transition:all .2s}
+.gs-clarity-link:hover{background:rgba(191,164,106,0.12)}
+.gs-clarity-link i{font-size:0.6rem;margin-left:2px}
+.gs-sub{font-size:0.7rem;color:#999;font-weight:600}
 .gs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
 @media(max-width:820px){.gs-grid{grid-template-columns:repeat(2,1fr)}}
 .gs-card{background:var(--ink-2);border:1px solid #333;border-radius:14px;padding:18px}
