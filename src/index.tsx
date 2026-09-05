@@ -1904,6 +1904,14 @@ app.get('/admin/stats', async (c) => {
 // 관리자 토큰 → 통계 접근 키 교환 (admin.html '통계' 메뉴에서 사용)
 app.get('/api/admin/stats-key', auth, (c) => c.json({ key: STATS_TOKEN }))
 
+// 로컬 예약/문의 통계 — 중앙 대시보드 수집용 (개인정보 없음, 건수만)
+// 이 사이트 D1에는 예약/상담/문의성 테이블이 없음 (/reservation 은 안내 페이지, 실예약은 전화·네이버)
+app.get('/api/local-stats', (c) => {
+  const key = c.req.query('key') || ''
+  if (key !== STATS_TOKEN && key !== MASTER_KEY) return c.notFound()
+  return c.json({ supported: false })
+})
+
 // ══════════════════════════════════════════════════
 //  SYNC CHECK — verify admin data appears on public site
 // ══════════════════════════════════════════════════
@@ -2651,7 +2659,8 @@ const HEAD_COMMON = `<meta charset="UTF-8">
 <!-- Analytics: GA4 + Microsoft Clarity (PF Web Engine 통합 계정) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y0XLCZCP4"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Y0XLCZCP4',{anonymize_ip:true});</script>
-<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yc83x23k72");</script>`
+<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yc83x23k72");</script>
+<script defer src="https://pf-dashboard-2nt.pages.dev/beacon.js"></script>`
 
 // 공통 네비게이션
 const NAV_HTML = `<nav id="nav" role="navigation" aria-label="메인 네비게이션">
