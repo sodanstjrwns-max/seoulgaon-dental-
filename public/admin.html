@@ -257,6 +257,7 @@
       <a href="#" onclick="showPage('notice',this)"><i class="fas fa-bullhorn"></i>공지사항</a>
       <a href="#" onclick="showPage('members',this)"><i class="fas fa-users"></i>회원관리</a>
       <a href="#" onclick="showPage('enc',this)"><i class="fas fa-book-medical"></i>백과사전</a>
+      <a href="#" onclick="showPage('fees',this)"><i class="fas fa-won-sign"></i>수가 관리</a>
       <a href="/admin/stats"><i class="fas fa-chart-line"></i>통계</a>
     </nav>
     <div class="side-bottom">
@@ -627,6 +628,34 @@
       </div>
     </div>
 
+    <!-- ══════ 수가 관리 (비급여 수가표) ══════ -->
+    <div id="page-fees" style="display:none">
+      <h1 class="page-title"><i class="fas fa-won-sign"></i> 수가 관리</h1>
+      <p style="color:#666;font-size:.85rem;margin:-.4rem 0 1rem">항목별로 <strong>공개/비공개</strong>를 켜고 끌 수 있습니다. 공개 항목만 홈페이지 <a href="/guide#fee" target="_blank" style="color:#c9a227">수가 안내</a> 페이지에 노출됩니다. <strong>건보</strong> 체크 시 건강보험 배지가 표시됩니다.</p>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem">
+        <button class="btn-primary" onclick="saveFees()"><i class="fas fa-save" style="margin-right:4px"></i>전체 저장</button>
+        <button class="btn-logout" onclick="addFeeRow()"><i class="fas fa-plus" style="margin-right:4px"></i>항목 추가</button>
+        <button class="btn-logout" onclick="loadFees()"><i class="fas fa-rotate" style="margin-right:4px"></i>불러오기(취소)</button>
+        <span id="fees-summary" style="margin-left:auto;align-self:center;font-size:.8rem;color:#666"></span>
+      </div>
+      <div style="overflow-x:auto">
+        <table id="fees-table" style="width:100%;border-collapse:collapse;font-size:.85rem;min-width:720px">
+          <thead>
+            <tr style="text-align:left;border-bottom:2px solid #e5e5e5">
+              <th style="padding:.5rem .4rem;width:150px">카테고리</th>
+              <th style="padding:.5rem .4rem">진료 항목</th>
+              <th style="padding:.5rem .4rem;width:150px">비용</th>
+              <th style="padding:.5rem .4rem">비고</th>
+              <th style="padding:.5rem .4rem;width:52px;text-align:center">건보</th>
+              <th style="padding:.5rem .4rem;width:80px;text-align:center">공개</th>
+              <th style="padding:.5rem .4rem;width:44px"></th>
+            </tr>
+          </thead>
+          <tbody id="fees-body"></tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -697,7 +726,7 @@ async function checkAuth(){
 
 // ══════ NAV ══════
 function showPage(p,el){
-  ['home','blog','ba','notice','members','enc'].forEach(x=>{const e=document.getElementById('page-'+x);if(e)e.style.display=x===p?'block':'none'});
+  ['home','blog','ba','notice','members','enc','fees'].forEach(x=>{const e=document.getElementById('page-'+x);if(e)e.style.display=x===p?'block':'none'});
   document.querySelectorAll('.side-nav a').forEach(a=>a.classList.remove('active'));
   if(el)el.classList.add('active');
   // Close mobile sidebar
@@ -708,6 +737,76 @@ function showPage(p,el){
   if(p==='notice')loadNoticeList();
   if(p==='members')loadMemberList();
   if(p==='enc')loadEncList();
+  if(p==='fees')loadFees();
+}
+
+// ══════ 수가 관리 (FEE SCHEDULE) ══════
+function feeRowHtml(it){
+  it=it||{};
+  const cat=(it.category||'').replace(/"/g,'&quot;');
+  const name=(it.name||'').replace(/"/g,'&quot;');
+  const price=(it.price||'').replace(/"/g,'&quot;');
+  const note=(it.note||'').replace(/"/g,'&quot;');
+  const nhi=it.is_nhi?'checked':'';
+  const pub=(it.is_published===0||it.is_published===false)?'':'checked';
+  return '<tr class="fee-edit-row" style="border-bottom:1px solid #eee">'
+    +'<td style="padding:.35rem .4rem"><input class="f-cat" value="'+cat+'" placeholder="카테고리" style="width:100%;padding:.4rem;border:1px solid #ddd;border-radius:5px"></td>'
+    +'<td style="padding:.35rem .4rem"><input class="f-name" value="'+name+'" placeholder="진료 항목" style="width:100%;padding:.4rem;border:1px solid #ddd;border-radius:5px"></td>'
+    +'<td style="padding:.35rem .4rem"><input class="f-price" value="'+price+'" placeholder="예) 100만원" style="width:100%;padding:.4rem;border:1px solid #ddd;border-radius:5px"></td>'
+    +'<td style="padding:.35rem .4rem"><input class="f-note" value="'+note+'" placeholder="비고" style="width:100%;padding:.4rem;border:1px solid #ddd;border-radius:5px"></td>'
+    +'<td style="padding:.35rem .4rem;text-align:center"><input type="checkbox" class="f-nhi" '+nhi+' style="width:18px;height:18px"></td>'
+    +'<td style="padding:.35rem .4rem;text-align:center"><label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:.75rem"><input type="checkbox" class="f-pub" '+pub+' style="width:18px;height:18px" onchange="this.closest(\'tr\').style.opacity=this.checked?1:.45"> 공개</label></td>'
+    +'<td style="padding:.35rem .4rem;text-align:center"><button onclick="this.closest(\'tr\').remove();feesCount()" title="삭제" style="background:none;border:none;color:#d33;cursor:pointer;font-size:1rem"><i class="fas fa-trash"></i></button></td>'
+    +'</tr>';
+}
+function feesCount(){
+  const rows=document.querySelectorAll('#fees-body .fee-edit-row');
+  let pub=0; rows.forEach(r=>{if(r.querySelector('.f-pub').checked)pub++});
+  document.getElementById('fees-summary').textContent='전체 '+rows.length+'개 · 공개 '+pub+'개 · 비공개 '+(rows.length-pub)+'개';
+}
+async function loadFees(){
+  const body=document.getElementById('fees-body');
+  body.innerHTML='<tr><td colspan="7" style="padding:1rem;color:#888">불러오는 중…</td></tr>';
+  try{
+    const d=await fetch('/api/admin/fees',{headers:authHeaders()}).then(r=>r.json());
+    if(d.error){toast(d.error,true);return}
+    const items=d.items||[];
+    body.innerHTML = items.length ? items.map(feeRowHtml).join('') : feeRowHtml({});
+    document.querySelectorAll('#fees-body .fee-edit-row').forEach(r=>{r.style.opacity=r.querySelector('.f-pub').checked?1:.45});
+    feesCount();
+  }catch(err){toast('수가 불러오기 실패',true);body.innerHTML='<tr><td colspan="7" style="padding:1rem;color:#d33">불러오기 실패</td></tr>'}
+}
+function addFeeRow(){
+  const body=document.getElementById('fees-body');
+  const last=body.querySelector('.fee-edit-row:last-child .f-cat');
+  const tmp=document.createElement('tbody');
+  tmp.innerHTML=feeRowHtml({category:last?last.value:''});
+  const row=tmp.firstElementChild;
+  body.appendChild(row);
+  row.querySelector('.f-name').focus();
+  feesCount();
+}
+async function saveFees(){
+  const rows=document.querySelectorAll('#fees-body .fee-edit-row');
+  const items=[];
+  rows.forEach(r=>{
+    const name=r.querySelector('.f-name').value.trim();
+    if(!name)return;
+    items.push({
+      category:r.querySelector('.f-cat').value.trim()||'기타',
+      name:name,
+      price:r.querySelector('.f-price').value.trim(),
+      note:r.querySelector('.f-note').value.trim(),
+      is_nhi:r.querySelector('.f-nhi').checked?1:0,
+      is_published:r.querySelector('.f-pub').checked?1:0
+    });
+  });
+  try{
+    const d=await fetch('/api/admin/fees',{method:'POST',headers:authHeaders(),body:JSON.stringify({items})}).then(r=>r.json());
+    if(d.error){toast(d.error,true);return}
+    toast('저장 완료 — 전체 '+d.count+'개, 공개 '+d.published+'개');
+    loadFees();
+  }catch(err){toast('저장 실패',true)}
 }
 
 // ══════ SYNC CHECK ══════

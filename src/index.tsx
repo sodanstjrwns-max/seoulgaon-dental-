@@ -5638,6 +5638,183 @@ if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open'
 </html>`
 }
 
+// ══════════════════════════════════════════════════
+//  비급여 수가표 (FEE SCHEDULE) — 원장 편집 + 항목별 공개/비공개
+//  · 공개 페이지: /guide (#fee) — 정적 guide.html 의 fee 표를 DB(공개 항목)로 치환
+//  · 데이터 없으면 정적 표 그대로 노출 → 절대 빈 화면 없음
+//  · 관리자: GET/POST /api/admin/fees (auth 필요)
+//  seed 출처: public/guide.html #fee (실제 게시 중이던 수가표)
+// ══════════════════════════════════════════════════
+type FeeSeedItem = { category: string; name: string; price: string; note: string; is_nhi?: number }
+const FEE_SEED: FeeSeedItem[] = [
+  // 임플란트
+  { category: '임플란트', name: '오스템 SOI', price: '100만원', note: '프리미엄 픽스쳐' },
+  { category: '임플란트', name: '오스템 SA', price: '90만원', note: '' },
+  { category: '임플란트', name: '덴티스', price: '80만원', note: '' },
+  { category: '임플란트', name: '단순 뼈이식', price: '30만원', note: '' },
+  { category: '임플란트', name: '복잡 뼈이식', price: '50만원', note: '' },
+  { category: '임플란트', name: '완전 복잡 뼈이식', price: '80만원', note: '' },
+  { category: '임플란트', name: '상악동 거상술 (Crestal)', price: '50만원', note: '폐쇄형' },
+  { category: '임플란트', name: '상악동 거상술 (Lateral)', price: '80만원', note: '개방형' },
+  { category: '임플란트', name: '네비게이션 (치아당)', price: '10~5만원', note: '가이드 수술' },
+  { category: '임플란트', name: '전치부 추가', price: '10만원 추가', note: '앞니 부위' },
+  { category: '임플란트', name: '커스텀 어버트먼트', price: '20만원', note: '' },
+  { category: '임플란트', name: '만 65세 이상 임플란트', price: '본인부담 약 30~50만원', note: '건강보험 적용 (2개)', is_nhi: 1 },
+  // 보존 (레진 치료)
+  { category: '보존 (레진 치료)', name: '구치부 레진 1면', price: '10만원', note: '어금니 · 단순' },
+  { category: '보존 (레진 치료)', name: '구치부 레진 2면', price: '15만원', note: '어금니 · 복합' },
+  { category: '보존 (레진 치료)', name: '전치부 레진 (간단)', price: '10만원', note: '앞니 · 단순' },
+  { category: '보존 (레진 치료)', name: '전치부 레진 (복잡)', price: '15만원', note: '앞니 · 복합' },
+  { category: '보존 (레진 치료)', name: 'Diastema (치아당)', price: '25만원', note: '치아 사이 벌어짐' },
+  { category: '보존 (레진 치료)', name: 'Pit 레진', price: '5만원', note: '미세 홈 충전' },
+  { category: '보존 (레진 치료)', name: '치경부 레진', price: '7만원', note: '잇몸 경계부 마모' },
+  { category: '보존 (레진 치료)', name: '유치 레진', price: '5만원', note: '소아' },
+  { category: '보존 (레진 치료)', name: '임플란트 홀 레진', price: '5만원', note: '타원형 홀 충전' },
+  { category: '보존 (레진 치료)', name: '레진 코어', price: '5만원', note: '크라운 기둥' },
+  // 레진 빌드업
+  { category: '레진 빌드업', name: '1급', price: '40만원', note: '' },
+  { category: '레진 빌드업', name: '2급', price: '50만원', note: '' },
+  { category: '레진 빌드업', name: '3급', price: '60만원', note: '' },
+  // 보철
+  { category: '보철', name: '이맥스 인레이', price: '30 / 35만원', note: '크기에 따라 상이' },
+  { category: '보철', name: '골드 인레이', price: '60만원', note: '' },
+  { category: '보철', name: '지르코니아 크라운 (구치)', price: '45만원', note: '어금니' },
+  { category: '보철', name: '지르코니아 크라운 (전치)', price: '60만원', note: '앞니 · 심미' },
+  { category: '보철', name: '라미네이트', price: '60만원', note: '앞니 전용' },
+  { category: '보철', name: 'PFM 크라운 (구치)', price: '40만원', note: '도재 금속관' },
+  { category: '보철', name: 'PFZ 크라운', price: '65만원', note: '도재 지르코니아' },
+  { category: '보철', name: '골드 크라운', price: '100만원', note: '' },
+  // 기타 진료
+  { category: '기타 진료', name: '임시 틀니 (악당)', price: '30만원', note: '' },
+  { category: '기타 진료', name: '전체 틀니 (악당)', price: '200만원', note: '' },
+  { category: '기타 진료', name: '부분 틀니 (악당)', price: '170만원', note: '' },
+  { category: '기타 진료', name: '플리퍼', price: '10만원', note: '임시 부분 의치' },
+  { category: '기타 진료', name: 'SS 크라운', price: '10만원', note: '소아 기성관' },
+  { category: '기타 진료', name: '공간유지장치', price: '15만원', note: '소아' },
+  { category: '기타 진료', name: '불소 도포', price: '3만원', note: '' },
+  { category: '기타 진료', name: '보톡스', price: '5만원', note: '부가세 별도' },
+  { category: '기타 진료', name: '오피스 미백', price: '20만원', note: '부가세 별도' },
+  { category: '기타 진료', name: '비급여 스케일링', price: '5만원', note: '보험 외 추가' },
+  { category: '기타 진료', name: '스케일링', price: '본인부담 약 1.5만원', note: '연 1회 보험', is_nhi: 1 },
+  // 제증명서류
+  { category: '제증명서류', name: '상해진단서', price: '상급병원 의뢰', note: '' },
+  { category: '제증명서류', name: '진료확인서 (질별코드X)', price: '3천원', note: '' },
+  { category: '제증명서류', name: '진단서', price: '1만원', note: '' },
+  { category: '제증명서류', name: '수술확인서', price: '1만원', note: '' },
+  { category: '제증명서류', name: '사보험 치과치료확인서', price: '3천원', note: '' },
+  { category: '제증명서류', name: '방사선 사진', price: '5천원', note: '' },
+]
+
+let feesReady = false
+async function ensureFees(db: D1Database) {
+  await db.prepare(`CREATE TABLE IF NOT EXISTS fee_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category TEXT NOT NULL DEFAULT '기타',
+    name TEXT NOT NULL,
+    price TEXT NOT NULL DEFAULT '',
+    note TEXT NOT NULL DEFAULT '',
+    is_nhi INTEGER NOT NULL DEFAULT 0,
+    is_published INTEGER NOT NULL DEFAULT 1,
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run()
+  try { await db.prepare(`CREATE INDEX IF NOT EXISTS idx_fee_pub ON fee_items(is_published, sort_order)`).run() } catch {}
+  // seed (테이블이 비어있을 때만)
+  const cnt: any = await db.prepare('SELECT COUNT(*) AS n FROM fee_items').first()
+  if (!cnt || cnt.n === 0) {
+    const stmt = db.prepare('INSERT INTO fee_items (category, name, price, note, is_nhi, is_published, sort_order) VALUES (?, ?, ?, ?, ?, 1, ?)')
+    const batch = FEE_SEED.map((it, i) => stmt.bind(it.category, it.name, it.price, it.note, it.is_nhi ? 1 : 0, i))
+    await db.batch(batch)
+  }
+  feesReady = true
+}
+
+// 공개(is_published=1) 항목으로 fee-table <tbody> 내부 행 생성. 항목이 없으면 null 반환(정적표 유지).
+async function renderPublishedFeeRows(db: D1Database): Promise<string | null> {
+  try {
+    await ensureFees(db)
+    const rs = await db.prepare('SELECT category, name, price, note, is_nhi FROM fee_items WHERE is_published = 1 ORDER BY sort_order ASC, id ASC').all()
+    const items: any[] = (rs.results as any[]) || []
+    if (!items.length) return null
+    let out = ''
+    let cur = ''
+    for (const it of items) {
+      if (it.category !== cur) {
+        cur = it.category
+        out += `        <tr class="fee-cat-row"><td class="fee-cat" colspan="3">${escHtml(cur)}</td></tr>\n`
+      }
+      const badge = it.is_nhi ? ' <span class="fee-badge nhi">건보</span>' : ''
+      out += `        <tr><td>${escHtml(it.name)}${badge}</td><td class="price">${escHtml(it.price)}</td><td>${escHtml(it.note || '')}</td></tr>\n`
+    }
+    return out
+  } catch (e) {
+    return null
+  }
+}
+
+// 공개 페이지: /guide — 정적 guide.html 을 그대로 서빙하되 수가표만 DB(공개항목)로 치환
+app.get('/guide', async (c) => {
+  const assetRes = await c.env.ASSETS.fetch(c.req.raw)
+  try {
+    let html = await assetRes.text()
+    const rows = await renderPublishedFeeRows(c.env.DB)
+    if (rows && /<tbody>[\s\S]*?<\/tbody>/.test(html)) {
+      html = html.replace(/<tbody>[\s\S]*?<\/tbody>/, `<tbody>\n${rows}      </tbody>`)
+    }
+    return c.html(html)
+  } catch (e) {
+    // 실패 시 원본 정적 페이지 그대로 (절대 빈 화면 없음)
+    return c.env.ASSETS.fetch(c.req.raw)
+  }
+})
+
+// 공개 API: 공개 항목만 (카테고리별 그룹)
+app.get('/api/fees', async (c) => {
+  try {
+    await ensureFees(c.env.DB)
+    const rs = await c.env.DB.prepare('SELECT id, category, name, price, note, is_nhi FROM fee_items WHERE is_published = 1 ORDER BY sort_order ASC, id ASC').all()
+    return c.json({ items: rs.results || [] })
+  } catch (e: any) {
+    return c.json({ items: [], error: e.message }, 200)
+  }
+})
+
+// 관리자: 전체 항목 조회 (비공개 포함)
+app.get('/api/admin/fees', auth, async (c) => {
+  await ensureFees(c.env.DB)
+  const rs = await c.env.DB.prepare('SELECT id, category, name, price, note, is_nhi, is_published, sort_order FROM fee_items ORDER BY sort_order ASC, id ASC').all()
+  return c.json({ items: rs.results || [] })
+})
+
+// 관리자: 전체 저장 (추가/수정/삭제/공개토글/순서 일괄 반영 — 전체 교체)
+app.post('/api/admin/fees', auth, async (c) => {
+  try {
+    await ensureFees(c.env.DB)
+    const body = await c.req.json<{ items: any[] }>()
+    const items = Array.isArray(body?.items) ? body.items : null
+    if (!items) return c.json({ error: '항목 목록이 필요합니다' }, 400)
+    const clean = items
+      .map((it: any) => ({
+        category: String(it.category ?? '기타').trim() || '기타',
+        name: String(it.name ?? '').trim(),
+        price: String(it.price ?? '').trim(),
+        note: String(it.note ?? '').trim(),
+        is_nhi: it.is_nhi ? 1 : 0,
+        is_published: it.is_published === 0 || it.is_published === false ? 0 : 1,
+      }))
+      .filter((it) => it.name.length > 0)
+    const db = c.env.DB
+    const ops: any[] = [db.prepare('DELETE FROM fee_items')]
+    const ins = db.prepare('INSERT INTO fee_items (category, name, price, note, is_nhi, is_published, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)')
+    clean.forEach((it, i) => ops.push(ins.bind(it.category, it.name, it.price, it.note, it.is_nhi, it.is_published, i)))
+    await db.batch(ops)
+    return c.json({ ok: true, count: clean.length, published: clean.filter((x) => x.is_published).length })
+  } catch (e: any) {
+    return c.json({ error: '저장 실패: ' + e.message }, 500)
+  }
+})
+
 // ── 각 랜딩페이지에 대해 라우트 등록 ──
 for (const page of LANDING_PAGES) {
   app.get(`/${page.slug}`, (c) => {
