@@ -117,12 +117,16 @@ app.use('*', async (c, next) => {
   c.header('X-Content-Type-Options', 'nosniff')
   c.header('X-Frame-Options', 'SAMEORIGIN')
   c.header('Referrer-Policy', 'strict-origin-when-cross-origin')
+  if (new URL(c.req.url).protocol === 'https:') c.header('Strict-Transport-Security', 'max-age=31536000')
   c.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self)')
 
   // HTML 페이지 캐시: 짧게 (SEO 크롤러가 최신 콘텐츠 수집)
   if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|invisalign|orthodontics|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant|implant-cost|night-dental|senior-implant|emergency-dental|tapseok-dental|painless-dental|pediatric-dental|crown|teeth-whitening|dental-checkup|implant-process|minrak-dental)$/) || path.match(/^\/(blog|before-after)\/\d+$/) || path.match(/^\/encyclopedia\/[^\/]+$/)) {
     c.header('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200')
-    c.header('X-Robots-Tag', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')
+    // 라우트 핸들러가 noindex를 지정한 페이지(비포애프터 상세, 얇은 블로그 글)는 덮어쓰지 않음
+    if (!(c.res.headers.get('X-Robots-Tag') || '').includes('noindex')) {
+      c.header('X-Robots-Tag', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')
+    }
   }
   // admin은 검색엔진 차단
   if (path === '/admin') {
@@ -132,6 +136,10 @@ app.use('*', async (c, next) => {
   // 정적 자산: 장기 캐시
   if (path.match(/\.(js|css|png|jpg|jpeg|webp|svg|ico|woff2?)$/)) {
     c.header('Cache-Control', 'public, max-age=31536000, immutable')
+  }
+  if (c.res.status >= 400) {
+    c.header('X-Robots-Tag', 'noindex, follow')
+    c.header('Cache-Control', 'no-store')
   }
 })
 
@@ -1165,7 +1173,7 @@ app.post('/api/admin/before-after', auth, async (c) => {
 
     const caseId = result.meta.last_row_id
     // IndexNow: 새 BA 케이스 색인 요청
-    c.executionCtx.waitUntil(submitIndexNow([`https://seoulgaondc.kr/before-after/${caseId}`, 'https://seoulgaondc.kr/before-after', 'https://seoulgaondc.kr/sitemap.xml']))
+    c.executionCtx.waitUntil(submitIndexNow(['https://seoulgaondc.kr/before-after', 'https://seoulgaondc.kr/sitemap.xml']))
 
     return c.json({ id: caseId, message: '비포&애프터 케이스가 등록되었습니다' }, 201)
   } catch (e: any) {
@@ -1215,7 +1223,7 @@ app.put('/api/admin/before-after/:id', auth, async (c) => {
     await db.prepare(`UPDATE before_after SET ${sets.join(', ')} WHERE id = ?`).bind(...vals).run()
 
     // IndexNow: 수정된 BA 케이스 재색인 요청
-    c.executionCtx.waitUntil(submitIndexNow([`https://seoulgaondc.kr/before-after/${id}`, 'https://seoulgaondc.kr/before-after']))
+    c.executionCtx.waitUntil(submitIndexNow(['https://seoulgaondc.kr/before-after']))
 
     return c.json({ message: '케이스가 수정되었습니다' })
   } catch (e: any) {
@@ -2247,8 +2255,7 @@ app.get('/sitemap-pages.xml', async (c) => {
       // /encyclopedia는 sitemap-encyclopedia.xml에서 관리 (중복 방지)
 
       // ── 컨텐츠 목록 페이지 (동적 — lastmod는 최신 포스트 기준) ──
-      { loc: '/blog',           priority: '0.85', changefreq: 'daily',   lastmod: V4_DATE },
-      { loc: '/before-after',   priority: '0.85', changefreq: 'daily',   lastmod: V4_DATE },
+      // /blog, /before-after 목록은 sitemap-blog.xml / sitemap-before-after.xml에서 관리 (중복 방지)
       { loc: '/notice',         priority: '0.55', changefreq: 'weekly',  lastmod: V4_DATE },
       { loc: '/community',      priority: '0.70', changefreq: 'weekly',  lastmod: V1_DATE },
 
@@ -2332,7 +2339,7 @@ app.get('/sitemap-blog.xml', async (c) => {
     let blogPosts: any[] = []
     try {
       const blogResult = await runQuery(db,
-        `SELECT id, title, thumbnail_url, created_at, updated_at FROM blog_posts WHERE is_published = 1 ORDER BY created_at DESC`, [])
+        `SELECT id, title, content, thumbnail_url, created_at, updated_at FROM blog_posts WHERE is_published = 1 ORDER BY created_at DESC`, [])
       blogPosts = blogResult.results || []
     } catch (e) { /* ignore */ }
 
@@ -2352,8 +2359,9 @@ app.get('/sitemap-blog.xml', async (c) => {
     </image:image>
   </url>\n`
 
-    // 블로그 개별 포스트
+    // 블로그 개별 포스트 (본문 600자 미만 얇은 글은 사이트맵 제외 + 페이지 noindex)
     for (const post of blogPosts) {
+      if (isThinBlogPost(post)) continue
       const date = (post.updated_at || post.created_at || today).toString().split('T')[0].split(' ')[0]
       const safeTitle = (post.title || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
       xml += `  <url>
@@ -2396,13 +2404,8 @@ app.get('/sitemap-before-after.xml', async (c) => {
     const SITE = 'https://seoulgaondc.kr'
     const today = new Date().toISOString().split('T')[0]
 
-    let baCases: any[] = []
-    try {
-      const baResult = await runQuery(db,
-        `SELECT id, title, created_at, updated_at FROM before_after WHERE is_published = 1 ORDER BY created_at DESC`, [])
-      baCases = baResult.results || []
-    } catch (e) { /* ignore */ }
-
+    // 2026-09-21: 상세 페이지(/before-after/:id)는 사진 열람에 로그인이 필요해 크롤러에게는
+    // 제목·라벨만 보이는 얇은 페이지 → GSC Soft 404 원인. 상세는 noindex 처리하고 목록 페이지만 등록한다.
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`
@@ -2420,26 +2423,6 @@ app.get('/sitemap-before-after.xml', async (c) => {
   </url>\n`
 
     // 비포&애프터 개별 케이스
-    for (const ba of baCases) {
-      const date = (ba.updated_at || ba.created_at || today).toString().split('T')[0].split(' ')[0]
-      const safeTitle = (ba.title || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-      xml += `  <url>
-    <loc>${SITE}/before-after/${ba.id}</loc>
-    <lastmod>${date}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>`
-
-      // 비포&애프터 대표 이미지
-      xml += `
-    <image:image>
-      <image:loc>${SITE}/images/og-before-after.jpg</image:loc>
-      <image:title>${safeTitle}</image:title>
-    </image:image>`
-
-      xml += `
-  </url>\n`
-    }
-
     xml += `</urlset>`
 
     return new Response(xml, {
@@ -2627,6 +2610,22 @@ app.get('/api/health', async (c) => {
 // ══════════════════════════════════════════════════
 
 // 공통 HTML 이스케이프
+// ── 얇은 콘텐츠 판정: 본문 HTML → 순수 텍스트 글자수 (GSC Soft 404 / 크롤링됨-미색인 대응, 2026-09-21) ──
+const THIN_BLOG_MIN_CHARS = 600
+function plainTextLength(html: string | null | undefined): number {
+  return String(html || '')
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&[a-z#0-9]+;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim().length
+}
+function isThinBlogPost(post: { content?: string | null }): boolean {
+  return plainTextLength(post.content) < THIN_BLOG_MIN_CHARS
+}
+
 function escHtml(str: string): string {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')
 }
@@ -3156,13 +3155,17 @@ app.get('/blog/:id', async (c) => {
       "sameAs": ["https://pf.kakao.com/_LLxhwG"]
     }
 
+    // 본문 600자 미만 얇은 글은 noindex, follow (사이트맵에서도 제외 — 내용 보강 후 자동 복귀)
+    const thinPost = isThinBlogPost(post)
+    const robotsDirective = thinPost ? 'noindex, follow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
+
     const html = `<!DOCTYPE html>
 <html lang="ko">
 <head>
 ${HEAD_COMMON}
 <title>${escHtml(pageTitle)}</title>
 <meta name="description" content="${escHtml(metaDesc)}">
-<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="robots" content="${robotsDirective}">
 <meta name="author" content="${escHtml(authorName)}">
 <link rel="canonical" href="${canonicalUrl}">
 <link rel="alternate" hreflang="ko" href="${canonicalUrl}">
@@ -3281,7 +3284,7 @@ if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open'
 
     return c.html(html, 200, {
       'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200',
-      'X-Robots-Tag': 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+      'X-Robots-Tag': robotsDirective,
     })
   } catch (e: any) {
     console.error('[SSR BLOG ERROR]', e.message)
@@ -3405,7 +3408,7 @@ app.get('/before-after/:id', async (c) => {
 ${HEAD_COMMON}
 <title>${escHtml(pageTitle)}</title>
 <meta name="description" content="${escHtml(metaDesc)}">
-<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="robots" content="noindex, follow">
 <meta name="author" content="${escHtml(authorName)}">
 <link rel="canonical" href="${canonicalUrl}">
 <link rel="alternate" hreflang="ko" href="${canonicalUrl}">
@@ -3506,7 +3509,8 @@ if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open'
 
     return c.html(html, 200, {
       'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200',
-      'X-Robots-Tag': 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+      // 2026-09-21: 사진은 로그인 후 열람 → 크롤러에겐 얇은 페이지(GSC Soft 404). 목록(/before-after)만 색인.
+      'X-Robots-Tag': 'noindex, follow',
     })
   } catch (e: any) {
     console.error('[SSR BA ERROR]', e.message)

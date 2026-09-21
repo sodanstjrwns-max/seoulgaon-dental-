@@ -1,10 +1,11 @@
 # robots.txt — 서울가온치과 (seoulgaondc.kr)
-# Last updated: 2026-06-11
+# Last updated: 2026-09-21 (블로그 이미지 /api/images/ 크롤 허용 — GSC robots.txt 차단 해소)
 
 # ── 모든 검색엔진 허용 ──
 User-agent: *
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 Disallow: /signup
 
@@ -12,30 +13,35 @@ Disallow: /signup
 User-agent: Googlebot
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # ── 이미지 검색엔진 ──
 User-agent: Googlebot-Image
 Allow: /images/
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # ── 네이버 검색봇 ──
 User-agent: Yeti
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # ── 다음 검색봇 ──
 User-agent: Daum
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # ── Bing 검색봇 ──
 User-agent: Bingbot
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # ── AI 검색엔진 (AEO 최적화) ──
@@ -43,103 +49,121 @@ Disallow: /api/
 User-agent: ChatGPT-User
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 User-agent: GPTBot
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # Google AI (Gemini, SGE)
 User-agent: Google-Extended
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # Perplexity AI
 User-agent: PerplexityBot
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # OpenAI Search (ChatGPT Search 인용용 — AEO 핵심)
 User-agent: OAI-SearchBot
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # Perplexity 사용자 요청 크롤러
 User-agent: Perplexity-User
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # Anthropic Claude
 User-agent: anthropic-ai
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 User-agent: ClaudeBot
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 User-agent: Claude-User
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 User-agent: Claude-SearchBot
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # Apple Intelligence / Siri
 User-agent: Applebot
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 User-agent: Applebot-Extended
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # Amazon Alexa / Rufus
 User-agent: Amazonbot
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # DuckDuckGo AI
 User-agent: DuckAssistBot
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # Mistral AI
 User-agent: MistralAI-User
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # Meta AI (Llama 검색)
 User-agent: meta-externalagent
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # Cohere AI
 User-agent: cohere-ai
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # Meta AI
 User-agent: FacebookBot
 Allow: /
 Disallow: /admin
+Allow: /api/images/
 Disallow: /api/
 
 # Microsoft Copilot
