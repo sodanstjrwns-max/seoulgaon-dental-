@@ -2192,29 +2192,144 @@ const sitemapImageMap: Record<string, { url: string; title: string }> = {
   '/minrak-dental':       { url: '/images/clinic-lobby-1.jpg',        title: '민락동 치과' },
 }
 
+// ── 사이트맵 lastmod 헬퍼 (2026-09-29) ──
+// lastmod 는 실제 콘텐츠 날짜만 쓴다. 날짜를 모르면 <lastmod> 를 생략 — new Date() 로 '오늘' 채우기 금지.
+function sitemapYmd(v: unknown): string {
+  const m = String(v ?? '').match(/^(\d{4}-\d{2}-\d{2})/)
+  return m ? m[1] : ''
+}
+function sitemapMaxYmd(dates: string[]): string {
+  return dates.filter(Boolean).sort().pop() || ''
+}
+function sitemapLastmodLine(d: string): string {
+  return d ? `    <lastmod>${d}</lastmod>\n` : ''
+}
+
+// 정적 페이지 + 랜딩페이지 목록과 lastmod
+// 랜딩 lastmod = max(배포 버전일, LANDING_MODIFIED 랜딩별 실제 최종 수정 커밋일 — 화면 감수 줄·dateModified 와 같은 값)
+// implant·aesthetic 은 06-09 의료법 문구 정비 커밋일(페이지 JSON-LD dateModified 와 동일)
+function sitemapStaticPages(): Array<{ loc: string; priority: string; changefreq: string; lastmod: string }> {
+  // lastmod: 실제 컨텐츠 수정일 기준 (랜딩페이지는 마지막 배포일 기준)
+  const V1_DATE = '2026-04-09'  // 초기 사이트 구축일
+  const V2_DATE = '2026-05-13'  // SEO v2 (14 랜딩페이지)
+  const V3_DATE = '2026-05-25'  // SEO v3 (6 랜딩페이지 추가)
+  const V4_DATE = '2026-05-27'  // SEO v4 (6 랜딩페이지 추가)
+
+  const pages: Array<{ loc: string; priority: string; changefreq: string; lastmod: string }> = [
+    // ── 핵심 페이지 (최고 우선순위) ──
+    { loc: '/',               priority: '1.0',  changefreq: 'weekly',  lastmod: V4_DATE },
+    { loc: '/implant',        priority: '1.0',  changefreq: 'weekly',  lastmod: V2_DATE },
+    { loc: '/reservation',    priority: '0.95', changefreq: 'monthly', lastmod: V1_DATE },
+
+    // ── 진료 정보 페이지 ──
+    { loc: '/treatments',     priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+    { loc: '/aesthetic',      priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+    { loc: '/resin-buildup',  priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+
+    // ── 병원 정보 페이지 ──
+    { loc: '/philosophy',     priority: '0.85', changefreq: 'monthly', lastmod: V1_DATE },
+    { loc: '/doctors',        priority: '0.85', changefreq: 'monthly', lastmod: V1_DATE },
+    { loc: '/guide',          priority: '0.80', changefreq: 'monthly', lastmod: V1_DATE },
+    { loc: '/faq',            priority: '0.80', changefreq: 'monthly', lastmod: V1_DATE },
+    // /encyclopedia는 sitemap-encyclopedia.xml에서 관리 (중복 방지)
+
+    // ── 컨텐츠 목록 페이지 (동적 — lastmod는 최신 포스트 기준) ──
+    // /blog, /before-after 목록은 sitemap-blog.xml / sitemap-before-after.xml에서 관리 (중복 방지)
+    { loc: '/notice',         priority: '0.55', changefreq: 'weekly',  lastmod: V4_DATE },
+    { loc: '/community',      priority: '0.70', changefreq: 'weekly',  lastmod: V1_DATE },
+
+    // ── SEO 랜딩페이지 v2 (2026-05-13 배포) ──
+    { loc: '/uijeongbu-dental',     priority: '0.95', changefreq: 'monthly', lastmod: V4_DATE },
+    { loc: '/endodontics',           priority: '0.90', changefreq: 'monthly', lastmod: V4_DATE },
+    { loc: '/invisalign',            priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+    { loc: '/orthodontics',          priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+    { loc: '/cavity-treatment',      priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+    { loc: '/implant-best',          priority: '0.95', changefreq: 'monthly', lastmod: V4_DATE },
+    { loc: '/full-mouth-implant',    priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+    { loc: '/front-tooth-implant',   priority: '0.85', changefreq: 'monthly', lastmod: V2_DATE },
+    { loc: '/bone-graft-implant',    priority: '0.85', changefreq: 'monthly', lastmod: V2_DATE },
+    { loc: '/laminate',              priority: '0.85', changefreq: 'monthly', lastmod: V2_DATE },
+    { loc: '/wisdom-tooth',          priority: '0.80', changefreq: 'monthly', lastmod: V2_DATE },
+    { loc: '/scaling-gum-treatment', priority: '0.80', changefreq: 'monthly', lastmod: V2_DATE },
+    { loc: '/denture-to-implant',    priority: '0.85', changefreq: 'monthly', lastmod: V2_DATE },
+
+    // ── SEO 랜딩페이지 v3 (2026-05-25 배포) ──
+    { loc: '/implant-cost',     priority: '0.95', changefreq: 'monthly', lastmod: V3_DATE },
+    { loc: '/night-dental',     priority: '0.85', changefreq: 'monthly', lastmod: V3_DATE },
+    { loc: '/senior-implant',   priority: '0.90', changefreq: 'monthly', lastmod: V3_DATE },
+    { loc: '/emergency-dental', priority: '0.85', changefreq: 'monthly', lastmod: V3_DATE },
+    { loc: '/tapseok-dental',   priority: '0.85', changefreq: 'monthly', lastmod: V3_DATE },
+    { loc: '/painless-dental',  priority: '0.85', changefreq: 'monthly', lastmod: V3_DATE },
+
+    // ── SEO 랜딩페이지 v4 (2026-05-27 배포) ──
+    { loc: '/pediatric-dental', priority: '0.85', changefreq: 'monthly', lastmod: V4_DATE },
+    { loc: '/crown',            priority: '0.85', changefreq: 'monthly', lastmod: V4_DATE },
+    { loc: '/teeth-whitening',  priority: '0.80', changefreq: 'monthly', lastmod: V4_DATE },
+    { loc: '/dental-checkup',   priority: '0.80', changefreq: 'monthly', lastmod: V4_DATE },
+    { loc: '/implant-process',  priority: '0.90', changefreq: 'monthly', lastmod: V4_DATE },
+    { loc: '/minrak-dental',    priority: '0.85', changefreq: 'monthly', lastmod: V4_DATE },
+  ]
+  const STATIC_MODIFIED: Record<string, string> = { '/implant': '2026-06-09', '/aesthetic': '2026-06-09' }
+  return pages.map((p) => ({
+    ...p,
+    lastmod: sitemapMaxYmd([p.lastmod, STATIC_MODIFIED[p.loc] || '', LANDING_MODIFIED[p.loc.slice(1)] || '']),
+  }))
+}
+
+// 블로그 사이트맵 대상 글 (얇은 글·중복 발행본 제외) + 글별 lastmod(updated_at → created_at, 없으면 생략)
+async function sitemapBlogPosts(db: D1Database): Promise<Array<{ id: number; title: string; thumbnail_url?: string; lastmod: string }>> {
+  let rows: any[] = []
+  try {
+    const r = await runQuery(db,
+      `SELECT id, title, content, thumbnail_url, created_at, updated_at FROM blog_posts WHERE is_published = 1 ORDER BY created_at DESC`, [])
+    rows = r.results || []
+  } catch (e) { /* ignore */ }
+  return rows
+    .filter((post) => !isThinBlogPost(post) && !isDuplicateBlogPost(post.id))
+    .map((post) => ({ id: post.id, title: post.title, thumbnail_url: post.thumbnail_url, lastmod: sitemapYmd(post.updated_at || post.created_at) }))
+}
+
+// 백과사전 사이트맵 대상 용어 + 용어별 lastmod
+async function sitemapEncyclopediaEntries(db: D1Database): Promise<Array<{ id: number; slug: string; lastmod: string }>> {
+  let rows: any[] = []
+  try {
+    const r = await db.prepare(
+      `SELECT id, term, slug, updated_at, created_at FROM encyclopedia WHERE is_published = 1 ORDER BY sort_order ASC, term ASC`
+    ).all()
+    rows = r.results || []
+  } catch (e) { /* ignore */ }
+  return rows.map((e) => ({ id: e.id, slug: e.slug, lastmod: sitemapYmd(e.updated_at || e.created_at) }))
+}
+
+// 비포&애프터 목록 lastmod = 가장 최근 등록 케이스 created_at (before_after 에는 updated_at 없음)
+async function sitemapBeforeAfterDate(db: D1Database): Promise<string> {
+  try {
+    const r: any = await db.prepare(`SELECT MAX(created_at) AS m FROM before_after WHERE is_published = 1`).first()
+    return sitemapYmd(r?.m)
+  } catch { return '' }
+}
+
 // ── 사이트맵 인덱스 (메인 sitemap.xml) ──
 app.get('/sitemap.xml', async (c) => {
   const SITE = 'https://seoulgaondc.kr'
-  const today = new Date().toISOString().split('T')[0]
+  const db = c.env.DB
+  // 하위 사이트맵 lastmod = 그 사이트맵 안 URL lastmod 중 최신값 (매 요청 '오늘' 금지 — 2026-09-29)
+  const [blogPosts, encEntries, baDate] = await Promise.all([
+    sitemapBlogPosts(db), sitemapEncyclopediaEntries(db), sitemapBeforeAfterDate(db),
+  ])
+  const blogMod = sitemapMaxYmd(blogPosts.map((p) => p.lastmod))
+  const encMod = sitemapMaxYmd(encEntries.map((e) => e.lastmod))
+  const pagesMod = sitemapMaxYmd(sitemapStaticPages().map((p) => p.lastmod))
+  const child = (loc: string, d: string) => `  <sitemap>
+    <loc>${SITE}/${loc}</loc>
+${d ? `    <lastmod>${d}</lastmod>\n` : ''}  </sitemap>`
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <sitemap>
-    <loc>${SITE}/sitemap-pages.xml</loc>
-    <lastmod>${today}</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>${SITE}/sitemap-blog.xml</loc>
-    <lastmod>${today}</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>${SITE}/sitemap-before-after.xml</loc>
-    <lastmod>${today}</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>${SITE}/sitemap-encyclopedia.xml</loc>
-    <lastmod>${today}</lastmod>
-  </sitemap>
+${child('sitemap-pages.xml', pagesMod)}
+${child('sitemap-blog.xml', blogMod)}
+${child('sitemap-before-after.xml', baDate)}
+${child('sitemap-encyclopedia.xml', encMod)}
 </sitemapindex>`
 
   return new Response(xml, {
@@ -2230,66 +2345,7 @@ app.get('/sitemap-pages.xml', async (c) => {
   try {
     const SITE = 'https://seoulgaondc.kr'
 
-    // lastmod: 실제 컨텐츠 수정일 기준 (랜딩페이지는 마지막 배포일 기준)
-    const V1_DATE = '2026-04-09'  // 초기 사이트 구축일
-    const V2_DATE = '2026-05-13'  // SEO v2 (14 랜딩페이지)
-    const V3_DATE = '2026-05-25'  // SEO v3 (6 랜딩페이지 추가)
-    const V4_DATE = '2026-05-27'  // SEO v4 (6 랜딩페이지 추가)
-
-    const staticPages: Array<{ loc: string; priority: string; changefreq: string; lastmod: string }> = [
-      // ── 핵심 페이지 (최고 우선순위) ──
-      { loc: '/',               priority: '1.0',  changefreq: 'weekly',  lastmod: V4_DATE },
-      { loc: '/implant',        priority: '1.0',  changefreq: 'weekly',  lastmod: V2_DATE },
-      { loc: '/reservation',    priority: '0.95', changefreq: 'monthly', lastmod: V1_DATE },
-
-      // ── 진료 정보 페이지 ──
-      { loc: '/treatments',     priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
-      { loc: '/aesthetic',      priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
-      { loc: '/resin-buildup',  priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
-
-      // ── 병원 정보 페이지 ──
-      { loc: '/philosophy',     priority: '0.85', changefreq: 'monthly', lastmod: V1_DATE },
-      { loc: '/doctors',        priority: '0.85', changefreq: 'monthly', lastmod: V1_DATE },
-      { loc: '/guide',          priority: '0.80', changefreq: 'monthly', lastmod: V1_DATE },
-      { loc: '/faq',            priority: '0.80', changefreq: 'monthly', lastmod: V1_DATE },
-      // /encyclopedia는 sitemap-encyclopedia.xml에서 관리 (중복 방지)
-
-      // ── 컨텐츠 목록 페이지 (동적 — lastmod는 최신 포스트 기준) ──
-      // /blog, /before-after 목록은 sitemap-blog.xml / sitemap-before-after.xml에서 관리 (중복 방지)
-      { loc: '/notice',         priority: '0.55', changefreq: 'weekly',  lastmod: V4_DATE },
-      { loc: '/community',      priority: '0.70', changefreq: 'weekly',  lastmod: V1_DATE },
-
-      // ── SEO 랜딩페이지 v2 (2026-05-13 배포) ──
-      { loc: '/uijeongbu-dental',     priority: '0.95', changefreq: 'monthly', lastmod: V4_DATE },
-      { loc: '/endodontics',           priority: '0.90', changefreq: 'monthly', lastmod: V4_DATE },
-      { loc: '/invisalign',            priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
-      { loc: '/orthodontics',          priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
-      { loc: '/cavity-treatment',      priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
-      { loc: '/implant-best',          priority: '0.95', changefreq: 'monthly', lastmod: V4_DATE },
-      { loc: '/full-mouth-implant',    priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
-      { loc: '/front-tooth-implant',   priority: '0.85', changefreq: 'monthly', lastmod: V2_DATE },
-      { loc: '/bone-graft-implant',    priority: '0.85', changefreq: 'monthly', lastmod: V2_DATE },
-      { loc: '/laminate',              priority: '0.85', changefreq: 'monthly', lastmod: V2_DATE },
-      { loc: '/wisdom-tooth',          priority: '0.80', changefreq: 'monthly', lastmod: V2_DATE },
-      { loc: '/scaling-gum-treatment', priority: '0.80', changefreq: 'monthly', lastmod: V2_DATE },
-      { loc: '/denture-to-implant',    priority: '0.85', changefreq: 'monthly', lastmod: V2_DATE },
-
-      // ── SEO 랜딩페이지 v3 (2026-05-25 배포) ──
-      { loc: '/implant-cost',     priority: '0.95', changefreq: 'monthly', lastmod: V3_DATE },
-      { loc: '/night-dental',     priority: '0.85', changefreq: 'monthly', lastmod: V3_DATE },
-      { loc: '/senior-implant',   priority: '0.90', changefreq: 'monthly', lastmod: V3_DATE },
-      { loc: '/emergency-dental', priority: '0.85', changefreq: 'monthly', lastmod: V3_DATE },
-      { loc: '/tapseok-dental',   priority: '0.85', changefreq: 'monthly', lastmod: V3_DATE },
-      { loc: '/painless-dental',  priority: '0.85', changefreq: 'monthly', lastmod: V3_DATE },
-
-      // ── SEO 랜딩페이지 v4 (2026-05-27 배포) ──
-      { loc: '/pediatric-dental', priority: '0.85', changefreq: 'monthly', lastmod: V4_DATE },
-      { loc: '/crown',            priority: '0.85', changefreq: 'monthly', lastmod: V4_DATE },
-      { loc: '/teeth-whitening',  priority: '0.80', changefreq: 'monthly', lastmod: V4_DATE },
-      { loc: '/dental-checkup',   priority: '0.80', changefreq: 'monthly', lastmod: V4_DATE },
-      { loc: '/implant-process',  priority: '0.90', changefreq: 'monthly', lastmod: V4_DATE },
-      { loc: '/minrak-dental',    priority: '0.85', changefreq: 'monthly', lastmod: V4_DATE },
-    ]
+    const staticPages = sitemapStaticPages()
 
     // XML 생성 (Image Sitemap 확장 포함)
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -2339,14 +2395,8 @@ app.get('/sitemap-blog.xml', async (c) => {
   try {
     const db = c.env.DB
     const SITE = 'https://seoulgaondc.kr'
-    const today = new Date().toISOString().split('T')[0]
-
-    let blogPosts: any[] = []
-    try {
-      const blogResult = await runQuery(db,
-        `SELECT id, title, content, thumbnail_url, created_at, updated_at FROM blog_posts WHERE is_published = 1 ORDER BY created_at DESC`, [])
-      blogPosts = blogResult.results || []
-    } catch (e) { /* ignore */ }
+    const blogPosts = await sitemapBlogPosts(db)
+    const listMod = sitemapMaxYmd(blogPosts.map((p) => p.lastmod))  // 목록 = 최신 글 날짜
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -2355,8 +2405,7 @@ app.get('/sitemap-blog.xml', async (c) => {
     // 블로그 목록 페이지
     xml += `  <url>
     <loc>${SITE}/blog</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>daily</changefreq>
+${sitemapLastmodLine(listMod)}    <changefreq>daily</changefreq>
     <priority>0.85</priority>
     <image:image>
       <image:loc>${SITE}/images/og-blog.jpg</image:loc>
@@ -2365,15 +2414,11 @@ app.get('/sitemap-blog.xml', async (c) => {
   </url>\n`
 
     // 블로그 개별 포스트 (본문 600자 미만 얇은 글은 사이트맵 제외 + 페이지 noindex)
-    for (const post of blogPosts) {
-      if (isThinBlogPost(post)) continue
-      if (isDuplicateBlogPost(post.id)) continue // 중복 발행본은 원본으로 301
-      const date = (post.updated_at || post.created_at || today).toString().split('T')[0].split(' ')[0]
+    for (const post of blogPosts) {  // 얇은 글·중복 발행본(원본으로 301)은 sitemapBlogPosts 에서 제외됨
       const safeTitle = (post.title || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
       xml += `  <url>
     <loc>${SITE}/blog/${post.id}</loc>
-    <lastmod>${date}</lastmod>
-    <changefreq>monthly</changefreq>
+${sitemapLastmodLine(post.lastmod)}    <changefreq>monthly</changefreq>
     <priority>0.75</priority>`
 
       // 블로그 포스트 썸네일 이미지
@@ -2408,7 +2453,7 @@ app.get('/sitemap-before-after.xml', async (c) => {
   try {
     const db = c.env.DB
     const SITE = 'https://seoulgaondc.kr'
-    const today = new Date().toISOString().split('T')[0]
+    const listMod = await sitemapBeforeAfterDate(db)  // 목록 = 최근 등록 케이스 날짜
 
     // 2026-09-21: 상세 페이지(/before-after/:id)는 사진 열람에 로그인이 필요해 크롤러에게는
     // 제목·라벨만 보이는 얇은 페이지 → GSC Soft 404 원인. 상세는 noindex 처리하고 목록 페이지만 등록한다.
@@ -2419,8 +2464,7 @@ app.get('/sitemap-before-after.xml', async (c) => {
     // 비포&애프터 목록 페이지
     xml += `  <url>
     <loc>${SITE}/before-after</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>daily</changefreq>
+${sitemapLastmodLine(listMod)}    <changefreq>daily</changefreq>
     <priority>0.85</priority>
     <image:image>
       <image:loc>${SITE}/images/og-before-after.jpg</image:loc>
@@ -2447,15 +2491,8 @@ app.get('/sitemap-encyclopedia.xml', async (c) => {
   try {
     const db = c.env.DB
     const SITE = 'https://seoulgaondc.kr'
-    const today = new Date().toISOString().split('T')[0]
-
-    let entries: any[] = []
-    try {
-      const r = await db.prepare(
-        `SELECT id, term, slug, updated_at, created_at FROM encyclopedia WHERE is_published = 1 ORDER BY sort_order ASC, term ASC`
-      ).all()
-      entries = r.results || []
-    } catch (e) { /* ignore */ }
+    const entries = await sitemapEncyclopediaEntries(db)
+    const listMod = sitemapMaxYmd(entries.map((e) => e.lastmod))  // 목록 = 최신 용어 날짜
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`
@@ -2463,18 +2500,15 @@ app.get('/sitemap-encyclopedia.xml', async (c) => {
     // 백과사전 목록 페이지
     xml += `  <url>
     <loc>${SITE}/encyclopedia</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
+${sitemapLastmodLine(listMod)}    <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>\n`
 
     for (const e of entries) {
-      const date = (e.updated_at || e.created_at || today).toString().split('T')[0].split(' ')[0]
       const loc = `${SITE}${encPath(e)}`
       xml += `  <url>
     <loc>${loc}</loc>
-    <lastmod>${date}</lastmod>
-    <changefreq>monthly</changefreq>
+${sitemapLastmodLine(e.lastmod)}    <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>\n`
     }
@@ -2568,18 +2602,18 @@ app.get('/rss.xml', async (c) => {
 
     const items = posts.map((p: any) => {
       const desc = (p.content || '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().substring(0, 300)
-      const pub = new Date(p.created_at || Date.now()).toUTCString()
+      const pub = p.created_at ? new Date(p.created_at).toUTCString() : ''  // 작성일 없으면 pubDate 생략
       return `    <item>
       <title>${xmlEsc(p.title)}</title>
       <link>${SITE}/blog/${p.id}</link>
       <guid isPermaLink="true">${SITE}/blog/${p.id}</guid>
-      <pubDate>${pub}</pubDate>
+      ${pub ? `<pubDate>${pub}</pubDate>` : ''}
       ${p.category ? `<category>${xmlEsc(p.category)}</category>` : ''}
       <description>${xmlEsc(desc)}</description>
     </item>`
     }).join('\n')
 
-    const lastBuild = posts.length ? new Date(posts[0].created_at).toUTCString() : new Date().toUTCString()
+    const lastBuild = posts.length ? new Date(posts[0].created_at).toUTCString() : ''  // 글 없으면 lastBuildDate 생략 (오늘 금지)
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -2589,7 +2623,7 @@ app.get('/rss.xml', async (c) => {
     <atom:link href="${SITE}/rss.xml" rel="self" type="application/rss+xml"/>
     <description>의정부 서울가온치과 블로그 — 임플란트, 심미치료, 신경치료 등 치과 건강 정보를 쉽고 정직하게 전합니다.</description>
     <language>ko-kr</language>
-    <lastBuildDate>${lastBuild}</lastBuildDate>
+    ${lastBuild ? `<lastBuildDate>${lastBuild}</lastBuildDate>` : ''}
     <ttl>360</ttl>
 ${items}
   </channel>
@@ -2655,9 +2689,9 @@ function escHtml(str: string): string {
 function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
 }
-// 날짜 포맷 (YYYY-MM-DD)
+// 날짜 포맷 (YYYY-MM-DD). 날짜가 없으면 '' — 오늘 날짜로 채우지 않는다(2026-09-29). JSON-LD 는 빈 값이면 필드 생략.
 function fmtDate(d: string | null): string {
-  if (!d) return new Date().toISOString().split('T')[0]
+  if (!d) return ''
   return d.toString().split('T')[0].split(' ')[0]
 }
 // 공통 <head> 리소스
@@ -3137,8 +3171,8 @@ app.get('/blog/:id', async (c) => {
       "description": metaDesc,
       "url": canonicalUrl,
       "image": ogImage,
-      "datePublished": publishDate,
-      "dateModified": modifiedDate,
+      "datePublished": publishDate || undefined,
+      "dateModified": modifiedDate || undefined,
       "author": { "@type": "Person", "name": authorName, "jobTitle": authorTitle, "worksFor": { "@id": CLINIC_ID } },
       "publisher": { ...CLINIC_REF, "logo": { "@type": "ImageObject", "url": `${SITE}/images/og-main.jpg` } },
       "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalUrl },
@@ -3365,8 +3399,8 @@ app.get('/before-after/:id', async (c) => {
       "description": metaDesc,
       "url": canonicalUrl,
       "image": ogImage,
-      "datePublished": publishDate,
-      "dateModified": modifiedDate,
+      "datePublished": publishDate || undefined,
+      "dateModified": modifiedDate || undefined,
       "author": { "@type": "Person", "name": authorName, "jobTitle": authorTitle },
       "publisher": CLINIC_REF,
       "mainEntity": {
@@ -3882,15 +3916,15 @@ app.get('/encyclopedia/:key', async (c) => {
         "description": metaDesc,
         "url": canonicalUrl,
         "inLanguage": "ko",
-        "datePublished": pubDate,
-        "dateModified": modDate,
+        "datePublished": pubDate || undefined,
+        "dateModified": modDate || undefined,
         "about": { "@type": "MedicalEntity", "name": entry.term },
         "mainEntity": { "@id": `${canonicalUrl}#term` },
         "speakable": { "@type": "SpeakableSpecification", "cssSelector": ["h1", ".enc-summary"] },
         "publisher": CLINIC_REF,
         "isPartOf": WEBSITE_REF,
         "reviewedBy": DOCTOR_HYUN_REF,
-        "lastReviewed": modDate
+        "lastReviewed": modDate || undefined
       },
       {
         "@type": "BreadcrumbList",
