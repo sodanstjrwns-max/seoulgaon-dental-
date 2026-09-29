@@ -130,10 +130,15 @@
   "dateModified": "2026-04-09",
   "speakable": {
     "@type": "SpeakableSpecification",
-    "cssSelector": ["h1", ".rsv-title", ".rsv-info-val"]
+    "cssSelector": [
+      "h1",
+      ".rsv-title",
+      ".rsv-info-val"
+    ]
   },
   "mainEntity": {
     "@type": "Dentist",
+    "@id": "https://seoulgaondc.kr/#clinic",
     "name": "서울가온치과의원",
     "url": "https://seoulgaondc.kr",
     "telephone": "0507-1325-3377",
@@ -148,28 +153,60 @@
     "geo": {
       "@type": "GeoCoordinates",
       "latitude": 37.7388,
-      "longitude": 127.0560
+      "longitude": 127.056
     },
     "openingHoursSpecification": [
-      {"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Friday"],"opens":"09:30","closes":"18:30"},
-      {"@type":"OpeningHoursSpecification","dayOfWeek":"Thursday","opens":"09:30","closes":"20:30"},
-      {"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"09:30","closes":"14:00"}
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Friday"
+        ],
+        "opens": "09:30",
+        "closes": "18:30"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Thursday",
+        "opens": "09:30",
+        "closes": "20:30"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Saturday",
+        "opens": "09:30",
+        "closes": "14:00"
+      }
     ],
     "potentialAction": [
       {
         "@type": "ReserveAction",
         "name": "전화 예약",
-        "target": {"@type":"EntryPoint","urlTemplate":"tel:0507-1325-3377","actionPlatform":"http://schema.org/OfflinePlatform"}
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "tel:0507-1325-3377",
+          "actionPlatform": "http://schema.org/OfflinePlatform"
+        }
       },
       {
         "@type": "ReserveAction",
         "name": "카카오톡 예약",
-        "target": {"@type":"EntryPoint","urlTemplate":"https://pf.kakao.com/_LLxhwG/chat","actionPlatform":"http://schema.org/DesktopWebPlatform"}
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://pf.kakao.com/_LLxhwG/chat",
+          "actionPlatform": "http://schema.org/DesktopWebPlatform"
+        }
       },
       {
         "@type": "ReserveAction",
         "name": "네이버 예약",
-        "target": {"@type":"EntryPoint","urlTemplate":"https://booking.naver.com/booking/13/bizes/781025","actionPlatform":"http://schema.org/DesktopWebPlatform"}
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://booking.naver.com/booking/13/bizes/781025",
+          "actionPlatform": "http://schema.org/DesktopWebPlatform"
+        }
       }
     ]
   }

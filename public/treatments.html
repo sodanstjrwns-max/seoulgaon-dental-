@@ -190,7 +190,12 @@
   "dateModified": "2026-04-09",
   "speakable": {
     "@type": "SpeakableSpecification",
-    "cssSelector": [".tx-sec-title", ".tx-sec-sub", ".tx-sec-highlight", "h1"]
+    "cssSelector": [
+      ".tx-sec-title",
+      ".tx-sec-sub",
+      ".tx-sec-highlight",
+      "h1"
+    ]
   },
   "mainEntity": [
     {
@@ -225,6 +230,7 @@
   ],
   "provider": {
     "@type": "Dentist",
+    "@id": "https://seoulgaondc.kr/#clinic",
     "name": "서울가온치과의원",
     "url": "https://seoulgaondc.kr",
     "telephone": "0507-1325-3377",
@@ -236,11 +242,35 @@
       "postalCode": "11786",
       "addressCountry": "KR"
     },
-    "geo": {"@type": "GeoCoordinates", "latitude": 37.7388, "longitude": 127.0560},
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 37.7388,
+      "longitude": 127.056
+    },
     "openingHoursSpecification": [
-      {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Friday"], "opens": "09:30", "closes": "18:30"},
-      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "09:30", "closes": "20:30"},
-      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:30", "closes": "14:00"}
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Friday"
+        ],
+        "opens": "09:30",
+        "closes": "18:30"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Thursday",
+        "opens": "09:30",
+        "closes": "20:30"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Saturday",
+        "opens": "09:30",
+        "closes": "14:00"
+      }
     ]
   }
 }

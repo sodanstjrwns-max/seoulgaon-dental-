@@ -51,22 +51,33 @@
 {
   "@context": "https://schema.org",
   "@type": "MedicalWebPage",
+  "@id": "https://seoulgaondc.kr/aesthetic#webpage",
   "name": "앞니 심미치료 | 서울가온치과",
   "headline": "의정부 앞니 심미치료 — 라미네이트·올세라믹·지르코니아 크라운",
   "description": "서울가온치과 앞니 심미치료. 라미네이트, 올세라믹, 지르코니아 크라운으로 자연스러운 앞니를 완성합니다. 디지털 쉐이드 매칭, 전문 기공소 1:1 맞춤 제작. 보통 2~3회 내원으로 완성.",
   "url": "https://seoulgaondc.kr/aesthetic",
-  "dateModified": "2026-04-12",
+  "dateModified": "2026-06-09",
   "datePublished": "2026-04-09",
   "inLanguage": "ko",
   "speakable": {
     "@type": "SpeakableSpecification",
-    "cssSelector": ["h1", ".tx-sec-title", ".tx-sec-sub", ".tx-sec-highlight"]
+    "cssSelector": [
+      "h1",
+      ".tx-sec-title",
+      ".tx-sec-sub",
+      ".tx-sec-highlight"
+    ]
   },
   "mainEntity": [
     {
       "@type": "MedicalProcedure",
+      "@id": "https://seoulgaondc.kr/aesthetic#procedure",
       "name": "라미네이트",
-      "alternateName": ["치과 라미네이트", "포슬린 라미네이트 베니어", "Dental Veneer"],
+      "alternateName": [
+        "치과 라미네이트",
+        "포슬린 라미네이트 베니어",
+        "Dental Veneer"
+      ],
       "procedureType": "Noninvasive",
       "description": "치아 표면을 최소 삭제 후 얇은 세라믹 쉘을 부착하여 자연스러운 색상과 형태를 복원합니다. 변색, 왜소치, 벌어진 앞니 등에 적합합니다.",
       "bodyLocation": "전치부 (앞니)",
@@ -78,7 +89,10 @@
     {
       "@type": "MedicalProcedure",
       "name": "올세라믹 크라운",
-      "alternateName": ["All-Ceramic Crown", "전부도재관"],
+      "alternateName": [
+        "All-Ceramic Crown",
+        "전부도재관"
+      ],
       "procedureType": "Noninvasive",
       "description": "금속 없이 세라믹만으로 제작한 크라운으로 자연치아와 구분이 어려운 심미성을 제공합니다.",
       "bodyLocation": "전치부 (앞니)",
@@ -87,7 +101,9 @@
     {
       "@type": "MedicalProcedure",
       "name": "지르코니아 크라운",
-      "alternateName": ["Zirconia Crown"],
+      "alternateName": [
+        "Zirconia Crown"
+      ],
       "procedureType": "Noninvasive",
       "description": "강도와 심미성 모두 뛰어난 지르코니아 소재 크라운으로 앞니와 어금니 모두에 적합합니다.",
       "bodyLocation": "전치부 및 구치부",
@@ -96,6 +112,7 @@
   ],
   "provider": {
     "@type": "Dentist",
+    "@id": "https://seoulgaondc.kr/#clinic",
     "name": "서울가온치과의원",
     "url": "https://seoulgaondc.kr",
     "telephone": "0507-1325-3377",
@@ -107,12 +124,58 @@
       "postalCode": "11786",
       "addressCountry": "KR"
     },
-    "geo": {"@type": "GeoCoordinates", "latitude": 37.7388, "longitude": 127.0560},
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 37.7388,
+      "longitude": 127.056
+    },
     "openingHoursSpecification": [
-      {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Friday"], "opens": "09:30", "closes": "18:30"},
-      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "09:30", "closes": "20:30"},
-      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:30", "closes": "14:00"}
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Friday"
+        ],
+        "opens": "09:30",
+        "closes": "18:30"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Thursday",
+        "opens": "09:30",
+        "closes": "20:30"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Saturday",
+        "opens": "09:30",
+        "closes": "14:00"
+      }
     ]
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "@id": "https://seoulgaondc.kr/#website",
+    "name": "서울가온치과",
+    "url": "https://seoulgaondc.kr"
+  },
+  "about": {
+    "@id": "https://seoulgaondc.kr/aesthetic#procedure"
+  },
+  "lastReviewed": "2026-06-09",
+  "reviewedBy": {
+    "@type": [
+      "Person",
+      "Physician"
+    ],
+    "@id": "https://seoulgaondc.kr/doctors#hyun-jinho",
+    "name": "현진호",
+    "jobTitle": "대표원장 (통합치의학과 전문의)",
+    "worksFor": {
+      "@id": "https://seoulgaondc.kr/#clinic"
+    }
   }
 }
 </script>
@@ -123,12 +186,54 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type": "Question", "name": "라미네이트와 크라운의 차이는 무엇인가요?", "acceptedAnswer": {"@type": "Answer", "text": "라미네이트는 치아 표면만 얇게 다듬어 세라믹을 붙이는 방식으로 치아 삭제가 최소입니다. 크라운은 치아 전체를 감싸는 방식으로 손상이 큰 경우 적합합니다. 서울가온치과는 환자 상태에 맞는 최적의 방법을 추천합니다."}},
-    {"@type": "Question", "name": "라미네이트 시술은 얼마나 걸리나요?", "acceptedAnswer": {"@type": "Answer", "text": "보통 2~3회 내원으로 완성됩니다. 첫 방문에서 치아를 준비하고, 2주 내 기공물이 완성되면 장착합니다. 자연치아와 거의 동일한 색상과 투명도로 제작됩니다."}},
-    {"@type": "Question", "name": "앞니 치료 후 자연스러운가요?", "acceptedAnswer": {"@type": "Answer", "text": "서울가온치과는 디지털 쉐이드 매칭으로 주변 치아와 완벽하게 어울리는 색상을 구현합니다. 지르코니아·세라믹 소재를 사용해 자연치아의 투명도와 질감까지 재현하며, '치료한 줄 모르겠다'는 반응이 대부분입니다."}},
-    {"@type": "Question", "name": "왜소치에 라미네이트가 적합한가요?", "acceptedAnswer": {"@type": "Answer", "text": "왜소치(작은 치아)는 라미네이트의 대표적인 적응증입니다. 최소 삭제로 크기와 형태를 자연스럽게 개선하며, 전문 기공소와 1:1 협업으로 디테일한 맞춤 제작이 가능합니다."}},
-    {"@type": "Question", "name": "벌어진 앞니도 심미치료로 개선 가능한가요?", "acceptedAnswer": {"@type": "Answer", "text": "네, 치간 이개(벌어진 앞니)는 라미네이트 또는 올세라믹 크라운으로 효과적으로 개선할 수 있습니다. 교정 없이도 짧은 기간 내에 자연스럽고 가지런한 앞니를 완성할 수 있습니다."}},
-    {"@type": "Question", "name": "심미치료 비용은 얼마인가요?", "acceptedAnswer": {"@type": "Answer", "text": "심미치료 비용은 치료 방법(라미네이트, 올세라믹, 지르코니아)과 개수에 따라 달라집니다. 서울가온치과는 상담 시 서면 치료계획서와 함께 정확한 비용을 안내드리며, 무이자 할부도 가능합니다."}}
+    {
+      "@type": "Question",
+      "name": "라미네이트와 크라운의 차이는 무엇인가요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "라미네이트는 치아 표면만 얇게 다듬어 세라믹을 붙이는 방식으로, 치아 삭제가 최소입니다. 크라운은 치아 전체를 감싸는 방식으로 손상이 큰 경우 적합합니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "라미네이트 시술은 얼마나 걸리나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "보통 2~3회 내원으로 완성됩니다. 첫 방문에서 치아를 준비하고, 2주 내 기공물이 완성되면 장착합니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "앞니 치료 후 자연스러운가요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "서울가온치과는 디지털 쉐이드 매칭으로 주변 치아와 완벽하게 어울리는 색상을 구현합니다. '치료한 줄 모르겠다'는 반응이 대부분입니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "왜소치에 라미네이트가 적합한가요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "왜소치는 라미네이트의 대표적인 적응증입니다. 최소 삭제로 크기와 형태를 자연스럽게 개선합니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "벌어진 앞니도 심미치료로 개선 가능한가요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "네, 치간 이개(벌어진 앞니)는 라미네이트 또는 올세라믹 크라운으로 효과적으로 개선할 수 있습니다. 교정 없이도 짧은 기간 내에 자연스러운 앞니를 완성할 수 있습니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "심미치료 비용은 얼마인가요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "치료 방법과 개수에 따라 달라집니다. 상담 시 서면 치료계획서와 함께 정확한 비용을 안내드리며, 무이자 할부도 가능합니다."
+      }
+    }
   ]
 }
 </script>
@@ -317,6 +422,9 @@
 
   <a href="tel:0507-1325-3377" class="tx-cta" data-magnet>심미치료 상담 예약 →</a>
 </div>
+
+<!-- 감수 줄 — 스키마 reviewedBy·lastReviewed 와 동일 값 -->
+<p class="tx-review" style="max-width:800px;margin:0 auto 2rem;padding:0 clamp(1.5rem,4vw,4rem);font-size:.8rem;color:var(--stone-l);text-align:center">감수: <a href="/doctors" style="color:var(--gold)">현진호 대표원장</a>(통합치의학과 전문의) · 최종 검토 <time datetime="2026-06-09">2026-06-09</time></p>
 
 <!-- FAQ Section -->
 <section class="treatment-section" data-reveal>

@@ -487,6 +487,7 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
 {
   "@context": "https://schema.org",
   "@type": "Dentist",
+  "@id": "https://seoulgaondc.kr/#clinic",
   "name": "서울가온치과의원",
   "alternateName": "Seoul Gaon Dental Clinic",
   "url": "https://seoulgaondc.kr",
@@ -506,18 +507,42 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
   "geo": {
     "@type": "GeoCoordinates",
     "latitude": 37.7388,
-    "longitude": 127.0560
+    "longitude": 127.056
   },
   "openingHoursSpecification": [
-    {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Friday"], "opens": "09:30", "closes": "18:30"},
-    {"@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "09:30", "closes": "20:30"},
-    {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:30", "closes": "14:00"}
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Friday"
+      ],
+      "opens": "09:30",
+      "closes": "18:30"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Thursday",
+      "opens": "09:30",
+      "closes": "20:30"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Saturday",
+      "opens": "09:30",
+      "closes": "14:00"
+    }
   ],
   "founder": {
     "@type": "Person",
+    "@id": "https://seoulgaondc.kr/doctors#hyun-jinho",
     "name": "현진호",
     "jobTitle": "대표원장",
-    "alumniOf": {"@type": "EducationalOrganization", "name": "서울대학교 치의학과"},
+    "alumniOf": {
+      "@type": "EducationalOrganization",
+      "name": "서울대학교 치의학과"
+    },
     "authorOf": {
       "@type": "Book",
       "name": "임플란트 사용설명서",
@@ -531,24 +556,35 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
   "employee": [
     {
       "@type": "Person",
+      "@id": "https://seoulgaondc.kr/doctors#hyun-jinho",
       "name": "현진호",
       "jobTitle": "대표원장 · 임플란트·앞니 심미치료 중점 진료",
       "description": "서울대학교 치의학과 졸업, 통합치의학과 전문의, 오스템 임플란트 증례 금상"
     },
     {
       "@type": "Person",
+      "@id": "https://seoulgaondc.kr/doctors#jo-eunbi",
       "name": "조은비",
       "jobTitle": "원장 · 치과보존과 전문의",
       "description": "서울대학교 치의학과 졸업, 서울대 치의학대학원 박사 수료, 치과보존과 전문의"
     }
   ],
-  "medicalSpecialty": ["Dentistry", "Implantology", "Endodontics", "Cosmetic Dentistry"],
-  "areaServed": {"@type": "City", "name": "의정부시"},
+  "medicalSpecialty": [
+    "Dentistry",
+    "Implantology",
+    "Endodontics",
+    "Cosmetic Dentistry"
+  ],
+  "areaServed": {
+    "@type": "City",
+    "name": "의정부시"
+  },
   "sameAs": [
     "https://pf.kakao.com/_LLxhwG",
     "https://www.instagram.com/seoulgaondental",
     "https://product.kyobobook.co.kr/detail/S000217229789"
-  ]
+  ],
+  "hasMap": "https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC"
 }
 </script>
 <!-- JSON-LD: FAQ 구조화 데이터 -->
@@ -579,30 +615,31 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
   "serviceType": "치과 진료",
   "provider": {
     "@type": "Dentist",
+    "@id": "https://seoulgaondc.kr/#clinic",
     "name": "서울가온치과의원",
-    "url": "https://seoulgaondc.kr",
-    "telephone": "0507-1325-3377",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "용민로 22, 골드자이프라자 4층",
-      "addressLocality": "의정부시",
-      "addressRegion": "경기도",
-      "postalCode": "11786",
-      "addressCountry": "KR"
-    },
-    "geo": {"@type": "GeoCoordinates", "latitude": 37.7388, "longitude": 127.0560},
-    "openingHoursSpecification": [
-      {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Friday"], "opens": "09:30", "closes": "18:30"},
-      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "09:30", "closes": "20:30"},
-      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:30", "closes": "14:00"}
-    ]
+    "url": "https://seoulgaondc.kr"
   },
   "areaServed": [
-    {"@type": "City", "name": "의정부시"},
-    {"@type": "City", "name": "양주시"},
-    {"@type": "City", "name": "남양주시"},
-    {"@type": "AdministrativeArea", "name": "노원구"},
-    {"@type": "AdministrativeArea", "name": "도봉구"}
+    {
+      "@type": "City",
+      "name": "의정부시"
+    },
+    {
+      "@type": "City",
+      "name": "양주시"
+    },
+    {
+      "@type": "City",
+      "name": "남양주시"
+    },
+    {
+      "@type": "AdministrativeArea",
+      "name": "노원구"
+    },
+    {
+      "@type": "AdministrativeArea",
+      "name": "도봉구"
+    }
   ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
@@ -648,22 +685,16 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": "https://seoulgaondc.kr/#website",
   "name": "서울가온치과",
   "alternateName": "Seoul Gaon Dental Clinic",
   "url": "https://seoulgaondc.kr",
   "inLanguage": "ko",
   "publisher": {
     "@type": "Dentist",
+    "@id": "https://seoulgaondc.kr/#clinic",
     "name": "서울가온치과의원",
-    "url": "https://seoulgaondc.kr",
-    "telephone": "0507-1325-3377",
-    "address": {"@type": "PostalAddress", "streetAddress": "용민로 22, 골드자이프라자 4층", "addressLocality": "의정부시", "addressRegion": "경기도", "postalCode": "11786", "addressCountry": "KR"},
-    "geo": {"@type": "GeoCoordinates", "latitude": 37.7388, "longitude": 127.0560},
-    "openingHoursSpecification": [
-      {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Friday"], "opens": "09:30", "closes": "18:30"},
-      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "09:30", "closes": "20:30"},
-      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:30", "closes": "14:00"}
-    ]
+    "url": "https://seoulgaondc.kr"
   },
   "potentialAction": {
     "@type": "SearchAction",
@@ -703,20 +734,51 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
   "description": "치과 치료가 좋은 기억이 될 수 있도록. 가이드 임플란트, 서울대 보존과 전문의 신경치료. 현진호 대표원장 직접 진료.",
   "url": "https://seoulgaondc.kr/",
   "inLanguage": "ko",
-  "isPartOf": {"@type": "WebSite", "name": "서울가온치과", "url": "https://seoulgaondc.kr"},
-  "about": {"@type": "Dentist", "name": "서울가온치과의원", "url": "https://seoulgaondc.kr"},
-  "mainEntity": {"@type": "Dentist", "name": "서울가온치과의원"},
+  "isPartOf": {
+    "@type": "WebSite",
+    "@id": "https://seoulgaondc.kr/#website",
+    "name": "서울가온치과",
+    "url": "https://seoulgaondc.kr"
+  },
+  "about": {
+    "@type": "Dentist",
+    "@id": "https://seoulgaondc.kr/#clinic",
+    "name": "서울가온치과의원",
+    "url": "https://seoulgaondc.kr"
+  },
+  "mainEntity": {
+    "@type": "Dentist",
+    "@id": "https://seoulgaondc.kr/#clinic",
+    "name": "서울가온치과의원",
+    "url": "https://seoulgaondc.kr"
+  },
   "speakable": {
     "@type": "SpeakableSpecification",
-    "cssSelector": [".sec-title", ".hero-desc", ".consult-quote", ".story-headline", ".value-h"]
+    "cssSelector": [
+      ".sec-title",
+      ".hero-desc",
+      ".consult-quote",
+      ".story-headline",
+      ".value-h"
+    ]
   },
-  "specialty": ["임플란트", "심미치료", "신경치료", "보존치료"],
+  "specialty": [
+    "임플란트",
+    "심미치료",
+    "신경치료",
+    "보존치료"
+  ],
   "keywords": "의정부치과, 의정부임플란트, 서울가온치과, 가이드임플란트, 심미치료, 신경치료, 보존과전문의, 탑석역치과",
   "dateModified": "2026-04-09",
   "breadcrumb": {
     "@type": "BreadcrumbList",
     "itemListElement": [
-      {"@type": "ListItem", "position": 1, "name": "홈", "item": "https://seoulgaondc.kr/"}
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "홈",
+        "item": "https://seoulgaondc.kr/"
+      }
     ]
   }
 }
@@ -851,7 +913,7 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
       <div class="stat-label">컴플레인 목표</div>
     </div>
     <div class="stat" data-reveal>
-      <div class="stat-num"><span data-count="100">0</span><sup>세</sup></div>
+      <div class="stat-num"><span data-count="100">100</span><sup>세</sup></div>
       <div class="stat-label">까지의 약속</div>
     </div>
   </div>

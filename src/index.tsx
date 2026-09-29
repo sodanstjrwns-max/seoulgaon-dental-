@@ -2509,12 +2509,14 @@ app.get('/llms-full.txt', async (c) => {
 
     const SITE = 'https://seoulgaondc.kr'
     const cleanMd = (s: string) => (s || '').replace(/<[^>]*>/g, '').trim()
+    // 실제 콘텐츠 최종 수정일(용어 updated_at 최댓값) — 요청 시각(오늘)이 아님
+    const lastUpdated = entries.map((e) => String(e.updated_at || '').slice(0, 10)).filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort().pop() || ''
     let out = `# 서울가온치과 치과 백과사전 — 전체 ${entries.length}개 용어 (Full Dump for LLMs)
 # Seoul Gaon Dental Clinic Encyclopedia — Medically reviewed by SNU-trained dentists
 # Clinic: 경기도 의정부시 용민로 22, 골드자이프라자 4층 | Tel: 0507-1325-3377
-# Index: ${SITE}/encyclopedia | Per-term URL: ${SITE}/encyclopedia/{slug}
+# Index: ${SITE}/encyclopedia | 각 용어 페이지 주소는 아래 항목별 'URL:' 줄에 있습니다.
 # License: Citation with link to source page is appreciated.
-# Last updated: ${new Date().toISOString().split('T')[0]}
+# Last updated: ${lastUpdated}
 
 `
     let currentCat = ''
@@ -2725,6 +2727,13 @@ const KAKAO_FLOAT = `<div id="kakao-float" onclick="window.open('https://pf.kaka
 </style>`
 
 const SITE = 'https://seoulgaondc.kr'
+// ── 구조화 데이터 엔티티 @id (사이트 전체 단일 병원 엔티티 — 전체 정의는 홈 public/index.html) ──
+const CLINIC_ID = `${SITE}/#clinic`
+const WEBSITE_ID = `${SITE}/#website`
+const DOCTOR_HYUN_ID = `${SITE}/doctors#hyun-jinho`
+const CLINIC_REF = { "@type": "Dentist", "@id": CLINIC_ID, "name": "서울가온치과의원", "url": SITE }
+const WEBSITE_REF = { "@type": "WebSite", "@id": WEBSITE_ID, "name": "서울가온치과", "url": SITE }
+const DOCTOR_HYUN_REF = { "@type": ["Person", "Physician"], "@id": DOCTOR_HYUN_ID, "name": "현진호", "jobTitle": "대표원장 (통합치의학과 전문의)", "worksFor": { "@id": CLINIC_ID } }
 
 // ── 301 리다이렉트: 구 URL → 클린 URL ──
 app.get('/blog-post.html', (c) => {
@@ -2799,7 +2808,7 @@ app.get('/blog', async (c) => {
       "name": "서울가온치과 블로그",
       "description": "의정부 서울가온치과 블로그. 임플란트, 심미치료, 신경치료 등 치과 건강 정보를 쉽고 정직하게 전합니다.",
       "url": `${SITE}/blog${page > 1 ? `?page=${page}` : ''}`,
-      "isPartOf": { "@type": "WebSite", "name": "서울가온치과", "url": SITE },
+      "isPartOf": WEBSITE_REF,
       "numberOfItems": total,
       "mainEntity": {
         "@type": "ItemList",
@@ -2946,7 +2955,7 @@ app.get('/before-after', async (c) => {
       "name": `서울가온치과 ${pageTitle}`,
       "description": `서울가온치과 치료 전후 사례. 임플란트, 심미치료, 레진빌드업 실제 치료 결과.`,
       "url": `${SITE}/before-after${cat ? `?category=${encodeURIComponent(cat)}` : ''}`,
-      "isPartOf": { "@type": "WebSite", "name": "서울가온치과", "url": SITE },
+      "isPartOf": WEBSITE_REF,
       "numberOfItems": total,
       "mainEntity": {
         "@type": "ItemList",
@@ -3130,15 +3139,8 @@ app.get('/blog/:id', async (c) => {
       "image": ogImage,
       "datePublished": publishDate,
       "dateModified": modifiedDate,
-      "author": { "@type": "Person", "name": authorName, "jobTitle": authorTitle, "worksFor": { "@type": "Dentist", "name": "서울가온치과의원" } },
-      "publisher": {
-        "@type": "Dentist",
-        "name": "서울가온치과의원",
-        "url": SITE,
-        "logo": { "@type": "ImageObject", "url": `${SITE}/images/og-main.jpg` },
-        "address": { "@type": "PostalAddress", "addressLocality": "의정부시", "addressRegion": "경기도", "streetAddress": "용민로 22, 4층", "postalCode": "11697", "addressCountry": "KR" },
-        "telephone": "0507-1325-3377"
-      },
+      "author": { "@type": "Person", "name": authorName, "jobTitle": authorTitle, "worksFor": { "@id": CLINIC_ID } },
+      "publisher": { ...CLINIC_REF, "logo": { "@type": "ImageObject", "url": `${SITE}/images/og-main.jpg` } },
       "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalUrl },
       "inLanguage": "ko",
       "articleSection": post.category || "치과 건강정보",
@@ -3156,28 +3158,7 @@ app.get('/blog/:id', async (c) => {
       ]
     }
 
-    // Dentist Organization schema (사이트 전역)
-    const jsonLdOrg = {
-      "@context": "https://schema.org",
-      "@type": "Dentist",
-      "name": "서울가온치과의원",
-      "url": SITE,
-      "logo": `${SITE}/images/og-main.jpg`,
-      "image": `${SITE}/images/og-main.jpg`,
-      "description": "의정부 임플란트·심미치료·신경치료 중점 진료 치과의원. 서울대학교 출신 의료진이 정직하고 바른 진료를 약속합니다.",
-      "address": { "@type": "PostalAddress", "addressLocality": "의정부시", "addressRegion": "경기도", "streetAddress": "용민로 22, 4층(용현동)", "postalCode": "11697", "addressCountry": "KR" },
-      "geo": { "@type": "GeoCoordinates", "latitude": "37.7381", "longitude": "127.0337" },
-      "telephone": "0507-1325-3377",
-      "openingHoursSpecification": [
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Friday"], "opens": "09:30", "closes": "18:30" },
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "09:30", "closes": "20:30" },
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:30", "closes": "14:00" }
-      ],
-      "priceRange": "$$",
-      "areaServed": { "@type": "City", "name": "의정부시" },
-      "medicalSpecialty": ["Dentistry", "Implantology", "Cosmetic Dentistry", "Endodontics"],
-      "sameAs": ["https://pf.kakao.com/_LLxhwG"]
-    }
+    // (병원 Dentist 전체 정의는 홈 /#clinic 하나로 통일 — 글마다 붙던 @id 없는 중복 Dentist 제거)
 
     // 본문 600자 미만 얇은 글은 noindex, follow (사이트맵에서도 제외 — 내용 보강 후 자동 복귀)
     const thinPost = isThinBlogPost(post)
@@ -3215,7 +3196,6 @@ ${HEAD_COMMON}
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">${JSON.stringify(jsonLdBlog)}</script>
 <script type="application/ld+json">${JSON.stringify(jsonLdBreadcrumb)}</script>
-<script type="application/ld+json">${JSON.stringify(jsonLdOrg)}</script>
 <style>
 .bp-wrap{max-width:800px;margin:0 auto;padding:clamp(8rem,15vh,12rem) clamp(1.5rem,4vw,3rem) clamp(4rem,8vh,6rem)}
 .bp-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--stone-l,#AFA79D);margin-bottom:2rem;transition:color .3s;text-decoration:none}
@@ -3388,14 +3368,14 @@ app.get('/before-after/:id', async (c) => {
       "datePublished": publishDate,
       "dateModified": modifiedDate,
       "author": { "@type": "Person", "name": authorName, "jobTitle": authorTitle },
-      "publisher": { "@type": "Dentist", "name": "서울가온치과의원", "url": SITE },
+      "publisher": CLINIC_REF,
       "mainEntity": {
         "@type": "MedicalProcedure",
         "name": `${item.category || '치과'} 치료`,
         "procedureType": "http://schema.org/TherapeuticProcedure",
         "bodyLocation": "Mouth",
         "status": "http://schema.org/EventCompleted",
-        "performedBy": { "@type": "Dentist", "name": authorName }
+        "performedBy": item.doctor_name ? { "@type": ["Person", "Physician"], "name": item.doctor_name } : CLINIC_REF
       },
       "about": {
         "@type": "MedicalCondition",
@@ -3706,9 +3686,9 @@ app.get('/encyclopedia', async (c) => {
           "name": "치과 백과사전 — 서울가온치과",
           "description": `치과 용어 ${total}개를 서울대 출신 의료진이 쉽게 풀어 설명하는 치과 백과사전. 임플란트, 보철, 신경치료, 교정, 잇몸 등 카테고리별 정리.`,
           "url": `${SITE}/encyclopedia`,
-          "isPartOf": { "@type": "WebSite", "name": "서울가온치과", "url": SITE },
+          "isPartOf": WEBSITE_REF,
           "numberOfItems": total,
-          "publisher": { "@type": "Dentist", "name": "서울가온치과의원", "url": SITE, "telephone": "0507-1325-3377" }
+          "publisher": CLINIC_REF
         },
         {
           "@type": "DefinedTermSet",
@@ -3907,14 +3887,9 @@ app.get('/encyclopedia/:key', async (c) => {
         "about": { "@type": "MedicalEntity", "name": entry.term },
         "mainEntity": { "@id": `${canonicalUrl}#term` },
         "speakable": { "@type": "SpeakableSpecification", "cssSelector": ["h1", ".enc-summary"] },
-        "publisher": {
-          "@type": "Dentist",
-          "name": "서울가온치과의원",
-          "url": SITE,
-          "telephone": "0507-1325-3377",
-          "address": { "@type": "PostalAddress", "addressLocality": "의정부시", "addressRegion": "경기도", "streetAddress": "용민로 22, 4층", "postalCode": "11697", "addressCountry": "KR" }
-        },
-        "reviewedBy": { "@type": "Person", "name": "현진호", "jobTitle": "대표원장 (통합치의학과 전문의)", "worksFor": { "@type": "Dentist", "name": "서울가온치과의원" } },
+        "publisher": CLINIC_REF,
+        "isPartOf": WEBSITE_REF,
+        "reviewedBy": DOCTOR_HYUN_REF,
         "lastReviewed": modDate
       },
       {
@@ -5429,46 +5404,68 @@ const LANDING_PAGES: LandingPageData[] = [
   },
 ]
 
+// ── 랜딩페이지 콘텐츠 최종 수정일 (고정값) ──
+// 각 랜딩 데이터 블록을 실제로 마지막 수정한 커밋 날짜. dateModified·lastReviewed·화면 감수 줄이 모두 이 값을 쓴다.
+// "오늘 날짜" 자동 생성 금지 — 해당 랜딩 내용을 고친 날에만 갱신한다.
+const LANDING_MODIFIED: Record<string, string> = {
+  'uijeongbu-dental': '2026-09-03', 'endodontics': '2026-06-09', 'invisalign': '2026-07-26', 'orthodontics': '2026-07-26',
+  'cavity-treatment': '2026-05-26', 'implant-best': '2026-09-03', 'full-mouth-implant': '2026-09-03', 'front-tooth-implant': '2026-06-09',
+  'bone-graft-implant': '2026-06-09', 'laminate': '2026-07-26', 'wisdom-tooth': '2026-05-26', 'scaling-gum-treatment': '2026-05-26',
+  'denture-to-implant': '2026-05-26', 'implant-cost': '2026-05-26', 'night-dental': '2026-05-26', 'senior-implant': '2026-05-26',
+  'emergency-dental': '2026-05-26', 'tapseok-dental': '2026-09-03', 'painless-dental': '2026-05-26', 'pediatric-dental': '2026-05-26',
+  'crown': '2026-06-09', 'teeth-whitening': '2026-07-26', 'dental-checkup': '2026-05-26', 'implant-process': '2026-09-29',
+  'minrak-dental': '2026-09-03',
+}
+// 진료(시술) 랜딩 → MedicalProcedure 이름. 여기 있는 페이지는 MedicalWebPage.about=MedicalProcedure + 대표원장 감수 줄을 단다.
+const LANDING_PROCEDURES: Record<string, string> = {
+  'endodontics': '신경치료', 'invisalign': '인비절라인 투명교정', 'orthodontics': '치아교정', 'cavity-treatment': '충치치료',
+  'full-mouth-implant': '전체임플란트', 'front-tooth-implant': '앞니 임플란트', 'bone-graft-implant': '뼈이식 임플란트',
+  'laminate': '라미네이트', 'wisdom-tooth': '사랑니 발치', 'scaling-gum-treatment': '스케일링·잇몸치료',
+  'pediatric-dental': '소아 치과진료', 'crown': '크라운', 'teeth-whitening': '치아미백',
+}
+
 // ── SSR 랜딩페이지 렌더러 ──
 function renderLandingPage(page: LandingPageData): string {
   const canonicalUrl = `${SITE}/${page.slug}`
+  const modified = LANDING_MODIFIED[page.slug]
+  const procName = LANDING_PROCEDURES[page.slug]
+  const procedureId = `${canonicalUrl}#procedure`
 
-  // JSON-LD: MedicalWebPage
-  const jsonLdPage = {
+  // JSON-LD: MedicalWebPage (병원·웹사이트·의료진은 @id 참조 — 전체 정의는 홈)
+  const jsonLdPage: any = {
     "@context": "https://schema.org",
     "@type": "MedicalWebPage",
+    "@id": `${canonicalUrl}#webpage`,
     "name": page.h1,
     "description": page.metaDesc,
     "url": canonicalUrl,
     "inLanguage": "ko",
-    "isPartOf": { "@type": "WebSite", "name": "서울가온치과", "url": SITE },
-    "about": { "@type": "MedicalSpecialty", "name": page.category },
-    "dateModified": new Date().toISOString().split('T')[0],
-    "publisher": {
-      "@type": "Dentist",
-      "name": "서울가온치과의원",
-      "url": SITE,
-      "logo": `${SITE}/images/og-main.jpg`,
-      "address": { "@type": "PostalAddress", "addressLocality": "의정부시", "addressRegion": "경기도", "streetAddress": "용민로 22, 4층(용현동)", "postalCode": "11697", "addressCountry": "KR" },
-      "geo": { "@type": "GeoCoordinates", "latitude": "37.7381", "longitude": "127.0337" },
-      "telephone": "0507-1325-3377",
-      "openingHoursSpecification": [
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Friday"], "opens": "09:30", "closes": "18:30" },
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "09:30", "closes": "20:30" },
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:30", "closes": "14:00" }
-      ],
-      "priceRange": "$$",
-      "areaServed": [
-        { "@type": "City", "name": "의정부시" },
-        { "@type": "AdministrativeArea", "name": "경기도" }
-      ],
-      "medicalSpecialty": ["Dentistry","Implantology","Cosmetic Dentistry","Endodontics","Orthodontics"]
-    },
+    "isPartOf": WEBSITE_REF,
+    "about": procName ? { "@id": procedureId } : { "@type": "MedicalSpecialty", "name": page.category },
+    ...(modified ? { "dateModified": modified } : {}),
+    "publisher": CLINIC_REF,
     "speakable": {
       "@type": "SpeakableSpecification",
       "cssSelector": ["h1", ".landing-section h2", ".landing-section p"]
     }
   }
+  if (procName) {
+    jsonLdPage.reviewedBy = DOCTOR_HYUN_REF
+    if (modified) jsonLdPage.lastReviewed = modified
+  }
+  // JSON-LD: MedicalProcedure (진료 랜딩만)
+  const jsonLdProcedure = procName ? {
+    "@context": "https://schema.org",
+    "@type": "MedicalProcedure",
+    "@id": procedureId,
+    "name": procName,
+    "description": page.metaDesc,
+    "url": canonicalUrl,
+    "provider": { "@id": CLINIC_ID },
+  } : null
+  const reviewLineHtml = procName && modified
+    ? `<p class="landing-review" style="margin:0 0 2.5rem;font-size:.82rem;color:var(--stone-l)">감수: <a href="/doctors" style="color:var(--gold)">현진호 대표원장</a>(통합치의학과 전문의) · 최종 검토 <time datetime="${modified}">${modified}</time></p>`
+    : ''
 
   // JSON-LD: FAQPage
   const jsonLdFaq = {
@@ -5578,7 +5575,7 @@ ${HEAD_COMMON}
 <meta name="twitter:image" content="${ogImage}">
 <!-- JSON-LD -->
 <script type="application/ld+json">${JSON.stringify(jsonLdPage)}</script>
-<script type="application/ld+json">${JSON.stringify(jsonLdFaq)}</script>
+${jsonLdProcedure ? `<script type="application/ld+json">${JSON.stringify(jsonLdProcedure)}</script>\n` : ''}<script type="application/ld+json">${JSON.stringify(jsonLdFaq)}</script>
 <script type="application/ld+json">${JSON.stringify(jsonLdBreadcrumb)}</script>
 <style>
 .landing-hero{padding:clamp(10rem,18vh,14rem) clamp(1.5rem,4vw,3rem) clamp(3rem,6vh,5rem);text-align:center;max-width:800px;margin:0 auto}
@@ -5641,6 +5638,7 @@ ${NAV_HTML}
   </div>
   <div class="landing-body">
     ${sectionsHtml}
+    ${reviewLineHtml}
     <div class="landing-faq" itemscope itemtype="https://schema.org/FAQPage">
       <h2>자주 묻는 질문</h2>
       ${faqHtml}

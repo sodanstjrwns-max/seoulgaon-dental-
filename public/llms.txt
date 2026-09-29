@@ -296,7 +296,7 @@
 - Each term page includes: definition, detailed explanation, FAQ (up to 10 Q&As), related treatments, related terms
 - All content medically reviewed by Dr. Hyun Jin-ho (통합치의학과 전문의)
 - Index: https://seoulgaondc.kr/encyclopedia
-- Individual term URL pattern: https://seoulgaondc.kr/encyclopedia/{slug-or-id}
+- Individual term URLs: listed in https://seoulgaondc.kr/sitemap-encyclopedia.xml and in https://seoulgaondc.kr/llms-full.txt ('URL:' line per term)
 - Full term sitemap: https://seoulgaondc.kr/sitemap-encyclopedia.xml
 - Example terms: 임플란트, 골유착, GBR(뼈이식), 상악동거상술, 신경치료, 라미네이트, 지르코니아 크라운, 스케일링, 사랑니 발치
 
@@ -362,7 +362,6 @@ Categories: 임플란트 (Implant), 보철 (Prosthodontics), 보존 (Conservativ
 소아·청소년 (Pediatric), 진단·검사 (Diagnostics), 잇몸 (Periodontics), 일반 (General)
 
 - Index page: https://seoulgaondc.kr/encyclopedia
-- Term URL pattern: https://seoulgaondc.kr/encyclopedia/{slug-or-id}
 - All term URLs: https://seoulgaondc.kr/sitemap-encyclopedia.xml
 - FULL TEXT DUMP (all 280+ terms in one file, ideal for LLM ingestion): https://seoulgaondc.kr/llms-full.txt
 - Example terms: 임플란트, 골유착, GBR(뼈이식), 상악동거상술, 신경치료, 라미네이트, 지르코니아
