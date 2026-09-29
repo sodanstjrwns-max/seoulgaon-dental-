@@ -5496,15 +5496,15 @@ function renderLandingPage(page: LandingPageData): string {
     </section>
   `).join('')
 
-  // FAQ HTML (SEO + 사용자 경험)
+  // FAQ HTML (SEO + 사용자 경험) — 구조화 데이터는 JSON-LD FAQPage 한 벌만 (마이크로데이터 중복 제거 2026-09-29)
   const faqHtml = page.faqs.map((f, i) => `
-    <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+    <div class="faq-item">
       <button class="faq-q" aria-expanded="false" onclick="this.parentElement.classList.toggle('open');this.setAttribute('aria-expanded',this.parentElement.classList.contains('open'))">
-        <span itemprop="name">${escHtml(f.q)}</span>
+        <span>${escHtml(f.q)}</span>
         <i class="fas fa-chevron-down"></i>
       </button>
-      <div class="faq-a" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-        <div itemprop="text"><p>${escHtml(f.a)}</p></div>
+      <div class="faq-a">
+        <div><p>${escHtml(f.a)}</p></div>
       </div>
     </div>
   `).join('')
@@ -5639,7 +5639,7 @@ ${NAV_HTML}
   <div class="landing-body">
     ${sectionsHtml}
     ${reviewLineHtml}
-    <div class="landing-faq" itemscope itemtype="https://schema.org/FAQPage">
+    <div class="landing-faq">
       <h2>자주 묻는 질문</h2>
       ${faqHtml}
     </div>
