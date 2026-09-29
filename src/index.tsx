@@ -768,7 +768,7 @@ app.get('/api/doctors/:id', async (c) => {
     const doctor = await db.prepare('SELECT * FROM doctors WHERE id = ? AND is_active = 1').bind(id).first()
     if (!doctor) return c.json({ error: '의료진을 찾을 수 없습니다' }, 404)
     // Get their blog posts & cases
-    const blogs = await db.prepare('SELECT id, title, category, thumbnail_url, created_at FROM blog_posts WHERE doctor_id = ? AND is_published = 1 ORDER BY created_at DESC LIMIT 10').bind(id).all()
+    const blogs = await db.prepare(`SELECT id, title, category, thumbnail_url, created_at FROM blog_posts WHERE doctor_id = ? AND is_published = 1 AND id NOT IN (${BLOG_DUPLICATE_IDS_SQL}) ORDER BY created_at DESC LIMIT 10`).bind(id).all()
     const cases = await db.prepare('SELECT id, title, category, intraoral_before_url, intraoral_after_url, panorama_before_url, panorama_after_url, created_at FROM before_after WHERE doctor_id = ? AND is_published = 1 ORDER BY created_at DESC LIMIT 10').bind(id).all()
     return c.json({ doctor, blogs: blogs.results || [], cases: cases.results || [] })
   } catch (e: any) {
@@ -885,7 +885,7 @@ app.get('/api/blog', async (c) => {
     const doctorId = c.req.query('doctor_id')
     const offset = (page - 1) * limit
 
-    let whereParts = ['b.is_published = 1']
+    let whereParts = ['b.is_published = 1', `b.id NOT IN (${BLOG_DUPLICATE_IDS_SQL})`]
     const binds: any[] = []
 
     if (category) { whereParts.push('b.category = ?'); binds.push(category) }
@@ -896,7 +896,7 @@ app.get('/api/blog', async (c) => {
     const dataSql = `SELECT b.id, b.title, b.content, b.category, b.doctor_id, b.thumbnail_url, b.view_count, b.created_at, d.name as doctor_name, d.photo_url as doctor_photo FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id WHERE ${where} ORDER BY b.created_at DESC LIMIT ? OFFSET ?`
     const countSql = `SELECT COUNT(*) as total FROM blog_posts b WHERE ${where.replace(/d\./g, '').replace(/LEFT JOIN.*?WHERE/, 'WHERE')}`
     // Simpler count
-    let countWhereParts = ['is_published = 1']
+    let countWhereParts = ['is_published = 1', `id NOT IN (${BLOG_DUPLICATE_IDS_SQL})`]
     const countBinds: any[] = []
     if (category) { countWhereParts.push('category = ?'); countBinds.push(category) }
     if (search) { countWhereParts.push('(title LIKE ? OR content LIKE ?)'); countBinds.push(`%${search}%`, `%${search}%`) }
@@ -2296,7 +2296,12 @@ app.get('/sitemap-pages.xml', async (c) => {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`
 
+    // /notice: 공지 본문이 얇으면(noindex, follow) 사이트맵 제외
+    let noticeThin = false
+    try { noticeThin = isThinNoticeList(await loadPublishedNotices(c.env.DB)) } catch { /* DB 오류 시 유지 */ }
+
     for (const p of staticPages) {
+      if (p.loc === '/notice' && noticeThin) continue
       const imgInfo = sitemapImageMap[p.loc]
       xml += `  <url>
     <loc>${SITE}${p.loc}</loc>
@@ -2362,6 +2367,7 @@ app.get('/sitemap-blog.xml', async (c) => {
     // 블로그 개별 포스트 (본문 600자 미만 얇은 글은 사이트맵 제외 + 페이지 noindex)
     for (const post of blogPosts) {
       if (isThinBlogPost(post)) continue
+      if (isDuplicateBlogPost(post.id)) continue // 중복 발행본은 원본으로 301
       const date = (post.updated_at || post.created_at || today).toString().split('T')[0].split(' ')[0]
       const safeTitle = (post.title || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
       xml += `  <url>
@@ -2553,7 +2559,7 @@ app.get('/rss.xml', async (c) => {
     let posts: any[] = []
     try {
       const r = await db.prepare(
-        `SELECT id, title, content, category, thumbnail_url, created_at, updated_at FROM blog_posts WHERE is_published = 1 ORDER BY created_at DESC LIMIT 30`
+        `SELECT id, title, content, category, thumbnail_url, created_at, updated_at FROM blog_posts WHERE is_published = 1 AND id NOT IN (${BLOG_DUPLICATE_IDS_SQL}) ORDER BY created_at DESC LIMIT 30`
       ).all()
       posts = r.results || []
     } catch (e) { /* ignore */ }
@@ -2624,6 +2630,20 @@ function plainTextLength(html: string | null | undefined): number {
 }
 function isThinBlogPost(post: { content?: string | null }): boolean {
   return plainTextLength(post.content) < THIN_BLOG_MIN_CHARS
+}
+
+// ── 같은 주제로 두 번 발행된 블로그 글 (2026-09-29 크롤 실측: 제목 동일·본문 유사도 0.97) ──
+// 나중 글(중복본) → 먼저 발행된 원본으로 301. DB 행은 지우지 않고 목록·사이트맵·RSS에서만 제외.
+const BLOG_DUPLICATE_REDIRECTS: Record<string, number> = {
+  '222': 192, // 신경치료 후 크라운, 왜 빨리 씌워야 하고 미루면 어떻게 되나요?
+  '189': 141, // 임플란트 나사 풀림, 왜 생기고 어떻게 예방하나요?
+  '180': 170, // 잇몸이식 흡연자, 수술 전후 금연이 왜 이렇게 중요한가요?
+  '178': 147, // 임플란트 주위염, 왜 생기고 어떻게 치료하나요?
+  '100': 70,  // 웃을 때 잇몸이 너무 많이 보여요 — 거미스마일 해결 방법
+}
+const BLOG_DUPLICATE_IDS_SQL = Object.keys(BLOG_DUPLICATE_REDIRECTS).map((n) => parseInt(n, 10)).join(',')
+function isDuplicateBlogPost(id: unknown): boolean {
+  return Object.prototype.hasOwnProperty.call(BLOG_DUPLICATE_REDIRECTS, String(id))
 }
 
 function escHtml(str: string): string {
@@ -2729,7 +2749,7 @@ app.get('/blog', async (c) => {
     const size = 20
     const offset = (page - 1) * size
 
-    const countRow: any = await db.prepare(`SELECT COUNT(*) as cnt FROM blog_posts WHERE is_published = 1`).first()
+    const countRow: any = await db.prepare(`SELECT COUNT(*) as cnt FROM blog_posts WHERE is_published = 1 AND id NOT IN (${BLOG_DUPLICATE_IDS_SQL})`).first()
     const total = countRow?.cnt || 0
     const totalPages = Math.ceil(total / size)
 
@@ -2737,7 +2757,7 @@ app.get('/blog', async (c) => {
       `SELECT b.id, b.title, b.content, b.category, b.thumbnail_url, b.created_at,
               d.name as doctor_name, d.photo_url as doctor_photo
        FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id
-       WHERE b.is_published = 1 ORDER BY b.created_at DESC LIMIT ? OFFSET ?`
+       WHERE b.is_published = 1 AND b.id NOT IN (${BLOG_DUPLICATE_IDS_SQL}) ORDER BY b.created_at DESC LIMIT ? OFFSET ?`
     ).bind(size, offset).all()
     const posts = result.results || []
 
@@ -2948,6 +2968,7 @@ ${HEAD_COMMON}
 <meta name="description" content="서울가온치과 치료 전후 사례. 임플란트, 심미치료(라미네이트·올세라믹), 레진빌드업 실제 치료 결과. ${total}건의 사례.">
 <meta name="keywords" content="의정부 치과 비포애프터, 임플란트 전후, 심미치료 전후, 레진빌드업 전후, 서울가온치과 사례">
 <link rel="canonical" href="${SITE}/before-after${cat ? `?category=${encodeURIComponent(cat)}` : ''}${page > 1 ? `${cat ? '&' : '?'}page=${page}` : ''}">
+${cat ? '<meta name="robots" content="noindex, follow">' : ''}
 <meta property="og:title" content="${pageTitle} | 서울가온치과">
 <meta property="og:description" content="서울가온치과 치료 전후 사례 ${total}건">
 <meta property="og:url" content="${SITE}/before-after">
@@ -2978,7 +2999,7 @@ if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open'
 
     return c.html(html, 200, {
       'Cache-Control': 'public, max-age=1800, s-maxage=3600, stale-while-revalidate=43200',
-      'X-Robots-Tag': 'index, follow, max-snippet:-1, max-image-preview:large',
+      'X-Robots-Tag': cat ? 'noindex, follow' : 'index, follow, max-snippet:-1, max-image-preview:large', // 카테고리 변형(?category=)은 전체 목록의 부분집합 → noindex, follow
     })
   } catch (e: any) {
     console.error('[SSR BA List ERROR]', e.message)
@@ -3025,8 +3046,11 @@ function sanitizeArticleContent(html: string): string {
 app.get('/blog/:id', async (c) => {
   try {
     const db = c.env.DB
-    await initDB(db)
     const id = c.req.param('id')
+    // 중복 발행 글 → 원본으로 301
+    const dupTarget = BLOG_DUPLICATE_REDIRECTS[id]
+    if (dupTarget) return c.redirect(`/blog/${dupTarget}`, 301)
+    await initDB(db)
     const post: any = await db.prepare(
       `SELECT b.*, d.name as doctor_name, d.photo_url as doctor_photo, d.title as doctor_title, d.role as doctor_role
        FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id
@@ -5292,7 +5316,7 @@ const LANDING_PAGES: LandingPageData[] = [
   // ── 25. 임플란트 과정 / 시술기간 ──
   {
     slug: 'implant-process',
-    title: '임플란트 과정 및 기간 | 서울가온치과 — 단계별 상세 안내',
+    title: '의정부 임플란트 과정 및 기간 | 서울가온치과 — 단계별 상세 안내',
     metaDesc: '임플란트 과정이 궁금하세요? 서울가온치과 임플란트 시술 단계별 안내. CT 촬영→수술→치유→보철 완성까지 전 과정. 기간 2~6개월. 당일 임시치아 가능. 현진호 대표원장 직접 수술. ☎ 0507-1325-3377',
     h1: '임플란트 과정 — 수술부터 보철 완성까지 단계별 안내',
     heroSub: '처음이라 막막하신가요? 임플란트 전 과정을 알기 쉽게 설명해 드립니다',
@@ -5769,6 +5793,61 @@ app.get('/guide', async (c) => {
     return c.html(html)
   } catch (e) {
     // 실패 시 원본 정적 페이지 그대로 (절대 빈 화면 없음)
+    return c.env.ASSETS.fetch(c.req.raw)
+  }
+})
+
+// 공개 페이지: /notice — 정적 notice.html 에 공지 목록을 서버에서 채워 넣음 (2026-09-29)
+// 예전엔 fetch('/api/notices')로만 그려서 robots.txt 가 /api/ 를 막는 검색엔진에는 빈 목록만 보였다.
+// 공지 본문 합이 300자 미만이면 noindex, follow + 사이트맵 제외 (공지가 쌓이면 자동 복귀).
+const THIN_NOTICE_LIST_MIN_CHARS = 300
+async function loadPublishedNotices(db: D1Database): Promise<any[]> {
+  const rs = await db.prepare('SELECT id, title, content, is_pinned, created_at FROM notices WHERE is_published = 1 ORDER BY is_pinned DESC, created_at DESC LIMIT 50').all()
+  return (rs.results as any[]) || []
+}
+function isThinNoticeList(notices: any[]): boolean {
+  const len = notices.reduce((n, x) => n + plainTextLength(x.title) + plainTextLength(x.content), 0)
+  return len < THIN_NOTICE_LIST_MIN_CHARS
+}
+app.get('/notice', async (c) => {
+  const assetRes = await c.env.ASSETS.fetch(c.req.raw)
+  try {
+    let html = await assetRes.text()
+    const db = c.env.DB
+    const notices = await loadPublishedNotices(db)
+    const imagesBy: Record<string, any[]> = {}
+    if (notices.length) {
+      try {
+        const ids = notices.map((n) => Number(n.id)).filter((n) => Number.isFinite(n)).join(',')
+        const imgs = await db.prepare(`SELECT notice_id, image_url, sort_order FROM notice_images WHERE notice_id IN (${ids}) ORDER BY sort_order`).all()
+        for (const im of ((imgs.results as any[]) || [])) (imagesBy[String(im.notice_id)] ||= []).push(im)
+      } catch { /* 이미지 테이블 스키마 차이 — 본문만 렌더 */ }
+    }
+    const items = notices.length
+      ? notices.map((n) => {
+          const imgs = imagesBy[String(n.id)] || []
+          const badge = `<span class="notice-badge">${n.is_pinned ? '공지' : '새 글'}</span>`
+          const gallery = imgs.length
+            ? '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:1rem">' +
+              imgs.map((im) => `<img src="${escHtml(String(im.image_url || ''))}" alt="${escHtml(String(n.title || ''))} 이미지" loading="lazy" style="width:100%;border-radius:8px;cursor:pointer;aspect-ratio:4/3;object-fit:cover" onclick="openNoticeImg(this.src)">`).join('') +
+              '</div>'
+            : ''
+          const body = escHtml(String(n.content || '')).replace(/\n/g, '<br>')
+          return `<div class="notice-item">
+    <button class="notice-q"${n.is_pinned ? ' data-open' : ''}>
+      <span>${badge}${escHtml(String(n.title || ''))}</span>
+      <span class="plus">+</span>
+    </button>
+    <div class="notice-a"><div class="notice-a-inner">${body}${gallery}</div></div>
+  </div>`
+        }).join('\n')
+      : '<div style="padding:3rem;text-align:center;color:var(--stone,#888)">등록된 공지사항이 없습니다.</div>'
+    html = html.replace(/<div class="notice-list" id="notice-list">[\s\S]*?<\/div>/, `<div class="notice-list" id="notice-list" data-ssr="1">\n${items}\n</div>`)
+    const thin = isThinNoticeList(notices)
+    if (thin) html = html.replace(/<meta name="robots"[^>]*>/i, '').replace('</head>', '<meta name="robots" content="noindex, follow">\n</head>')
+    return c.html(html, 200, thin ? { 'X-Robots-Tag': 'noindex, follow' } : {})
+  } catch (e) {
+    // 실패 시 원본 정적 페이지 그대로 (클라이언트가 /api/notices 로 그림)
     return c.env.ASSETS.fetch(c.req.raw)
   }
 })

@@ -163,6 +163,8 @@ function openNoticeImg(src){
 // Load and render — DB notices only (관리자 페이지에서 관리)
 (async function(){
   const list = document.getElementById('notice-list');
+  // 서버에서 이미 목록을 그렸으면(/notice SSR) 다시 불러오지 않고 아코디언만 연결
+  if(list && list.dataset.ssr){ initAllAccordion(); return; }
   let dbNotices = [];
   
   try {
