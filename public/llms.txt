@@ -338,7 +338,7 @@
 - Treatments: https://seoulgaondc.kr/treatments
 - Philosophy: https://seoulgaondc.kr/philosophy
 - Doctors: https://seoulgaondc.kr/doctors
-- Blog: https://seoulgaondc.kr/blog
+- Blog: https://seoulgaondc.kr/blog (전체 칼럼 목록: https://seoulgaondc.kr/llms-full.txt 하단 '칼럼(블로그)' 절, https://seoulgaondc.kr/sitemap-blog.xml)
 - Before & After: https://seoulgaondc.kr/before-after
 - FAQ: https://seoulgaondc.kr/faq
 - Guide: https://seoulgaondc.kr/guide
