@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { serveStatic } from 'hono/cloudflare-pages'
+import { ENC_ENRICH, ENC_ENRICH_DATE, ENC_ALIASES, ENC_TREAT_LABELS } from './data/enc-enrich'
 
 // ══════════════════════════════════════════════════
 //  TYPE DEFINITIONS
@@ -2298,7 +2299,11 @@ async function sitemapEncyclopediaEntries(db: D1Database): Promise<Array<{ id: n
     ).all()
     rows = r.results || []
   } catch (e) { /* ignore */ }
-  return rows.map((e) => ({ id: e.id, slug: e.slug, lastmod: sitemapYmd(e.updated_at || e.created_at) }))
+  // 동의어(ENC_ALIASES) 는 301 이라 제외, 보강 원고(ENC_ENRICH)가 붙은 용어는 보강일(고정값)과 DB 수정일 중 최신
+  return rows.filter((e) => !ENC_ALIASES[e.slug]).map((e) => ({
+    id: e.id, slug: e.slug,
+    lastmod: ENC_ENRICH[e.slug] ? sitemapMaxYmd([sitemapYmd(e.updated_at || e.created_at), ENC_ENRICH_DATE]) : sitemapYmd(e.updated_at || e.created_at),
+  }))
 }
 
 // 비포&애프터 목록 lastmod = 가장 최근 등록 케이스 created_at (before_after 에는 updated_at 없음)
@@ -2538,13 +2543,13 @@ app.get('/llms-full.txt', async (c) => {
                 related_treatment, updated_at
          FROM encyclopedia WHERE is_published = 1 ORDER BY category, sort_order ASC, term ASC`
       ).all()
-      entries = r.results || []
+      entries = (r.results || []).filter((e: any) => !ENC_ALIASES[e.slug])
     } catch { /* ignore */ }
 
     const SITE = 'https://seoulgaondc.kr'
     const cleanMd = (s: string) => (s || '').replace(/<[^>]*>/g, '').trim()
     // 실제 콘텐츠 최종 수정일(용어 updated_at 최댓값) — 요청 시각(오늘)이 아님
-    const lastUpdated = entries.map((e) => String(e.updated_at || '').slice(0, 10)).filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort().pop() || ''
+    const lastUpdated = entries.map((e) => ENC_ENRICH[e.slug] && ENC_ENRICH_DATE > String(e.updated_at || '').slice(0, 10) ? ENC_ENRICH_DATE : String(e.updated_at || '').slice(0, 10)).filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort().pop() || ''
     let out = `# 서울가온치과 치과 백과사전 — 전체 ${entries.length}개 용어 (Full Dump for LLMs)
 # Seoul Gaon Dental Clinic Encyclopedia — Medically reviewed by SNU-trained dentists
 # Clinic: 경기도 의정부시 용민로 22, 골드자이프라자 4층 | Tel: 0507-1325-3377
@@ -2564,8 +2569,10 @@ app.get('/llms-full.txt', async (c) => {
       out += `- URL: ${url}\n`
       if (e.summary) out += `- 요약: ${cleanMd(e.summary)}\n`
       if (e.related_treatment) out += `- 관련 진료: ${e.related_treatment}\n`
-      const body = cleanMd(e.content).replace(/\n{2,}/g, '\n')
+      const body = cleanMd(encCleanContent(e.slug, e.content)).replace(/\n{2,}/g, '\n')
       if (body) out += `${body}\n`
+      const en = ENC_ENRICH[e.slug]
+      if (en) for (const sec of en.sections) out += `### ${sec.h}\n${sec.p.join('\n')}\n${(sec.li || []).map((x) => '- ' + x).join('\n')}${sec.li && sec.li.length ? '\n' : ''}`
       for (let i = 1; i <= 3; i++) {
         const q = e[`faq_q${i}`], a = e[`faq_a${i}`]
         if (q && a) out += `Q: ${q}\nA: ${a}\n`
@@ -3292,7 +3299,7 @@ app.get('/blog/:id', async (c) => {
     // 블로그 본문 → 백과사전 용어 자동 크로스링크 (최대 12개)
     try {
       const tr = await db.prepare('SELECT id, term, slug FROM encyclopedia WHERE is_published = 1').all()
-      const encTerms = (tr.results || []) as any[]
+      const encTerms = ((tr.results || []) as any[]).filter((t: any) => !ENC_ALIASES[t.slug])
       if (encTerms.length) articleContent = autoCrossLink(articleContent, encTerms, undefined, 12)
     } catch { /* encyclopedia 없어도 블로그는 정상 */ }
 
@@ -3814,6 +3821,16 @@ function encFormatContent(text: string): string {
   return html
 }
 
+// DB 본문 앞에 섞여 들어간 작성 도구 대화문 제거 (2026-10-08 발견: 레진 수복 본문이 "맞습니다! 바로 수정합니다…"로 시작)
+// 원격 DB 는 고치지 않고 렌더 시 지정한 소제목부터 보여 준다.
+const ENC_CONTENT_START: Record<string, string> = { 'composite-resin-restoration': '## 레진 수복이란?' }
+function encCleanContent(slug: string, content: string): string {
+  const marker = ENC_CONTENT_START[slug]
+  if (!marker || !content) return content || ''
+  const i = content.indexOf(marker)
+  return i > 0 ? content.slice(i) : content
+}
+
 const ENC_CAT_ORDER = ['임플란트','보철','보존','교정','예방','구강외과','심미','소아·청소년','진단·검사','잇몸','일반']
 
 // ── 자동 크로스링크 엔진 ──
@@ -3905,12 +3922,13 @@ app.get('/encyclopedia', async (c) => {
     const result = await db.prepare(
       `SELECT id, term, slug, category, summary FROM encyclopedia WHERE is_published = 1 ORDER BY sort_order ASC, term ASC`
     ).all()
-    const entries: any[] = result.results || []
+    const entries: any[] = (result.results || []).filter((e: any) => !ENC_ALIASES[e.slug])
     const total = entries.length
 
-    // 카테고리별 그룹핑
+    // 카테고리별 그룹핑 (동의어 301 대상은 목록에서 제외)
     const byCat: Record<string, any[]> = {}
     for (const e of entries) {
+      if (ENC_ALIASES[e.slug]) continue
       const cat = e.category || '일반'
       if (!byCat[cat]) byCat[cat] = []
       byCat[cat].push(e)
@@ -4051,13 +4069,15 @@ app.get('/encyclopedia/:key', async (c) => {
     const db = c.env.DB
     await initDB(db)
     const key = decodeURIComponent(c.req.param('key'))
+    // 동의어·중복 용어 → 대표 용어로 301 (2026-10-08: 치과 방사선 중복 dental-x-ray → dental-radiography)
+    if (ENC_ALIASES[key]) return c.redirect(`/encyclopedia/${encodeURIComponent(ENC_ALIASES[key])}`, 301)
 
     let entry: any = null
     if (/^\d+$/.test(key)) {
       entry = await db.prepare('SELECT * FROM encyclopedia WHERE id = ? AND is_published = 1').bind(parseInt(key)).first()
       // id 접근인데 클린 slug 보유 → canonical URL로 301 (중복 콘텐츠 방지)
       if (entry && encSlugClean(entry.slug)) {
-        return c.redirect(`/encyclopedia/${encodeURIComponent(entry.slug)}`, 301)
+        return c.redirect(`/encyclopedia/${encodeURIComponent(ENC_ALIASES[entry.slug] || entry.slug)}`, 301)
       }
     }
     if (!entry) {
@@ -4089,14 +4109,17 @@ app.get('/encyclopedia/:key', async (c) => {
     const relResult = await db.prepare(
       'SELECT id, term, slug, summary FROM encyclopedia WHERE category = ? AND id != ? AND is_published = 1 ORDER BY view_count DESC, term ASC LIMIT 6'
     ).bind(entry.category, entry.id).all()
-    const related: any[] = relResult.results || []
+    const related: any[] = (relResult.results || []).filter((r: any) => !ENC_ALIASES[r.slug])
 
     // 전체 용어 (자동 크로스링크용 — 가벼운 3컬럼만)
     let allTerms: any[] = []
     try {
       const tr = await db.prepare('SELECT id, term, slug FROM encyclopedia WHERE is_published = 1').all()
-      allTerms = tr.results || []
+      allTerms = (tr.results || []).filter((t: any) => !ENC_ALIASES[t.slug])
     } catch { /* ignore */ }
+
+    // 보강 원고 (레포 데이터 파일 src/data/enc-enrich.ts — 원격 DB 미수정, 2026-10-08)
+    const enrich = ENC_ENRICH[entry.slug]
 
     // 관련 블로그 글 (제목/내용에 용어 포함 — 콘텐츠 허브 내부링크)
     let relatedBlogs: any[] = []
@@ -4113,12 +4136,19 @@ app.get('/encyclopedia/:key', async (c) => {
       const q = entry[`faq_q${i}`], a = entry[`faq_a${i}`]
       if (q && a) faqs.push({ q, a })
     }
+    if (enrich) {
+      const normQ = (q: string) => q.replace(/[\s?？.!,·'"()]/g, '')
+      const seenQ = new Set(faqs.map((f) => normQ(f.q)))
+      for (const f of enrich.faqs) if (!seenQ.has(normQ(f.q))) { seenQ.add(normQ(f.q)); faqs.push(f) }
+    }
 
     const canonicalPath = encPath(entry)
     const canonicalUrl = `${SITE}${canonicalPath}`
     const pageTitle = entry.seo_title || `${entry.term}이란? 뜻과 치료 정보 | 서울가온치과 치과 백과사전`
     const metaDesc = entry.seo_description || (entry.summary || '').substring(0, 155)
-    const modDate = fmtDate(entry.updated_at || entry.created_at)
+    const dbModDate = fmtDate(entry.updated_at || entry.created_at)
+    // 보강 원고가 붙은 용어는 보강일(고정값)이 최종 수정일 — new Date() 금지
+    const modDate = enrich && (!dbModDate || ENC_ENRICH_DATE > dbModDate) ? ENC_ENRICH_DATE : dbModDate
     const pubDate = fmtDate(entry.created_at)
 
     // JSON-LD: DefinedTerm + MedicalWebPage + FAQPage + BreadcrumbList
@@ -4197,13 +4227,14 @@ app.get('/encyclopedia/:key', async (c) => {
       '크라운': '/crown', '보철': '/crown', '보철치료': '/crown', '미백': '/teeth-whitening', '치아미백': '/teeth-whitening',
       '사랑니': '/wisdom-tooth', '발치': '/wisdom-tooth', '소아치과': '/pediatric-dental', '정기검진': '/dental-checkup'
     }
-    const treatHtml = treatmentLinks.length ? `
+    const treatPairs: Array<{ href: string; label: string }> = treatmentLinks.map((t: string) => ({ href: treatMap[t] || '/treatments', label: t }))
+    if (enrich) for (const href of enrich.treat) {
+      if (!treatPairs.some((p) => p.href === href)) treatPairs.push({ href, label: ENC_TREAT_LABELS[href] || href })
+    }
+    const treatHtml = treatPairs.length ? `
     <aside class="encd-treat">
       <h3>이 용어와 관련된 진료</h3>
-      <div class="encd-treat-tags">${treatmentLinks.map((t: string) => {
-        const href = treatMap[t] || '/treatments'
-        return `<a href="${href}">${escHtml(t)}</a>`
-      }).join('')}</div>
+      <div class="encd-treat-tags">${treatPairs.map((p) => `<a href="${p.href}">${escHtml(p.label)}</a>`).join('')}</div>
     </aside>` : ''
 
     // 관련 블로그 글 섹션 (콘텐츠 허브 — 백과사전 ↔ 블로그 양방향 링크)
@@ -4216,7 +4247,12 @@ app.get('/encyclopedia/:key', async (c) => {
     </section>` : ''
 
     // 본문 자동 크로스링크 (다른 백과사전 용어 → 링크)
-    const bodyHtml = autoCrossLink(encFormatContent(entry.content), allTerms, entry.id)
+    const relSlugs = new Set(related.map((r: any) => r.slug))
+    const enrichRel = enrich ? enrich.rel.filter((sl) => !relSlugs.has(sl)).map((sl) => allTerms.find((t: any) => t.slug === sl)).filter(Boolean) : []
+    const enrichHtml = enrich ? enrich.sections.map((sec) => `<h2>${escHtml(sec.h)}</h2>${sec.p.map((x) => `<p>${escHtml(x)}</p>`).join('')}${sec.li && sec.li.length ? `<ul>${sec.li.map((x) => `<li>${escHtml(x)}</li>`).join('')}</ul>` : ''}`).join('')
+      + (enrichRel.length ? `<p class="encd-seealso">함께 보면 좋은 용어: ${enrichRel.map((t: any) => `<a href="${encPath(t)}">${escHtml(t.term)}</a>`).join(' · ')}</p>` : '')
+      : ''
+    const bodyHtml = autoCrossLink(encFormatContent(encCleanContent(entry.slug, entry.content)) + (enrichHtml ? `<div class="encd-more">${enrichHtml}</div>` : ''), allTerms, entry.id)
 
     const html = `<!DOCTYPE html>
 <html lang="ko">
@@ -4277,6 +4313,9 @@ ${entry.seo_keywords ? `<meta name="keywords" content="${escHtml(entry.seo_keywo
 .encd-cta p{color:var(--stone-l);margin-bottom:1rem;font-size:.92rem}
 .encd-cta a{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.6rem;background:var(--gold);color:#050504;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem}
 .encd-meta{margin-top:1.5rem;font-size:.72rem;color:var(--stone)}
+.encd-more{margin-top:1.6rem;padding-top:.4rem;border-top:1px solid rgba(191,164,106,.12)}
+.encd-seealso{margin-top:1.4rem;font-size:.88rem}
+.encd-seealso a{color:var(--gold);text-decoration:none;border-bottom:1px dotted rgba(191,164,106,.5)}
 .encd-blogs{margin-top:2.5rem}
 .encd-blogs h2{font-size:1.25rem;color:var(--ivory);margin-bottom:1rem}
 .encd-blogs-list{list-style:none;padding:0;margin:0}
@@ -4354,58 +4393,93 @@ interface LandingPageData {
 }
 
 const LANDING_PAGES: LandingPageData[] = [
-  // ── 1. 의정부 치과 (대표 키워드) ──
+  // ── 1. 의정부 치과 (대표 키워드 허브) — 2026-10-08 허브 보강: 위치·진료시간·의료진·진료 링크·FAQ ──
   {
     slug: 'uijeongbu-dental',
-    title: '의정부 치과 추천 | 서울가온치과 — 서울대 출신 의료진, 탑석역 5분',
-    metaDesc: '의정부 치과 찾으시나요? 서울가온치과는 서울대학교 치의학과 출신 의료진이 임플란트·심미치료·신경치료를 직접 진료합니다. 탑석역 1번출구 도보 5분. 과잉진료 없는 정직한 치과. ☎ 0507-1325-3377',
-    h1: '의정부 치과 추천 — 과잉진료가 걱정되어 치과를 못 믿으신다면',
-    heroSub: '서울대학교 출신 의료진이 직접 진료하는 의정부 치과',
-    keywords: '의정부 치과, 의정부 치과 추천, 의정부치과, 의정부 치과의원, 탑석역 치과, 용현동 치과, 의정부 좋은치과, 의정부역 치과, 민락동 치과, 가능동 치과',
+    title: '의정부 치과 | 서울가온치과',
+    metaDesc: '의정부 치과 서울가온치과 안내. 의정부시 용민로 22 골드자이프라자 4층, 탑석역 1번 출구 도보 약 5분. 월·화·수·금 09:30~18:30, 목 20:30까지 야간진료, 토 09:30~14:00. 임플란트·신경치료·앞니 심미·충치·잇몸·사랑니 진료 안내.',
+    h1: '의정부 치과',
+    heroSub: '서울가온치과 · 의정부시 용현동 탑석센트럴자이 정문 앞 · 탑석역 1번 출구 도보 약 5분',
+    keywords: '의정부 치과, 의정부치과, 의정부 치과의원, 탑석역 치과, 용현동 치과, 민락동 치과, 의정부 야간진료 치과, 의정부 토요일 치과',
     category: '종합진료',
     sections: [
       {
-        heading: '왜 의정부에서 서울가온치과를 선택할까요?',
-        content: `<p>서울가온치과는 <strong>서울대학교 치의학과</strong> 출신 의료진이 직접 진료하는 의정부 치과의원입니다. '가온'은 대표원장의 딸 이름으로, <strong>"내 아이에게 하듯 정직하게"</strong>라는 진료 철학을 담고 있습니다.</p>
-<p>의정부시 용민로에 위치하며 <strong>탑석역 1번출구에서 도보 5분</strong> 거리입니다. 임플란트, 심미치료(라미네이트·올세라믹), 신경치료, 레진빌드업, 일반진료까지 원스톱으로 진료합니다.</p>`
+        heading: '의정부 치과 서울가온치과는 어디에 있나요?',
+        content: `<p>서울가온치과는 <strong>경기도 의정부시 용민로 22, 골드자이프라자 4층</strong>(용현동)에 있습니다. 탑석센트럴자이 아파트 정문 바로 앞, 1층에 배스킨라빈스가 있는 건물이라 처음 오시는 분도 건물을 찾기 쉽습니다.</p>
+<ul>
+<li><strong>지하철</strong> — 탑석역 1번 출구에서 걸어서 약 5분</li>
+<li><strong>버스</strong> — 탑석센트럴자이 정류장 하차 (201, 201-1, 72번 등)</li>
+<li><strong>자가용</strong> — 맞은편 제일식자재마트 지하주차장 이용, 진료 후 무료 주차 쿠폰 제공</li>
+</ul>
+<p>용현동·탑석 생활권은 걸어서, 민락동·장암동·신곡동 쪽에서는 버스나 차로 짧게 오실 수 있는 위치입니다. 동네별 길 안내는 <a href="/tapseok-dental">탑석역 치과</a>, <a href="/minrak-dental">민락동 치과</a> 페이지에 따로 정리해 두었습니다. 지도에서 바로 확인하시려면 <a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC" target="_blank" rel="noopener">네이버 지도에서 서울가온치과 보기</a>를 눌러 주세요.</p>`
       },
       {
-        heading: '서울가온치과의 핵심 진료 분야',
+        heading: '진료시간 — 목요일은 밤 8시 30분까지 진료합니다',
+        content: `<table class="hub-hours" style="width:100%;border-collapse:collapse;margin:.5rem 0 1rem;font-size:.92rem">
+<thead><tr><th style="text-align:left;padding:.55rem;border-bottom:1px solid rgba(191,164,106,.35)">요일</th><th style="text-align:left;padding:.55rem;border-bottom:1px solid rgba(191,164,106,.35)">진료시간</th></tr></thead>
+<tbody>
+<tr><td style="padding:.55rem;border-bottom:1px solid rgba(191,164,106,.15)">월 · 화 · 수 · 금</td><td style="padding:.55rem;border-bottom:1px solid rgba(191,164,106,.15)">09:30 ~ 18:30</td></tr>
+<tr><td style="padding:.55rem;border-bottom:1px solid rgba(191,164,106,.15)"><strong>목요일 (야간진료)</strong></td><td style="padding:.55rem;border-bottom:1px solid rgba(191,164,106,.15)"><strong>09:30 ~ 20:30</strong></td></tr>
+<tr><td style="padding:.55rem;border-bottom:1px solid rgba(191,164,106,.15)">토요일</td><td style="padding:.55rem;border-bottom:1px solid rgba(191,164,106,.15)">09:30 ~ 14:00</td></tr>
+<tr><td style="padding:.55rem;border-bottom:1px solid rgba(191,164,106,.15)">점심시간</td><td style="padding:.55rem;border-bottom:1px solid rgba(191,164,106,.15)">12:30 ~ 14:00</td></tr>
+<tr><td style="padding:.55rem">일요일 · 공휴일</td><td style="padding:.55rem">휴진</td></tr>
+</tbody></table>
+<p>평일 낮에 시간을 내기 어려운 직장인·학생은 목요일 저녁 시간을 많이 이용하십니다. 야간이라고 진료 범위가 줄지 않으며 자세한 안내는 <a href="/night-dental">의정부 야간진료 치과</a> 페이지에 있습니다. 휴진·진료시간 변경은 <a href="/notice">공지사항</a>에 먼저 올립니다.</p>`
+      },
+      {
+        heading: '어떤 의료진이 진료하나요?',
+        content: `<p><strong>현진호 대표원장</strong>은 서울대학교 치의학과를 졸업한 통합치의학과 전문의로, 임플란트와 보철(씌우는 치료)을 중점적으로 진료합니다. CT 영상을 바탕으로 식립 위치를 미리 계획하는 가이드 임플란트를 시행합니다.</p>
+<p><strong>조은비 원장</strong>은 서울대학교 치의학대학원 치과보존과 전문의로, 신경치료와 레진 등 자연치아를 살리는 치료를 맡고 있습니다. 미세현미경으로 신경관 내부를 확대해 보며 치료합니다. 두 원장의 경력은 <a href="/doctors">의료진 소개</a>에서 확인하실 수 있습니다.</p>`
+      },
+      {
+        heading: '의정부 치과에서 많이 찾는 진료',
         content: `<ul>
-<li><strong>가이드 임플란트</strong> — CT 기반 정밀 식립, 뼈이식·상악동거상술 가능, 만 65세 이상 건강보험 적용</li>
-<li><strong>앞니 심미치료</strong> — 라미네이트, 올세라믹·지르코니아 크라운, 디지털 쉐이드 매칭</li>
-<li><strong>신경치료</strong> — 서울대 보존과 전문의 조은비 원장 직접 시행, 미세현미경 활용</li>
-<li><strong>레진빌드업</strong> — 크라운 없이 자연치아 최대 보존, 당일 완료 가능</li>
-<li><strong>인비절라인 교정</strong> — 투명 교정장치로 심미적인 치아교정</li>
-<li><strong>일반진료</strong> — 스케일링, 충치치료, 사랑니 발치 등</li>
+<li><a href="/implant"><strong>임플란트</strong></a> — 치아를 잃은 자리의 회복. 뼈가 부족하면 <a href="/bone-graft-implant">뼈이식 임플란트</a>, 만 65세 이상은 <a href="/senior-implant">건강보험 임플란트</a></li>
+<li><a href="/endodontics"><strong>신경치료</strong></a> — 깊은 충치·금 간 치아의 통증 치료와 재신경치료</li>
+<li><a href="/aesthetic"><strong>앞니 심미치료</strong></a> — <a href="/laminate">라미네이트</a>, 지르코니아 <a href="/crown">크라운</a>, <a href="/resin-buildup">레진빌드업</a></li>
+<li><a href="/cavity-treatment"><strong>충치치료</strong></a>와 <a href="/scaling-gum-treatment"><strong>스케일링·잇몸치료</strong></a> — 만 19세 이상 연 1회 스케일링 건강보험 적용</li>
+<li><a href="/wisdom-tooth"><strong>사랑니 발치</strong></a>, <a href="/orthodontics"><strong>치아교정</strong></a>·<a href="/invisalign">인비절라인</a>, <a href="/pediatric-dental"><strong>소아치과</strong></a>, <a href="/dental-checkup"><strong>정기검진</strong></a></li>
 </ul>`
       },
       {
-        heading: '서울가온치과 의료진',
-        content: `<p><strong>현진호 대표원장</strong> — 서울대학교 치의학과 졸업. 임플란트·보철 중점 진료. CT 기반 가이드 수술로 정확성과 안전성을 확보합니다.</p>
-<p><strong>조은비 원장</strong> — 서울대학교 치의학대학원 보존과 전문의. 신경치료·심미수복을 중점적으로 진료하며, 미세현미경으로 정밀한 치료를 시행합니다.</p>`
+        heading: '의정부에서 치과를 고를 때 확인해 볼 것',
+        content: `<p>집이나 직장에서 가까운 곳이 가장 오래 다니기 좋지만, 몇 가지는 미리 확인해 두시면 치료 중에 덜 흔들립니다.</p>
+<ul>
+<li><strong>설명을 사진으로 보여 주는지</strong> — 엑스레이·CT 화면을 같이 보며 왜 이 치료가 필요한지 듣고 나면 결정이 쉬워집니다.</li>
+<li><strong>비용을 미리 공개하는지</strong> — 비급여 진료비를 홈페이지나 서면으로 확인할 수 있으면 상담 뒤에 금액이 바뀌는 걱정이 줄어듭니다.</li>
+<li><strong>진료과목별 담당이 정해져 있는지</strong> — 임플란트·보철과 신경치료처럼 성격이 다른 치료를 누가 맡는지 알아 두면 좋습니다.</li>
+<li><strong>내 생활 시간과 맞는지</strong> — 임플란트나 신경치료는 몇 차례 다시 와야 하므로 저녁·토요일 진료가 가능한지 확인해 보세요.</li>
+</ul>
+<p>서울가온치과는 치료를 서두르기보다 지금 꼭 해야 할 것과 지켜봐도 되는 것을 구분해 말씀드리는 것을 원칙으로 합니다.</p>`
       },
       {
-        heading: '오시는 길 · 진료시간',
-        content: `<p>📍 <strong>경기도 의정부시 용민로 22, 4층</strong> (용현동, 탑석역 1번출구 도보 5분)</p>
-<p>🕐 <strong>진료시간</strong>: 월~금 10:00~19:00 / 토 10:00~15:00 / 일·공휴일 휴진</p>
-<p>☎ <strong>전화예약</strong>: <a href="tel:0507-1325-3377">0507-1325-3377</a></p>
-<p>💬 <strong>카카오톡 상담</strong>: <a href="https://pf.kakao.com/_LLxhwG/chat" target="_blank" rel="noopener">카카오톡으로 상담하기</a></p>`
+        heading: '처음 방문하시면 이렇게 진행됩니다',
+        content: `<ol>
+<li><strong>예약</strong> — 전화(<a href="tel:0507-1325-3377">0507-1325-3377</a>), <a href="https://booking.naver.com/booking/13/bizes/781025" target="_blank" rel="noopener">네이버 예약</a>, <a href="https://pf.kakao.com/_LLxhwG/chat" target="_blank" rel="noopener">카카오톡 상담</a> 중 편한 방법으로 잡으시면 됩니다.</li>
+<li><strong>검사</strong> — 불편한 부위를 듣고 구강 상태를 살핀 뒤, 필요하면 파노라마나 CT를 촬영합니다.</li>
+<li><strong>설명</strong> — 촬영 사진을 함께 보면서 지금 꼭 필요한 치료와 지켜봐도 되는 부분을 나눠 말씀드리고, 치료 계획과 비용은 서면으로 안내합니다.</li>
+<li><strong>치료 결정</strong> — 설명을 듣고 충분히 생각하신 뒤 결정하셔도 됩니다. 비급여 항목 기준 비용은 <a href="/guide">내원 안내</a>의 수가표에 공개해 두었습니다.</li>
+</ol>
+<p>신분증과 건강보험 자격 확인이 필요하고, 드시는 약이 있으면 약 이름을 메모해 오시면 진료 계획을 세우는 데 도움이 됩니다.</p>`
       }
     ],
     faqs: [
-      { q: '의정부 서울가온치과 위치가 어디인가요?', a: '경기도 의정부시 용민로 22, 4층(용현동)에 위치해 있습니다. 탑석역 1번출구에서 도보 5분 거리입니다.' },
-      { q: '진료 예약은 어떻게 하나요?', a: '전화(0507-1325-3377) 또는 카카오톡 채널(서울가온치과)을 통해 예약 가능합니다.' },
-      { q: '주차가 가능한가요?', a: '건물 지하 주차장 이용 가능합니다. 1시간 무료 주차를 제공합니다.' },
-      { q: '의정부 서울가온치과 진료비는 어떻게 되나요?', a: '건강보험 적용 진료는 보험 수가로 진행되며, 비급여 항목은 진료 전 상세히 안내해 드립니다. 수가표는 홈페이지 안내 페이지에서 확인하실 수 있습니다.' },
+      { q: '의정부 서울가온치과 위치가 어디인가요?', a: '경기도 의정부시 용민로 22, 골드자이프라자 4층(용현동)입니다. 탑석센트럴자이 정문 앞 배스킨라빈스 건물이며, 탑석역 1번 출구에서 걸어서 약 5분 걸립니다.' },
+      { q: '차를 가지고 가면 어디에 주차하나요?', a: '맞은편 제일식자재마트 지하주차장을 이용하시면 됩니다. 진료를 받으시면 무료 주차 쿠폰을 드립니다.' },
+      { q: '퇴근 후 저녁에도 진료를 받을 수 있나요?', a: '네. 매주 목요일은 밤 8시 30분(20:30)까지 야간진료를 합니다. 다른 평일은 18:30까지이니, 저녁 내원은 목요일로 예약해 주세요.' },
+      { q: '토요일과 일요일에도 문을 여나요?', a: '토요일은 09:30부터 14:00까지 점심시간 없이 진료합니다. 일요일과 공휴일은 휴진입니다.' },
+      { q: '예약 없이 가도 진료받을 수 있나요?', a: '예약 환자 위주로 진료하므로 미리 전화(0507-1325-3377)나 네이버 예약으로 시간을 잡고 오시면 기다리는 시간이 줄어듭니다. 갑자기 아프신 경우에는 먼저 전화로 상황을 말씀해 주세요.' },
+      { q: '치료비는 언제 알 수 있나요?', a: '검사 후 치료 계획을 설명드리면서 비용을 서면으로 먼저 안내합니다. 건강보험 적용 진료는 보험 기준에 따르고, 비급여 기준 비용은 내원 안내 페이지 수가표에서 미리 보실 수 있습니다.' },
     ],
     ctaText: '의정부 치과 상담 예약하기',
     relatedLinks: [
       { href: '/implant', label: '의정부 임플란트' },
-      { href: '/aesthetic', label: '의정부 심미치료' },
-      { href: '/night-dental', label: '야간진료 안내' },
-      { href: '/dental-checkup', label: '정기검진 안내' },
-      { href: '/pediatric-dental', label: '소아치과 안내' },
+      { href: '/endodontics', label: '의정부 신경치료' },
+      { href: '/aesthetic', label: '의정부 앞니 심미치료' },
+      { href: '/night-dental', label: '목요일 야간진료 안내' },
+      { href: '/tapseok-dental', label: '탑석역 치과' },
+      { href: '/minrak-dental', label: '민락동 치과' },
+      { href: '/guide', label: '오시는 길 · 수가 안내' },
       { href: '/doctors', label: '의료진 소개' },
     ]
   },
@@ -5664,13 +5738,21 @@ const LANDING_PAGES: LandingPageData[] = [
 // 각 랜딩 데이터 블록을 실제로 마지막 수정한 커밋 날짜. dateModified·lastReviewed·화면 감수 줄이 모두 이 값을 쓴다.
 // "오늘 날짜" 자동 생성 금지 — 해당 랜딩 내용을 고친 날에만 갱신한다.
 const LANDING_MODIFIED: Record<string, string> = {
-  'uijeongbu-dental': '2026-09-03', 'endodontics': '2026-06-09', 'invisalign': '2026-07-26', 'orthodontics': '2026-07-26',
+  'uijeongbu-dental': '2026-10-08', 'endodontics': '2026-06-09', 'invisalign': '2026-07-26', 'orthodontics': '2026-07-26',
   'cavity-treatment': '2026-05-26', 'implant-best': '2026-09-03', 'full-mouth-implant': '2026-09-03', 'front-tooth-implant': '2026-06-09',
   'bone-graft-implant': '2026-06-09', 'laminate': '2026-07-26', 'wisdom-tooth': '2026-05-26', 'scaling-gum-treatment': '2026-05-26',
   'denture-to-implant': '2026-05-26', 'implant-cost': '2026-05-26', 'night-dental': '2026-05-26', 'senior-implant': '2026-05-26',
   'emergency-dental': '2026-05-26', 'tapseok-dental': '2026-09-03', 'painless-dental': '2026-05-26', 'pediatric-dental': '2026-05-26',
   'crown': '2026-06-09', 'teeth-whitening': '2026-07-26', 'dental-checkup': '2026-05-26', 'implant-process': '2026-09-29',
   'minrak-dental': '2026-09-03',
+}
+// 대표 지역 키워드 허브 → MedicalWebPage.about = 병원(@id) + areaServed (2026-10-08 "의정부 치과" 허브)
+const LANDING_HUB_AREAS: Record<string, any[]> = {
+  'uijeongbu-dental': [
+    { "@type": "City", "name": "의정부시", "containedInPlace": { "@type": "State", "name": "경기도" } },
+    { "@type": "Place", "name": "의정부시 용현동" },
+    { "@type": "Place", "name": "탑석역" },
+  ],
 }
 // 진료(시술) 랜딩 → MedicalProcedure 이름. 여기 있는 페이지는 MedicalWebPage.about=MedicalProcedure + 대표원장 감수 줄을 단다.
 const LANDING_PROCEDURES: Record<string, string> = {
@@ -5697,7 +5779,8 @@ function renderLandingPage(page: LandingPageData): string {
     "url": canonicalUrl,
     "inLanguage": "ko",
     "isPartOf": WEBSITE_REF,
-    "about": procName ? { "@id": procedureId } : { "@type": "MedicalSpecialty", "name": page.category },
+    "about": procName ? { "@id": procedureId } : (LANDING_HUB_AREAS[page.slug] ? CLINIC_REF : { "@type": "MedicalSpecialty", "name": page.category }),
+    ...(LANDING_HUB_AREAS[page.slug] ? { "areaServed": LANDING_HUB_AREAS[page.slug], "mainEntity": CLINIC_REF, "lastReviewed": modified } : {}),
     ...(modified ? { "dateModified": modified } : {}),
     "publisher": CLINIC_REF,
     "speakable": {
