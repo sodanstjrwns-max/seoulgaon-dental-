@@ -2582,11 +2582,12 @@ app.get('/llms-full.txt', async (c) => {
 
     // 원장 칼럼(블로그) 목록 — 색인 대상 글만(얇은 글·중복본 제외), 제목·카테고리·URL (2026-10-03)
     try {
-      const br = await db.prepare(`SELECT id, title, category, content, created_at, updated_at FROM blog_posts WHERE is_published = 1 AND id NOT IN (${BLOG_DUPLICATE_IDS_SQL}) ORDER BY created_at DESC`).all()
+      const br = await db.prepare(`SELECT b.id, b.title, b.category, b.content, b.created_at, b.updated_at, b.doctor_id, d.name as doctor_name FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id WHERE b.is_published = 1 AND b.id NOT IN (${BLOG_DUPLICATE_IDS_SQL}) ORDER BY b.created_at DESC`).all()
       const posts = ((br.results || []) as any[]).filter((p) => !isThinBlogPost(p))
       if (posts.length) {
-        out += `\n# ═══ 칼럼(블로그) ${posts.length}편 — 의료진 작성·감수 ═══\n\n`
-        for (const p of posts) out += `- [${p.title}](${SITE}/blog/${p.id})${p.category ? ` · ${p.category}` : ''} · ${String(p.updated_at || p.created_at || '').slice(0, 10)}\n`
+        // 작성 주체 = 상세 페이지와 같은 판별(isDoctorAttestedPost): 병원이 원장을 지정한 글만 원장, 나머지 병원 발행
+        out += `\n# ═══ 칼럼(블로그) ${posts.length}편 — 글마다 작성 주체 표시(원장 작성 글 / 서울가온치과 발행 일반 건강정보) ═══\n\n`
+        for (const p of posts) out += `- [${p.title}](${SITE}/blog/${p.id})${p.category ? ` · ${p.category}` : ''} · ${isDoctorAttestedPost(p) && p.doctor_name ? `작성: ${p.doctor_name} 원장` : '서울가온치과 발행(일반 건강정보)'} · ${String(p.updated_at || p.created_at || '').slice(0, 10)}\n`
       }
     } catch { /* 블로그 없어도 백과는 정상 */ }
 
@@ -2612,7 +2613,7 @@ app.get('/rss.xml', async (c) => {
     let posts: any[] = []
     try {
       const r = await db.prepare(
-        `SELECT id, title, content, category, thumbnail_url, created_at, updated_at FROM blog_posts WHERE is_published = 1 AND id NOT IN (${BLOG_DUPLICATE_IDS_SQL}) ORDER BY created_at DESC LIMIT 30`
+        `SELECT b.id, b.title, b.content, b.category, b.thumbnail_url, b.created_at, b.updated_at, b.doctor_id, d.name as doctor_name FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id WHERE b.is_published = 1 AND b.id NOT IN (${BLOG_DUPLICATE_IDS_SQL}) ORDER BY b.created_at DESC LIMIT 30`
       ).all()
       posts = r.results || []
     } catch (e) { /* ignore */ }
@@ -2625,6 +2626,7 @@ app.get('/rss.xml', async (c) => {
       <link>${SITE}/blog/${p.id}</link>
       <guid isPermaLink="true">${SITE}/blog/${p.id}</guid>
       ${pub ? `<pubDate>${pub}</pubDate>` : ''}
+      <dc:creator>${xmlEsc(postBylineName(p))}</dc:creator>
       ${p.category ? `<category>${xmlEsc(p.category)}</category>` : ''}
       <description>${xmlEsc(desc)}</description>
     </item>`
@@ -2633,7 +2635,7 @@ app.get('/rss.xml', async (c) => {
     const lastBuild = posts.length ? new Date(posts[0].created_at).toUTCString() : ''  // 글 없으면 lastBuildDate 생략 (오늘 금지)
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>서울가온치과 블로그</title>
     <link>${SITE}/blog</link>
@@ -2730,6 +2732,22 @@ function seoTxFor(category: string | null | undefined, title: string | null | un
 }
 // DB doctors.id → 의료진 페이지 Physician @id (doctors.html 과 같은 값). 없으면 대표원장
 const SEO_DOCTOR_IDS: Record<string, string> = { '1': 'hyun-jinho', '2': 'jo-eunbi' }
+// ===== 칼럼 작성 주체 (2026-10-08, 사용자 승인) =====
+// 원장을 작성·감수자로 표시하는 근거 = 병원이 관리자 에디터에서 담당 원장(doctor_id)을 지정해 올린 글뿐.
+//  - id 1~10: 대행사(GenSpark) 초기 셋업일 2026-04-09 06:30:43~06:54:03 에 5편씩 같은 초에 일괄 삽입된 예시 글
+//    (doctor_id 없음, 같은 날 대행사 커밋 edc59e3·685f18d 운영 매뉴얼의 예시 제목과 일치) → 원장 작성·검토 근거 없음
+//  - doctor_id 가 비어 있는 글: 예전엔 코드 기본값으로 '현진호 대표원장 작성·감수'·reviewedBy 가 붙었음 → 근거 없음
+// → 작성·발행 = 병원(CLINIC_ID), reviewedBy·lastReviewed·감수 표시 없음, 화면엔 일반 건강정보 안내.
+const AGENCY_SEED_POST_IDS = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+const CLINIC_GENERAL_INFO_NOTE = '일반 건강정보입니다. 진료 판단은 내원 상담에서 원장이 직접 합니다.'
+/** 병원이 담당 원장을 지정해 올린 글이면 true (대행사 시드·원장 미지정 글은 false = 병원 발행) */
+function isDoctorAttestedPost(p: { id?: unknown; doctor_id?: unknown }): boolean {
+  return !!p && !AGENCY_SEED_POST_IDS.has(Number(p.id)) && p.doctor_id != null && String(p.doctor_id) !== '' && String(p.doctor_id) !== '0'
+}
+/** 목록·RSS·llms 표시용 작성 주체 */
+function postBylineName(p: { id?: unknown; doctor_id?: unknown; doctor_name?: unknown }): string {
+  return isDoctorAttestedPost(p) && p.doctor_name ? String(p.doctor_name) : '서울가온치과'
+}
 function seoDoctorId(doctorId: unknown): string {
   return `${SITE}/doctors#${SEO_DOCTOR_IDS[String(doctorId)] || 'hyun-jinho'}`
 }
@@ -2933,7 +2951,7 @@ app.get('/blog', async (c) => {
     const offset = (page - 1) * size
 
     const result = await db.prepare(
-      `SELECT b.id, b.title, b.content, b.category, b.thumbnail_url, b.created_at,
+      `SELECT b.id, b.title, b.content, b.category, b.thumbnail_url, b.created_at, b.doctor_id,
               d.name as doctor_name, d.photo_url as doctor_photo
        FROM blog_posts b LEFT JOIN doctors d ON b.doctor_id = d.id
        WHERE b.is_published = 1 AND b.id NOT IN (${BLOG_DUPLICATE_IDS_SQL})${cat ? ' AND b.category = ?' : ''} ORDER BY b.created_at DESC LIMIT ? OFFSET ?`
@@ -2953,7 +2971,7 @@ app.get('/blog', async (c) => {
             <h2 style="font-size:1rem;margin:.4rem 0;color:var(--ivory)">${escHtml(p.title)}</h2>
             <p style="font-size:.85rem;color:var(--stone-l);margin:0">${escHtml(desc)}…</p>
             <div style="display:flex;align-items:center;gap:.5rem;margin-top:.6rem;font-size:.75rem;color:var(--stone)">
-              ${p.doctor_name ? `<span><i class="fas fa-user-md"></i> ${escHtml(p.doctor_name)}</span>` : ''}
+              ${isDoctorAttestedPost(p) && p.doctor_name ? `<span><i class="fas fa-user-md"></i> ${escHtml(p.doctor_name)}</span>` : '<span>서울가온치과 발행</span>'}
               <span>${fmtDate(p.created_at)}</span>
             </div>
           </div>
@@ -3269,14 +3287,16 @@ app.get('/blog/:id', async (c) => {
     const ogImage = post.thumbnail_url ? (/^https?:\/\//.test(post.thumbnail_url) ? post.thumbnail_url : `${SITE}${post.thumbnail_url.startsWith('/') ? '' : '/'}${post.thumbnail_url}`) : `${SITE}/images/og-blog.jpg`
     const publishDate = fmtDate(post.created_at)
     const modifiedDate = fmtDate(post.updated_at || post.created_at)
-    const authorName = post.doctor_name || '서울가온치과'
+    // 작성 주체: 병원이 원장을 지정한 글만 원장, 대행사 시드·원장 미지정 글은 병원 발행 (isDoctorAttestedPost)
+    const attested = isDoctorAttestedPost(post)
+    const authorName = attested && post.doctor_name ? post.doctor_name : '서울가온치과'
     const authorTitle = post.doctor_title || '원장'
     const catLabel: Record<string, string> = {'임플란트':'Implant','심미치료':'Aesthetic','신경치료':'Endodontics','치과상식':'Info','일반':'Info'}
     const tag = catLabel[post.category] || post.category || 'Info'
 
     // 의료진 배지
     let drHtml = ''
-    if (post.doctor_name) {
+    if (attested && post.doctor_name) {
       drHtml = `<a class="bp-doctor" href="/doctors?id=${post.doctor_id}">
         ${post.doctor_photo ? `<img src="${escHtml(post.doctor_photo)}" alt="${escHtml(post.doctor_name)}" width="28" height="28">` : '<i class="fas fa-user-md"></i>'}
         ${escHtml(post.doctor_name)}${post.doctor_title ? ' · ' + escHtml(post.doctor_title) : ''}
@@ -3324,9 +3344,18 @@ app.get('/blog/:id', async (c) => {
         relatedCases = rc.results || []
       }
     } catch { /* 관련 링크 없어도 본문은 정상 */ }
-    const drRow: any = post.doctor_id ? { name: post.doctor_name, title: post.doctor_title, role: post.doctor_role, specialties: post.doctor_specialties, education: post.doctor_education } : null
+    const drRow: any = attested ? { name: post.doctor_name, title: post.doctor_title, role: post.doctor_role, specialties: post.doctor_specialties, education: post.doctor_education } : null
     const reviewed = fmtDate(post.updated_at || post.created_at)
-    const authorBoxHtml = `<aside class="sg-author" aria-label="작성·감수">
+    const authorBoxHtml = !attested ? `<aside class="sg-author" aria-label="발행 정보">
+    <div class="sg-author-ico"><i class="fas fa-tooth"></i></div>
+    <div>
+      <p class="sg-role">발행</p>
+      <p class="sg-name">서울가온치과</p>
+      <p>${CLINIC_GENERAL_INFO_NOTE}</p>
+      ${reviewed ? `<p>최종 업데이트 <time datetime="${reviewed}">${reviewed}</time></p>` : ''}
+      <p class="sg-note">※ 진단과 치료 결과는 개인의 구강 상태에 따라 다를 수 있습니다.</p>
+    </div>
+  </aside>` : `<aside class="sg-author" aria-label="작성·감수">
     <div class="sg-author-ico"><i class="fas fa-user-md"></i></div>
     <div>
       <p class="sg-role">작성·감수</p>
@@ -3356,8 +3385,7 @@ app.get('/blog/:id', async (c) => {
           "breadcrumb": { "@id": `${canonicalUrl}#breadcrumb` },
           "mainEntity": { "@id": `${canonicalUrl}#article` },
           ...(txs.length ? { "about": txs.map((t) => ({ "@id": `${SITE}${t.path}#procedure` })) } : {}),
-          "reviewedBy": { "@id": reviewerId },
-          ...(reviewed ? { "lastReviewed": reviewed } : {}),
+          ...(attested ? { "reviewedBy": { "@id": reviewerId }, ...(reviewed ? { "lastReviewed": reviewed } : {}) } : {}),
           "speakable": { "@type": "SpeakableSpecification", "cssSelector": answerText ? ["h1", ".sg-answer"] : ["h1"] },
           "publisher": { "@id": CLINIC_ID }
         },
@@ -3370,7 +3398,7 @@ app.get('/blog/:id', async (c) => {
           "image": { "@type": "ImageObject", "url": ogImage },
           ...(publishDate ? { "datePublished": publishDate } : {}),
           ...(modifiedDate ? { "dateModified": modifiedDate } : {}),
-          "author": post.doctor_id ? { "@id": authorId } : { "@id": CLINIC_ID },
+          "author": attested ? { "@id": authorId } : { "@id": CLINIC_ID },
           "publisher": { "@id": CLINIC_ID },
           "mainEntityOfPage": { "@id": `${canonicalUrl}#webpage` },
           "isPartOf": { "@id": WEBSITE_ID },
