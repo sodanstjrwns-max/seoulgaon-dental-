@@ -2890,6 +2890,24 @@ const FOOTER_HTML = `<footer role="contentinfo">
   </div>
   <p class="ft-copy">© 2022–2026 서울가온치과의원. All rights reserved.</p>
 </footer>`
+// "의정부 치과" 허브(/uijeongbu-dental) 링크를 넣은 전역 푸터 (2026-10-08) — 허브 자신은 FOOTER_HTML(링크 없음)을 쓴다
+const HUB_PATH = '/uijeongbu-dental'
+const HUB_ANCHOR = '의정부 치과'
+const FOOTER_HUB_LINE = `<p class="ft-local" style="font-size:.78rem;color:var(--stone);margin:.2rem 0 .6rem"><a href="${HUB_PATH}" style="color:var(--stone-l);text-decoration:underline;text-underline-offset:3px">${HUB_ANCHOR}</a> · 경기도 의정부시 용민로 22, 골드자이프라자 4층</p>`
+const FOOTER_WITH_HUB = FOOTER_HTML.replace('<p class="ft-copy">', FOOTER_HUB_LINE + '\n  <p class="ft-copy">')
+function hubBlogNote(key: string, topic?: string | null): string {
+  let h = 0
+  for (const ch of String(key)) h = (h * 31 + ch.charCodeAt(0)) >>> 0
+  const a = `<a href="${HUB_PATH}">${HUB_ANCHOR}</a>`
+  const t = topic ? escHtml(topic) : ''
+  const forms = [
+    `서울가온치과는 ${a}를 찾는 용현동·민락동·탑석역 주변 주민분들께 ${t ? `${t} 진료와 ` : ''}내원 방법을 안내하고 있습니다.`,
+    `의정부에서 ${t ? `${t} ` : '치과 '}상담할 곳을 찾고 계신다면 ${a} 안내에서 위치·진료시간·의료진을 한 번에 확인하실 수 있습니다.`,
+    `용민로 22 골드자이프라자 4층에 있는 서울가온치과의 진료시간·주차·찾아오는 길은 ${a} 페이지에 정리해 두었습니다.`,
+    `이 글의 내용을 직접 상담받고 싶은 의정부 주민분은 ${a} 안내에서 진료 일정과 오시는 길을 먼저 확인해 보세요.`,
+  ]
+  return `<p class="sg-hub-note" style="margin:0 0 1.6rem;padding:1rem 1.2rem;border:1px solid rgba(191,164,106,.15);border-radius:12px;background:rgba(191,164,106,.04);font-size:.9rem;color:var(--stone-l,#AFA79D);line-height:1.8">${forms[h % forms.length]}</p>`
+}
 
 // 공통 카카오 플로팅 + JS
 const KAKAO_FLOAT = `<div id="kakao-float" onclick="window.open('https://pf.kakao.com/_LLxhwG/chat','_blank')" title="카카오톡 상담">
@@ -3040,7 +3058,7 @@ ${NAV_HTML}
   </div>
   ${pagination}
 </main>
-${FOOTER_HTML}
+${FOOTER_WITH_HUB}
 ${KAKAO_FLOAT}
 <script src="/pages.js"></script>
 <script>
@@ -3189,7 +3207,7 @@ ${NAV_HTML}
   </div>
   ${pagination}
 </main>
-${FOOTER_HTML}
+${FOOTER_WITH_HUB}
 ${KAKAO_FLOAT}
 <script src="/pages.js"></script>
 <script>
@@ -3261,7 +3279,7 @@ app.get('/blog/:id', async (c) => {
     ).bind(id).first()
 
     if (!post) {
-      return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>게시글을 찾을 수 없습니다 | 서울가온치과</title>${HEAD_COMMON}</head><body>${NAV_HTML}<main style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:72px"><div><h1 style="color:var(--gold);font-size:2rem;margin-bottom:1rem">404</h1><p style="color:var(--stone-l);margin-bottom:2rem">게시글을 찾을 수 없습니다.</p><a href="/blog" style="color:var(--gold);text-decoration:underline">블로그 목록으로 →</a></div></main>${FOOTER_HTML}${KAKAO_FLOAT}<script src="/pages.js"></script></body></html>`, 404)
+      return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>게시글을 찾을 수 없습니다 | 서울가온치과</title>${HEAD_COMMON}</head><body>${NAV_HTML}<main style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:72px"><div><h1 style="color:var(--gold);font-size:2rem;margin-bottom:1rem">404</h1><p style="color:var(--stone-l);margin-bottom:2rem">게시글을 찾을 수 없습니다.</p><a href="/blog" style="color:var(--gold);text-decoration:underline">블로그 목록으로 →</a></div></main>${FOOTER_WITH_HUB}${KAKAO_FLOAT}<script src="/pages.js"></script></body></html>`, 404)
     }
 
     // 조회수 증가
@@ -3532,6 +3550,7 @@ ${NAV_HTML}
   <div class="bp-divider"></div>
   ${answerText ? `<div class="sg-answer" id="blog-answer"><p class="sg-answer-label">핵심 답변</p>${escHtml(answerText)}</div>` : ''}
   <article class="bp-content" itemprop="articleBody">${articleContent}</article>
+  ${hubBlogNote(String(post.slug || post.id || ''), txs[0]?.name)}
   ${authorBoxHtml}
   ${relatedHtml}
   <div class="bp-bottom">
@@ -3540,7 +3559,7 @@ ${NAV_HTML}
   </div>
 </div>
 </main>
-${FOOTER_HTML}
+${FOOTER_WITH_HUB}
 <div class="lb" id="lb" onclick="this.classList.remove('show')"><img id="lb-img" src="" alt=""></div>
 ${KAKAO_FLOAT}
 <script src="/pages.js"></script>
@@ -3582,7 +3601,7 @@ app.get('/before-after/:id', async (c) => {
     ).bind(id).first()
 
     if (!item) {
-      return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>케이스를 찾을 수 없습니다 | 서울가온치과</title>${HEAD_COMMON}</head><body>${NAV_HTML}<main style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:72px"><div><h1 style="color:var(--gold);font-size:2rem;margin-bottom:1rem">404</h1><p style="color:var(--stone-l);margin-bottom:2rem">케이스를 찾을 수 없습니다.</p><a href="/before-after" style="color:var(--gold);text-decoration:underline">비포 애프터 목록으로 →</a></div></main>${FOOTER_HTML}${KAKAO_FLOAT}<script src="/pages.js"></script></body></html>`, 404)
+      return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>케이스를 찾을 수 없습니다 | 서울가온치과</title>${HEAD_COMMON}</head><body>${NAV_HTML}<main style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:72px"><div><h1 style="color:var(--gold);font-size:2rem;margin-bottom:1rem">404</h1><p style="color:var(--stone-l);margin-bottom:2rem">케이스를 찾을 수 없습니다.</p><a href="/before-after" style="color:var(--gold);text-decoration:underline">비포 애프터 목록으로 →</a></div></main>${FOOTER_WITH_HUB}${KAKAO_FLOAT}<script src="/pages.js"></script></body></html>`, 404)
     }
 
     // 조회수 증가
@@ -3787,7 +3806,7 @@ ${NAV_HTML}
   </div>
 </div>
 </main>
-${FOOTER_HTML}
+${FOOTER_WITH_HUB}
 <div class="lb" id="lb" onclick="this.classList.remove('show')"><img id="lb-img" src="" alt=""></div>
 ${KAKAO_FLOAT}
 <script src="/pages.js"></script>
@@ -4068,7 +4087,7 @@ ${NAV_HTML}
     ${sectionsHtml}
   </div>
 </main>
-${FOOTER_HTML}
+${FOOTER_WITH_HUB}
 ${KAKAO_FLOAT}
 <script src="/pages.js"></script>
 <script>
@@ -4125,7 +4144,7 @@ app.get('/encyclopedia/:key', async (c) => {
     }
 
     if (!entry) {
-      return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>용어를 찾을 수 없습니다 | 서울가온치과</title>${HEAD_COMMON}</head><body>${NAV_HTML}<main style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:72px"><div><h1 style="color:var(--gold);font-size:2rem;margin-bottom:1rem">404</h1><p style="color:var(--stone-l);margin-bottom:2rem">해당 용어를 찾을 수 없습니다.</p><a href="/encyclopedia" style="color:var(--gold);text-decoration:underline">백과사전 목록으로 →</a></div></main>${FOOTER_HTML}${KAKAO_FLOAT}<script src="/pages.js"></script></body></html>`, 404)
+      return c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><title>용어를 찾을 수 없습니다 | 서울가온치과</title>${HEAD_COMMON}</head><body>${NAV_HTML}<main style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:72px"><div><h1 style="color:var(--gold);font-size:2rem;margin-bottom:1rem">404</h1><p style="color:var(--stone-l);margin-bottom:2rem">해당 용어를 찾을 수 없습니다.</p><a href="/encyclopedia" style="color:var(--gold);text-decoration:underline">백과사전 목록으로 →</a></div></main>${FOOTER_WITH_HUB}${KAKAO_FLOAT}<script src="/pages.js"></script></body></html>`, 404)
     }
 
     // 조회수 증가 (fire-and-forget)
@@ -4365,6 +4384,7 @@ ${NAV_HTML}
     ${treatHtml}
     ${blogsHtml}
     ${relatedHtml}
+    <p class="encd-seealso">서울가온치과 위치·진료시간 안내: <a href="${HUB_PATH}">${HUB_ANCHOR}</a></p>
     <div class="encd-cta">
       <p><strong style="color:var(--ivory)">${escHtml(entry.term)}</strong>에 대해 더 궁금하신가요? 서울대 출신 의료진이 직접 상담해 드립니다.</p>
       <a href="tel:0507-1325-3377"><i class="fas fa-phone"></i> 전화 상담: 0507-1325-3377</a>
@@ -4373,7 +4393,7 @@ ${NAV_HTML}
     <p class="encd-meta">일반 건강정보입니다. 진료 판단은 내원 상담에서 원장이 직접 합니다. · 최종 수정일: ${modDate} · <a href="/encyclopedia" style="color:var(--gold)">전체 용어 보기 →</a></p>
   </article>
 </main>
-${FOOTER_HTML}
+${FOOTER_WITH_HUB}
 ${KAKAO_FLOAT}
 <script src="/pages.js"></script>
 <script>
@@ -5871,7 +5891,11 @@ function renderLandingPage(page: LandingPageData): string {
   `).join('')
 
   // 내부 링크 섹션
-  const linksHtml = page.relatedLinks.map(l =>
+  // 허브 링크(2026-10-08): 허브가 아닌 랜딩은 '관련 진료 안내'에 "의정부 치과" 1개(앵커 정확 일치) — 푸터와 합쳐 최대 2개
+  const relLinks = page.slug === 'uijeongbu-dental'
+    ? page.relatedLinks.filter(l => l.href !== HUB_PATH)
+    : [{ href: HUB_PATH, label: HUB_ANCHOR }, ...page.relatedLinks.filter(l => l.href !== HUB_PATH)]
+  const linksHtml = relLinks.map(l =>
     `<a href="${l.href}" class="related-link"><i class="fas fa-chevron-right"></i> ${escHtml(l.label)}</a>`
   ).join('')
 
@@ -6014,7 +6038,7 @@ ${NAV_HTML}
     </div>
   </div>
 </main>
-${FOOTER_HTML}
+${page.slug === 'uijeongbu-dental' ? FOOTER_HTML : FOOTER_WITH_HUB}
 ${KAKAO_FLOAT}
 <script src="/pages.js"></script>
 <script>
