@@ -2551,7 +2551,7 @@ app.get('/llms-full.txt', async (c) => {
     // 실제 콘텐츠 최종 수정일(용어 updated_at 최댓값) — 요청 시각(오늘)이 아님
     const lastUpdated = entries.map((e) => ENC_ENRICH[e.slug] && ENC_ENRICH_DATE > String(e.updated_at || '').slice(0, 10) ? ENC_ENRICH_DATE : String(e.updated_at || '').slice(0, 10)).filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort().pop() || ''
     let out = `# 서울가온치과 치과 백과사전 — 전체 ${entries.length}개 용어 (Full Dump for LLMs)
-# Seoul Gaon Dental Clinic Encyclopedia — Medically reviewed by SNU-trained dentists
+# Seoul Gaon Dental Clinic Encyclopedia — General dental health information (not individually reviewed by a dentist; diagnosis and treatment decisions are made by the dentist at an in-person consultation)
 # Clinic: 경기도 의정부시 용민로 22, 골드자이프라자 4층 | Tel: 0507-1325-3377
 # Index: ${SITE}/encyclopedia | 각 용어 페이지 주소는 아래 항목별 'URL:' 줄에 있습니다.
 # License: Citation with link to source page is appreciated.
@@ -3958,7 +3958,7 @@ app.get('/encyclopedia', async (c) => {
         {
           "@type": "CollectionPage",
           "name": "치과 백과사전 — 서울가온치과",
-          "description": `치과 용어 ${total}개를 서울대 출신 의료진이 쉽게 풀어 설명하는 치과 백과사전. 임플란트, 보철, 신경치료, 교정, 잇몸 등 카테고리별 정리.`,
+          "description": `치과 용어 ${total}개를 쉬운 말로 풀어 정리한 치과 백과사전(일반 건강정보). 임플란트, 보철, 신경치료, 교정, 잇몸 등 카테고리별 정리.`,
           "url": `${SITE}/encyclopedia`,
           "isPartOf": WEBSITE_REF,
           "numberOfItems": total,
@@ -3991,11 +3991,11 @@ app.get('/encyclopedia', async (c) => {
 <head>
 ${HEAD_COMMON}
 <title>치과 백과사전 — ${total}개 치과 용어 총정리 | 서울가온치과</title>
-<meta name="description" content="임플란트, 보철, 신경치료, 교정, 잇몸질환 등 치과 용어 ${total}개를 서울대 출신 의료진이 쉽게 설명합니다. 의정부 서울가온치과 치과 백과사전.">
+<meta name="description" content="임플란트, 보철, 신경치료, 교정, 잇몸질환 등 치과 용어 ${total}개를 쉬운 말로 정리했습니다. 의정부 서울가온치과 치과 백과사전.">
 <meta name="keywords" content="치과 용어, 치과 백과사전, 임플란트 용어, 치과 상식, 치과 용어 정리, 의정부 치과">
 <link rel="canonical" href="${SITE}/encyclopedia">
 <meta property="og:title" content="치과 백과사전 — ${total}개 치과 용어 총정리 | 서울가온치과">
-<meta property="og:description" content="치과 용어 ${total}개를 서울대 출신 의료진이 쉽게 설명합니다.">
+<meta property="og:description" content="치과 용어 ${total}개를 쉬운 말로 정리한 치과 백과사전입니다.">
 <meta property="og:url" content="${SITE}/encyclopedia">
 <meta property="og:type" content="website">
 <meta property="og:image" content="${SITE}/images/og-main.jpg">
@@ -4029,7 +4029,7 @@ ${NAV_HTML}
 <main id="main-content" role="main">
   <div class="enc-hero">
     <h1><i class="fas fa-book-medical" style="color:var(--gold);margin-right:.5rem"></i>치과 백과사전</h1>
-    <p>치과 용어 <strong style="color:var(--gold)">${total}개</strong>를 서울대 출신 의료진이 쉽고 정확하게 설명합니다.</p>
+    <p>치과 용어 <strong style="color:var(--gold)">${total}개</strong>를 쉬운 말로 정리했습니다. 일반 건강정보이며, 진료 판단은 내원 상담에서 원장이 직접 합니다.</p>
     <div class="enc-search-wrap">
       <i class="fas fa-search"></i>
       <input type="search" id="enc-search" placeholder="용어 검색 (예: 임플란트, 신경치료, 골이식)" aria-label="치과 용어 검색">
@@ -4174,9 +4174,7 @@ app.get('/encyclopedia/:key', async (c) => {
         "mainEntity": { "@id": `${canonicalUrl}#term` },
         "speakable": { "@type": "SpeakableSpecification", "cssSelector": ["h1", ".enc-summary"] },
         "publisher": CLINIC_REF,
-        "isPartOf": WEBSITE_REF,
-        "reviewedBy": DOCTOR_HYUN_REF,
-        "lastReviewed": modDate || undefined
+        "isPartOf": WEBSITE_REF
       },
       {
         "@type": "BreadcrumbList",
@@ -4344,7 +4342,7 @@ ${NAV_HTML}
       <a href="tel:0507-1325-3377"><i class="fas fa-phone"></i> 전화 상담: 0507-1325-3377</a>
     </div>
     <p class="encd-local">의정부 ${escHtml(entry.term)} · 탑석역 ${escHtml(entry.term)} · 민락동 ${escHtml(entry.term)} — 의정부시 용현동 서울가온치과 치과 백과사전</p>
-    <p class="encd-meta">의학 정보 검수: 현진호 대표원장 (통합치의학과 전문의) · 최종 수정일: ${modDate} · <a href="/encyclopedia" style="color:var(--gold)">전체 용어 보기 →</a></p>
+    <p class="encd-meta">일반 건강정보입니다. 진료 판단은 내원 상담에서 원장이 직접 합니다. · 최종 수정일: ${modDate} · <a href="/encyclopedia" style="color:var(--gold)">전체 용어 보기 →</a></p>
   </article>
 </main>
 ${FOOTER_HTML}
@@ -5776,7 +5774,7 @@ function renderLandingPage(page: LandingPageData): string {
     "inLanguage": "ko",
     "isPartOf": WEBSITE_REF,
     "about": procName ? { "@id": procedureId } : (LANDING_HUB_AREAS[page.slug] ? CLINIC_REF : { "@type": "MedicalSpecialty", "name": page.category }),
-    ...(LANDING_HUB_AREAS[page.slug] ? { "areaServed": LANDING_HUB_AREAS[page.slug], "mainEntity": CLINIC_REF, "lastReviewed": modified } : {}),
+    ...(LANDING_HUB_AREAS[page.slug] ? { "areaServed": LANDING_HUB_AREAS[page.slug], "mainEntity": CLINIC_REF } : {}),
     ...(modified ? { "dateModified": modified } : {}),
     "publisher": CLINIC_REF,
     "speakable": {
