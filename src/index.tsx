@@ -2270,7 +2270,7 @@ function sitemapStaticPages(): Array<{ loc: string; priority: string; changefreq
     { loc: '/implant-process',  priority: '0.90', changefreq: 'monthly', lastmod: V4_DATE },
     { loc: '/minrak-dental',    priority: '0.85', changefreq: 'monthly', lastmod: V4_DATE },
   ]
-  const STATIC_MODIFIED: Record<string, string> = { '/implant': '2026-06-09', '/aesthetic': '2026-06-09' }
+  const STATIC_MODIFIED: Record<string, string> = { '/implant': '2026-06-09', '/aesthetic': '2026-06-09', '/': '2026-10-08', '/guide': '2026-10-08', '/reservation': '2026-10-08', '/community': '2026-10-08' }
   return pages.map((p) => ({
     ...p,
     lastmod: sitemapMaxYmd([p.lastmod, STATIC_MODIFIED[p.loc] || '', LANDING_MODIFIED[p.loc.slice(1)] || '']),
@@ -5157,14 +5157,14 @@ const LANDING_PAGES: LandingPageData[] = [
 <tr><td style="padding:10px;border:1px solid #ddd"><strong>토요일</strong></td><td style="padding:10px;border:1px solid #ddd">09:30 ~ <strong>14:00</strong></td><td style="padding:10px;border:1px solid #ddd">점심시간 없이 연속 진료</td></tr>
 <tr><td style="padding:10px;border:1px solid #ddd"><strong>일요일·공휴일</strong></td><td style="padding:10px;border:1px solid #ddd" colspan="2">휴진</td></tr>
 </table>
-<p>📍 <strong>탑석역 도보 5분</strong> — 대중교통으로도 접근이 편리합니다.<br>🅿️ <strong>건물 내 무료주차</strong> — 차로 오셔도 주차 걱정 없습니다.</p>`
+<p>📍 <strong>탑석역 도보 5분</strong> — 대중교통으로도 접근이 편리합니다.<br>🅿️ <strong>주차</strong> — 맞은편 제일식자재마트 건물 지하주차장 이용, 진료 후 무료 주차 쿠폰을 드립니다.</p>`
       },
       {
         heading: '목요일 야간에도 모든 진료 가능',
         content: `<p>일부 치과에서는 야간 시간에 <strong>간단한 진료만</strong> 가능한 경우가 있습니다. 서울가온치과는 목요일 야간에도 아래 <strong>모든 진료</strong>를 동일하게 제공합니다:</p>
 <ul>
 <li>🦷 <strong>임플란트</strong> — 상담, CT 촬영, 수술 모두 가능</li>
-<li>😁 <strong>교정</strong> — 인비절라인·세라믹 교정 상담 및 조정</li>
+<li>😁 <strong>교정</strong> — 인비절라인·부분교정 상담 및 조정</li>
 <li>🪥 <strong>일반 진료</strong> — 충치, 신경치료, 발치, 스케일링</li>
 <li>✨ <strong>심미치료</strong> — 라미네이트, 레진빌드업, 미백</li>
 <li>🏥 <strong>응급 처치</strong> — 급성 치통, 보철물 탈락, 외상</li>
@@ -5214,7 +5214,7 @@ const LANDING_PAGES: LandingPageData[] = [
 <li><strong>전신 건강 사전 평가</strong> — 복용 약물, 기저질환, 혈액검사 등 종합 확인</li>
 <li><strong>단계별 치료 계획</strong> — 한꺼번에 무리하지 않고 단계적으로 진행</li>
 <li><strong>안전한 마취 관리</strong> — 고혈압·당뇨 환자에 맞춘 마취 프로토콜</li>
-<li><strong>편안한 진료 환경</strong> — 독립 수술실, 환자 모니터링 시스템</li>
+<li><strong>편안한 진료 환경</strong> — 1:1 상담실과 회복실을 갖춘 진료 공간</li>
 </ul>
 <p>서울가온치과는 <strong>70~80대 환자분들의 전체 임플란트 수술</strong>을 다수 경험하였으며, 안전하게 진행합니다.</p>`
       },
@@ -5243,7 +5243,7 @@ const LANDING_PAGES: LandingPageData[] = [
   {
     slug: 'emergency-dental',
     title: '의정부 응급치과 | 서울가온치과 — 급한 치통, 즉시 대응',
-    metaDesc: '의정부 응급치과 서울가온치과. 갑작스러운 치통, 보철물 탈락, 치아 외상 즉시 대응. 평일 저녁 7시·토요일 3시까지 진료. 당일 진료 가능. 의정부역 도보 5분. ☎ 0507-1325-3377',
+    metaDesc: '의정부 응급치과 서울가온치과. 갑작스러운 치통, 보철물 탈락, 치아 외상 즉시 대응. 목요일 20:30 야간진료·토요일 14:00까지 진료. 당일 진료 가능. 탑석역 도보 5분. ☎ 0507-1325-3377',
     h1: '의정부 응급치과 — 급한 치통, 빠르게 해결',
     heroSub: '갑자기 이가 아프세요? 참지 마시고 지금 바로 연락하세요',
     keywords: '의정부 응급치과, 의정부 치통, 응급 치과, 급한 치통, 치아 외상, 보철물 탈락, 의정부 당일 치과, 의정부 아픈 이',
@@ -5296,54 +5296,52 @@ const LANDING_PAGES: LandingPageData[] = [
       { href: '/doctors', label: '의료진 소개' },
     ]
   },
-  // ── 19. 탑석역 치과 ──
+  // ── 19. 탑석역 치과 ── (2026-10-08 사실 정정: 레포 검증 정보만 — 탑석역 1번 출구 도보 5분·실제 진료시간·제일식자재마트 주차)
   {
     slug: 'tapseok-dental',
-    title: '탑석역 치과 | 서울가온치과 — 탑석역 근처 믿을 수 있는 치과',
-    metaDesc: '탑석역 치과 서울가온치과. 의정부역에서 1정거장, 탑석역에서 가까운 종합 치과. 임플란트·교정·심미·일반진료 전 과목. 400평 규모 최첨단 시설. 현진호 대표원장. ☎ 0507-1325-3377',
-    h1: '탑석역 치과 — 집 근처에서 큰 치과를 찾고 계신다면',
-    heroSub: '탑석역에서 한 정거장. 규모와 실력을 갖춘 종합 치과를 만나보세요',
+    title: '탑석역 치과 | 서울가온치과 — 탑석역 1번 출구 도보 5분',
+    metaDesc: '탑석역 치과 서울가온치과. 탑석역 1번 출구에서 걸어서 약 5분, 의정부시 용민로 22 골드자이프라자 4층. 임플란트·신경치료·앞니 심미·교정·일반진료, 목요일 20:30 야간진료. 현진호 대표원장. ☎ 0507-1325-3377',
+    h1: '탑석역 치과 — 1번 출구에서 걸어서 5분',
+    heroSub: '탑석센트럴자이 정문 앞 골드자이프라자 4층, 탑석역 1번 출구에서 도보 약 5분',
     keywords: '탑석역 치과, 탑석 치과, 탑석역 임플란트, 탑석역 교정, 탑석 근처 치과, 의정부 탑석 치과, 탑석역 치과 추천',
     category: '탑석역 치과',
     sections: [
       {
         heading: '탑석역에서 서울가온치과 오시는 길',
-        content: `<p>서울가온치과는 <strong>의정부역 도보 5분</strong> 거리에 있어, 탑석역에서도 매우 가깝습니다.</p>
+        content: `<p>서울가온치과는 <strong>탑석역 1번 출구에서 걸어서 약 5분</strong> 거리입니다. 탑석센트럴자이 정문 맞은편, 배스킨라빈스가 입점한 골드자이프라자 건물 4층으로 올라오시면 됩니다.</p>
 <ul>
-<li>🚇 <strong>지하철</strong> — 1호선 탑석역 → 의정부역 (1정거장, 2분) → 도보 5분</li>
-<li>🚌 <strong>버스</strong> — 탑석역 앞 정류장에서 의정부역 방면 다수 노선 이용 (약 5분)</li>
-<li>🚗 <strong>차량</strong> — 탑석역에서 약 5분 거리 / 건물 내 무료주차</li>
+<li>🚇 <strong>지하철</strong> — 탑석역 1번 출구로 나와 도보 약 5분</li>
+<li>🚌 <strong>버스</strong> — 탑석센트럴자이 정류장 하차 (201, 201-1, 72번 등)</li>
+<li>🚗 <strong>차량</strong> — 길 건너 제일식자재마트 건물 지하주차장에 주차하시고, 진료 후 데스크에서 무료 주차 쿠폰을 받으세요</li>
 </ul>
-<p>📍 주소: <strong>경기도 의정부시 용민로 22, 4층(용현동)</strong></p>`
+<p>📍 주소: <strong>경기도 의정부시 용민로 22, 골드자이프라자 4층(용현동)</strong></p>`
       },
       {
-        heading: '왜 탑석 주민들이 서울가온치과를 선택할까요?',
-        content: `<p>탑석·민락·장암 지역 주민분들이 서울가온치과를 찾는 이유:</p>
-<ul>
-<li><strong>400평 규모 종합 시설</strong> — 대학병원급 장비와 독립 수술실 6개</li>
-<li><strong>전 진료과목 원스톱</strong> — 임플란트, 교정, 심미, 일반 진료 모두 한 곳에서</li>
-<li><strong>현진호 대표원장 직접 진료</strong> — 임플란트 중점 진료, 서울대 출신</li>
-<li><strong>평일 저녁 7시까지</strong> — 퇴근 후에도 편하게 내원</li>
-<li><strong>철저한 감염관리</strong> — 에어샤워, 개별 수술실, 1회용 소독 키트</li>
+        heading: '탑석 주민들이 서울가온치과를 찾는 이유',
+        content: `<ul>
+<li><strong>진료 분야별 담당 원장</strong> — 임플란트·보철은 현진호 대표원장(통합치의학과 전문의), 신경치료·자연치아 보존은 조은비 원장(치과보존과 전문의)이 맡습니다</li>
+<li><strong>CT 기반 가이드 임플란트</strong> — 촬영 영상으로 식립 위치를 미리 계획한 뒤 수술합니다</li>
+<li><strong>목요일 야간진료</strong> — 매주 목요일은 20:30까지 진료해 퇴근 후에도 내원하실 수 있습니다</li>
+<li><strong>설명 먼저, 치료는 그 다음</strong> — 1:1 상담실에서 촬영 사진을 함께 보며 치료 계획과 비용을 서면으로 안내합니다</li>
 </ul>`
       },
       {
         heading: '서울가온치과 주요 진료과목',
         content: `<ul>
-<li>🦷 <strong>임플란트</strong> — 단일·전체·뼈이식·상악동거상술 / 건강보험 적용</li>
-<li>😁 <strong>교정</strong> — 인비절라인·세라믹 교정·부분교정</li>
+<li>🦷 <strong>임플란트</strong> — 단일·전체·뼈이식·상악동거상술 / 만 65세 이상 건강보험 적용</li>
+<li>😁 <strong>교정</strong> — 인비절라인·부분교정·심미교정</li>
 <li>✨ <strong>심미치료</strong> — 라미네이트·레진빌드업·미백</li>
 <li>🪥 <strong>일반 진료</strong> — 충치·신경치료·발치·스케일링</li>
 <li>🦴 <strong>사랑니</strong> — 매복사랑니 발치</li>
-<li>💪 <strong>잇몸치료</strong> — 치주치료·잇몸수술</li>
+<li>💪 <strong>잇몸치료</strong> — 스케일링·치주치료</li>
 </ul>
-<p>탑석역에서 조금만 오시면, <strong>대학병원 수준의 진료</strong>를 동네 치과의 편안함으로 받으실 수 있습니다.</p>`
+<p>진료시간은 월·화·수·금 09:30~18:30, 목요일 09:30~20:30, 토요일 09:30~14:00이며 평일 점심시간은 12:30~14:00, 일요일·공휴일은 휴진입니다.</p>`
       }
     ],
     faqs: [
-      { q: '탑석역에서 서울가온치과까지 얼마나 걸리나요?', a: '지하철로 1정거장(2분) + 도보 5분, 총 약 10분 이내입니다. 차량으로는 약 5분이며 건물 내 무료주차가 가능합니다.' },
-      { q: '탑석 근처에서 임플란트 잘하는 치과를 찾고 있어요', a: '서울가온치과는 현진호 대표원장이 모든 임플란트 수술을 직접 진행하며, 독립 수술실 6개와 CT 등 대학병원급 장비를 갖추고 있습니다.' },
-      { q: '주차가 가능한가요?', a: '네, 건물 내 무료주차가 가능합니다. 차량으로 편하게 오실 수 있습니다.' },
+      { q: '탑석역에서 서울가온치과까지 얼마나 걸리나요?', a: '탑석역 1번 출구에서 걸어서 약 5분입니다. 탑석센트럴자이 정문 맞은편 골드자이프라자 건물 4층으로 오시면 됩니다.' },
+      { q: '탑석역 근처에서 임플란트 상담을 받고 싶어요', a: '서울가온치과는 현진호 대표원장이 CT 영상으로 식립 위치를 미리 계획하는 가이드 임플란트를 직접 진료합니다. 상담 때 촬영 사진을 함께 보며 치료 계획과 비용을 서면으로 안내해 드립니다.' },
+      { q: '주차가 가능한가요?', a: '네. 병원 맞은편 제일식자재마트 건물 지하주차장을 이용하시면 되고, 진료 후 데스크에서 무료 주차 쿠폰을 드립니다.' },
     ],
     ctaText: '탑석역 → 서울가온치과 상담 예약',
     relatedLinks: [
@@ -5655,7 +5653,6 @@ const LANDING_PAGES: LandingPageData[] = [
 <li>🖥️ <strong>CT 가이드 수술</strong> — 3D CT 데이터로 사전 시뮬레이션, 0.1mm 정밀도</li>
 <li>🔬 <strong>무절개/최소절개</strong> — 잇몸 절개 최소화, 출혈·부기 감소</li>
 <li>💉 <strong>무통 마취</strong> — 3단계 마취 시스템으로 수술 중 통증 없음</li>
-<li>🏥 <strong>독립 수술실</strong> — 6개 개별 수술실, 철저한 감염 관리</li>
 <li>👨‍⚕️ <strong>현진호 대표원장 직접</strong> — 모든 임플란트 수술을 직접 진행</li>
 </ul>`
       }
@@ -5675,42 +5672,41 @@ const LANDING_PAGES: LandingPageData[] = [
       { href: '/before-after', label: '전후 사례 보기' },
     ]
   },
-  // ── 26. 민락동 치과 ──
+  // ── 26. 민락동 치과 ── (2026-10-08 사실 정정: 레포 검증 정보만)
   {
     slug: 'minrak-dental',
     title: '민락동 치과 | 서울가온치과 — 민락 주민이 찾는 종합 치과',
-    metaDesc: '민락동 치과 서울가온치과. 민락동·민락2지구에서 가까운 종합 치과. 임플란트·교정·심미·일반진료 전 과목. 400평 규모 대학병원급 시설. 탑석역 도보 5분. ☎ 0507-1325-3377',
-    h1: '민락동 치과 — 걸어서 다닐 수 있는 큰 치과를 찾으신다면',
-    heroSub: '민락동·민락2지구에서 가까운 종합 치과. 규모와 실력을 함께 만나세요',
+    metaDesc: '민락동 치과 서울가온치과. 민락동·민락2지구에서 차로 약 5~10분, 의정부시 용민로 22 골드자이프라자 4층(탑석역 1번 출구 도보 약 5분). 임플란트·신경치료·심미·교정·소아 진료. ☎ 0507-1325-3377',
+    h1: '민락동 치과 — 민락에서 가까운 용현동 서울가온치과',
+    heroSub: '민락동·민락2지구에서 차로 5~10분. 두 원장이 진료 분야를 나눠 맡습니다',
     keywords: '민락동 치과, 민락 치과, 민락2지구 치과, 민락동 임플란트, 민락 근처 치과, 의정부 민락 치과, 민락역 치과',
     category: '민락동 치과',
     sections: [
       {
         heading: '민락동에서 서울가온치과 오시는 길',
-        content: `<p>서울가온치과는 <strong>탑석역 도보 5분</strong> 거리에 있어 민락동·민락2지구에서 매우 가깝습니다.</p>
+        content: `<p>서울가온치과는 민락동과 맞닿은 용현동, <strong>탑석역 1번 출구에서 도보 약 5분</strong> 거리의 골드자이프라자 4층에 있습니다.</p>
 <ul>
-<li>🚗 <strong>차량</strong> — 민락동에서 약 5~10분 거리 / 건물 내 <strong>무료주차</strong></li>
-<li>🚌 <strong>버스</strong> — 민락2지구에서 탑석역 방면 다수 노선 (약 10분)</li>
-<li>🚇 <strong>지하철</strong> — 경전철 탑석역 또는 1호선 의정부역 이용</li>
+<li>🚗 <strong>차량</strong> — 민락동에서 약 5~10분 / 맞은편 제일식자재마트 건물 지하주차장 이용, 진료 후 <strong>무료 주차 쿠폰</strong> 제공</li>
+<li>🚌 <strong>버스</strong> — 탑석역·탑석센트럴자이 방면 노선 이용 후 탑석센트럴자이 정류장 하차</li>
+<li>🚇 <strong>지하철</strong> — 탑석역 1번 출구에서 걸어서 약 5분</li>
 </ul>
-<p>📍 주소: <strong>경기도 의정부시 용민로 22, 4층(용현동)</strong></p>`
+<p>📍 주소: <strong>경기도 의정부시 용민로 22, 골드자이프라자 4층(용현동)</strong></p>`
       },
       {
         heading: '민락 주민들이 서울가온치과를 선택하는 이유',
         content: `<ul>
-<li><strong>400평 규모 종합 시설</strong> — 대학병원급 장비 + 독립 수술실 6개</li>
-<li><strong>전 진료과목 원스톱</strong> — 임플란트, 교정, 심미, 일반 진료, 소아 치과</li>
-<li><strong>서울대 출신 전문의 2인 진료</strong> — 현진호 대표원장(임플란트) + 조은비 원장(보존과)</li>
+<li><strong>서울대 출신 전문의 2인 진료</strong> — 현진호 대표원장(통합치의학과 전문의, 임플란트·보철) + 조은비 원장(치과보존과 전문의, 신경치료)</li>
+<li><strong>CT 기반 가이드 임플란트</strong> — 수술 전에 CT 영상으로 식립 위치를 계획합니다</li>
 <li><strong>목요일 야간 ~20:30</strong> — 직장인도 퇴근 후 내원 가능</li>
-<li><strong>철저한 감염관리</strong> — 에어샤워, 개별 수술실, 1회용 키트</li>
+<li><strong>아이부터 어르신까지</strong> — 소아 실란트·불소도포부터 만 65세 이상 건강보험 임플란트까지 한 곳에서</li>
 </ul>
-<p>민락동에서 조금만 오시면 <strong>대학병원 수준의 진료</strong>를 동네 치과의 편안함으로 받으실 수 있습니다.</p>`
+<p>처음 오시면 검사와 촬영을 하고, 사진을 함께 보며 설명을 들으신 뒤 치료 계획과 비용을 서면으로 받아 보시게 됩니다. 비급여 기준 비용은 <a href="/guide">내원 안내</a> 수가표에서 미리 확인하실 수 있습니다.</p>`
       },
       {
         heading: '주요 진료 안내',
         content: `<ul>
 <li>🦷 <strong>임플란트</strong> — CT 가이드 수술, 뼈이식, 전체임플란트 / 65세 보험</li>
-<li>😁 <strong>교정</strong> — 인비절라인·세라믹·부분교정</li>
+<li>😁 <strong>교정</strong> — 인비절라인·심미교정·부분교정</li>
 <li>✨ <strong>심미</strong> — 라미네이트·레진빌드업·미백·최소삭제 라미네이트</li>
 <li>🪥 <strong>일반</strong> — 충치·신경치료·발치·스케일링·사랑니</li>
 <li>👶 <strong>소아</strong> — 실란트·불소도포·유치치료</li>
@@ -5719,8 +5715,8 @@ const LANDING_PAGES: LandingPageData[] = [
       }
     ],
     faqs: [
-      { q: '민락동에서 서울가온치과까지 얼마나 걸리나요?', a: '차량으로 약 5~10분이며, 건물 내 무료주차가 가능합니다. 버스로는 탑석역 방면 노선을 이용하시면 약 10분입니다.' },
-      { q: '민락2지구에서 가까운 치과를 찾고 있어요', a: '서울가온치과는 탑석역 도보 5분 거리에 있어 민락2지구에서 가장 가까운 종합 치과 중 하나입니다.' },
+      { q: '민락동에서 서울가온치과까지 얼마나 걸리나요?', a: '차로 약 5~10분입니다. 맞은편 제일식자재마트 건물 지하주차장에 주차하시면 진료 후 무료 주차 쿠폰을 드립니다. 대중교통으로는 탑석역 1번 출구에서 걸어서 약 5분입니다.' },
+      { q: '민락2지구에서 가까운 치과를 찾고 있어요', a: '서울가온치과는 민락동과 맞닿은 용현동, 탑석센트럴자이 정문 맞은편에 있습니다. 임플란트·신경치료·심미·교정·소아 진료를 한 곳에서 받으실 수 있습니다.' },
       { q: '예약 없이 방문해도 되나요?', a: '예약 우선제로 운영하지만, 당일 빈 시간이 있으면 바로 진료 가능합니다. 전화(0507-1325-3377)로 확인 후 방문하시면 대기 시간을 줄일 수 있습니다.' },
     ],
     ctaText: '민락동 → 서울가온치과 상담 예약',
@@ -5741,10 +5737,10 @@ const LANDING_MODIFIED: Record<string, string> = {
   'uijeongbu-dental': '2026-10-08', 'endodontics': '2026-06-09', 'invisalign': '2026-07-26', 'orthodontics': '2026-07-26',
   'cavity-treatment': '2026-05-26', 'implant-best': '2026-09-03', 'full-mouth-implant': '2026-09-03', 'front-tooth-implant': '2026-06-09',
   'bone-graft-implant': '2026-06-09', 'laminate': '2026-07-26', 'wisdom-tooth': '2026-05-26', 'scaling-gum-treatment': '2026-05-26',
-  'denture-to-implant': '2026-05-26', 'implant-cost': '2026-05-26', 'night-dental': '2026-05-26', 'senior-implant': '2026-05-26',
-  'emergency-dental': '2026-05-26', 'tapseok-dental': '2026-09-03', 'painless-dental': '2026-05-26', 'pediatric-dental': '2026-05-26',
-  'crown': '2026-06-09', 'teeth-whitening': '2026-07-26', 'dental-checkup': '2026-05-26', 'implant-process': '2026-09-29',
-  'minrak-dental': '2026-09-03',
+  'denture-to-implant': '2026-05-26', 'implant-cost': '2026-05-26', 'night-dental': '2026-10-08', 'senior-implant': '2026-10-08',
+  'emergency-dental': '2026-10-08', 'tapseok-dental': '2026-10-08', 'painless-dental': '2026-05-26', 'pediatric-dental': '2026-05-26',
+  'crown': '2026-06-09', 'teeth-whitening': '2026-07-26', 'dental-checkup': '2026-05-26', 'implant-process': '2026-10-08',
+  'minrak-dental': '2026-10-08',
 }
 // 대표 지역 키워드 허브 → MedicalWebPage.about = 병원(@id) + areaServed (2026-10-08 "의정부 치과" 허브)
 const LANDING_HUB_AREAS: Record<string, any[]> = {
