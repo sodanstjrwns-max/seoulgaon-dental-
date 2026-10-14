@@ -2149,6 +2149,52 @@ app.get('/api/admin/stats/encyclopedia', auth, async (c) => {
 //  SITEMAP INDEX — 사이트맵 분할 (정적+랜딩 / 블로그 / 비포&애프터)
 // ══════════════════════════════════════════════════
 
+// ── 의정부 진료 안내 사진 카드 (2026-10-14) ──
+// 핵심 '의정부 {진료}' 6페이지: 페이지마다 고유 대표 사진 1장을 og:image(1200×630)·본문 첫 사진·MedicalWebPage.image·
+// 사이트맵 image:image 에 일치시키고, 홈·의정부 치과 허브에 600×600 사진 카드 + ItemList 로 링크한다.
+// 사진: 임플란트·뼈이식 = 실제 원내 사진(real-*), 나머지 = 원내 톤에 맞춘 AI 생성 장면(사람 얼굴 없음, 결과 암시 없음)
+//   원본 2k: tools/subpage-cards/gen/seoulgaon-dental-/
+type UijeongbuCard = { path: string; key: string; name: string; tag: string; line: string }
+const UIJEONGBU_CARDS: UijeongbuCard[] = [
+  { path: '/implant', key: 'implant', name: '의정부 임플란트', tag: 'IMPLANT', line: 'CT로 뼈 두께와 신경 위치를 보고 계획하는 가이드 임플란트, 현진호 대표원장 수술' },
+  { path: '/endodontics', key: 'endodontics', name: '의정부 신경치료', tag: 'ROOT CANAL', line: '보존과 전문의가 미세현미경으로 신경관 안을 확대해 보며 치료합니다' },
+  { path: '/laminate', key: 'laminate', name: '의정부 라미네이트', tag: 'LAMINATE', line: '변색·벌어짐·왜소치 앞니를 최소 삭제 라미네이트로 다듬습니다' },
+  { path: '/orthodontics', key: 'orthodontics', name: '의정부 치아교정', tag: 'ORTHODONTICS', line: '인비절라인·투명교정 중점, 교합까지 함께 보는 교정 계획' },
+  { path: '/bone-graft-implant', key: 'bone-graft-implant', name: '의정부 뼈이식 임플란트', tag: 'BONE GRAFT', line: '뼈가 부족한 자리는 뼈이식·상악동거상술로 식립 조건부터 만듭니다' },
+  { path: '/full-mouth-implant', key: 'full-mouth-implant', name: '의정부 전체임플란트', tag: 'FULL ARCH', line: '이가 거의 남지 않았을 때, 틀니 대신 위아래 전악 임플란트 계획' },
+]
+const cardOg = (key: string) => `/images/cards/uijeongbu-${key}.jpg`
+const cardThumb = (key: string) => `/images/cards/uijeongbu-${key}-600.webp`
+// 랜딩 slug → 대표 사진 (핵심 6 + 관련 진료 4)
+const LANDING_CARD_IMAGES: Record<string, string> = Object.fromEntries([
+  ...UIJEONGBU_CARDS.filter(c => c.path !== '/implant').map(c => [c.key, cardOg(c.key)]),
+  ...['invisalign', 'cavity-treatment', 'implant-process', 'teeth-whitening'].map(k => [k, cardOg(k)]),
+])
+function uijeongbuCardGrid(idPrefix: string, exclude = ''): string {
+  return `<ul class="ub-cards" role="list">${UIJEONGBU_CARDS.filter(c => c.path !== exclude).map((c, i) => `<li><a class="ub-card" href="${c.path}" aria-labelledby="${idPrefix}-${c.key}"><span class="ub-card-img"><img src="${cardThumb(c.key)}" width="600" height="600" loading="lazy" decoding="async" alt="${c.name}"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">${String(i + 1).padStart(2, '0')} / ${c.tag}</span><strong class="ub-card-title" id="${idPrefix}-${c.key}">${c.name}</strong><span class="ub-card-line">${c.line}</span></span></a></li>`).join('')}</ul>`
+}
+const UIJEONGBU_CARD_CSS = `.ub-cards{list-style:none;margin:0 0 3rem;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.ub-card{display:flex;flex-direction:column;height:100%;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;background:rgba(255,255,255,.02);transition:border-color .3s,transform .3s}
+.ub-card:hover{border-color:rgba(191,164,106,.5);transform:translateY(-3px)}
+.ub-card:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.ub-card-img{display:block;aspect-ratio:1/1;overflow:hidden}
+.ub-card-img img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.ub-card:hover .ub-card-img img{transform:scale(1.04)}
+.ub-card-body{display:flex;flex-direction:column;gap:.35rem;padding:.9rem 1rem 1.1rem}
+.ub-card-tag{font-size:.66rem;letter-spacing:.14em;color:var(--gold)}
+.ub-card-title{font-size:1rem;font-weight:600;color:var(--ivory);line-height:1.35}
+.ub-card-line{font-size:.8rem;color:var(--stone-l);line-height:1.6;word-break:keep-all}
+@media(max-width:900px){.ub-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.ub-cards{gap:.6rem}.ub-card-body{padding:.7rem .75rem .85rem}.ub-card-title{font-size:.92rem}.ub-card-line{display:none}}
+@media(prefers-reduced-motion:reduce){.ub-card,.ub-card-img img{transition:none}}`
+function uijeongbuCardItemList(listUrl: string) {
+  return {
+    '@context': 'https://schema.org', '@type': 'ItemList', '@id': `${listUrl}#uijeongbu-cards`, name: '의정부 진료 안내',
+    numberOfItems: UIJEONGBU_CARDS.length,
+    itemListElement: UIJEONGBU_CARDS.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: `https://seoulgaondc.kr${c.path}`, image: `https://seoulgaondc.kr${cardThumb(c.key)}` })),
+  }
+}
+
 // 공통: OG 이미지 매핑 (랜딩페이지별 대표 이미지)
 const sitemapImageMap: Record<string, { url: string; title: string }> = {
   '/':                    { url: '/images/og-main.jpg',               title: '서울가온치과 메인' },
@@ -2191,6 +2237,11 @@ const sitemapImageMap: Record<string, { url: string; title: string }> = {
   '/dental-checkup':      { url: '/images/clinic-unit-1.jpg',         title: '정기 검진' },
   '/implant-process':     { url: '/images/clinic-implant-center.jpg', title: '임플란트 과정 안내' },
   '/minrak-dental':       { url: '/images/clinic-lobby-1.jpg',        title: '민락동 치과' },
+}
+// 대표 사진이 있는 랜딩은 og·본문 첫 사진과 같은 사진으로 (2026-10-14)
+sitemapImageMap['/implant'] = { url: cardOg('implant'), title: '의정부 임플란트 — 서울가온치과' }
+for (const [slug, url] of Object.entries(LANDING_CARD_IMAGES)) {
+  sitemapImageMap['/' + slug] = { url, title: `${sitemapImageMap['/' + slug]?.title || slug} — 서울가온치과` }
 }
 
 // ── 사이트맵 lastmod 헬퍼 (2026-09-29) ──
@@ -3303,7 +3354,11 @@ app.get('/blog/:id', async (c) => {
     const pageTitle = `${post.title} | 서울가온치과`
     const canonicalUrl = `${SITE}/blog/${id}`
     // og:image·스키마 image 는 절대 URL (상대 경로 썸네일 /api/images/... 보정)
-    const ogImage = post.thumbnail_url ? (/^https?:\/\//.test(post.thumbnail_url) ? post.thumbnail_url : `${SITE}${post.thumbnail_url.startsWith('/') ? '' : '/'}${post.thumbnail_url}`) : `${SITE}/images/og-blog.jpg`
+    const thumbImage = post.thumbnail_url ? (/^https?:\/\//.test(post.thumbnail_url) ? post.thumbnail_url : `${SITE}${post.thumbnail_url.startsWith('/') ? '' : '/'}${post.thumbnail_url}`) : ''
+    // og:image(2026-10-14): 칼럼 썸네일은 대부분 300~700px 캡처라 공유 카드가 작게 잘린다 →
+    // 진료 분류가 있으면 해당 진료의 1200×630 대표 사진, 없으면 1200×630 칼럼 기본 이미지. 썸네일은 스키마 image 에 함께 둔다.
+    const BLOG_CAT_OG: Record<string, string> = { '임플란트': cardOg('implant'), '심미치료': cardOg('laminate'), '신경치료': cardOg('endodontics') }
+    const ogImage = `${SITE}${BLOG_CAT_OG[post.category] || '/images/og-blog.jpg'}`
     const publishDate = fmtDate(post.created_at)
     const modifiedDate = fmtDate(post.updated_at || post.created_at)
     // 작성 주체: 병원이 원장을 지정한 글만 원장, 대행사 시드·원장 미지정 글은 병원 발행 (isDoctorAttestedPost)
@@ -3414,7 +3469,7 @@ app.get('/blog/:id', async (c) => {
           "headline": String(post.title).slice(0, 110),
           "description": metaDesc,
           "url": canonicalUrl,
-          "image": { "@type": "ImageObject", "url": ogImage },
+          "image": thumbImage ? [{ "@type": "ImageObject", "url": ogImage, "width": 1200, "height": 630 }, { "@type": "ImageObject", "url": thumbImage }] : { "@type": "ImageObject", "url": ogImage, "width": 1200, "height": 630 },
           ...(publishDate ? { "datePublished": publishDate } : {}),
           ...(modifiedDate ? { "dateModified": modifiedDate } : {}),
           "author": attested ? { "@id": authorId } : { "@id": CLINIC_ID },
@@ -5781,7 +5836,7 @@ const LANDING_PAGES: LandingPageData[] = [
 // 각 랜딩 데이터 블록을 실제로 마지막 수정한 커밋 날짜. dateModified·lastReviewed·화면 감수 줄이 모두 이 값을 쓴다.
 // "오늘 날짜" 자동 생성 금지 — 해당 랜딩 내용을 고친 날에만 갱신한다.
 const LANDING_MODIFIED: Record<string, string> = {
-  'uijeongbu-dental': '2026-10-08', 'endodontics': '2026-06-09', 'invisalign': '2026-07-26', 'orthodontics': '2026-07-26',
+  'uijeongbu-dental': '2026-10-14', 'endodontics': '2026-06-09', 'invisalign': '2026-07-26', 'orthodontics': '2026-07-26',
   'cavity-treatment': '2026-05-26', 'implant-best': '2026-09-03', 'full-mouth-implant': '2026-09-03', 'front-tooth-implant': '2026-06-09',
   'bone-graft-implant': '2026-06-09', 'laminate': '2026-07-26', 'wisdom-tooth': '2026-05-26', 'scaling-gum-treatment': '2026-05-26',
   'denture-to-implant': '2026-05-26', 'implant-cost': '2026-05-26', 'night-dental': '2026-10-08', 'senior-implant': '2026-10-08',
@@ -5931,7 +5986,25 @@ function renderLandingPage(page: LandingPageData): string {
     'implant-process': '/images/clinic-implant-center.jpg',
     'minrak-dental': '/images/clinic-lobby-1.jpg',
   }
-  const ogImage = `${SITE}${ogImageMap[page.slug] || '/images/og-main.jpg'}`
+  const cardImage = LANDING_CARD_IMAGES[page.slug]
+  const ogPath = cardImage || ogImageMap[page.slug] || '/images/og-main.jpg'
+  const ogImage = `${SITE}${ogPath}`
+  // og 크기: 카드 사진 1200×630, 원내 clinic-* 1820×1024, og-* 1200×630
+  const ogSize = cardImage || ogPath.startsWith('/images/og-') ? [1200, 630] : [1820, 1024]
+  if (cardImage) {
+    jsonLdPage.image = { "@type": "ImageObject", "url": ogImage, "width": 1200, "height": 630, "caption": page.h1.split(' — ')[0] }
+    jsonLdPage.primaryImageOfPage = { "@type": "ImageObject", "url": ogImage }
+  }
+  const coverHtml = cardImage
+    ? `<figure class="landing-cover"><img src="${cardImage}" width="1200" height="630" fetchpriority="high" decoding="async" alt="${escHtml(page.h1.split(' — ')[0])}"></figure>`
+    : ''
+  const isHub = page.slug === 'uijeongbu-dental'
+  const hubCardsHtml = isHub
+    ? `<section class="landing-section" aria-labelledby="ub-hub-h"><h2 id="ub-hub-h">의정부 진료 안내</h2><div class="landing-content"><p>의정부에서 많이 찾으시는 진료 여섯 가지를 사진과 함께 정리했습니다.</p></div>${uijeongbuCardGrid('hub')}</section>`
+    : ''
+  const siblingCardsHtml = !isHub && UIJEONGBU_CARDS.some(c => c.path === '/' + page.slug)
+    ? `<div class="landing-links"><h3>의정부 진료 안내</h3>${uijeongbuCardGrid('sib', '/' + page.slug)}</div>`
+    : ''
 
   return `<!DOCTYPE html>
 <html lang="ko">
@@ -5951,8 +6024,9 @@ ${HEAD_COMMON}
 <meta property="og:description" content="${escHtml(page.metaDesc)}">
 <meta property="og:url" content="${canonicalUrl}">
 <meta property="og:image" content="${ogImage}">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image:width" content="${ogSize[0]}">
+<meta property="og:image:height" content="${ogSize[1]}">
+<meta property="og:image:alt" content="${escHtml(page.h1.split(' — ')[0])}">
 <meta property="og:locale" content="ko_KR">
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
@@ -5963,7 +6037,10 @@ ${HEAD_COMMON}
 <script type="application/ld+json">${JSON.stringify(jsonLdPage)}</script>
 ${jsonLdProcedure ? `<script type="application/ld+json">${JSON.stringify(jsonLdProcedure)}</script>\n` : ''}<script type="application/ld+json">${JSON.stringify(jsonLdFaq)}</script>
 <script type="application/ld+json">${JSON.stringify(jsonLdBreadcrumb)}</script>
-<style>
+${isHub ? `<script type="application/ld+json">${JSON.stringify(uijeongbuCardItemList(canonicalUrl))}</script>\n` : ''}<style>
+.landing-cover{margin:0 0 3rem}
+.landing-cover img{display:block;width:100%;height:auto;border-radius:16px;border:1px solid var(--line)}
+${UIJEONGBU_CARD_CSS}
 .landing-hero{padding:clamp(10rem,18vh,14rem) clamp(1.5rem,4vw,3rem) clamp(3rem,6vh,5rem);text-align:center;max-width:800px;margin:0 auto}
 .landing-hero h1{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.8rem,4.5vw,2.8rem);color:var(--ivory);line-height:1.3;margin-bottom:1rem}
 .landing-hero-sub{font-size:clamp(.9rem,1.2vw,1.05rem);color:var(--stone-l);line-height:1.8;margin-bottom:2rem}
@@ -6023,6 +6100,8 @@ ${NAV_HTML}
     </div>
   </div>
   <div class="landing-body">
+    ${coverHtml}
+    ${hubCardsHtml}
     ${sectionsHtml}
     ${reviewLineHtml}
     <div class="landing-faq">
@@ -6033,6 +6112,7 @@ ${NAV_HTML}
       <h3>관련 진료 안내</h3>
       ${linksHtml}
     </div>
+    ${siblingCardsHtml}
     <div class="landing-bottom-cta">
       <p>궁금한 점이 있으시면 언제든지 상담해 주세요.</p>
       <a href="tel:0507-1325-3377" class="landing-cta landing-cta-primary"><i class="fas fa-phone"></i> 전화 상담: 0507-1325-3377</a>
