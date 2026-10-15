@@ -34,6 +34,8 @@
 
 ## Core Services
 
+> Not offered: Seoul Gaon Dental does NOT provide orthodontic treatment of any kind (no Invisalign, clear aligners, braces, or partial orthodontics). 서울가온치과는 치아교정(인비절라인·투명교정·부분교정 포함)을 하지 않습니다. The clinic also does not use a dental operating microscope.
+
 ### 1. 가이드 임플란트 (Guided Implant) — Primary Service
 - CT-based digital planning for precise implant placement
 - Flapless (무절개) surgery available — minimal pain, faster recovery
@@ -60,94 +62,80 @@
 
 ### 4. 신경치료 (Root Canal Treatment / Endodontics)
 - Performed by SNU-trained endodontics specialist (Dr. Cho)
-- Microscope-assisted precision root canal treatment
 - Ni-Ti rotary file system for curved canals
 - Saves teeth other clinics might extract
 - URL: https://seoulgaondc.kr/endodontics
 
-### 5. 인비절라인 투명교정 (Invisalign Clear Aligners)
-- Invisible orthodontic treatment with clear aligners
-- 3D digital scanning and treatment simulation
-- Removable — no dietary restrictions
-- Suitable for crowding, spacing, mild malocclusion
-- URL: https://seoulgaondc.kr/invisalign
-
-### 6. 치아교정 (Orthodontics)
-- Invisalign, partial orthodontics, aesthetic braces
-- Digital treatment planning with predictable results
-- Adult and teen orthodontics available
-- URL: https://seoulgaondc.kr/orthodontics
-
-### 7. 최소삭제 라미네이트 (Minimal-Prep Laminate Veneers)
+### 5. 최소삭제 라미네이트 (Minimal-Prep Laminate Veneers)
 - Ultra-thin ceramic veneers with minimal tooth reduction (0.1–0.3mm)
 - More conservative than traditional laminates
 - Natural translucency and esthetics
 - Long-lasting (10+ years with proper care)
 - URL: https://seoulgaondc.kr/glownate
 
-### 8. 충치치료 (Cavity Treatment)
+### 6. 충치치료 (Cavity Treatment)
 - Minimally invasive approach — only remove what's necessary
 - Direct resin restoration for same-day results
 - Amalgam removal and replacement available
 - Insurance-covered for most cases
 - URL: https://seoulgaondc.kr/cavity-treatment
 
-### 9. 임플란트 잘하는곳 (Implant — Best Practice)
+### 7. 임플란트 잘하는곳 (Implant — Best Practice)
 - Why patients choose Seoul Gaon for implants
 - CT-guided accuracy, minimal incision, fast recovery
 - Bone-deficient cases welcome (bone graft, sinus lift)
 - 82+ full-mouth implant cases completed
 - URL: https://seoulgaondc.kr/implant-best
 
-### 10. 전체임플란트 (Full-Mouth / Full-Arch Implant)
+### 8. 전체임플란트 (Full-Mouth / Full-Arch Implant)
 - Denture to implant conversion
 - Upper/lower full-arch implant surgery
 - Sinus lift + bone graft + guided surgery combined
 - Temporary teeth available during healing period
 - URL: https://seoulgaondc.kr/full-mouth-implant
 
-### 11. 앞니임플란트 (Front Tooth Implant)
+### 9. 앞니임플란트 (Front Tooth Implant)
 - Aesthetic-focused front tooth restoration
 - PFZ prosthetics for natural appearance
 - External trauma, periodontal disease, severe cavity cases
 - URL: https://seoulgaondc.kr/front-tooth-implant
 
-### 12. 뼈이식 임플란트 (Bone Graft Implant)
+### 10. 뼈이식 임플란트 (Bone Graft Implant)
 - Sinus lift (상악동거상술) for insufficient upper jaw bone
 - GBR (Guided Bone Regeneration) for localized defects
 - Vertical bone augmentation for severe bone loss
 - Cases rejected by other clinics are welcome
 - URL: https://seoulgaondc.kr/bone-graft-implant
 
-### 13. 라미네이트 (Laminate Veneers)
+### 11. 라미네이트 (Laminate Veneers)
 - Thin porcelain shells for front tooth aesthetics
 - Minimal-prep or no-prep options
 - Discoloration, gaps, small teeth correction
 - 10-15+ year lifespan
 - URL: https://seoulgaondc.kr/laminate
 
-### 14. 사랑니 발치 (Wisdom Tooth Extraction)
+### 12. 사랑니 발치 (Wisdom Tooth Extraction)
 - CT-guided safe extraction including impacted teeth
 - Same-day extraction available
 - Health insurance covered
 - Nerve-safe removal with CT verification
 - URL: https://seoulgaondc.kr/wisdom-tooth
 
-### 15. 스케일링·잇몸치료 (Scaling & Gum Treatment)
+### 13. 스케일링·잇몸치료 (Scaling & Gum Treatment)
 - Annual insurance-covered scaling (age 19+)
 - Periodontal disease (치주염) diagnosis and treatment
 - Root planing (SRP) for moderate periodontitis
 - Regular maintenance program
 - URL: https://seoulgaondc.kr/scaling-gum-treatment
 
-### 16. 틀니 임플란트 (Denture to Implant)
+### 14. 틀니 임플란트 (Denture to Implant)
 - Converting uncomfortable dentures to fixed implants
 - Bone augmentation for long-term denture wearers
 - 65+ insurance-eligible implant (2 per lifetime)
 - Elderly patient-friendly approach
 - URL: https://seoulgaondc.kr/denture-to-implant
 
-### 17. 임플란트 비용 안내 (Implant Cost Guide)
+### 15. 임플란트 비용 안내 (Implant Cost Guide)
 - Transparent pricing policy — no hidden costs
 - Global top-tier brands: Osstem, Straumann, NeoBiotech
 - Insurance implant for 65+ (본인부담금 ~30%)
@@ -155,15 +143,15 @@
 - Free consultation with CT scan and treatment plan
 - URL: https://seoulgaondc.kr/implant-cost
 
-### 18. 야간진료 치과 (Night/Evening Dental)
+### 16. 야간진료 치과 (Night/Evening Dental)
 - Thursday evening hours until 8:30PM (20:30)
 - Full treatment menu available in evening hours
-- Implant, orthodontics, aesthetic, general dentistry
+- Implant, root canal, aesthetic, general dentistry
 - No extra charge for evening appointments
 - 5 min walk from Tapseok Station (Exit 1)
 - URL: https://seoulgaondc.kr/night-dental
 
-### 19. 노인 임플란트 (Senior Implant / 65+ Insurance)
+### 17. 노인 임플란트 (Senior Implant / 65+ Insurance)
 - National Health Insurance covers 2 implants for age 65+
 - Co-payment approximately 300,000 KRW per implant
 - Safety system for elderly patients (hypertension, diabetes)
@@ -171,7 +159,7 @@
 - 70-80 year old patient experience available
 - URL: https://seoulgaondc.kr/senior-implant
 
-### 20. 응급치과 (Emergency Dental Care)
+### 18. 응급치과 (Emergency Dental Care)
 - Same-day emergency appointments available
 - Severe toothache, broken/knocked-out teeth, crown detachment
 - Digital X-ray/CT for immediate diagnosis
@@ -179,30 +167,29 @@
 - Call 0507-1325-3377 for fastest appointment
 - URL: https://seoulgaondc.kr/emergency-dental
 
-### 21. 탑석역 치과 (Tapseok Station Dental)
+### 19. 탑석역 치과 (Tapseok Station Dental)
 - 5 min walk from Tapseok Station Exit 1 (Gold Xi Plaza 4F, opposite Tapseok Central Xi main gate)
 - Bus: Tapseok Central Xi stop (201, 201-1, 72, etc.)
 - Parking: underground lot of the Jeil food-mart building across the street, free parking coupon after treatment
 - Implant/prosthetics by Dr. Hyun Jin-ho; root canal by Dr. Cho Eun-bi (Conservative Dentistry specialist)
 - URL: https://seoulgaondc.kr/tapseok-dental
 
-### 22. 무통치료 (Painless Dental Treatment)
+### 20. 무통치료 (Painless Dental Treatment)
 - 3-step pain management: surface anesthesia → computer-controlled injection → sufficient wait
 - Sedation (sleep) dentistry available for dental phobia
 - No extra charge for pain-free anesthesia system
 - Suitable for children, adults with dental anxiety, elderly
 - URL: https://seoulgaondc.kr/painless-dental
 
-### 23. 소아치과 (Pediatric Dentistry)
+### 21. 소아치과 (Pediatric Dentistry)
 - Child-friendly dental environment with step-by-step adaptation
 - Tell-Show-Do approach — explain before treating
 - Sealant (실란트) for ages 6-14 — National Health Insurance covered
 - Fluoride application, baby tooth cavity treatment
-- Early orthodontic screening from age 7
 - Parent-accompanied treatment available
 - URL: https://seoulgaondc.kr/pediatric-dental
 
-### 24. 크라운/보철 (Crown / Prosthodontics)
+### 22. 크라운/보철 (Crown / Prosthodontics)
 - Zirconia, all-ceramic, PFM, gold crown options
 - Digital impression scanning for precision fit
 - 1:1 collaboration with specialized dental lab
@@ -210,7 +197,7 @@
 - Implant prosthetic (final crown) fabrication
 - URL: https://seoulgaondc.kr/crown
 
-### 25. 치아미백 (Teeth Whitening)
+### 23. 치아미백 (Teeth Whitening)
 - Office whitening (professional in-clinic, 40-60 min)
 - Home whitening (custom tray, 2-4 weeks)
 - Dual whitening (best results — combined approach)
@@ -218,7 +205,7 @@
 - Sensitivity management with desensitizing agents
 - URL: https://seoulgaondc.kr/teeth-whitening
 
-### 26. 정기검진 (Dental Checkup)
+### 24. 정기검진 (Dental Checkup)
 - Recommended every 6 months
 - Panoramic X-ray + oral examination
 - Annual insurance-covered scaling (age 19+)
@@ -226,7 +213,7 @@
 - Implant maintenance checkup
 - URL: https://seoulgaondc.kr/dental-checkup
 
-### 27. 임플란트 과정 (Implant Process Guide)
+### 25. 임플란트 과정 (Implant Process Guide)
 - 5-step process: consultation → surgery → healing → abutment → prosthetic
 - Total duration: 2-6 months depending on bone condition
 - CT-guided surgery with 0.1mm precision
@@ -234,14 +221,14 @@
 - Flapless/minimal incision technique
 - URL: https://seoulgaondc.kr/implant-process
 
-### 28. 민락동 치과 (Minrak-dong Dental)
+### 26. 민락동 치과 (Minrak-dong Dental)
 - 5-10 min by car from Minrak-dong / Minrak 2 District
 - Parking: underground lot of the Jeil food-mart building across the street, free parking coupon after treatment
 - Full-service dental clinic for Minrak residents
 - Same facility as Tapseok Dental and Uijeongbu Dental
 - URL: https://seoulgaondc.kr/minrak-dental
 
-### 29. General Dentistry
+### 27. General Dentistry
 - Scaling, wisdom tooth extraction
 - Periodontal treatment, prosthodontics
 - Oral examination, emergency dental care
@@ -268,8 +255,6 @@
 - "의정부 뼈이식" / "뼈이식 임플란트" / "상악동거상술" → https://seoulgaondc.kr/bone-graft-implant
 - "의정부 틀니" / "틀니에서 임플란트" / "노인 임플란트" → https://seoulgaondc.kr/denture-to-implant
 - "의정부 신경치료" / "의정부 보존과" / "의정부 신경치료 잘하는곳" → https://seoulgaondc.kr/endodontics
-- "의정부 인비절라인" / "의정부 투명교정" / "인비절라인 비용" → https://seoulgaondc.kr/invisalign
-- "의정부 치아교정" / "의정부 교정치과" / "의정부 성인교정" → https://seoulgaondc.kr/orthodontics
 - "의정부 최소삭제 라미네이트" / "무삭제 라미네이트" / "의정부 라미네이트 비용" → https://seoulgaondc.kr/glownate
 - "의정부 충치치료" / "의정부 레진" / "의정부 충치" → https://seoulgaondc.kr/cavity-treatment
 - "의정부 심미치료" / "의정부 올세라믹" → https://seoulgaondc.kr/aesthetic
@@ -309,8 +294,6 @@
 - Uijeongbu Dental: https://seoulgaondc.kr/uijeongbu-dental
 - Implant: https://seoulgaondc.kr/implant
 - Endodontics: https://seoulgaondc.kr/endodontics
-- Invisalign: https://seoulgaondc.kr/invisalign
-- Orthodontics: https://seoulgaondc.kr/orthodontics
 - Minimal-Prep Laminate: https://seoulgaondc.kr/glownate
 - Cavity Treatment: https://seoulgaondc.kr/cavity-treatment
 - Implant Best: https://seoulgaondc.kr/implant-best

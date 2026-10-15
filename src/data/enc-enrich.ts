@@ -5,7 +5,7 @@ export interface EncEnrich { type: string; sections: { h: string; p: string[]; l
 export const ENC_ENRICH_DATE = '2026-10-08'
 // 동의어·중복 용어 → 대표 용어 slug (301). 목록·사이트맵·크로스링크에서 제외.
 export const ENC_ALIASES: Record<string, string> = {"dental-x-ray": "dental-radiography", "root-canal-treatment": "root-canal-treatmen", "guided-implant-surgery": "guided-implant", "implant-insurance": "implant-health-insurance", "secondary-caries-recurrent-caries": "secondary-caries", "dentinal-hypersensitivity": "dentin-hypersensitivity", "microfracture": "cracked-tooth-microfracture", "tooth-staining": "toothstaining", "canine-2": "canine", "vertical-dimension": "occlusal-vertical-dimension", "dental-erosion": "dental-erosion-acid-erosion", "enamel-erosion": "dental-erosion-acid-erosion", "dental-attrition": "attrition", "dental-anesthesia": "local-anesthesia", "gingival-hyperplasia": "gingival-enlargement", "periodontal-probing": "periodontal-probe-probing", "subgingival-curettage": "curettage", "residual-alveolar-bone": "residual-bone-volume-available-bone", "congenital-tooth-absence": "hypodontia"}
-export const ENC_TREAT_LABELS: Record<string, string> = {"/implant": "임플란트", "/implant-process": "임플란트 과정", "/implant-cost": "임플란트 비용", "/bone-graft-implant": "뼈이식 임플란트", "/full-mouth-implant": "전체 임플란트", "/front-tooth-implant": "앞니 임플란트", "/senior-implant": "어르신 건강보험 임플란트", "/denture-to-implant": "틀니에서 임플란트로", "/endodontics": "신경치료", "/cavity-treatment": "충치치료", "/resin-buildup": "레진빌드업", "/aesthetic": "앞니 심미치료", "/laminate": "라미네이트", "/teeth-whitening": "치아미백", "/crown": "크라운", "/orthodontics": "치아교정", "/invisalign": "인비절라인", "/scaling-gum-treatment": "스케일링·잇몸치료", "/wisdom-tooth": "사랑니 발치", "/pediatric-dental": "소아치과", "/dental-checkup": "정기검진", "/emergency-dental": "응급 치과", "/painless-dental": "편안한 치과 진료"}
+export const ENC_TREAT_LABELS: Record<string, string> = {"/implant": "임플란트", "/implant-process": "임플란트 과정", "/implant-cost": "임플란트 비용", "/bone-graft-implant": "뼈이식 임플란트", "/full-mouth-implant": "전체 임플란트", "/front-tooth-implant": "앞니 임플란트", "/senior-implant": "어르신 건강보험 임플란트", "/denture-to-implant": "틀니에서 임플란트로", "/endodontics": "신경치료", "/cavity-treatment": "충치치료", "/resin-buildup": "레진빌드업", "/aesthetic": "앞니 심미치료", "/laminate": "라미네이트", "/teeth-whitening": "치아미백", "/crown": "크라운", "/scaling-gum-treatment": "스케일링·잇몸치료", "/wisdom-tooth": "사랑니 발치", "/pediatric-dental": "소아치과", "/dental-checkup": "정기검진", "/emergency-dental": "응급 치과", "/painless-dental": "편안한 치과 진료"}
 export const ENC_ENRICH: Record<string, EncEnrich> = {
 "abrasion": {
 "type": "질환",
@@ -522,8 +522,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/pediatric-dental",
-"/orthodontics"
+"/pediatric-dental"
 ],
 "rel": [
 "tooth-avulsion",
@@ -1641,7 +1640,6 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/orthodontics",
 "/implant"
 ],
 "rel": [
@@ -2700,8 +2698,6 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/orthodontics",
-"/invisalign"
 ],
 "rel": [
 "malocclusion",
@@ -3292,7 +3288,6 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/orthodontics"
 ],
 "rel": [
 "dental-arch-dentition",
@@ -3350,7 +3345,6 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/orthodontics",
 "/implant"
 ],
 "rel": [
@@ -5010,8 +5004,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/endodontics",
-"/orthodontics"
+"/endodontics"
 ],
 "rel": [
 "root-canal",
@@ -5245,8 +5238,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/pediatric-dental",
-"/orthodontics"
+"/pediatric-dental"
 ],
 "rel": [
 "eruption",
@@ -5773,8 +5765,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/pediatric-dental",
-"/orthodontics"
+"/pediatric-dental"
 ],
 "rel": [
 "tooth-eruption",
@@ -7428,8 +7419,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/dental-checkup",
-"/orthodontics"
+"/dental-checkup"
 ],
 "rel": [
 "clenching",
@@ -7721,7 +7711,6 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/orthodontics",
 "/implant"
 ],
 "rel": [
@@ -7900,8 +7889,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/wisdom-tooth",
-"/orthodontics"
+"/wisdom-tooth"
 ],
 "rel": [
 "wisdom-tooth",
@@ -9632,8 +9620,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/laminate",
-"/orthodontics"
+"/laminate"
 ],
 "rel": [
 "laminate-veneer",
@@ -9691,8 +9678,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/aesthetic",
-"/orthodontics"
+"/aesthetic"
 ],
 "rel": [
 "central-incisor",
@@ -9926,7 +9912,6 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/orthodontics",
 "/aesthetic"
 ],
 "rel": [
@@ -9987,8 +9972,6 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/orthodontics",
-"/invisalign"
 ],
 "rel": [
 "crowding",
@@ -10578,7 +10561,6 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/orthodontics",
 "/laminate"
 ],
 "rel": [
@@ -10931,8 +10913,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/crown",
-"/orthodontics"
+"/crown"
 ],
 "rel": [
 "occlusion",
@@ -11049,8 +11030,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/crown",
-"/orthodontics"
+"/crown"
 ],
 "rel": [
 "occlusal-interference",
@@ -11646,8 +11626,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/scaling-gum-treatment",
-"/orthodontics"
+"/scaling-gum-treatment"
 ],
 "rel": [
 "osteoblast",
@@ -12176,8 +12155,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/scaling-gum-treatment",
-"/orthodontics"
+"/scaling-gum-treatment"
 ],
 "rel": [
 "cementum",
@@ -13180,7 +13158,6 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/orthodontics",
 "/implant"
 ],
 "rel": [
@@ -15481,8 +15458,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/endodontics",
-"/orthodontics"
+"/endodontics"
 ],
 "rel": [
 "tooth-avulsion",
@@ -16966,8 +16942,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/implant",
-"/orthodontics"
+"/implant"
 ],
 "rel": [
 "eruption",
@@ -17381,8 +17356,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/implant",
-"/orthodontics"
+"/implant"
 ],
 "rel": [
 "opposing-tooth",
@@ -18455,8 +18429,7 @@ export const ENC_ENRICH: Record<string, EncEnrich> = {
 }
 ],
 "treat": [
-"/cavity-treatment",
-"/orthodontics"
+"/cavity-treatment"
 ],
 "rel": [
 "enamel-caries",

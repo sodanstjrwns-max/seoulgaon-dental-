@@ -122,7 +122,7 @@ app.use('*', async (c, next) => {
   c.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self)')
 
   // HTML 페이지 캐시: 짧게 (SEO 크롤러가 최신 콘텐츠 수집)
-  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|invisalign|orthodontics|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant|implant-cost|night-dental|senior-implant|emergency-dental|tapseok-dental|painless-dental|pediatric-dental|crown|teeth-whitening|dental-checkup|implant-process|minrak-dental)$/) || path.match(/^\/(blog|before-after)\/\d+$/) || path.match(/^\/encyclopedia\/[^\/]+$/)) {
+  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant|implant-cost|night-dental|senior-implant|emergency-dental|tapseok-dental|painless-dental|pediatric-dental|crown|teeth-whitening|dental-checkup|implant-process|minrak-dental)$/) || path.match(/^\/(blog|before-after)\/\d+$/) || path.match(/^\/encyclopedia\/[^\/]+$/)) {
     c.header('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200')
     // 라우트 핸들러가 noindex를 지정한 페이지(비포애프터 상세, 얇은 블로그 글)는 덮어쓰지 않음
     if (!(c.res.headers.get('X-Robots-Tag') || '').includes('noindex')) {
@@ -2154,21 +2154,25 @@ app.get('/api/admin/stats/encyclopedia', auth, async (c) => {
 // 사이트맵 image:image 에 일치시키고, 홈·의정부 치과 허브에 600×600 사진 카드 + ItemList 로 링크한다.
 // 사진: 임플란트·뼈이식 = 실제 원내 사진(real-*), 나머지 = 원내 톤에 맞춘 AI 생성 장면(사람 얼굴 없음, 결과 암시 없음)
 //   원본 2k: tools/subpage-cards/gen/seoulgaon-dental-/
+// 서울가온치과에서 하지 않는 진료(2026-10-15 병원 대표 확인): 치아교정 전반(인비절라인·투명교정·부분교정·심미교정)
+const NOT_OFFERED_TX = /교정|인비절라인/
 type UijeongbuCard = { path: string; key: string; name: string; tag: string; line: string }
 const UIJEONGBU_CARDS: UijeongbuCard[] = [
   { path: '/implant', key: 'implant', name: '의정부 임플란트', tag: 'IMPLANT', line: 'CT로 뼈 두께와 신경 위치를 보고 계획하는 가이드 임플란트, 현진호 대표원장 수술' },
-  { path: '/endodontics', key: 'endodontics', name: '의정부 신경치료', tag: 'ROOT CANAL', line: '보존과 전문의가 미세현미경으로 신경관 안을 확대해 보며 치료합니다' },
+  { path: '/endodontics', key: 'endodontics', name: '의정부 신경치료', tag: 'ROOT CANAL', line: '서울대 치과보존과 전문의 조은비 원장이 신경관 구조를 확인하며 직접 치료합니다' },
   { path: '/laminate', key: 'laminate', name: '의정부 라미네이트', tag: 'LAMINATE', line: '변색·벌어짐·왜소치 앞니를 최소 삭제 라미네이트로 다듬습니다' },
-  { path: '/orthodontics', key: 'orthodontics', name: '의정부 치아교정', tag: 'ORTHODONTICS', line: '인비절라인·투명교정 중점, 교합까지 함께 보는 교정 계획' },
+  { path: '/cavity-treatment', key: 'cavity-treatment', name: '의정부 충치치료', tag: 'CAVITY', line: '충치 부위만 덜어내고 건강한 치아는 최대한 남기는 레진 치료' },
   { path: '/bone-graft-implant', key: 'bone-graft-implant', name: '의정부 뼈이식 임플란트', tag: 'BONE GRAFT', line: '뼈가 부족한 자리는 뼈이식·상악동거상술로 식립 조건부터 만듭니다' },
   { path: '/full-mouth-implant', key: 'full-mouth-implant', name: '의정부 전체임플란트', tag: 'FULL ARCH', line: '이가 거의 남지 않았을 때, 틀니 대신 위아래 전악 임플란트 계획' },
 ]
-const cardOg = (key: string) => `/images/cards/uijeongbu-${key}.jpg`
-const cardThumb = (key: string) => `/images/cards/uijeongbu-${key}-600.webp`
+// 2026-10-15 신경치료·충치치료 사진 교체(현미경이 찍힌 AI 장면 → 실제 원내 진료실 사진). 정적 이미지가 immutable 캐시라 파일명을 바꾼다.
+const CARD_VER: Record<string, string> = { 'endodontics': '-v2', 'cavity-treatment': '-v2' }
+const cardOg = (key: string) => `/images/cards/uijeongbu-${key}${CARD_VER[key] || ''}.jpg`
+const cardThumb = (key: string) => `/images/cards/uijeongbu-${key}${CARD_VER[key] || ''}-600.webp`
 // 랜딩 slug → 대표 사진 (핵심 6 + 관련 진료 4)
 const LANDING_CARD_IMAGES: Record<string, string> = Object.fromEntries([
   ...UIJEONGBU_CARDS.filter(c => c.path !== '/implant').map(c => [c.key, cardOg(c.key)]),
-  ...['invisalign', 'cavity-treatment', 'implant-process', 'teeth-whitening'].map(k => [k, cardOg(k)]),
+  ...['implant-process', 'teeth-whitening'].map(k => [k, cardOg(k)]),
 ])
 function uijeongbuCardGrid(idPrefix: string, exclude = ''): string {
   return `<ul class="ub-cards" role="list">${UIJEONGBU_CARDS.filter(c => c.path !== exclude).map((c, i) => `<li><a class="ub-card" href="${c.path}" aria-labelledby="${idPrefix}-${c.key}"><span class="ub-card-img"><img src="${cardThumb(c.key)}" width="600" height="600" loading="lazy" decoding="async" alt="${c.name}"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">${String(i + 1).padStart(2, '0')} / ${c.tag}</span><strong class="ub-card-title" id="${idPrefix}-${c.key}">${c.name}</strong><span class="ub-card-line">${c.line}</span></span></a></li>`).join('')}</ul>`
@@ -2214,8 +2218,6 @@ const sitemapImageMap: Record<string, { url: string; title: string }> = {
   '/reservation':         { url: '/images/og-main.jpg',               title: '예약 안내' },
   '/uijeongbu-dental':    { url: '/images/clinic-lobby-1.jpg',        title: '의정부 치과 서울가온치과' },
   '/endodontics':         { url: '/images/clinic-unit-1.jpg',         title: '신경치료' },
-  '/invisalign':          { url: '/images/clinic-treatment.jpg',      title: '인비절라인 교정' },
-  '/orthodontics':        { url: '/images/clinic-treatment.jpg',      title: '치아교정' },
   '/cavity-treatment':    { url: '/images/clinic-unit-1.jpg',         title: '충치치료' },
   '/implant-best':        { url: '/images/clinic-implant-center.jpg', title: '임플란트 잘하는 치과' },
   '/full-mouth-implant':  { url: '/images/clinic-implant-center.jpg', title: '전체 임플란트' },
@@ -2293,8 +2295,6 @@ function sitemapStaticPages(): Array<{ loc: string; priority: string; changefreq
     // ── SEO 랜딩페이지 v2 (2026-05-13 배포) ──
     { loc: '/uijeongbu-dental',     priority: '0.95', changefreq: 'monthly', lastmod: V4_DATE },
     { loc: '/endodontics',           priority: '0.90', changefreq: 'monthly', lastmod: V4_DATE },
-    { loc: '/invisalign',            priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
-    { loc: '/orthodontics',          priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
     { loc: '/cavity-treatment',      priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
     { loc: '/implant-best',          priority: '0.95', changefreq: 'monthly', lastmod: V4_DATE },
     { loc: '/full-mouth-implant',    priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
@@ -2619,7 +2619,8 @@ app.get('/llms-full.txt', async (c) => {
       out += `## ${e.term}\n`
       out += `- URL: ${url}\n`
       if (e.summary) out += `- 요약: ${cleanMd(e.summary)}\n`
-      if (e.related_treatment) out += `- 관련 진료: ${e.related_treatment}\n`
+      const relTx = String(e.related_treatment || '').split(/[,·]/).map((t: string) => t.trim()).filter((t: string) => t && !NOT_OFFERED_TX.test(t)).join(', ')
+      if (relTx) out += `- 관련 진료: ${relTx}\n`
       const body = cleanMd(encCleanContent(e.slug, e.content)).replace(/\n{2,}/g, '\n')
       if (body) out += `${body}\n`
       const en = ENC_ENRICH[e.slug]
@@ -2767,7 +2768,6 @@ const SEO_TX_PAGES: { path: string; name: string; keys: string[] }[] = [
   { path: '/cavity-treatment', name: '충치치료', keys: ['충치'] },
   { path: '/wisdom-tooth', name: '사랑니 발치', keys: ['사랑니'] },
   { path: '/scaling-gum-treatment', name: '스케일링·잇몸치료', keys: ['스케일링', '잇몸'] },
-  { path: '/orthodontics', name: '치아교정', keys: ['교정'] },
   { path: '/teeth-whitening', name: '치아미백', keys: ['미백'] },
   { path: '/pediatric-dental', name: '소아 치과진료', keys: ['소아', '유치'] },
 ]
@@ -4318,12 +4318,12 @@ app.get('/encyclopedia/:key', async (c) => {
       </div>
     </section>` : ''
 
-    const treatmentLinks = (entry.related_treatment || '').split(/[,·]/).map((t: string) => t.trim()).filter(Boolean)
+    // 서울가온치과는 치아교정(인비절라인 포함)을 하지 않는다(2026-10-15 병원 확인) → '관련 진료'에서 제외
+    const treatmentLinks = (entry.related_treatment || '').split(/[,·]/).map((t: string) => t.trim()).filter(Boolean).filter((t: string) => !NOT_OFFERED_TX.test(t))
     const treatMap: Record<string, string> = {
       '임플란트': '/implant', '가이드 임플란트': '/implant', '뼈이식': '/bone-graft-implant',
       '신경치료': '/endodontics', '보존치료': '/endodontics', '심미치료': '/aesthetic',
-      '라미네이트': '/laminate', '교정': '/orthodontics', '치아교정': '/orthodontics',
-      '인비절라인': '/invisalign', '충치치료': '/cavity-treatment', '레진': '/cavity-treatment',
+      '라미네이트': '/laminate', '충치치료': '/cavity-treatment', '레진': '/cavity-treatment',
       '레진빌드업': '/resin-buildup', '잇몸치료': '/scaling-gum-treatment', '스케일링': '/scaling-gum-treatment',
       '크라운': '/crown', '보철': '/crown', '보철치료': '/crown', '미백': '/teeth-whitening', '치아미백': '/teeth-whitening',
       '사랑니': '/wisdom-tooth', '발치': '/wisdom-tooth', '소아치과': '/pediatric-dental', '정기검진': '/dental-checkup'
@@ -4531,7 +4531,7 @@ const LANDING_PAGES: LandingPageData[] = [
       {
         heading: '어떤 의료진이 진료하나요?',
         content: `<p><strong>현진호 대표원장</strong>은 서울대학교 치의학과를 졸업한 통합치의학과 전문의로, 임플란트와 보철(씌우는 치료)을 중점적으로 진료합니다. CT 영상을 바탕으로 식립 위치를 미리 계획하는 가이드 임플란트를 시행합니다.</p>
-<p><strong>조은비 원장</strong>은 서울대학교 치의학대학원 치과보존과 전문의로, 신경치료와 레진 등 자연치아를 살리는 치료를 맡고 있습니다. 미세현미경으로 신경관 내부를 확대해 보며 치료합니다. 두 원장의 경력은 <a href="/doctors">의료진 소개</a>에서 확인하실 수 있습니다.</p>`
+<p><strong>조은비 원장</strong>은 서울대학교 치의학대학원 치과보존과 전문의로, 신경치료와 레진 등 자연치아를 살리는 치료를 맡고 있습니다. 두 원장의 경력은 <a href="/doctors">의료진 소개</a>에서 확인하실 수 있습니다.</p>`
       },
       {
         heading: '의정부 치과에서 많이 찾는 진료',
@@ -4540,8 +4540,9 @@ const LANDING_PAGES: LandingPageData[] = [
 <li><a href="/endodontics"><strong>신경치료</strong></a> — 깊은 충치·금 간 치아의 통증 치료와 재신경치료</li>
 <li><a href="/aesthetic"><strong>앞니 심미치료</strong></a> — <a href="/laminate">라미네이트</a>, 지르코니아 <a href="/crown">크라운</a>, <a href="/resin-buildup">레진빌드업</a></li>
 <li><a href="/cavity-treatment"><strong>충치치료</strong></a>와 <a href="/scaling-gum-treatment"><strong>스케일링·잇몸치료</strong></a> — 만 19세 이상 연 1회 스케일링 건강보험 적용</li>
-<li><a href="/wisdom-tooth"><strong>사랑니 발치</strong></a>, <a href="/orthodontics"><strong>치아교정</strong></a>·<a href="/invisalign">인비절라인</a>, <a href="/pediatric-dental"><strong>소아치과</strong></a>, <a href="/dental-checkup"><strong>정기검진</strong></a></li>
-</ul>`
+<li><a href="/wisdom-tooth"><strong>사랑니 발치</strong></a>, <a href="/pediatric-dental"><strong>소아치과</strong></a>, <a href="/dental-checkup"><strong>정기검진</strong></a></li>
+</ul>
+<p>치아교정(인비절라인·투명교정 포함)은 서울가온치과에서 하지 않는 진료입니다.</p>`
       },
       {
         heading: '의정부에서 치과를 고를 때 확인해 볼 것',
@@ -4589,21 +4590,20 @@ const LANDING_PAGES: LandingPageData[] = [
   {
     slug: 'endodontics',
     title: '의정부 신경치료 | 서울가온치과 — 서울대 보존과 전문의 직접 시행',
-    metaDesc: '의정부 신경치료 서울가온치과. 서울대학교 보존과 전문의 조은비 원장이 미세현미경으로 직접 시행합니다. 정확한 진단, 최소 삭제, 높은 성공률. 탑석역 5분. ☎ 0507-1325-3377',
+    metaDesc: '의정부 신경치료 서울가온치과. 서울대학교 보존과 전문의 조은비 원장이 직접 시행합니다. 정확한 진단, 최소 삭제, 높은 성공률. 탑석역 5분. ☎ 0507-1325-3377',
     h1: '의정부 신경치료 — 서울대 보존과 전문의',
-    heroSub: '서울대학교 보존과 전문의가 미세현미경으로 직접 시행하는 정밀 신경치료',
+    heroSub: '서울대학교 보존과 전문의가 처음부터 끝까지 직접 시행하는 신경치료',
     keywords: '의정부 신경치료, 의정부 신경치료 잘하는곳, 의정부 치과 신경치료, 탑석역 신경치료, 신경치료 통증, 신경치료 비용, 의정부 보존과, 의정부 치아살리기',
     category: '신경치료',
     sections: [
       {
         heading: '신경치료, 왜 서울가온치과일까요?',
-        content: `<p>신경치료는 <strong>치아를 뽑지 않고 살리는 마지막 기회</strong>입니다. 서울가온치과에서는 <strong>서울대학교 보존과 전문의 조은비 원장</strong>이 미세현미경을 활용하여 직접 신경치료를 시행합니다.</p>
+        content: `<p>신경치료는 <strong>치아를 뽑지 않고 살리는 마지막 기회</strong>입니다. 서울가온치과에서는 <strong>서울대학교 보존과 전문의 조은비 원장</strong>이 직접 신경치료를 시행합니다.</p>
 <p>보존과 전문의란 <strong>충치와 신경치료를 전문적으로 수련한 의사</strong>를 말합니다. 일반 치과의사와 달리 2~3년의 추가 수련을 통해 복잡한 신경관 구조를 정밀하게 치료할 수 있는 전문성을 갖추고 있습니다.</p>`
       },
       {
         heading: '서울가온치과 신경치료의 차이점',
         content: `<ul>
-<li><strong>미세현미경 사용</strong> — 육안으로 보이지 않는 미세 신경관까지 정확히 확인하고 치료합니다</li>
 <li><strong>Ni-Ti 파일 사용</strong> — 유연한 니켈-티타늄 기구로 곡선형 신경관도 안전하게 성형합니다</li>
 <li><strong>최소 삭제 원칙</strong> — 건강한 치아 조직은 최대한 보존하며 감염 부위만 정밀 제거합니다</li>
 <li><strong>전문의 직접 시행</strong> — 처음부터 끝까지 조은비 원장(서울대 보존과 전문의)이 직접 치료합니다</li>
@@ -4625,7 +4625,7 @@ const LANDING_PAGES: LandingPageData[] = [
         heading: '신경치료 과정',
         content: `<ol>
 <li><strong>정밀 진단</strong> — X-ray·CT 촬영으로 신경관 상태를 정확히 파악합니다</li>
-<li><strong>마취 후 감염 제거</strong> — 충분한 마취 후 감염된 신경 조직을 미세현미경 하에 제거합니다</li>
+<li><strong>마취 후 감염 제거</strong> — 충분한 마취 후 감염된 신경 조직을 제거합니다</li>
 <li><strong>신경관 성형·세척</strong> — Ni-Ti 파일로 신경관을 성형하고 소독액으로 철저히 세척합니다</li>
 <li><strong>밀봉 충전</strong> — 생체적합성 재료로 신경관을 빈틈없이 밀봉합니다</li>
 <li><strong>보철 수복</strong> — 크라운 또는 레진빌드업으로 치아를 원래 형태로 복원합니다</li>
@@ -4647,117 +4647,7 @@ const LANDING_PAGES: LandingPageData[] = [
       { href: '/doctors', label: '의료진 소개' },
     ]
   },
-  // ── 3. 의정부 인비절라인 ──
-  {
-    slug: 'invisalign',
-    title: '의정부 인비절라인 | 서울가온치과 — 투명교정, 탑석역 5분',
-    metaDesc: '의정부 인비절라인 투명교정 서울가온치과. 눈에 띄지 않는 투명 교정장치로 가지런한 치아를 만듭니다. 정밀 3D 시뮬레이션, 맞춤 치료 계획. 탑석역 5분. ☎ 0507-1325-3377',
-    h1: '의정부 인비절라인 — 투명교정 중점 진료',
-    heroSub: '눈에 띄지 않는 투명 교정장치로 가지런한 치아를 완성합니다',
-    keywords: '의정부 인비절라인, 의정부 투명교정, 의정부 치아교정, 인비절라인 비용, 인비절라인 후기, 의정부 교정치과, 탑석역 교정, 인비절라인 기간',
-    category: '치아교정',
-    sections: [
-      {
-        heading: '인비절라인이란?',
-        content: `<p>인비절라인은 <strong>투명한 플라스틱 장치</strong>를 이용한 치아교정 방법입니다. 전통적인 금속 브라켓과 달리 <strong>눈에 거의 보이지 않아</strong> 교정 중에도 자연스러운 미소를 유지할 수 있습니다.</p>
-<p>서울가온치과에서는 <strong>3D 디지털 스캔과 시뮬레이션</strong>을 통해 치료 시작 전부터 최종 결과를 미리 확인할 수 있습니다.</p>`
-      },
-      {
-        heading: '인비절라인의 장점',
-        content: `<ul>
-<li><strong>심미성</strong> — 투명하여 착용 중에도 티가 나지 않습니다</li>
-<li><strong>편의성</strong> — 탈착이 가능하여 식사와 양치에 불편이 없습니다</li>
-<li><strong>위생적</strong> — 장치를 분리하고 깨끗이 세척할 수 있어 충치·잇몸병 위험이 낮습니다</li>
-<li><strong>편안함</strong> — 금속 브라켓 없이 부드러운 장치로 구강 점막 자극이 적습니다</li>
-<li><strong>예측 가능</strong> — 3D 시뮬레이션으로 치료 결과를 사전에 확인합니다</li>
-</ul>`
-      },
-      {
-        heading: '서울가온치과 인비절라인 치료 과정',
-        content: `<ol>
-<li><strong>상담 및 정밀 검사</strong> — 구강 검진, X-ray, 3D 스캔으로 현재 상태를 정확히 파악합니다</li>
-<li><strong>맞춤 치료 계획</strong> — 3D 시뮬레이션으로 치료 과정과 최종 결과를 시각적으로 확인합니다</li>
-<li><strong>맞춤 장치 제작</strong> — 개인의 치아에 정확히 맞는 투명 교정장치를 제작합니다</li>
-<li><strong>교정 진행</strong> — 2주마다 새 장치로 교체하며 치아를 점진적으로 이동시킵니다</li>
-<li><strong>정기 검진</strong> — 4~6주 간격으로 내원하여 진행 상황을 확인합니다</li>
-<li><strong>유지 관리</strong> — 교정 완료 후 유지장치로 결과를 안정적으로 유지합니다</li>
-</ol>`
-      },
-      {
-        heading: '인비절라인이 적합한 경우',
-        content: `<ul>
-<li>앞니가 <strong>삐뚤빼뚤</strong>한 경우</li>
-<li><strong>치아 사이 공간</strong>이 벌어진 경우</li>
-<li><strong>앞니 돌출</strong>(덧니)이 있는 경우</li>
-<li><strong>이전 교정 후 재발</strong>한 경우</li>
-<li>직업상 <strong>보이지 않는 교정</strong>을 원하는 경우</li>
-</ul>
-<p>심한 부정교합의 경우 다른 교정 방법이 더 적합할 수 있으므로, 정확한 상담 후 최적의 방법을 안내해 드립니다.</p>`
-      }
-    ],
-    faqs: [
-      { q: '인비절라인 비용은 얼마인가요?', a: '교정 범위와 난이도에 따라 다르며, 상담 후 정확한 비용을 안내해 드립니다. 무이자 분할 납부도 가능합니다.' },
-      { q: '인비절라인 교정 기간은 얼마나 되나요?', a: '간단한 배열의 경우 6개월~1년, 전체 교정의 경우 1년~2년 정도 소요됩니다. 3D 시뮬레이션으로 예상 기간을 미리 확인하실 수 있습니다.' },
-      { q: '인비절라인은 아프나요?', a: '새 장치로 교체 후 1~2일 정도 가벼운 압박감이 있을 수 있지만, 금속 교정에 비해 통증이 적습니다.' },
-      { q: '하루에 몇 시간 착용해야 하나요?', a: '하루 20~22시간 착용을 권장합니다. 식사와 양치 시에만 분리합니다.' },
-    ],
-    ctaText: '인비절라인 무료 상담 예약',
-    relatedLinks: [
-      { href: '/orthodontics', label: '의정부 치아교정' },
-      { href: '/aesthetic', label: '의정부 심미치료' },
-      { href: '/laminate', label: '의정부 최소삭제 라미네이트' },
-      { href: '/doctors', label: '의료진 소개' },
-    ]
-  },
-  // ── 4. 의정부 치아교정 ──
-  {
-    slug: 'orthodontics',
-    title: '의정부 치아교정 | 서울가온치과 — 인비절라인·투명교정 중점 진료',
-    metaDesc: '의정부 치아교정 서울가온치과. 인비절라인 투명교정, 부분교정, 심미교정까지. 3D 디지털 시뮬레이션으로 정확한 치료 계획. 탑석역 5분. ☎ 0507-1325-3377',
-    h1: '의정부 치아교정 — 인비절라인·투명교정 중점 진료',
-    heroSub: '가지런한 치아, 건강한 교합 — 나에게 맞는 최적의 교정 방법을 찾아드립니다',
-    keywords: '의정부 치아교정, 의정부 교정치과, 의정부 교정, 의정부 투명교정, 의정부 부분교정, 의정부 치아교정 비용, 탑석역 교정치과, 의정부 성인교정',
-    category: '치아교정',
-    sections: [
-      {
-        heading: '치아교정이 필요한 이유',
-        content: `<p>치아교정은 단순히 <strong>미용 목적</strong>만이 아닙니다. 가지런하지 않은 치아는 충치와 잇몸병의 원인이 되고, <strong>잘못된 교합은 턱관절 장애</strong>를 유발할 수 있습니다.</p>
-<p>서울가온치과에서는 환자의 교합 상태를 정밀하게 분석하여 <strong>건강한 교합과 아름다운 미소</strong>를 동시에 달성하는 교정 치료를 제공합니다.</p>`
-      },
-      {
-        heading: '서울가온치과 교정 치료 종류',
-        content: `<ul>
-<li><strong>인비절라인</strong> — 투명 교정장치. 눈에 보이지 않으며 탈착 가능. 심미성 최고</li>
-<li><strong>부분교정</strong> — 앞니 부분만 교정. 기간 짧고 비용 효율적</li>
-<li><strong>심미교정</strong> — 세라믹·투명 브라켓을 사용하여 눈에 덜 띄는 교정</li>
-</ul>
-<p>환자의 치아 상태와 라이프스타일에 맞는 최적의 교정 방법을 상담 후 추천해 드립니다.</p>`
-      },
-      {
-        heading: '교정 치료 과정',
-        content: `<ol>
-<li><strong>무료 상담</strong> — 현재 치아 상태 확인 및 교정 필요성 판단</li>
-<li><strong>정밀 검사</strong> — X-ray, 3D 구강 스캔, 교합 분석</li>
-<li><strong>치료 계획 수립</strong> — 3D 시뮬레이션으로 예상 결과 확인</li>
-<li><strong>교정 장치 장착</strong> — 맞춤 제작된 장치로 교정 시작</li>
-<li><strong>정기 내원</strong> — 월 1회 내원으로 진행 상황 체크</li>
-<li><strong>교정 완료 + 유지</strong> — 유지장치로 결과 안정화</li>
-</ol>`
-      }
-    ],
-    faqs: [
-      { q: '성인도 치아교정이 가능한가요?', a: '네, 성인 교정은 충분히 가능합니다. 오히려 성인은 치료 계획을 잘 따라주시기 때문에 좋은 결과를 얻는 경우가 많습니다.' },
-      { q: '치아교정 비용은 어떻게 되나요?', a: '교정 종류와 범위에 따라 다릅니다. 상담 시 정확한 비용을 안내드리며, 무이자 분할 납부가 가능합니다.' },
-      { q: '교정 기간은 보통 얼마나 걸리나요?', a: '부분교정은 6개월~1년, 전체 교정은 1년~2년 정도 소요됩니다. 개인 차이가 있으므로 상담 시 정확히 안내드립니다.' },
-    ],
-    ctaText: '치아교정 무료 상담 예약',
-    relatedLinks: [
-      { href: '/invisalign', label: '의정부 인비절라인' },
-      { href: '/aesthetic', label: '의정부 심미치료' },
-      { href: '/laminate', label: '의정부 최소삭제 라미네이트' },
-      { href: '/doctors', label: '의료진 소개' },
-    ]
-  },
+  // (구 3·4. 의정부 인비절라인·치아교정 랜딩 제거됨 — 서울가온치과는 치아교정을 하지 않음(2026-10-15 병원 확인). /invisalign·/orthodontics 는 410)
   // (구 5. 글로우네이트 랜딩페이지 제거됨 — /glownate → /laminate 301 리다이렉트로 대체. 2026-07-21)
   // ── 6. 의정부 충치치료 ──
   {
@@ -5239,7 +5129,7 @@ const LANDING_PAGES: LandingPageData[] = [
   {
     slug: 'night-dental',
     title: '의정부 야간진료 치과 | 서울가온치과 — 목요일 밤 8시 30분까지',
-    metaDesc: '의정부 야간진료 치과 서울가온치과. 매주 목요일 밤 8시 30분까지 야간진료. 직장인·학생도 퇴근 후 내원 가능. 임플란트·교정·충치치료 등 전 진료과목 저녁 진료. 탑석역 도보 5분. ☎ 0507-1325-3377',
+    metaDesc: '의정부 야간진료 치과 서울가온치과. 매주 목요일 밤 8시 30분까지 야간진료. 직장인·학생도 퇴근 후 내원 가능. 임플란트·신경치료·충치치료 등 전 진료과목 저녁 진료. 탑석역 도보 5분. ☎ 0507-1325-3377',
     h1: '의정부 야간진료 치과 — 목요일 밤 8시 30분까지',
     heroSub: '바쁜 일상에도 치과 진료를 미루지 마세요. 매주 목요일 야간진료 운영합니다',
     keywords: '의정부 야간진료 치과, 의정부 저녁 진료 치과, 의정부 늦게까지 하는 치과, 야간 치과, 퇴근 후 치과, 의정부 목요일 야간 치과, 저녁 치과 진료',
@@ -5266,7 +5156,6 @@ const LANDING_PAGES: LandingPageData[] = [
         content: `<p>일부 치과에서는 야간 시간에 <strong>간단한 진료만</strong> 가능한 경우가 있습니다. 서울가온치과는 목요일 야간에도 아래 <strong>모든 진료</strong>를 동일하게 제공합니다:</p>
 <ul>
 <li>🦷 <strong>임플란트</strong> — 상담, CT 촬영, 수술 모두 가능</li>
-<li>😁 <strong>교정</strong> — 인비절라인·부분교정 상담 및 조정</li>
 <li>🪥 <strong>일반 진료</strong> — 충치, 신경치료, 발치, 스케일링</li>
 <li>✨ <strong>심미치료</strong> — 라미네이트, 레진빌드업, 미백</li>
 <li>🏥 <strong>응급 처치</strong> — 급성 치통, 보철물 탈락, 외상</li>
@@ -5402,10 +5291,10 @@ const LANDING_PAGES: LandingPageData[] = [
   {
     slug: 'tapseok-dental',
     title: '탑석역 치과 | 서울가온치과 — 탑석역 1번 출구 도보 5분',
-    metaDesc: '탑석역 치과 서울가온치과. 탑석역 1번 출구에서 걸어서 약 5분, 의정부시 용민로 22 골드자이프라자 4층. 임플란트·신경치료·앞니 심미·교정·일반진료, 목요일 20:30 야간진료. 현진호 대표원장. ☎ 0507-1325-3377',
+    metaDesc: '탑석역 치과 서울가온치과. 탑석역 1번 출구에서 걸어서 약 5분, 의정부시 용민로 22 골드자이프라자 4층. 임플란트·신경치료·앞니 심미·일반진료, 목요일 20:30 야간진료. 현진호 대표원장. ☎ 0507-1325-3377',
     h1: '탑석역 치과 — 1번 출구에서 걸어서 5분',
     heroSub: '탑석센트럴자이 정문 앞 골드자이프라자 4층, 탑석역 1번 출구에서 도보 약 5분',
-    keywords: '탑석역 치과, 탑석 치과, 탑석역 임플란트, 탑석역 교정, 탑석 근처 치과, 의정부 탑석 치과, 탑석역 치과 추천',
+    keywords: '탑석역 치과, 탑석 치과, 탑석역 임플란트, 탑석 근처 치과, 의정부 탑석 치과, 탑석역 치과 추천',
     category: '탑석역 치과',
     sections: [
       {
@@ -5431,7 +5320,6 @@ const LANDING_PAGES: LandingPageData[] = [
         heading: '서울가온치과 주요 진료과목',
         content: `<ul>
 <li>🦷 <strong>임플란트</strong> — 단일·전체·뼈이식·상악동거상술 / 만 65세 이상 건강보험 적용</li>
-<li>😁 <strong>교정</strong> — 인비절라인·부분교정·심미교정</li>
 <li>✨ <strong>심미치료</strong> — 라미네이트·레진빌드업·미백</li>
 <li>🪥 <strong>일반 진료</strong> — 충치·신경치료·발치·스케일링</li>
 <li>🦴 <strong>사랑니</strong> — 매복사랑니 발치</li>
@@ -5510,7 +5398,7 @@ const LANDING_PAGES: LandingPageData[] = [
   {
     slug: 'pediatric-dental',
     title: '의정부 소아치과 | 서울가온치과 — 아이가 무서워하지 않는 치과',
-    metaDesc: '의정부 소아치과 서울가온치과. 아이 눈높이 진료, 단계적 적응 프로그램, 무통마취 시스템. 유치 충치, 실란트, 불소도포, 소아 교정 상담. 보호자 동반 진료 가능. ☎ 0507-1325-3377',
+    metaDesc: '의정부 소아치과 서울가온치과. 아이 눈높이 진료, 단계적 적응 프로그램, 무통마취 시스템. 유치 충치, 실란트, 불소도포. 보호자 동반 진료 가능. ☎ 0507-1325-3377',
     h1: '의정부 소아치과 — 아이가 웃으며 다니는 치과',
     heroSub: '무서움 없이, 울음 없이. 아이 눈높이에서 시작하는 치과 진료',
     keywords: '의정부 소아치과, 의정부 어린이 치과, 소아 충치, 유치 치료, 실란트, 불소도포, 의정부 아이 치과, 소아 치과 추천',
@@ -5529,7 +5417,6 @@ const LANDING_PAGES: LandingPageData[] = [
 <tr><td style="padding:10px;border:1px solid #ddd"><strong>불소도포</strong></td><td style="padding:10px;border:1px solid #ddd">만 5세~</td><td style="padding:10px;border:1px solid #ddd">치아 표면 강화, 충치 예방</td></tr>
 <tr><td style="padding:10px;border:1px solid #ddd"><strong>유치 충치치료</strong></td><td style="padding:10px;border:1px solid #ddd">유치 시기</td><td style="padding:10px;border:1px solid #ddd">레진·글래스아이오노머 충전</td></tr>
 <tr><td style="padding:10px;border:1px solid #ddd"><strong>유치 신경치료</strong></td><td style="padding:10px;border:1px solid #ddd">심한 유치 충치</td><td style="padding:10px;border:1px solid #ddd">영구치 보호를 위한 유치 보존</td></tr>
-<tr><td style="padding:10px;border:1px solid #ddd"><strong>소아 교정 상담</strong></td><td style="padding:10px;border:1px solid #ddd">만 7세~</td><td style="padding:10px;border:1px solid #ddd">부정교합 조기 발견 및 치료 시기 안내</td></tr>
 </table>`
       },
       {
@@ -5547,13 +5434,12 @@ const LANDING_PAGES: LandingPageData[] = [
       { q: '아이가 너무 무서워하는데 치료가 가능한가요?', a: '네, 처음부터 치료하지 않고 단계적으로 적응시킵니다. 체어에 앉기, 기구 만져보기, 거울로 입안 보기 등 순서대로 진행하며, 아이가 편안해진 뒤 치료를 시작합니다.' },
       { q: '유치는 어차피 빠지는데 치료해야 하나요?', a: '네, 유치 충치를 방치하면 영구치에 감염이 전파되거나, 조기 탈락으로 영구치 공간이 부족해져 부정교합이 생길 수 있습니다.' },
       { q: '실란트는 보험이 되나요?', a: '네, 만 6~14세는 제1·제2 대구치(큰 어금니) 실란트에 건강보험이 적용됩니다.' },
-      { q: '소아 교정은 몇 살에 시작하나요?', a: '일반적으로 만 7세 전후 첫 교정 검진을 권장합니다. 턱뼈 성장과 영구치 맹출 상태에 따라 적절한 치료 시기를 안내드립니다.' },
+      { q: '서울가온치과에서 소아 교정도 하나요?', a: '아니요. 서울가온치과는 소아·성인 모두 치아교정을 하지 않습니다. 교정 상담은 교정 진료를 하는 치과에서 받으셔야 합니다.' },
     ],
     ctaText: '소아 치과 상담 예약',
     relatedLinks: [
       { href: '/painless-dental', label: '무통치료 안내' },
       { href: '/cavity-treatment', label: '충치치료 안내' },
-      { href: '/orthodontics', label: '교정 안내' },
       { href: '/dental-checkup', label: '정기검진 안내' },
       { href: '/doctors', label: '의료진 소개' },
     ]
@@ -5778,7 +5664,7 @@ const LANDING_PAGES: LandingPageData[] = [
   {
     slug: 'minrak-dental',
     title: '민락동 치과 | 서울가온치과 — 민락 주민이 찾는 종합 치과',
-    metaDesc: '민락동 치과 서울가온치과. 민락동·민락2지구에서 차로 약 5~10분, 의정부시 용민로 22 골드자이프라자 4층(탑석역 1번 출구 도보 약 5분). 임플란트·신경치료·심미·교정·소아 진료. ☎ 0507-1325-3377',
+    metaDesc: '민락동 치과 서울가온치과. 민락동·민락2지구에서 차로 약 5~10분, 의정부시 용민로 22 골드자이프라자 4층(탑석역 1번 출구 도보 약 5분). 임플란트·신경치료·심미·소아 진료. ☎ 0507-1325-3377',
     h1: '민락동 치과 — 민락에서 가까운 용현동 서울가온치과',
     heroSub: '민락동·민락2지구에서 차로 5~10분. 두 원장이 진료 분야를 나눠 맡습니다',
     keywords: '민락동 치과, 민락 치과, 민락2지구 치과, 민락동 임플란트, 민락 근처 치과, 의정부 민락 치과, 민락역 치과',
@@ -5808,7 +5694,6 @@ const LANDING_PAGES: LandingPageData[] = [
         heading: '주요 진료 안내',
         content: `<ul>
 <li>🦷 <strong>임플란트</strong> — CT 가이드 수술, 뼈이식, 전체임플란트 / 65세 보험</li>
-<li>😁 <strong>교정</strong> — 인비절라인·심미교정·부분교정</li>
 <li>✨ <strong>심미</strong> — 라미네이트·레진빌드업·미백·최소삭제 라미네이트</li>
 <li>🪥 <strong>일반</strong> — 충치·신경치료·발치·스케일링·사랑니</li>
 <li>👶 <strong>소아</strong> — 실란트·불소도포·유치치료</li>
@@ -5818,7 +5703,7 @@ const LANDING_PAGES: LandingPageData[] = [
     ],
     faqs: [
       { q: '민락동에서 서울가온치과까지 얼마나 걸리나요?', a: '차로 약 5~10분입니다. 맞은편 제일식자재마트 건물 지하주차장에 주차하시면 진료 후 무료 주차 쿠폰을 드립니다. 대중교통으로는 탑석역 1번 출구에서 걸어서 약 5분입니다.' },
-      { q: '민락2지구에서 가까운 치과를 찾고 있어요', a: '서울가온치과는 민락동과 맞닿은 용현동, 탑석센트럴자이 정문 맞은편에 있습니다. 임플란트·신경치료·심미·교정·소아 진료를 한 곳에서 받으실 수 있습니다.' },
+      { q: '민락2지구에서 가까운 치과를 찾고 있어요', a: '서울가온치과는 민락동과 맞닿은 용현동, 탑석센트럴자이 정문 맞은편에 있습니다. 임플란트·신경치료·심미·소아 진료를 한 곳에서 받으실 수 있습니다.' },
       { q: '예약 없이 방문해도 되나요?', a: '예약 우선제로 운영하지만, 당일 빈 시간이 있으면 바로 진료 가능합니다. 전화(0507-1325-3377)로 확인 후 방문하시면 대기 시간을 줄일 수 있습니다.' },
     ],
     ctaText: '민락동 → 서울가온치과 상담 예약',
@@ -5836,13 +5721,13 @@ const LANDING_PAGES: LandingPageData[] = [
 // 각 랜딩 데이터 블록을 실제로 마지막 수정한 커밋 날짜. dateModified·lastReviewed·화면 감수 줄이 모두 이 값을 쓴다.
 // "오늘 날짜" 자동 생성 금지 — 해당 랜딩 내용을 고친 날에만 갱신한다.
 const LANDING_MODIFIED: Record<string, string> = {
-  'uijeongbu-dental': '2026-10-14', 'endodontics': '2026-06-09', 'invisalign': '2026-07-26', 'orthodontics': '2026-07-26',
+  'uijeongbu-dental': '2026-10-15', 'endodontics': '2026-10-15',
   'cavity-treatment': '2026-05-26', 'implant-best': '2026-09-03', 'full-mouth-implant': '2026-09-03', 'front-tooth-implant': '2026-06-09',
   'bone-graft-implant': '2026-06-09', 'laminate': '2026-07-26', 'wisdom-tooth': '2026-05-26', 'scaling-gum-treatment': '2026-05-26',
-  'denture-to-implant': '2026-05-26', 'implant-cost': '2026-05-26', 'night-dental': '2026-10-08', 'senior-implant': '2026-10-08',
-  'emergency-dental': '2026-10-08', 'tapseok-dental': '2026-10-08', 'painless-dental': '2026-05-26', 'pediatric-dental': '2026-05-26',
+  'denture-to-implant': '2026-05-26', 'implant-cost': '2026-05-26', 'night-dental': '2026-10-15', 'senior-implant': '2026-10-08',
+  'emergency-dental': '2026-10-08', 'tapseok-dental': '2026-10-15', 'painless-dental': '2026-05-26', 'pediatric-dental': '2026-10-15',
   'crown': '2026-06-09', 'teeth-whitening': '2026-07-26', 'dental-checkup': '2026-05-26', 'implant-process': '2026-10-08',
-  'minrak-dental': '2026-10-08',
+  'minrak-dental': '2026-10-15',
 }
 // 대표 지역 키워드 허브 → MedicalWebPage.about = 병원(@id) + areaServed (2026-10-08 "의정부 치과" 허브)
 const LANDING_HUB_AREAS: Record<string, any[]> = {
@@ -5854,7 +5739,7 @@ const LANDING_HUB_AREAS: Record<string, any[]> = {
 }
 // 진료(시술) 랜딩 → MedicalProcedure 이름. 여기 있는 페이지는 MedicalWebPage.about=MedicalProcedure + 대표원장 감수 줄을 단다.
 const LANDING_PROCEDURES: Record<string, string> = {
-  'endodontics': '신경치료', 'invisalign': '인비절라인 투명교정', 'orthodontics': '치아교정', 'cavity-treatment': '충치치료',
+  'endodontics': '신경치료', 'cavity-treatment': '충치치료',
   'full-mouth-implant': '전체임플란트', 'front-tooth-implant': '앞니 임플란트', 'bone-graft-implant': '뼈이식 임플란트',
   'laminate': '라미네이트', 'wisdom-tooth': '사랑니 발치', 'scaling-gum-treatment': '스케일링·잇몸치료',
   'pediatric-dental': '소아 치과진료', 'crown': '크라운', 'teeth-whitening': '치아미백',
@@ -5968,8 +5853,6 @@ function renderLandingPage(page: LandingPageData): string {
     'aesthetic': '/images/clinic-makeup-close.jpg',
     'resin-buildup': '/images/clinic-makeup.jpg',
     'laminate': '/images/clinic-makeup-close.jpg',
-    'invisalign': '/images/clinic-treatment.jpg',
-    'orthodontics': '/images/clinic-treatment.jpg',
     'endodontics': '/images/clinic-unit-1.jpg',
     'cavity-treatment': '/images/clinic-unit-1.jpg',
     'wisdom-tooth': '/images/clinic-treatment.jpg',
@@ -6361,6 +6244,18 @@ app.post('/api/admin/fees', auth, async (c) => {
     return c.json({ error: '저장 실패: ' + e.message }, 500)
   }
 })
+
+// ── 하지 않는 진료 랜딩: 410 Gone (2026-10-15) ──
+// 서울가온치과는 치아교정(인비절라인·투명교정 포함)을 하지 않는다. 대응 페이지가 없으므로 301 대신 410 + noindex.
+const GONE_PATHS = ['/invisalign', '/orthodontics']
+for (const gp of GONE_PATHS) {
+  for (const p of [gp, gp + '/', gp + '.html']) {
+    app.get(p, (c) => c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, follow"><title>제공하지 않는 진료 안내 | 서울가온치과</title><style>body{margin:0;background:#0a0a09;color:#e9e4d8;font-family:-apple-system,BlinkMacSystemFont,'Pretendard',sans-serif;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px;box-sizing:border-box}main{max-width:520px;text-align:center;line-height:1.7;word-break:keep-all}h1{font-size:1.35rem;margin:0 0 1rem}a{color:#BFA46A}</style></head><body><main><h1>이 페이지는 더 이상 제공되지 않습니다</h1><p>서울가온치과는 치아교정(인비절라인·투명교정 포함)을 하지 않습니다.</p><p><a href="/treatments">진료 안내 보기</a> · <a href="/">홈으로</a></p></main></body></html>`, 410, {
+      'X-Robots-Tag': 'noindex, follow',
+      'Cache-Control': 'public, max-age=3600',
+    }))
+  }
+}
 
 // ── 각 랜딩페이지에 대해 라우트 등록 ──
 for (const page of LANDING_PAGES) {
