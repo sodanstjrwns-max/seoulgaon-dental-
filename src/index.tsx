@@ -142,8 +142,6 @@ app.use('*', async (c, next) => {
     c.header('X-Robots-Tag', 'noindex, follow')
     c.header('Cache-Control', 'no-store')
   }
-  // 미리보기 별칭(immersive-preview.seoulgaon-dental.pages.dev 등)은 검색 색인 제외
-  if (url.hostname.endsWith('.pages.dev')) c.header('X-Robots-Tag', 'noindex, nofollow')
 })
 
 app.use('/api/*', cors({
