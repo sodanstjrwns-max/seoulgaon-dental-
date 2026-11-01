@@ -9,12 +9,34 @@
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 // ──── UTILITIES ────
+// Gradient text (background-clip:text) turns transparent when split into inline-block pieces:
+// the gradient element is never split — it moves whole as one piece (its own clip:text survives a transform).
+function isClipText(e){
+  const cs = getComputedStyle(e);
+  return cs.webkitBackgroundClip === 'text' || cs.backgroundClip === 'text';
+}
+function inClipText(el){
+  for(let e = el; e; e = e.parentElement){ if(isClipText(e)) return true; }
+  return false;
+}
+function hasClipText(el){
+  return inClipText(el) || Array.from(el.querySelectorAll('*')).some(isClipText);
+}
 function splitChars(el){
+  if(inClipText(el)) return [el];
   // Preserve <em class="gold"> tags during split
   const nodes = Array.from(el.childNodes);
+  const whole = nodes.filter(node => node.nodeType === 1 && hasClipText(node));
   el.dataset.original = el.textContent;
   el.innerHTML = '';
   nodes.forEach(node => {
+    if(whole.includes(node)){
+      node.classList.add('char');
+      node.style.display = 'inline-block';
+      node.style.willChange = 'transform, opacity';
+      el.appendChild(node);
+      return;
+    }
     const isGold = node.nodeType === 1 && node.classList && node.classList.contains('gold');
     const text = node.textContent || '';
     text.split('').forEach(c => {
@@ -31,6 +53,7 @@ function splitChars(el){
 }
 
 function splitWords(el){
+  if(hasClipText(el)) return [el];
   const text = el.textContent;
   el.innerHTML = '';
   text.split(' ').forEach((w,i) => {
@@ -694,6 +717,7 @@ function initLabelScramble(){
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function initTextDance(){
   document.querySelectorAll('.tx-dance').forEach(h=>{
+    if(hasClipText(h)) return;
     const text = h.textContent;
     h.innerHTML = text.split('').map(c=>`<span class="dance-char">${c}</span>`).join('');
     const spans = h.querySelectorAll('.dance-char');
