@@ -154,12 +154,13 @@
     if (heroBg) gsap.to(heroBg, { yPercent: 10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 
     // ── 4) 문(GATE): 아치가 열리고, 주변이 밝아지고, 글이 바뀐다
-    var gate = $('.gate'), arch = $('.gate-arch'), archImg = $('.gate-arch img'), paper = $('.gate-paper'), shade = $('.gate-shade'),
+    var gate = $('.gate'), arch = $('.gate-arch'), archImg = $('.gate-arch img'), paper = $('.gate-paper'), glow = $('.gate-glow'), shade = $('.gate-shade'),
       open = $('.gate-open'), tick = $('.gate-tick'), gcopy = $('.gate-copy');
     if (gate && arch) {
       gsap.set(arch, { clipPath: 'inset(56% 41% 0% 41% round 999px 999px 0px 0px)' });
       gsap.set(archImg, { scale: 1.35 });
       gsap.set(paper, { opacity: 0 });
+      gsap.set(glow, { opacity: 0 });
       gsap.set(shade, { opacity: 0 });
       gsap.set(gcopy, { opacity: 0, y: 36 });
       var gtl = gsap.timeline({
@@ -177,7 +178,9 @@
         .to(arch, { clipPath: 'inset(0% 0% 0% 0% round 0px 0px 0px 0px)', duration: 0.6, ease: 'power2.inOut' }, 0.12)
         .to(archImg, { scale: 1, duration: 0.78 }, 0.1)
         .to([open, tick], { opacity: 0, y: -50, duration: 0.16 }, 0.3)
+        .to(glow, { opacity: 1, duration: 0.18 }, 0.26)
         .to(paper, { opacity: 1, duration: 0.3 }, 0.34)
+        .to(glow, { opacity: 0, duration: 0.22 }, 0.5)
         .to(shade, { opacity: 1, duration: 0.14 }, 0.7)
         .to(gcopy, { opacity: 1, y: 0, duration: 0.18 }, 0.76);
     }
