@@ -36,14 +36,15 @@
 <meta name="twitter:image" content="https://seoulgaondc.kr/images/og-main.jpg">
 <!-- Naver -->
 <meta name="naver-site-verification" content="3acfa2ab85baedd02a79be084c5e8d869112230d" />
-<link rel="preconnect" href="https://hangeul.pstatic.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="preload" as="font" type="font/woff2" href="https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff2" crossorigin>
-<link rel="preload" as="image" href="/images/real-lobby-1.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="/images/real-lobby-2.jpg" fetchpriority="high">
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500..800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/style.css?v=dev">
 <link rel="stylesheet" href="/static/home.css?v=dev">
-<noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
+<noscript><style>[data-reveal]{opacity:1!important;transform:none!important}#nav{background:rgba(11,13,16,.9)!important;color:#F3EFE7!important}</style></noscript>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -351,11 +352,13 @@
 <script src="/static/site.js?v=dev" defer></script>
 </head>
 <body>
-<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--sage-d);color:#fff;font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--sage-d,#3E6B59);color:#fff;font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
+<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--amber);color:#0B0D10;font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--amber);color:#0B0D10;font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문으로 바로가기</a>
 <div id="progressBar" aria-hidden="true"></div>
+<div class="curtain" aria-hidden="true"><div class="curtain-in"><span class="curtain-mark">서울가온치과<i>.</i></span><span class="curtain-line"><b style="position:absolute;inset:0;background:var(--amber);transform:scaleX(0);transform-origin:left"></b></span><span class="curtain-sub">Seoul Gaon Dental Clinic · Uijeongbu</span></div></div>
+<div class="grain" aria-hidden="true"></div>
 
 <!-- NAVIGATION -->
-<nav id="nav" role="navigation" aria-label="메인 네비게이션">
+<nav id="nav" class="on-night" role="navigation" aria-label="메인 네비게이션">
   <a href="/" class="nav-logo" aria-label="서울가온치과 홈">서울가온치과<span>.</span></a>
   <div class="nav-links">
     <a href="/philosophy">진료 철학</a>
@@ -389,31 +392,27 @@
     </div>
   </div>
   <span class="live-pill" data-status role="status" aria-live="polite"><i></i><span class="txt">진료 시간 확인 중</span></span>
-  <div class="nav-member" id="nav-member-desktop"></div>
-  <a href="/reservation" class="nav-cta">예약 안내</a>
-  <button class="hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mob-menu"><span></span><span></span><span></span></button>
+  <div class="nav-member" id="navMember"></div>
+  <a href="https://booking.naver.com/booking/13/bizes/781025" target="_blank" rel="noopener" class="nav-cta">네이버 예약</a>
+  <button class="hamburger" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobMenu"><span></span><span></span><span></span></button>
 </nav>
-
-<!-- MOBILE MENU -->
-<div class="mob-menu" id="mob-menu">
+<nav class="mob-menu" id="mobMenu" aria-label="모바일 메뉴">
   <a href="/philosophy">진료 철학</a>
   <a href="/treatments">진료 안내</a>
-  <a href="/implant">임플란트</a>
-  <a href="/aesthetic">앞니 심미치료</a>
+  <a class="mob-sub" href="/implant">임플란트</a>
+  <a class="mob-sub" href="/aesthetic">앞니 심미치료</a>
+  <a class="mob-sub" href="/resin-buildup">레진빌드업</a>
+  <a class="mob-sub" href="/treatments#endodontics">신경치료</a>
   <a href="/doctors">의료진</a>
-  <a href="/blog">블로그</a>
-  <a href="/before-after">비포 애프터</a>
-  <a href="/notice">공지사항</a>
-  <a href="/encyclopedia">치과 백과사전</a>
+  <a href="/community">커뮤니티</a>
+  <a href="/guide">안내</a>
   <a href="/faq">자주 묻는 질문</a>
-  <a href="/guide">오시는 길 · 안내</a>
-  <a href="/reservation">예약 안내</a>
-  <div class="mob-member-divider"></div>
-  <div class="mob-member" id="nav-member-mobile"></div>
-</div>
-<main id="main-content" role="main">
+  <a href="https://booking.naver.com/booking/13/bizes/781025" target="_blank" rel="noopener">네이버 예약</a>
+  <div class="mob-member" id="mobMember"></div>
+  <p class="mob-foot">Seoul Gaon Dental Clinic · Uijeongbu</p>
+</nav>
 
-<!-- AEO: AI 검색엔진 발췌용 핵심 요약 (화면에 보이지 않으나 크롤러가 수집) -->
+<main id="main-content">
 <article itemscope itemtype="https://schema.org/Dentist" class="sr-only" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
   <h2 itemprop="name">서울가온치과의원</h2>
   <p itemprop="description">의정부 치과 서울가온치과는 경기도 의정부시 용현동에 위치한 치과의원으로, 서울대학교 치의학과를 졸업한 현진호 대표원장이 직접 진료합니다. 가이드 임플란트, 앞니 심미치료(라미네이트·크라운), 서울대 치과보존과 전문의의 신경치료를 중점적으로 진료합니다. 진료시간은 평일 09:30~18:30(목요일 야간 20:30), 토요일 09:30~14:00이며, 일요일·공휴일은 휴진입니다.</p>
@@ -426,83 +425,78 @@
   <p>대표원장: <span itemprop="founder" itemscope itemtype="https://schema.org/Person"><span itemprop="name">현진호</span> (<span itemprop="jobTitle">대표원장</span>, <span itemprop="alumniOf">서울대학교 치의학과</span> 졸업, 통합치의학과 전문의)</span></p>
 </article>
 
-<!-- ===== HERO ===== -->
-<section id="top" class="hero">
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <p class="hero-kicker"><a href="/uijeongbu-dental">의정부 치과</a> 서울가온치과 · 탑석역 1번 출구 도보 5분</p>
-      <h1><span class="ph">좋은 <em class="gold">기억</em>이</span> <span class="ph">될 수 있도록.</span></h1>
-      <p class="hero-sub hero-desc"><span class="ph"><em class="gold">아프지</em> 않게.</span> <span class="ph"><em class="gold">무섭지</em> 않게.</span> <span class="ph"><em class="gold">이해</em>되게.</span></p>
-      <div class="hero-btns">
-        <a href="#s-contact" class="btn btn-primary">상담 예약 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <a href="https://booking.naver.com/booking/13/bizes/781025" target="_blank" rel="noopener" class="btn btn-naver">네이버 예약</a>
-      </div>
-      <ul class="hero-facts" aria-label="진료 요약">
-        <li class="live-pill" data-status><i></i><span class="txt">진료 시간 확인 중</span></li>
-        <li>목요일 야간 20:30</li>
-        <li>토요일 진료</li>
-        <li>주차 지원</li>
-      </ul>
+<!-- ===== HERO — 밤 ===== -->
+<section id="top" class="hero" data-theme="night">
+  <div class="hero-bg" aria-hidden="true"><img src="/images/real-lobby-2.jpg" width="1024" height="682" alt="" fetchpriority="high" decoding="async"></div>
+  <div class="hero-leak" aria-hidden="true"></div>
+  <div class="hero-meta mono" aria-hidden="true">Uijeongbu · Topseok Stn. Exit 1 · 5 min</div>
+  <div class="wrap hero-in">
+    <p class="hero-kicker"><a href="/uijeongbu-dental">의정부 치과</a> 서울가온치과 · 탑석역 1번 출구 도보 5분</p>
+    <h1 class="hero-h"><span class="ln"><span class="ph">좋은 <em class="gold">기억</em>이</span></span><span class="ln"><span class="ph">될 수 있도록.</span></span></h1>
+    <p class="hero-sub hero-desc"><span class="ph"><em>아프지</em> 않게.</span> <span class="ph"><em>무섭지</em> 않게.</span> <span class="ph"><em>이해</em>되게.</span></p>
+    <div class="hero-btns">
+      <a href="#s-contact" class="btn btn-amber">상담 예약 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="https://booking.naver.com/booking/13/bizes/781025" target="_blank" rel="noopener" class="btn btn-ghost">네이버 예약</a>
     </div>
-    <div class="hero-visual">
-      <div class="hero-ring" aria-hidden="true"></div>
-      <figure class="hero-arch">
-        <img src="/images/real-lobby-1.jpg" width="1024" height="682" alt="서울가온치과 리셉션 — 아치형 입구와 세이지 그린 소파가 있는 밝은 로비" fetchpriority="high" decoding="async">
-        <figcaption>의정부 용현동 · 골드자이프라자 4층</figcaption>
-      </figure>
-      <div class="hero-stats">
-        <div class="stat"><div class="stat-num"><span data-count="0">0</span></div><div class="stat-label">컴플레인 목표</div></div>
-        <div class="stat"><div class="stat-num"><span data-count="100">100</span><sup>세</sup></div><div class="stat-label">까지의 약속</div></div>
-      </div>
-    </div>
+  </div>
+  <div class="wrap hero-foot">
+    <ul class="hero-facts" aria-label="진료 요약">
+      <li class="live-pill" data-status><i></i><span class="txt">진료 시간 확인 중</span></li>
+      <li>목요일 야간 20:30</li>
+      <li>토요일 진료</li>
+      <li>주차 지원</li>
+      <li>용현동 골드자이프라자 4F</li>
+    </ul>
+    <div class="hero-scroll" aria-hidden="true"><span>Scroll</span><i></i></div>
   </div>
 </section>
 
-<!-- ===== 진료 안내 띠 ===== -->
-<section id="s-info" class="info-strip" aria-label="진료 시간·위치 요약">
-  <ul>
-    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><strong>평일 09:30–18:30</strong><span>점심 12:30–14:00</span></div></li>
-    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5z"/></svg><div><strong>목요일 야간 20:30</strong><span>토요일 09:30–14:00 · 일·공휴일 휴진</span></div></li>
-    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg><div><strong>탑석역 1번 출구 도보 5분</strong><span>용민로 22, 골드자이프라자 4층</span></div></li>
-    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13l2-5a2 2 0 0 1 2-1h10a2 2 0 0 1 2 1l2 5v5h-2a2 2 0 0 1-4 0H9a2 2 0 0 1-4 0H3z"/><path d="M3 13h18"/></svg><div><strong>주차 지원</strong><span>맞은편 제일식자재마트 지하 · 무료 쿠폰</span></div></li>
-  </ul>
-</section>
-
-<!-- ===== PHILOSOPHY ===== -->
-<section id="s-intro" class="sec">
-  <div class="wrap">
-    <div class="sec-head">
+<!-- ===== GATE — 문을 열면 (진료 철학) ===== -->
+<section id="s-intro" class="gate" data-theme="night">
+  <div class="gate-stage">
+    <div class="gate-paper" aria-hidden="true"></div>
+    <figure class="gate-arch">
+      <img src="/images/real-lobby-1.jpg" width="1024" height="682" alt="서울가온치과 리셉션 — 아치형 입구와 세이지 그린 소파가 있는 밝은 로비" decoding="async">
+      <div class="gate-shade" aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(243,239,231,0) 38%,rgba(243,239,231,.9) 100%)"></div>
+    </figure>
+    <p class="gate-tick" aria-hidden="true">Scroll to enter</p>
+    <p class="gate-open ff-display" aria-hidden="true">문을 열면,</p>
+    <div class="gate-copy">
       <span class="sec-label">Philosophy · 진료 철학</span>
-      <h2 class="sec-title"><span class="ph">좋은 치과는</span> <span class="ph"><em class="gold">설명부터</em> 다릅니다.</span></h2>
-      <blockquote class="intro-quote">"환자분이 이해하실 때까지, 처음부터 끝까지 설명드립니다."</blockquote>
+      <h2 class="gate-h"><span class="ph">좋은 치과는</span> <span class="ph"><em class="gold">설명부터</em> 다릅니다.</span></h2>
+      <blockquote class="gate-quote">"환자분이 이해하실 때까지, 처음부터 끝까지 설명드립니다."</blockquote>
     </div>
+  </div>
+</section>
+<section class="values-sec" data-theme="day" aria-label="서울가온치과 진료 원칙">
+  <div class="wrap">
     <div class="values">
-    <div class="value-card" data-reveal>
+    <div class="value-card">
       <div class="value-num">01</div>
       <h3 class="value-h"><em class="gold">편안한</em> 진료</h3>
       <p class="value-p">통증과 불안을 최소화합니다. <em class="gold">무서운 마음</em>부터 이해하고, 시작합니다.</p>
     </div>
-    <div class="value-card" data-reveal>
+    <div class="value-card">
       <div class="value-num">02</div>
       <h3 class="value-h"><em class="gold">명확한</em> 설명</h3>
       <p class="value-p"><em class="gold">이해</em>될 때까지 말씀드립니다. 궁금한 게 없을 때까지, 천천히.</p>
     </div>
-    <div class="value-card" data-reveal>
+    <div class="value-card">
       <div class="value-num">03</div>
       <h3 class="value-h"><em class="gold">오래가는</em> 결과</h3>
       <p class="value-p">빠름보다 <em class="gold">정확함</em>을 선택합니다. 한 번의 치료가 오래가도록.</p>
     </div>
-    <div class="value-card" data-reveal>
+    <div class="value-card">
       <div class="value-num">04</div>
       <h3 class="value-h">한 단계 <em class="gold">더</em></h3>
       <p class="value-p"><em class="gold">사후관리</em>까지 책임집니다. 치료 후에도 곁에 있겠습니다.</p>
     </div>
-    <div class="value-card" data-reveal>
+    <div class="value-card">
       <div class="value-num">05</div>
       <h3 class="value-h"><em class="gold">정직한</em> 진료</h3>
       <p class="value-p">필요한 치료만, <em class="gold">솔직하게</em> 말씀드립니다. 과잉 진료 없이, 신뢰를 먼저 쌓습니다.</p>
     </div>
-    <div class="value-card" data-reveal>
+    <div class="value-card">
       <div class="value-num">06</div>
       <h3 class="value-h"><em class="gold">가족</em> 같은 마음</h3>
       <p class="value-p">내 <em class="gold">가족</em>이라면 어떻게 할까. 그 기준으로 모든 치료를 결정합니다.</p>
@@ -511,27 +505,22 @@
   </div>
 </section>
 
-<!-- ===== TREATMENTS ===== -->
-<section id="s-tx" class="sec sec-paper2">
-  <div class="wrap">
-    <div class="sec-head">
+<!-- ===== TX — 세 가지 핵심 진료 ===== -->
+<section id="s-tx" class="tx" data-theme="day">
+  <div class="wrap tx-head">
+    <div>
       <span class="sec-label">Treatments · 핵심 진료</span>
-      <h2 class="sec-title"><span class="ph">세 가지</span> <span class="ph"><em class="gold">핵심</em> 진료.</span></h2>
-      <p class="sec-lead">임플란트, 앞니 심미치료, 신경치료. 서울가온치과가 가장 많이, 가장 깊게 보는 세 가지입니다.</p>
+      <h2 class="sec-title" style="margin-top:1rem"><span class="ph">세 가지</span> <span class="ph"><em class="gold">핵심</em> 진료.</span></h2>
     </div>
-    <div class="tx-layout">
-      <aside class="tx-index" aria-hidden="true">
-        <ol>
-          <li data-tx="1"><span>01</span>임플란트</li>
-          <li data-tx="2"><span>02</span>앞니 심미치료</li>
-          <li data-tx="3"><span>03</span>신경치료</li>
-        </ol>
-        <p class="tx-index-note">현진호 대표원장(임플란트·앞니 심미)과 조은비 원장(서울대 치과보존과 전문의)이 각자 가장 잘하는 진료를 맡습니다.</p>
-      </aside>
-      <div class="tx-panels">
-        <article class="tx-panel" id="tx-1" data-reveal>
+    <p class="sec-lead">임플란트, 앞니 심미치료, 신경치료. 서울가온치과가 가장 많이, 가장 깊게 보는 세 가지입니다. 현진호 대표원장(임플란트·앞니 심미)과 조은비 원장(서울대 치과보존과 전문의)이 각자 가장 잘하는 진료를 맡습니다.</p>
+  </div>
+  <div class="tx-stage">
+    <div class="tx-sticky">
+      <div class="tx-track">
+        <article class="tx-panel" id="tx-1">
           <div class="tx-num" aria-hidden="true">01</div>
           <div class="tx-body">
+            <p class="tx-eyebrow">01 / 03 — Implant</p>
             <h3><a href="/implant"><em class="gold">임플란트</em></a></h3>
             <p class="tx-panel-sub"><em class="gold">올바른 위치</em>가, 오래가는 결과를 만듭니다.</p>
             <ul class="tx-features">
@@ -543,10 +532,12 @@
             <blockquote class="tx-quote">"뼈가 부족한 경우에도, 뼈이식을 통해 진료가 가능합니다."</blockquote>
             <a href="/implant" class="tx-link">임플란트 자세히 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           </div>
+          <figure class="tx-photo" data-cursor="IMPLANT"><img src="/images/real-implant-center.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="서울가온치과 임플란트 센터"><figcaption>Implant Center</figcaption></figure>
         </article>
-        <article class="tx-panel" id="tx-2" data-reveal>
+        <article class="tx-panel" id="tx-2">
           <div class="tx-num" aria-hidden="true">02</div>
           <div class="tx-body">
+            <p class="tx-eyebrow">02 / 03 — Aesthetic</p>
             <h3><a href="/aesthetic">앞니 <em class="gold">심미</em>치료</a></h3>
             <p class="tx-panel-sub"><em class="gold">자연스럽고</em>, 오래 만족스러운 앞니.</p>
             <ul class="tx-features">
@@ -557,10 +548,12 @@
             </ul>
             <a href="/aesthetic" class="tx-link">심미치료 자세히 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           </div>
+          <figure class="tx-photo" data-cursor="AESTHETIC"><img src="/images/real-makeup-close.jpg" width="682" height="1024" loading="lazy" decoding="async" alt="서울가온치과 메이크업룸"><figcaption>Make-up Room</figcaption></figure>
         </article>
-        <article class="tx-panel" id="tx-3" data-reveal>
+        <article class="tx-panel" id="tx-3">
           <div class="tx-num" aria-hidden="true">03</div>
           <div class="tx-body">
+            <p class="tx-eyebrow">03 / 03 — Endodontics</p>
             <h3><a href="/treatments#endodontics"><em class="gold">신경</em>치료</a></h3>
             <p class="tx-panel-sub"><em class="gold">정확한 진단</em>, 섬세한 치료가 기본.</p>
             <ul class="tx-features">
@@ -569,18 +562,20 @@
               <li>재치료까지 고려한 치료 설계</li>
               <li>가능한 한 치아를 보존합니다</li>
             </ul>
-            <a href="/treatments#endodontics" class="tx-link">자세히 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a href="/treatments#endodontics" class="tx-link">신경치료 자세히 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           </div>
+          <figure class="tx-photo" data-cursor="ENDO"><img src="/images/real-treatment-unit.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="서울가온치과 개인 진료 유닛"><figcaption>Private Unit</figcaption></figure>
         </article>
       </div>
+      <div class="tx-progress" aria-hidden="true"><span class="tx-cur">01</span><i class="tx-bar"><b></b></i><span>03</span></div>
     </div>
   </div>
 </section>
 
-<!-- ===== 의정부 진료 안내 사진 카드 (2026-10-14) — 핵심 6페이지, head 의 ItemList와 1:1 ===== -->
-<section id="s-uijeongbu" class="sec" aria-labelledby="ub-home-h">
+<!-- ===== 의정부 진료 안내 (ItemList 1:1) ===== -->
+<section id="s-uijeongbu" class="sec ub" data-theme="day" aria-labelledby="ub-home-h">
   <div class="wrap">
-    <div class="sec-head center">
+    <div class="sec-head">
       <span class="sec-label">Uijeongbu Guide · 의정부 진료 안내</span>
       <h2 id="ub-home-h" class="sec-title">의정부 진료 안내</h2>
       <p class="sec-lead">탑석역 1번 출구 도보 약 5분. 많이 찾으시는 진료 여섯 가지를 사진과 함께 정리했습니다. <a href="/uijeongbu-dental">의정부 치과 종합 안내 →</a></p>
@@ -589,11 +584,11 @@
   </div>
 </section>
 
-<!-- ===== STORY ===== -->
-<section id="s-story" class="sec story">
+<!-- ===== STORY — 밤 ===== -->
+<section id="s-story" class="sec sec-night story" data-theme="night">
   <div class="story-bg-text" aria-hidden="true">가온</div>
   <div class="wrap story-grid">
-    <figure class="story-photo">
+    <figure class="story-photo" data-cursor="가온">
       <img src="/images/story-daughter.jpg" width="768" height="1024" loading="lazy" decoding="async" alt="아버지와 딸 가온">
       <figcaption>with 가온</figcaption>
     </figure>
@@ -601,20 +596,20 @@
       <span class="sec-label">Our Story · 이름의 약속</span>
       <h2 class="story-headline"><span class="ph"><em class="gold">딸 아이</em>의 이름이</span> <span class="ph">부끄럽지 않게.</span></h2>
       <div class="story-body">
-        <p data-reveal>'<em class="gold">가온</em>'은 제 딸 아이의 이름입니다. 순우리말로 '<em class="gold">세상의 중심</em>'이라는 뜻을 가지고 있습니다.</p>
-        <p data-reveal>아이의 이름을 치과에 붙인 이유는 단 하나 — 내 가족에게 <em class="gold">부끄럽지 않은 치료</em>를 하겠다는 약속입니다.</p>
-        <p data-reveal><em class="gold">100세까지</em>, 가족처럼 곁에서 함께하는 치과. 그것이 <em class="gold">서울가온치과</em>가 존재하는 이유입니다.</p>
+        <p data-reveal>'<em>가온</em>'은 제 딸 아이의 이름입니다. 순우리말로 '<em>세상의 중심</em>'이라는 뜻을 가지고 있습니다.</p>
+        <p data-reveal>아이의 이름을 치과에 붙인 이유는 단 하나 — 내 가족에게 <em>부끄럽지 않은 치료</em>를 하겠다는 약속입니다.</p>
+        <p data-reveal><em>100세까지</em>, 가족처럼 곁에서 함께하는 치과. 그것이 <em>서울가온치과</em>가 존재하는 이유입니다.</p>
       </div>
       <div class="story-signature" data-reveal>
-        <p class="story-signature-name">현진호 <em class="gold">대표원장</em></p>
-        <p class="story-signature-role">서울가온치과</p>
+        <p class="story-signature-name">현진호 <em>대표원장</em></p>
+        <p class="story-signature-role">Seoul Gaon Dental Clinic</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== CONSULT PHILOSOPHY ===== -->
-<section id="s-consult" class="consult">
+<!-- ===== CONSULT — 설명이 먼저 ===== -->
+<section id="s-consult" class="consult" data-theme="day">
   <div class="consult-wrap">
     <figure class="consult-img">
       <img src="/images/real-consult-scene.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="현진호 원장 상담 장면">
@@ -630,45 +625,51 @@
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg> 서면 치료계획서</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7l3 10 3-8 3 8 3-10M3 11h18M3 14h18"/></svg> 투명한 비용 안내</li>
       </ul>
+      <div class="consult-stats" aria-label="서울가온치과 약속">
+        <div class="stat"><div class="stat-num"><span data-count="0">0</span></div><div class="stat-label">컴플레인 목표</div></div>
+        <div class="stat"><div class="stat-num"><span data-count="100">100</span><sup>세</sup></div><div class="stat-label">까지의 약속</div></div>
+        <div class="stat"><div class="stat-num"><span data-count="2">2</span><sup>인</sup></div><div class="stat-label">전문의 의료진</div></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ===== DOCTORS ===== -->
-<section id="s-dr" class="sec">
+<!-- ===== 의료진 ===== -->
+<section id="s-dr" class="sec dr" data-theme="day">
   <div class="wrap">
-    <div class="sec-head center">
+    <div class="sec-head">
       <span class="sec-label">Doctors · 의료진</span>
-      <h2 class="sec-title"><em class="gold">의료진</em> 소개</h2>
+      <h2 class="sec-title"><span class="ph">두 사람이</span> <span class="ph"><em class="gold">직접</em> 봅니다.</span></h2>
+      <p class="sec-lead">임플란트·앞니 심미는 현진호 대표원장이, 신경치료·자연치아 보존은 서울대 치과보존과 전문의 조은비 원장이 처음부터 끝까지 맡습니다.</p>
     </div>
     <div class="dr-grid">
-      <a class="dr-card" href="/doctors?id=1" data-reveal>
+      <a class="dr-card" href="/doctors?id=1" data-cursor="PROFILE">
         <figure class="dr-photo">
           <img src="/images/real-dr-hyun.jpg" width="683" height="1024" loading="lazy" decoding="async" alt="현진호 원장">
           <span class="dr-tag head">대표원장</span>
         </figure>
         <div class="dr-info">
-          <h3 class="dr-name">현진호 <span class="head-label">대표원장</span></h3>
-          <p class="dr-role">Representative Director</p>
-          <p class="dr-desc">의정부 임플란트·앞니 심미치료 <em class="gold">중점 진료</em>. 가이드 임플란트. 꼼꼼한 설명과 정확한 진료로 신뢰받는 진료를 약속합니다.</p>
+          <h3 class="dr-name">현진호 <span class="head-label">Representative Director</span></h3>
+          <p class="dr-role">Implant · Anterior Aesthetics</p>
+          <p class="dr-desc">의정부 임플란트·앞니 심미치료 <em>중점 진료</em>. 가이드 임플란트. 꼼꼼한 설명과 정확한 진료로 신뢰받는 진료를 약속합니다.</p>
           <div class="dr-chips">
             <span class="dr-chip gold">임플란트</span>
             <span class="dr-chip">앞니심미</span>
             <span class="dr-chip">가이드수술</span>
             <span class="dr-chip">뼈이식</span>
           </div>
-          <div class="dr-badge">✦ 서울가온치과 대표원장 · 임플란트 &amp; 앞니 심미치료 중점 진료</div>
+          <div class="dr-badge">✦ 서울가온치과 대표원장 · 임플란트 &amp; 앞니 심미치료 중점 진료 · 『임플란트 사용설명서』 저자</div>
         </div>
       </a>
-      <a class="dr-card" href="/doctors" data-reveal>
+      <a class="dr-card" href="/doctors" data-cursor="PROFILE">
         <figure class="dr-photo">
           <img src="/images/real-dr-cho.jpg" width="683" height="1024" loading="lazy" decoding="async" alt="조은비 원장">
           <span class="dr-tag">보존과 전문의</span>
         </figure>
         <div class="dr-info">
-          <h3 class="dr-name">조은비</h3>
-          <p class="dr-role">Conservative Dentistry · Endodontics Specialist</p>
-          <p class="dr-desc">서울대 치과병원 4년 전공의 수련. 치과보존과 전문의(전국 2.5%). 자연치아를 <em class="gold">단 하나라도 더 살리는 것</em>이 진료의 시작입니다.</p>
+          <h3 class="dr-name">조은비 <span class="head-label">Endodontics Specialist</span></h3>
+          <p class="dr-role">Conservative Dentistry · SNUDH</p>
+          <p class="dr-desc">서울대 치과병원 4년 전공의 수련. 치과보존과 전문의(전국 2.5%). 자연치아를 <em>단 하나라도 더 살리는 것</em>이 진료의 시작입니다.</p>
           <div class="dr-chips">
             <span class="dr-chip gold">자연치아보존</span>
             <span class="dr-chip">신경치료</span>
@@ -679,17 +680,18 @@
         </div>
       </a>
     </div>
+    <div class="dr-more"><a href="/doctors" class="btn btn-outline">의료진 자세히 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
   </div>
 </section>
 
-<!-- ===== BOOK — 대표원장 저서 ===== -->
-<section id="s-book" class="sec book">
+<!-- ===== 저서 — 밤 ===== -->
+<section id="s-book" class="sec sec-night book" data-theme="night">
   <div class="wrap book-grid">
-    <div class="book-cover" data-reveal>
+    <div class="book-cover">
       <img src="/images/book-implant-guide.jpg" width="448" height="600" loading="lazy" decoding="async" alt="임플란트 사용설명서 — 현진호 저">
       <span class="book-badge">2025 출간</span>
     </div>
-    <div class="book-text" data-reveal>
+    <div class="book-text">
       <span class="sec-label">Published Book · 대표원장 저서</span>
       <h2><em class="gold">임플란트 사용설명서</em></h2>
       <p>치과 의사가 직접 알려주는 임플란트의 모든 것. 막막했던 임플란트, 이제는 <strong>제대로 알고 선택하세요.</strong> 읽는 순간, 치과가 덜 무서워집니다.</p>
@@ -706,27 +708,27 @@
   </div>
 </section>
 
-<!-- ===== FACILITY ===== -->
-<section id="s-facility" class="sec sec-paper2">
-  <div class="wrap">
-    <div class="sec-head">
+<!-- ===== 공간 ===== -->
+<section id="s-facility" class="sec fac" data-theme="day">
+  <div class="wrap fac-head">
+    <div>
       <span class="sec-label">Our Clinic · 공간</span>
-      <h2 class="sec-title"><span class="ph"><em class="gold">공간</em>이 달라야</span> <span class="ph"><em class="gold">치료</em>도 다릅니다.</span></h2>
-      <p class="sec-lead">아치형 문과 세이지 그린 소파, 따뜻한 조명. 치과 냄새 대신 편안함이 먼저 느껴지도록 공간부터 다르게 만들었습니다.</p>
+      <h2 class="sec-title" style="margin-top:1rem"><span class="ph"><em class="gold">공간</em>이 달라야</span> <span class="ph"><em class="gold">치료</em>도 다릅니다.</span></h2>
     </div>
+    <p class="sec-lead">아치형 문과 세이지 그린 소파, 따뜻한 조명. 치과 냄새 대신 편안함이 먼저 느껴지도록 공간부터 다르게 만들었습니다.</p>
   </div>
   <div class="fac-scroller" tabindex="0" aria-label="병원 공간 사진 — 좌우로 넘겨 보세요">
     <div class="fac-track">
-      <figure class="fac-item fac-main"><img src="/images/real-lobby-1.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="리셉션 & 데스크"><figcaption>Reception &amp; Desk</figcaption></figure>
-      <figure class="fac-item"><img src="/images/real-lobby-2.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="로비 & 대기공간"><figcaption>Lobby &amp; Waiting</figcaption></figure>
-      <figure class="fac-item"><img src="/images/real-waiting.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="대기실"><figcaption>Patient Lounge</figcaption></figure>
-      <figure class="fac-item"><img src="/images/real-makeup-close.jpg" width="682" height="1024" loading="lazy" decoding="async" alt="메이크업룸"><figcaption>Make-Up Room</figcaption></figure>
-      <figure class="fac-item"><img src="/images/real-consult-room.jpg" width="682" height="1024" loading="lazy" decoding="async" alt="1:1 상담실"><figcaption>Consultation Room</figcaption></figure>
-      <figure class="fac-item"><img src="/images/real-implant-center.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="임플란트 센터"><figcaption>Implant Center</figcaption></figure>
-      <figure class="fac-item"><img src="/images/real-unit-multi.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="진료실 전경"><figcaption>Treatment Rooms</figcaption></figure>
-      <figure class="fac-item"><img src="/images/real-makeup-hallway.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="메이크업룸 & 회복실"><figcaption>Make-Up &amp; Recovery</figcaption></figure>
-      <figure class="fac-item"><img src="/images/real-hallway-sterilization.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="복도 & 소독실"><figcaption>Hallway &amp; Sterilization</figcaption></figure>
-      <figure class="fac-item"><img src="/images/real-treatment-unit.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="개인 진료 유닛"><figcaption>Private Unit</figcaption></figure>
+      <figure class="fac-item fac-main" data-cursor="LOBBY"><img src="/images/real-lobby-1.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="리셉션 & 데스크"><figcaption>Reception &amp; Desk</figcaption></figure>
+      <figure class="fac-item" data-cursor="LOBBY"><img src="/images/real-lobby-2.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="로비 & 대기공간"><figcaption>Lobby &amp; Waiting</figcaption></figure>
+      <figure class="fac-item" data-cursor="LOUNGE"><img src="/images/real-waiting.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="대기실"><figcaption>Patient Lounge</figcaption></figure>
+      <figure class="fac-item" data-cursor="ROOM"><img src="/images/real-makeup-close.jpg" width="682" height="1024" loading="lazy" decoding="async" alt="메이크업룸"><figcaption>Make-Up Room</figcaption></figure>
+      <figure class="fac-item" data-cursor="ROOM"><img src="/images/real-consult-room.jpg" width="682" height="1024" loading="lazy" decoding="async" alt="1:1 상담실"><figcaption>Consultation Room</figcaption></figure>
+      <figure class="fac-item" data-cursor="CENTER"><img src="/images/real-implant-center.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="임플란트 센터"><figcaption>Implant Center</figcaption></figure>
+      <figure class="fac-item" data-cursor="UNIT"><img src="/images/real-unit-multi.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="진료실 전경"><figcaption>Treatment Rooms</figcaption></figure>
+      <figure class="fac-item" data-cursor="ROOM"><img src="/images/real-makeup-hallway.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="메이크업룸 & 회복실"><figcaption>Make-Up &amp; Recovery</figcaption></figure>
+      <figure class="fac-item" data-cursor="CLEAN"><img src="/images/real-hallway-sterilization.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="복도 & 소독실"><figcaption>Hallway &amp; Sterilization</figcaption></figure>
+      <figure class="fac-item" data-cursor="UNIT"><img src="/images/real-treatment-unit.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="개인 진료 유닛"><figcaption>Private Unit</figcaption></figure>
     </div>
   </div>
   <div class="wrap fac-nav">
@@ -736,69 +738,71 @@
 </section>
 
 <!-- ===== FAQ ===== -->
-<section id="s-faq" class="sec">
-  <div class="wrap">
-    <div class="sec-head center">
+<section id="s-faq" class="sec faq" data-theme="day">
+  <div class="wrap faq-grid">
+    <div class="faq-side">
       <span class="sec-label">FAQ · 자주 묻는 질문</span>
-      <h2 class="sec-title"><em class="gold">자주 묻는</em> <em class="gold">질문</em></h2>
+      <h2 class="sec-title" style="margin-top:1rem"><span class="ph">무서운 마음부터</span> <span class="ph"><em class="gold">이해</em>합니다.</span></h2>
+      <p class="sec-lead">처음 오시는 분들이 가장 많이 물으시는 열두 가지입니다. 다른 궁금한 점은 카카오톡으로 편하게 물어보세요.</p>
+      <a href="https://pf.kakao.com/_LLxhwG/chat" target="_blank" rel="noopener" class="btn btn-kakao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H8l-5 3 1.2-4.4A8 8 0 1 1 21 12z"/></svg> 카카오톡으로 질문하기</a>
     </div>
     <div class="faq-list">
       <details class="faq-item">
-        <summary class="faq-q">치과 치료가 너무 무서워요.<span class="plus" aria-hidden="true"></span></summary>
+        <summary class="faq-q" data-n="01">치과 치료가 너무 무서워요.<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><div class="faq-a-inner">무서운 마음부터 이해합니다. 서울가온치과는 통증 최소화가 기본입니다. 충분한 마취와 세심한 진행으로, "생각보다 괜찮았어요"라는 말을 가장 많이 듣습니다. 무서우시면 언제든 손을 들어주세요. 치료 전 충분한 설명과 동의 과정을 거치며, 환자분의 속도에 맞춰 진행합니다.</div></div>
       </details>
       <details class="faq-item">
-        <summary class="faq-q">이전 치과에서 너무 아팠어요.<span class="plus" aria-hidden="true"></span></summary>
+        <summary class="faq-q" data-n="02">이전 치과에서 너무 아팠어요.<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><div class="faq-a-inner">충분한 마취와 세심한 진료로, 치과가 좋은 기억이 되도록 합니다. 이전의 아픈 경험을 말씀해주시면, 더 신경 쓰겠습니다. 마취가 완전히 되었는지 반드시 확인한 후 진료를 시작하고, 진행 중에도 불편하시면 즉시 멈춥니다.</div></div>
       </details>
       <details class="faq-item">
-        <summary class="faq-q">임플란트 수술이 너무 겁나요.<span class="plus" aria-hidden="true"></span></summary>
+        <summary class="faq-q" data-n="03">임플란트 수술이 너무 겁나요.<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><div class="faq-a-inner">가이드 수술은 CT 촬영을 기반으로 미리 계획된 안전한 경로로 진행됩니다. 절개를 최소화하고, 정확한 위치에 식립합니다. 수술 후 "생각보다 편했다"는 말씀이 가장 많습니다. 수술 시간도 일반적으로 30분~1시간 내외로 짧습니다.</div></div>
       </details>
       <details class="faq-item">
-        <summary class="faq-q">고령이라 임플란트가 안 될까봐요.<span class="plus" aria-hidden="true"></span></summary>
+        <summary class="faq-q" data-n="04">고령이라 임플란트가 안 될까봐요.<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><div class="faq-a-inner">나이 자체가 임플란트를 막지 않습니다. 전신 건강 상태와 잇몸뼈를 정밀하게 평가한 후, 대부분의 경우 안전하게 수술이 가능합니다. 70~80대 환자분도 많이 치료받고 계십니다. 당뇨, 고혈압 등 만성질환이 있어도 조절이 잘 되면 가능합니다.</div></div>
       </details>
       <details class="faq-item">
-        <summary class="faq-q">다른 치과에서 안 된다고 했어요.<span class="plus" aria-hidden="true"></span></summary>
+        <summary class="faq-q" data-n="05">다른 치과에서 안 된다고 했어요.<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><div class="faq-a-inner">정밀 뼈이식과 가이드 수술로 좋은 결과를 만들어냅니다. 뼈가 부족하거나 위치가 어려운 경우에도, 사전 계획을 통해 해결 방법을 찾습니다. 포기하기 전에 한 번 더 상담받아보세요. 다른 곳에서 안 된다고 한 분들이 많이 찾아오십니다.</div></div>
       </details>
       <details class="faq-item">
-        <summary class="faq-q">임플란트 수명은 얼마나 되나요?<span class="plus" aria-hidden="true"></span></summary>
+        <summary class="faq-q" data-n="06">임플란트 수명은 얼마나 되나요?<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><div class="faq-a-inner">잘 관리하면 20년 이상 사용하는 분들이 많습니다. 임플란트 자체는 반영구적이지만, 관리가 핵심입니다. 정기 검진(6개월~1년)과 올바른 칫솔질, 치간 칫솔 사용이 수명을 좌우합니다. 서울가온치과는 수술 후에도 체계적인 유지관리 프로그램을 운영합니다.</div></div>
       </details>
       <details class="faq-item">
-        <summary class="faq-q">설명을 들어도 잘 이해가 안 돼요.<span class="plus" aria-hidden="true"></span></summary>
+        <summary class="faq-q" data-n="07">설명을 들어도 잘 이해가 안 돼요.<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><div class="faq-a-inner">"여기 와서 처음 이해했어요" — 저희가 가장 자주 듣는 말입니다. 구강 카메라 영상, 모형, CT 사진을 활용해 쉽게 설명드리고, 이해될 때까지 여러 번 말씀드립니다. 궁금한 점은 상담 중 언제든 질문해주세요.</div></div>
       </details>
       <details class="faq-item">
-        <summary class="faq-q">치료 비용이 얼마나 드나요?<span class="plus" aria-hidden="true"></span></summary>
+        <summary class="faq-q" data-n="08">치료 비용이 얼마나 드나요?<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><div class="faq-a-inner">치료 비용은 환자분의 구강 상태와 치료 범위에 따라 달라집니다. 상담 시 정확한 치료 계획과 함께 비용을 투명하게 안내드립니다. 불필요한 치료를 권하지 않으며, 건강보험 적용 항목은 최대한 활용합니다. 무이자 할부 등 부담을 줄이는 방법도 함께 안내드립니다.</div></div>
       </details>
       <details class="faq-item">
-        <summary class="faq-q">첫 방문 시 어떤 준비가 필요한가요?<span class="plus" aria-hidden="true"></span></summary>
+        <summary class="faq-q" data-n="09">첫 방문 시 어떤 준비가 필요한가요?<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><div class="faq-a-inner">신분증과 건강보험증만 가져오시면 됩니다. 현재 복용 중인 약이 있다면 약 이름이나 처방전을 가져오시면 진료에 도움이 됩니다. 첫 방문 시 파노라마 촬영과 구강 검진 후 상담을 진행하며, 약 30~40분 소요됩니다.</div></div>
       </details>
       <details class="faq-item">
-        <summary class="faq-q">앞니가 벌어졌는데 교정 없이 치료 가능한가요?<span class="plus" aria-hidden="true"></span></summary>
+        <summary class="faq-q" data-n="10">앞니가 벌어졌는데 교정 없이 치료 가능한가요?<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><div class="faq-a-inner">벌어진 정도와 원인에 따라 라미네이트나 크라운으로 교정 없이 개선할 수 있습니다. 최소 삭제로 자연스러운 형태와 색상을 구현하며, 보통 2~3회 내원으로 완성됩니다. 정밀 상담을 통해 최적의 방법을 안내드립니다.</div></div>
       </details>
       <details class="faq-item">
-        <summary class="faq-q">신경치료 하면 이가 약해지나요?<span class="plus" aria-hidden="true"></span></summary>
+        <summary class="faq-q" data-n="11">신경치료 하면 이가 약해지나요?<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><div class="faq-a-inner">신경치료 자체가 이를 약하게 만드는 것은 아닙니다. 다만 신경을 제거한 치아는 영양 공급이 줄어 장기적으로 취약해질 수 있어, 치료 후 크라운으로 보호하는 것을 권장합니다. 서울가온치과는 첨단 장비로 정밀한 신경치료를 진행합니다.</div></div>
       </details>
       <details class="faq-item">
-        <summary class="faq-q">주차가 가능한가요?<span class="plus" aria-hidden="true"></span></summary>
+        <summary class="faq-q" data-n="12">주차가 가능한가요?<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><div class="faq-a-inner">네, 맞은편 제일식자재마트 건물 지하주차장을 이용하실 수 있으며 진료 후 무료 주차 쿠폰을 드립니다. 자세한 사항은 방문 전 전화(0507-1325-3377)로 문의해주세요. 탑석역 1번 출구에서 도보 약 5분 거리로 대중교통도 편리합니다.</div></div>
       </details>
     </div>
   </div>
 </section>
 
-<!-- ===== TREATMENT GUIDE (환자 경험담 → 진료 안내로 대체, 의료법 §56②2 준수) ===== -->
-<section id="s-rev" class="sec sec-paper2">
+<!-- ===== 치료 전 안내 ===== -->
+<section id="s-rev" class="sec rev" data-theme="day">
   <div class="wrap">
-    <div class="sec-head center">
+    <div class="sec-head">
       <span class="sec-label">Guide · 치료 전 안내</span>
       <h2 class="sec-title"><span class="ph">치료 전,</span> <span class="ph"><em class="gold">충분히</em> 설명드립니다</span></h2>
     </div>
@@ -813,12 +817,13 @@
   </div>
 </section>
 
-<!-- ===== CONTACT ===== -->
-<section id="s-contact" class="sec contact">
+<!-- ===== CONTACT — 밤 ===== -->
+<section id="s-contact" class="sec sec-night contact" data-theme="night">
+  <div class="marquee" aria-hidden="true"><div class="marquee-in"><span>Seoul Gaon Dental Clinic</span><span>의정부 치과</span><span>탑석역 1번 출구 도보 5분</span><span>목요일 야간 20:30</span><span>토요일 진료</span><span>가이드 임플란트 · 앞니 심미 · 신경치료</span><span>Seoul Gaon Dental Clinic</span><span>의정부 치과</span><span>탑석역 1번 출구 도보 5분</span><span>목요일 야간 20:30</span><span>토요일 진료</span><span>가이드 임플란트 · 앞니 심미 · 신경치료</span></div></div>
   <div class="wrap contact-grid">
     <div class="contact-main">
       <span class="sec-label">Contact · 상담 예약</span>
-      <h2 class="sec-title"><span class="ph"><em class="gold">한 번 더,</em></span> <span class="ph"><em class="gold">제대로</em> <em class="gold">설명</em>드리겠습니다.</span></h2>
+      <h2 class="sec-title"><span class="ph"><em class="gold">한 번 더,</em></span> <span class="ph">제대로 설명드리겠습니다.</span></h2>
       <p class="contact-lead">전화, 카카오톡, 네이버 예약 — 편한 방법으로 연락 주세요. 첫 방문은 파노라마 촬영과 검진, 상담까지 약 30~40분이 걸립니다.</p>
       <div class="contact-btns">
         <a href="tel:0507-1325-3377" class="btn btn-paper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg> 0507-1325-3377</a>
@@ -940,6 +945,7 @@
 <!-- SCRIPTS -->
 <script src="/js/gsap.min.js" defer></script>
 <script src="/js/ScrollTrigger.min.js" defer></script>
+<script src="/js/lenis.min.js" defer></script>
 <script src="/static/home.js?v=dev" defer></script>
 <script>
 /* ===== Member Nav (index.html) ===== */

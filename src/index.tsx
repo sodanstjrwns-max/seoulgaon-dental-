@@ -1757,7 +1757,7 @@ function statsPageHtml(d: any): string {
         ${stCard('CTR', g.ctr != null ? (g.ctr * 100).toFixed(1) + '%' : '—', stDelta(g.delta?.ctr), 'fa-percent')}
         ${stCard('평균 순위', g.position != null ? Number(g.position).toFixed(1) + '위' : '—', stDelta(g.delta?.position, true), 'fa-ranking-star')}
       </div>`
-      inner += `<div class="gs-spark"><div class="gs-spark-title">일별 검색 클릭</div>${stSpark((g.dailyClicks ?? []).map((x: any) => Number(x.clicks) || 0), '#3E6B59')}</div>`
+      inner += `<div class="gs-spark"><div class="gs-spark-title">일별 검색 클릭</div>${stSpark((g.dailyClicks ?? []).map((x: any) => Number(x.clicks) || 0), '#B8741A')}</div>`
     } else {
       inner += `<div class="gs-empty">검색콘솔 데이터 수집 중입니다</div>`
     }
@@ -1770,7 +1770,7 @@ function statsPageHtml(d: any): string {
         ${stCard('리드(전환)', stFmt(a.leads), stDelta(a.delta?.leads), 'fa-phone')}
         ${stCard('AI 유입', ai ? `${stFmt(ai.sessions)} <em class="gs-share">(${ai.share ?? 0}%)</em>` : '—', ai ? stDelta(ai.delta) : '', 'fa-robot')}
       </div>`
-      inner += `<div class="gs-spark"><div class="gs-spark-title">일별 사용자</div>${stSpark((a.dailyUsers ?? []).map((x: any) => Number(x.users) || 0), '#7A9E8E')}</div>`
+      inner += `<div class="gs-spark"><div class="gs-spark-title">일별 사용자</div>${stSpark((a.dailyUsers ?? []).map((x: any) => Number(x.users) || 0), '#E9A23B')}</div>`
     } else {
       inner += `<div class="gs-empty">${d.hasGa ? '애널리틱스 데이터 수집 중입니다' : '애널리틱스 연동 대기 중입니다'}</div>`
     }
@@ -1802,7 +1802,7 @@ function statsPageHtml(d: any): string {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--gold:#3E6B59;--gold-b:#7A9E8E;--ink:#0a0a0a;--ink-2:#141413;--ink-3:#1a1a19;--ink-4:#222221;--success:#4ade80;--danger:#f87171}
+:root{--gold:#B8741A;--gold-b:#E9A23B;--ink:#0a0a0a;--ink-2:#141413;--ink-3:#1a1a19;--ink-4:#222221;--success:#4ade80;--danger:#f87171}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--ink);color:#e5e5e5;min-height:100vh}
 a{color:inherit;text-decoration:none}
 .gs-wrap{max-width:1080px;margin:0 auto;padding:36px 22px 80px}
@@ -1813,26 +1813,26 @@ a{color:inherit;text-decoration:none}
 .gs-back:hover{color:var(--gold);border-color:var(--gold)}
 .gs-range{font-size:0.74rem;color:#777}
 .gs-expect{background:var(--ink-2);border:1px solid #333;border-radius:16px;margin-bottom:24px}
-.gs-expect-lg{padding:42px 32px;text-align:center;background:linear-gradient(160deg,rgba(62,107,89,0.08),var(--ink-2) 55%);border-color:rgba(62,107,89,0.4)}
-.gs-expect-icon{width:54px;height:54px;border-radius:14px;background:rgba(62,107,89,0.12);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin:0 auto 18px}
+.gs-expect-lg{padding:42px 32px;text-align:center;background:linear-gradient(160deg,rgba(184,116,26,0.08),var(--ink-2) 55%);border-color:rgba(184,116,26,0.4)}
+.gs-expect-icon{width:54px;height:54px;border-radius:14px;background:rgba(184,116,26,0.12);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin:0 auto 18px}
 .gs-expect-lg h2{font-size:1.45rem;font-weight:700;color:#fff;margin-bottom:12px}
 .gs-expect-lg p{color:#aaa;font-size:0.92rem;line-height:1.8;margin-bottom:26px}
 .gs-expect-sm{padding:18px 22px}
 .gs-expect-sm-head{font-size:0.88rem;font-weight:700;color:var(--gold);margin-bottom:12px}
 .gs-timeline{display:flex;align-items:stretch;justify-content:center;flex-wrap:wrap}
 .gs-tl-step{flex:1;min-width:108px;text-align:center;padding:4px}
-.gs-tl-dot{width:29px;height:29px;border-radius:50%;background:rgba(62,107,89,0.12);border:1px solid var(--gold);color:var(--gold);font-weight:700;font-size:0.78rem;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.gs-tl-dot{width:29px;height:29px;border-radius:50%;background:rgba(184,116,26,0.12);border:1px solid var(--gold);color:var(--gold);font-weight:700;font-size:0.78rem;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
 .gs-tl-period{font-size:0.7rem;color:var(--gold);font-weight:700;margin-bottom:2px}
 .gs-tl-label{font-size:0.8rem;color:#ccc}
-.gs-tl-line{flex:0 0 22px;height:1px;background:rgba(62,107,89,0.35);align-self:center;margin-top:-22px}
+.gs-tl-line{flex:0 0 22px;height:1px;background:rgba(184,116,26,0.35);align-self:center;margin-top:-22px}
 .gs-pending{background:var(--ink-2);border:1px dashed #444;border-radius:16px;padding:42px 22px;text-align:center;margin-bottom:24px}
 .gs-pending i{font-size:1.5rem;color:#666;margin-bottom:12px}
 .gs-pending h3{font-size:1.02rem;color:#fff;margin-bottom:6px}
 .gs-pending p{color:#888;font-size:0.86rem;line-height:1.7}
 .gs-sec{font-size:0.95rem;font-weight:700;color:#fff;margin:28px 0 12px}
 .gs-sec span{font-size:0.7rem;color:#777;font-weight:400;margin-left:8px}
-.gs-clarity-link{font-size:0.7rem;color:var(--gold);font-weight:600;margin-left:10px;border:1px solid rgba(62,107,89,0.4);padding:3px 10px;border-radius:99px;transition:all .2s}
-.gs-clarity-link:hover{background:rgba(62,107,89,0.12)}
+.gs-clarity-link{font-size:0.7rem;color:var(--gold);font-weight:600;margin-left:10px;border:1px solid rgba(184,116,26,0.4);padding:3px 10px;border-radius:99px;transition:all .2s}
+.gs-clarity-link:hover{background:rgba(184,116,26,0.12)}
 .gs-clarity-link i{font-size:0.6rem;margin-left:2px}
 .gs-sub{font-size:0.7rem;color:#999;font-weight:600}
 .gs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
@@ -1850,7 +1850,7 @@ a{color:inherit;text-decoration:none}
 .gs-spark{background:var(--ink-2);border:1px solid #333;border-radius:14px;padding:16px 18px 10px;margin-bottom:8px}
 .gs-spark-title{font-size:0.72rem;color:#999;margin-bottom:8px}
 .gs-spark-empty{color:#666;font-size:0.82rem;padding:18px 0;text-align:center}
-.gs-insight{background:linear-gradient(160deg,rgba(62,107,89,0.07),var(--ink-2) 60%);border:1px solid rgba(62,107,89,0.3);border-radius:14px;padding:22px 24px;margin:26px 0}
+.gs-insight{background:linear-gradient(160deg,rgba(184,116,26,0.07),var(--ink-2) 60%);border:1px solid rgba(184,116,26,0.3);border-radius:14px;padding:22px 24px;margin:26px 0}
 .gs-insight h3{font-size:0.92rem;color:var(--gold);margin-bottom:12px}
 .gs-insight ul{list-style:none}
 .gs-insight li{font-size:0.86rem;color:#ccc;line-height:1.7;padding:5px 0 5px 18px;position:relative}
@@ -2191,7 +2191,7 @@ function uijeongbuCardGrid(idPrefix: string, exclude = ''): string {
 }
 const UIJEONGBU_CARD_CSS = `.ub-cards{list-style:none;margin:0 0 3rem;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
 .ub-card{display:flex;flex-direction:column;height:100%;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;background:rgba(255,255,255,.02);transition:border-color .3s,transform .3s}
-.ub-card:hover{border-color:rgba(62,107,89,.5);transform:translateY(-3px)}
+.ub-card:hover{border-color:rgba(184,116,26,.5);transform:translateY(-3px)}
 .ub-card:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .ub-card-img{display:block;aspect-ratio:1/1;overflow:hidden}
 .ub-card-img img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s}
@@ -2874,20 +2874,20 @@ function seoPolishImgs(html: string, title: string): string {
   })
 }
 const seoLd = (o: unknown) => JSON.stringify(o).replace(/</g, '\\u003c')
-const SEO_BOX_CSS = `.sg-answer{border-left:3px solid var(--gold,#3E6B59);background:rgba(62,107,89,.06);border-radius:0 12px 12px 0;padding:1.1rem 1.4rem;margin:0 0 2.2rem;color:var(--ivory,#2B2622);line-height:1.85}
-.sg-answer-label{font-family:var(--ff-en,'Bebas Neue');font-size:.72rem;letter-spacing:3px;color:var(--gold,#3E6B59);margin:0 0 .4rem}
+const SEO_BOX_CSS = `.sg-answer{border-left:3px solid var(--gold,#B8741A);background:rgba(184,116,26,.06);border-radius:0 12px 12px 0;padding:1.1rem 1.4rem;margin:0 0 2.2rem;color:var(--ivory,#15171A);line-height:1.85}
+.sg-answer-label{font-family:var(--ff-en,'Bebas Neue');font-size:.72rem;letter-spacing:3px;color:var(--gold,#B8741A);margin:0 0 .4rem}
 .sg-answer dl{display:grid;grid-template-columns:max-content 1fr;gap:.35rem 1.2rem;margin:0}
-.sg-answer dt{color:var(--stone,#9C958D);font-size:.85rem}.sg-answer dd{margin:0;font-size:.92rem}
-.sg-author{display:flex;gap:1rem;align-items:flex-start;border:1px solid rgba(62,107,89,.15);border-radius:12px;padding:1.2rem 1.4rem;margin:0 0 2rem;background:rgba(62,107,89,.04)}
-.sg-author-ico{width:52px;height:52px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(62,107,89,.12);color:var(--gold,#3E6B59);font-size:1.2rem}
-.sg-author p{margin:0 0 .25rem;font-size:.85rem;color:var(--stone-l,#6F6861);line-height:1.6}
-.sg-author .sg-role{font-size:.72rem;letter-spacing:2px;color:var(--gold,#3E6B59)}
-.sg-author .sg-name{font-size:1rem;color:var(--ivory,#2B2622)}.sg-author .sg-name a{color:inherit;text-decoration:none}
-.sg-author .sg-note{font-size:.76rem;color:var(--stone,#9C958D);margin-top:.5rem}
-.sg-related{margin:0 0 2.5rem}.sg-related h2{font-family:var(--ff-title);font-weight:500;font-size:1.1rem;color:var(--ivory,#2B2622);margin:1.6rem 0 .8rem}
-.sg-chips{display:flex;flex-wrap:wrap;gap:.5rem}.sg-chips a{padding:.45rem 1rem;border-radius:100px;border:1px solid rgba(62,107,89,.25);color:var(--gold,#3E6B59);font-size:.82rem;text-decoration:none}
-.sg-chips a:hover{background:rgba(62,107,89,.1)}
-.sg-list{margin:0;padding-left:1.1rem;line-height:1.9}.sg-list a{color:var(--stone-l,#6F6861);text-decoration:underline;text-underline-offset:3px}.sg-list a:hover{color:var(--gold,#3E6B59)}
+.sg-answer dt{color:var(--stone,#9A9EA4);font-size:.85rem}.sg-answer dd{margin:0;font-size:.92rem}
+.sg-author{display:flex;gap:1rem;align-items:flex-start;border:1px solid rgba(184,116,26,.15);border-radius:12px;padding:1.2rem 1.4rem;margin:0 0 2rem;background:rgba(184,116,26,.04)}
+.sg-author-ico{width:52px;height:52px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(184,116,26,.12);color:var(--gold,#B8741A);font-size:1.2rem}
+.sg-author p{margin:0 0 .25rem;font-size:.85rem;color:var(--stone-l,#6B6F75);line-height:1.6}
+.sg-author .sg-role{font-size:.72rem;letter-spacing:2px;color:var(--gold,#B8741A)}
+.sg-author .sg-name{font-size:1rem;color:var(--ivory,#15171A)}.sg-author .sg-name a{color:inherit;text-decoration:none}
+.sg-author .sg-note{font-size:.76rem;color:var(--stone,#9A9EA4);margin-top:.5rem}
+.sg-related{margin:0 0 2.5rem}.sg-related h2{font-family:var(--ff-title);font-weight:500;font-size:1.1rem;color:var(--ivory,#15171A);margin:1.6rem 0 .8rem}
+.sg-chips{display:flex;flex-wrap:wrap;gap:.5rem}.sg-chips a{padding:.45rem 1rem;border-radius:100px;border:1px solid rgba(184,116,26,.25);color:var(--gold,#B8741A);font-size:.82rem;text-decoration:none}
+.sg-chips a:hover{background:rgba(184,116,26,.1)}
+.sg-list{margin:0;padding-left:1.1rem;line-height:1.9}.sg-list a{color:var(--stone-l,#6B6F75);text-decoration:underline;text-underline-offset:3px}.sg-list a:hover{color:var(--gold,#B8741A)}
 @media(max-width:768px){.sg-author{flex-direction:column}.sg-answer dl{grid-template-columns:1fr}}`
 
 function escHtml(str: string): string {
@@ -2913,7 +2913,9 @@ const HEAD_COMMON = `<meta charset="UTF-8">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png?v=fav20261014">
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png?v=fav20261014">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=fav20261014">
-<link rel="preconnect" href="https://hangeul.pstatic.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500..800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
 <link href="/style.css?v=dev" rel="stylesheet">
@@ -2971,7 +2973,7 @@ function hubBlogNote(key: string, topic?: string | null): string {
     `용민로 22 골드자이프라자 4층에 있는 서울가온치과의 진료시간·주차·찾아오는 길은 ${a} 페이지에 정리해 두었습니다.`,
     `이 글의 내용을 직접 상담받고 싶은 의정부 주민분은 ${a} 안내에서 진료 일정과 오시는 길을 먼저 확인해 보세요.`,
   ]
-  return `<p class="sg-hub-note" style="margin:0 0 1.6rem;padding:1rem 1.2rem;border:1px solid rgba(62,107,89,.15);border-radius:12px;background:rgba(62,107,89,.04);font-size:.9rem;color:var(--stone-l,#6F6861);line-height:1.8">${forms[h % forms.length]}</p>`
+  return `<p class="sg-hub-note" style="margin:0 0 1.6rem;padding:1rem 1.2rem;border:1px solid rgba(184,116,26,.15);border-radius:12px;background:rgba(184,116,26,.04);font-size:.9rem;color:var(--stone-l,#6B6F75);line-height:1.8">${forms[h % forms.length]}</p>`
 }
 
 // 공통 카카오 플로팅 + JS
@@ -2980,10 +2982,10 @@ const KAKAO_FLOAT = `<div id="kakao-float" onclick="window.open('https://pf.kaka
   <span class="kakao-float-label">상담하기</span>
 </div>
 <style>
-#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(43,38,34,.09);transition:transform .3s,box-shadow .3s}
-#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(43,38,34,.12)}
-.kakao-float-label{position:absolute;right:72px;background:rgba(43,38,34,.9);color:#F5F0E8;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(62,107,89,.15)}
-.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(43,38,34,.9)}
+#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(21,23,26,.09);transition:transform .3s,box-shadow .3s}
+#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(21,23,26,.12)}
+.kakao-float-label{position:absolute;right:72px;background:rgba(21,23,26,.9);color:#F3EFE7;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(184,116,26,.15)}
+.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(21,23,26,.9)}
 #kakao-float:hover .kakao-float-label{opacity:1;transform:translateX(0)}
 @media(max-width:768px){#kakao-float{width:52px;height:52px;bottom:1.2rem;right:1.2rem}#kakao-float svg{width:26px;height:26px}.kakao-float-label{display:none}}
 </style>`
@@ -3040,14 +3042,14 @@ app.get('/blog', async (c) => {
        WHERE b.is_published = 1 AND b.id NOT IN (${BLOG_DUPLICATE_IDS_SQL})${cat ? ' AND b.category = ?' : ''} ORDER BY b.created_at DESC LIMIT ? OFFSET ?`
     ).bind(...(cat ? [cat] : []), size, offset).all()
     const posts = result.results || []
-    const catLinks = [`<a href="/blog" style="padding:.4rem .8rem;border-radius:4px;font-size:.85rem;text-decoration:none;${!cat ? 'background:var(--gold);color:#fff' : 'background:rgba(62,107,89,.15);color:var(--gold)'}">전체</a>`]
-      .concat(blogCats.map((bc) => `<a href="/blog?category=${encodeURIComponent(bc)}" style="padding:.4rem .8rem;border-radius:4px;font-size:.85rem;text-decoration:none;${cat === bc ? 'background:var(--gold);color:#fff' : 'background:rgba(62,107,89,.15);color:var(--gold)'}">${escHtml(bc)}</a>`)).join('')
+    const catLinks = [`<a href="/blog" style="padding:.4rem .8rem;border-radius:4px;font-size:.85rem;text-decoration:none;${!cat ? 'background:var(--gold);color:#fff' : 'background:rgba(184,116,26,.15);color:var(--gold)'}">전체</a>`]
+      .concat(blogCats.map((bc) => `<a href="/blog?category=${encodeURIComponent(bc)}" style="padding:.4rem .8rem;border-radius:4px;font-size:.85rem;text-decoration:none;${cat === bc ? 'background:var(--gold);color:#fff' : 'background:rgba(184,116,26,.15);color:var(--gold)'}">${escHtml(bc)}</a>`)).join('')
 
     const postCards = posts.map((p: any) => {
       const desc = stripHtml(p.content || '').substring(0, 120)
       const thumb = p.thumbnail_url ? `<img src="${p.thumbnail_url}" alt="${escHtml(p.title)}" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:8px 8px 0 0">` : `<div style="width:100%;height:200px;background:var(--ink);border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center"><i class="fas fa-tooth" style="font-size:3rem;color:var(--gold)"></i></div>`
       return `<a href="/blog/${p.id}" style="text-decoration:none;color:inherit">
-        <article style="background:var(--ink);border:1px solid rgba(62,107,89,.15);border-radius:8px;overflow:hidden;transition:transform .2s">
+        <article style="background:var(--ink);border:1px solid rgba(184,116,26,.15);border-radius:8px;overflow:hidden;transition:transform .2s">
           ${thumb}
           <div style="padding:1rem">
             ${p.category ? `<span style="color:var(--gold);font-size:.75rem;text-transform:uppercase">${escHtml(p.category)}</span>` : ''}
@@ -3185,9 +3187,9 @@ app.get('/before-after', async (c) => {
     const catResult = await db.prepare(`SELECT DISTINCT category FROM before_after ORDER BY category`).all()
     const categories = (catResult.results || []).map((r: any) => r.category)
 
-    const catButtons = [`<a href="/before-after" style="padding:.4rem .8rem;border-radius:4px;font-size:.85rem;text-decoration:none;${!cat ? 'background:var(--gold);color:#fff' : 'background:rgba(62,107,89,.15);color:var(--gold)'}">전체</a>`]
+    const catButtons = [`<a href="/before-after" style="padding:.4rem .8rem;border-radius:4px;font-size:.85rem;text-decoration:none;${!cat ? 'background:var(--gold);color:#fff' : 'background:rgba(184,116,26,.15);color:var(--gold)'}">전체</a>`]
       .concat(categories.map((c: string) =>
-        `<a href="/before-after?category=${encodeURIComponent(c)}" style="padding:.4rem .8rem;border-radius:4px;font-size:.85rem;text-decoration:none;${cat === c ? 'background:var(--gold);color:#fff' : 'background:rgba(62,107,89,.15);color:var(--gold)'}">${escHtml(c)}</a>`
+        `<a href="/before-after?category=${encodeURIComponent(c)}" style="padding:.4rem .8rem;border-radius:4px;font-size:.85rem;text-decoration:none;${cat === c ? 'background:var(--gold);color:#fff' : 'background:rgba(184,116,26,.15);color:var(--gold)'}">${escHtml(c)}</a>`
       )).join('')
 
     const caseCards = cases.map((ba: any, idx: number) => {
@@ -3200,7 +3202,7 @@ app.get('/before-after', async (c) => {
       const beforeImg = ba.intraoral_before_url ? `<img src="${ba.intraoral_before_url}" alt="치료 전 - ${escHtml(ba.title)}" ${imgAttrs} width="300" height="160" style="width:50%;height:160px;object-fit:cover">` : `<div style="width:50%;height:160px;background:#333;display:flex;align-items:center;justify-content:center"><span style="color:#666">Before</span></div>`
       const afterImg = ba.intraoral_after_url ? `<img src="${ba.intraoral_after_url}" alt="치료 후 - ${escHtml(ba.title)}" ${imgAttrs} width="300" height="160" style="width:50%;height:160px;object-fit:cover">` : `<div style="width:50%;height:160px;background:#333;display:flex;align-items:center;justify-content:center"><span style="color:#666">After</span></div>`
       return `<a href="/before-after/${ba.id}" style="text-decoration:none;color:inherit">
-        <article style="background:var(--ink);border:1px solid rgba(62,107,89,.15);border-radius:8px;overflow:hidden">
+        <article style="background:var(--ink);border:1px solid rgba(184,116,26,.15);border-radius:8px;overflow:hidden">
           <div style="display:flex">${beforeImg}${afterImg}</div>
           <div style="padding:.8rem 1rem">
             <span style="color:var(--gold);font-size:.75rem">${escHtml(ba.category || '')}</span>
@@ -3553,44 +3555,44 @@ ${HEAD_COMMON}
 <style>
 ${SEO_BOX_CSS}
 .bp-wrap{max-width:800px;margin:0 auto;padding:clamp(8rem,15vh,12rem) clamp(1.5rem,4vw,3rem) clamp(4rem,8vh,6rem)}
-.bp-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--stone-l,#6F6861);margin-bottom:2rem;transition:color .3s;text-decoration:none}
-.bp-back:hover{color:var(--gold,#3E6B59)}
+.bp-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--stone-l,#6B6F75);margin-bottom:2rem;transition:color .3s;text-decoration:none}
+.bp-back:hover{color:var(--gold,#B8741A)}
 .bp-back i{font-size:.7rem;transition:transform .3s}
 .bp-back:hover i{transform:translateX(-3px)}
 .bp-meta{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem}
-.bp-tag{font-family:var(--ff-en,'Bebas Neue');font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold,#3E6B59);padding:.3rem .8rem;border:1px solid rgba(62,107,89,.2);border-radius:100px}
-.bp-date{font-size:.78rem;color:var(--stone,#9C958D)}
-.bp-title{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.4;margin-bottom:1.5rem;color:var(--ivory,#2B2622)}
-.bp-doctor{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(62,107,89,.08);border:1px solid rgba(62,107,89,.15);border-radius:100px;font-size:.82rem;color:var(--stone-l,#6F6861);text-decoration:none;transition:all .3s;margin-bottom:2.5rem}
-.bp-doctor:hover{border-color:var(--gold,#3E6B59);color:var(--gold,#3E6B59)}
+.bp-tag{font-family:var(--ff-en,'Bebas Neue');font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold,#B8741A);padding:.3rem .8rem;border:1px solid rgba(184,116,26,.2);border-radius:100px}
+.bp-date{font-size:.78rem;color:var(--stone,#9A9EA4)}
+.bp-title{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.4;margin-bottom:1.5rem;color:var(--ivory,#15171A)}
+.bp-doctor{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(184,116,26,.08);border:1px solid rgba(184,116,26,.15);border-radius:100px;font-size:.82rem;color:var(--stone-l,#6B6F75);text-decoration:none;transition:all .3s;margin-bottom:2.5rem}
+.bp-doctor:hover{border-color:var(--gold,#B8741A);color:var(--gold,#B8741A)}
 .bp-doctor img{width:28px;height:28px;border-radius:50%;object-fit:cover}
-.bp-divider{width:60px;height:1px;background:linear-gradient(90deg,var(--gold,#3E6B59),transparent);margin-bottom:2.5rem}
-.bp-content{font-size:clamp(.9rem,1vw,.98rem);line-height:2;color:var(--stone-l,#6F6861);word-break:keep-all;margin-bottom:3rem}
-.bp-content h2{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.25rem,2.5vw,1.6rem);color:var(--ivory,#2B2622);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid rgba(62,107,89,.12);line-height:1.4}
-.bp-content h3{font-size:clamp(1.05rem,2vw,1.2rem);color:var(--ivory,#2B2622);margin:2rem 0 .8rem;font-weight:600;line-height:1.4}
+.bp-divider{width:60px;height:1px;background:linear-gradient(90deg,var(--gold,#B8741A),transparent);margin-bottom:2.5rem}
+.bp-content{font-size:clamp(.9rem,1vw,.98rem);line-height:2;color:var(--stone-l,#6B6F75);word-break:keep-all;margin-bottom:3rem}
+.bp-content h2{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.25rem,2.5vw,1.6rem);color:var(--ivory,#15171A);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid rgba(184,116,26,.12);line-height:1.4}
+.bp-content h3{font-size:clamp(1.05rem,2vw,1.2rem);color:var(--ivory,#15171A);margin:2rem 0 .8rem;font-weight:600;line-height:1.4}
 .bp-content p{margin-bottom:1.2rem;line-height:2}
-.bp-content strong,.bp-content b{color:var(--ivory,#2B2622);font-weight:600}
-.bp-content a{color:var(--gold,#3E6B59);text-decoration:underline;text-underline-offset:3px}
+.bp-content strong,.bp-content b{color:var(--ivory,#15171A);font-weight:600}
+.bp-content a{color:var(--gold,#B8741A);text-decoration:underline;text-underline-offset:3px}
 .bp-content ul,.bp-content ol{margin:1rem 0 1.5rem 1.2rem;line-height:1.9}
 .bp-content li{margin-bottom:.4rem}
-.bp-content li::marker{color:var(--gold,#3E6B59)}
-.bp-content blockquote{border-left:3px solid var(--gold,#3E6B59);padding:.8rem 1.5rem;margin:1.5rem 0;font-style:italic;color:#bbb;background:rgba(62,107,89,.04);border-radius:0 8px 8px 0}
+.bp-content li::marker{color:var(--gold,#B8741A)}
+.bp-content blockquote{border-left:3px solid var(--gold,#B8741A);padding:.8rem 1.5rem;margin:1.5rem 0;font-style:italic;color:#bbb;background:rgba(184,116,26,.04);border-radius:0 8px 8px 0}
 .bp-content figure{margin:2rem 0;text-align:center}
-.bp-content figure img{max-width:100%;border-radius:12px;border:1px solid rgba(62,107,89,.08)}
-.bp-content figcaption{font-size:.78rem;color:var(--stone,#9C958D);margin-top:.6rem;font-style:italic}
-.enc-xlink{color:var(--gold);text-decoration:none;border-bottom:1px dotted rgba(62,107,89,.5)}
+.bp-content figure img{max-width:100%;border-radius:12px;border:1px solid rgba(184,116,26,.08)}
+.bp-content figcaption{font-size:.78rem;color:var(--stone,#9A9EA4);margin-top:.6rem;font-style:italic}
+.enc-xlink{color:var(--gold);text-decoration:none;border-bottom:1px dotted rgba(184,116,26,.5)}
 .enc-xlink:hover{border-bottom-style:solid}
 .bp-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:3rem}
-.bp-images img{width:100%;border-radius:12px;aspect-ratio:4/3;object-fit:cover;border:1px solid rgba(62,107,89,.08)}
+.bp-images img{width:100%;border-radius:12px;aspect-ratio:4/3;object-fit:cover;border:1px solid rgba(184,116,26,.08)}
 .bp-images.single{grid-template-columns:1fr}
-.bp-images.single img{aspect-ratio:auto;max-height:500px;object-fit:contain;background:var(--ink-3,#E3DACA)}
-.bp-bottom{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid var(--line,rgba(62,107,89,.1));flex-wrap:wrap}
+.bp-images.single img{aspect-ratio:auto;max-height:500px;object-fit:contain;background:var(--ink-3,#DED6C6)}
+.bp-bottom{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid var(--line,rgba(184,116,26,.1));flex-wrap:wrap}
 .bp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.5rem;border-radius:100px;font-size:.82rem;font-weight:500;text-decoration:none;transition:all .3s}
-.bp-btn-back{border:1px solid var(--line,rgba(62,107,89,.1));color:var(--stone-l,#6F6861)}
-.bp-btn-back:hover{border-color:var(--gold,#3E6B59);color:var(--gold,#3E6B59)}
-.bp-btn-cta{background:var(--gold,#3E6B59);color:var(--ink,#F5F0E8);font-weight:600}
-.bp-btn-cta:hover{background:var(--gold-b,#7A9E8E)}
-.lb{position:fixed;inset:0;background:rgba(43,38,34,.28);z-index:10000;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.bp-btn-back{border:1px solid var(--line,rgba(184,116,26,.1));color:var(--stone-l,#6B6F75)}
+.bp-btn-back:hover{border-color:var(--gold,#B8741A);color:var(--gold,#B8741A)}
+.bp-btn-cta{background:var(--gold,#B8741A);color:var(--ink,#F3EFE7);font-weight:600}
+.bp-btn-cta:hover{background:var(--gold-b,#E9A23B)}
+.lb{position:fixed;inset:0;background:rgba(21,23,26,.28);z-index:10000;display:none;align-items:center;justify-content:center;cursor:zoom-out}
 .lb.show{display:flex}
 .lb img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:4px}
 @media(max-width:768px){
@@ -3605,7 +3607,7 @@ ${SEO_BOX_CSS}
 </style>
 </head>
 <body>
-<noscript><div style="background:#3E6B59;color:#F5F0E8;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
+<noscript><div style="background:#B8741A;color:#F3EFE7;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
 ${NAV_HTML}
 <main id="main-content" role="main">
 <div class="bp-wrap">
@@ -3814,33 +3816,33 @@ ${HEAD_COMMON}
 <style>
 ${SEO_BOX_CSS}
 .ba-detail-wrap{max-width:800px;margin:0 auto;padding:clamp(8rem,15vh,12rem) clamp(1.5rem,4vw,3rem) clamp(4rem,8vh,6rem)}
-.bp-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--stone-l,#6F6861);margin-bottom:2rem;transition:color .3s;text-decoration:none}
-.bp-back:hover{color:var(--gold,#3E6B59)}
+.bp-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--stone-l,#6B6F75);margin-bottom:2rem;transition:color .3s;text-decoration:none}
+.bp-back:hover{color:var(--gold,#B8741A)}
 .bp-back i{font-size:.7rem;transition:transform .3s}
 .bp-back:hover i{transform:translateX(-3px)}
 .bp-meta{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem}
-.bp-tag{font-family:var(--ff-en,'Bebas Neue');font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold,#3E6B59);padding:.3rem .8rem;border:1px solid rgba(62,107,89,.2);border-radius:100px}
-.bp-date{font-size:.78rem;color:var(--stone,#9C958D)}
-.ba-detail-title{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.4;margin-bottom:1.5rem;color:var(--ivory,#2B2622)}
-.bp-doctor{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(62,107,89,.08);border:1px solid rgba(62,107,89,.15);border-radius:100px;font-size:.82rem;color:var(--stone-l,#6F6861);text-decoration:none;transition:all .3s;margin-bottom:1.5rem}
-.bp-doctor:hover{border-color:var(--gold,#3E6B59);color:var(--gold,#3E6B59)}
+.bp-tag{font-family:var(--ff-en,'Bebas Neue');font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold,#B8741A);padding:.3rem .8rem;border:1px solid rgba(184,116,26,.2);border-radius:100px}
+.bp-date{font-size:.78rem;color:var(--stone,#9A9EA4)}
+.ba-detail-title{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.4;margin-bottom:1.5rem;color:var(--ivory,#15171A)}
+.bp-doctor{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(184,116,26,.08);border:1px solid rgba(184,116,26,.15);border-radius:100px;font-size:.82rem;color:var(--stone-l,#6B6F75);text-decoration:none;transition:all .3s;margin-bottom:1.5rem}
+.bp-doctor:hover{border-color:var(--gold,#B8741A);color:var(--gold,#B8741A)}
 .bp-doctor img{width:28px;height:28px;border-radius:50%;object-fit:cover}
-.ba-desc{font-size:clamp(.9rem,1vw,.98rem);line-height:2;color:var(--stone-l,#6F6861);word-break:keep-all;margin-bottom:2.5rem}
+.ba-desc{font-size:clamp(.9rem,1vw,.98rem);line-height:2;color:var(--stone-l,#6B6F75);word-break:keep-all;margin-bottom:2.5rem}
 .ba-compare{margin-bottom:3rem}
-.ba-compare h2{font-family:var(--ff-title);font-weight:500;font-size:1.1rem;color:var(--ivory,#2B2622);margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
-.ba-compare h2 i{color:var(--gold,#3E6B59);font-size:.9rem}
+.ba-compare h2{font-family:var(--ff-title);font-weight:500;font-size:1.1rem;color:var(--ivory,#15171A);margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
+.ba-compare h2 i{color:var(--gold,#B8741A);font-size:.9rem}
 .ba-pair{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .ba-pair figure{text-align:center}
-.ba-pair img{width:100%;border-radius:12px;border:1px solid rgba(62,107,89,.08);cursor:pointer;transition:transform .3s,box-shadow .3s}
-.ba-pair img:hover{transform:scale(1.02);box-shadow:0 8px 30px rgba(43,38,34,.09)}
-.ba-pair figcaption{font-size:.75rem;color:var(--stone,#9C958D);margin-top:.5rem;font-weight:600;letter-spacing:2px;text-transform:uppercase}
-.bp-bottom{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid var(--line,rgba(62,107,89,.1));flex-wrap:wrap}
+.ba-pair img{width:100%;border-radius:12px;border:1px solid rgba(184,116,26,.08);cursor:pointer;transition:transform .3s,box-shadow .3s}
+.ba-pair img:hover{transform:scale(1.02);box-shadow:0 8px 30px rgba(21,23,26,.09)}
+.ba-pair figcaption{font-size:.75rem;color:var(--stone,#9A9EA4);margin-top:.5rem;font-weight:600;letter-spacing:2px;text-transform:uppercase}
+.bp-bottom{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid var(--line,rgba(184,116,26,.1));flex-wrap:wrap}
 .bp-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.5rem;border-radius:100px;font-size:.82rem;font-weight:500;text-decoration:none;transition:all .3s}
-.bp-btn-back{border:1px solid var(--line,rgba(62,107,89,.1));color:var(--stone-l,#6F6861)}
-.bp-btn-back:hover{border-color:var(--gold,#3E6B59);color:var(--gold,#3E6B59)}
-.bp-btn-cta{background:var(--gold,#3E6B59);color:var(--ink,#F5F0E8);font-weight:600}
-.bp-btn-cta:hover{background:var(--gold-b,#7A9E8E)}
-.lb{position:fixed;inset:0;background:rgba(43,38,34,.28);z-index:10000;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.bp-btn-back{border:1px solid var(--line,rgba(184,116,26,.1));color:var(--stone-l,#6B6F75)}
+.bp-btn-back:hover{border-color:var(--gold,#B8741A);color:var(--gold,#B8741A)}
+.bp-btn-cta{background:var(--gold,#B8741A);color:var(--ink,#F3EFE7);font-weight:600}
+.bp-btn-cta:hover{background:var(--gold-b,#E9A23B)}
+.lb{position:fixed;inset:0;background:rgba(21,23,26,.28);z-index:10000;display:none;align-items:center;justify-content:center;cursor:zoom-out}
 .lb.show{display:flex}
 .lb img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:4px}
 @media(max-width:768px){
@@ -3853,7 +3855,7 @@ ${SEO_BOX_CSS}
 </style>
 </head>
 <body>
-<noscript><div style="background:#3E6B59;color:#F5F0E8;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
+<noscript><div style="background:#B8741A;color:#F3EFE7;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
 ${NAV_HTML}
 <main id="main-content" role="main">
 <div class="ba-detail-wrap">
@@ -3867,7 +3869,7 @@ ${NAV_HTML}
   ${summaryHtml}
   ${item.description ? `<p class="ba-desc">${escHtml(item.description)}</p>` : ''}
   ${imagesHtml}
-  <p style="font-size:.78rem;color:var(--stone,#9C958D);line-height:1.7;margin:0 0 2rem">※ 치료 전·후 사진은 같은 촬영 조건에서 기록했으며, 치료 결과는 개인의 구강 상태에 따라 다를 수 있습니다.${reviewed ? ` 최종 검토: ${reviewed}` : ''}</p>
+  <p style="font-size:.78rem;color:var(--stone,#9A9EA4);line-height:1.7;margin:0 0 2rem">※ 치료 전·후 사진은 같은 촬영 조건에서 기록했으며, 치료 결과는 개인의 구강 상태에 따라 다를 수 있습니다.${reviewed ? ` 최종 검토: ${reviewed}` : ''}</p>
   ${caseLinksHtml}
   <div class="bp-bottom">
     <a href="/before-after" class="bp-btn bp-btn-back"><i class="fas fa-arrow-left"></i> 목록으로</a>
@@ -4016,7 +4018,7 @@ function autoCrossLink(html: string, terms: Array<{ id: number; term: string; sl
   return parts.join('')
 }
 
-const ENC_XLINK_CSS = `.enc-xlink{color:var(--gold);text-decoration:none;border-bottom:1px dotted rgba(62,107,89,.5)}
+const ENC_XLINK_CSS = `.enc-xlink{color:var(--gold);text-decoration:none;border-bottom:1px dotted rgba(184,116,26,.5)}
 .enc-xlink:hover{border-bottom-style:solid}`
 
 // ── 301: 구 URL → 클린 URL ──
@@ -4121,18 +4123,18 @@ ${HEAD_COMMON}
 .enc-hero h1{font-size:clamp(1.7rem,4vw,2.4rem);color:var(--ivory);margin-bottom:.6rem}
 .enc-hero p{color:var(--stone-l);font-size:.95rem}
 .enc-search-wrap{max-width:560px;margin:1.5rem auto 0;position:relative}
-.enc-search-wrap input{width:100%;padding:.85rem 1.1rem .85rem 2.6rem;background:var(--ink);border:1px solid rgba(62,107,89,.25);border-radius:8px;color:var(--ivory);font-size:.95rem}
+.enc-search-wrap input{width:100%;padding:.85rem 1.1rem .85rem 2.6rem;background:var(--ink);border:1px solid rgba(184,116,26,.25);border-radius:8px;color:var(--ivory);font-size:.95rem}
 .enc-search-wrap i{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--gold)}
 .enc-tabs{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;max-width:900px;margin:1.5rem auto 0;padding:0 1rem}
-.enc-tab{padding:.4rem .85rem;background:var(--ink);border:1px solid rgba(62,107,89,.2);border-radius:20px;color:var(--stone-l);font-size:.8rem;text-decoration:none;transition:all .2s}
+.enc-tab{padding:.4rem .85rem;background:var(--ink);border:1px solid rgba(184,116,26,.2);border-radius:20px;color:var(--stone-l);font-size:.8rem;text-decoration:none;transition:all .2s}
 .enc-tab:hover{border-color:var(--gold);color:var(--gold)}
 .enc-tab span{color:var(--gold);font-size:.72rem}
 .enc-main{max-width:1100px;margin:0 auto;padding:1rem 1.5rem 4rem}
 .enc-section{margin-top:2.5rem}
-.enc-section h2{font-size:1.3rem;color:var(--ivory);border-bottom:1px solid rgba(62,107,89,.2);padding-bottom:.6rem;margin-bottom:1rem}
+.enc-section h2{font-size:1.3rem;color:var(--ivory);border-bottom:1px solid rgba(184,116,26,.2);padding-bottom:.6rem;margin-bottom:1rem}
 .enc-count{font-size:.8rem;color:var(--stone);font-weight:400}
 .enc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.8rem}
-.enc-item{display:flex;flex-direction:column;gap:.3rem;padding:.9rem 1rem;background:var(--ink);border:1px solid rgba(62,107,89,.12);border-radius:8px;text-decoration:none;transition:border-color .2s,transform .2s}
+.enc-item{display:flex;flex-direction:column;gap:.3rem;padding:.9rem 1rem;background:var(--ink);border:1px solid rgba(184,116,26,.12);border-radius:8px;text-decoration:none;transition:border-color .2s,transform .2s}
 .enc-item:hover{border-color:var(--gold);transform:translateY(-2px)}
 .enc-item strong{color:var(--gold);font-size:.92rem}
 .enc-item span{color:var(--stone-l);font-size:.78rem;line-height:1.45}
@@ -4393,11 +4395,11 @@ ${entry.seo_keywords ? `<meta name="keywords" content="${escHtml(entry.seo_keywo
 .encd-bc{font-size:.78rem;color:var(--stone);margin-bottom:1.2rem}
 .encd-bc a{color:var(--stone-l);text-decoration:none}
 .encd-bc a:hover{color:var(--gold)}
-.encd-cat{display:inline-block;padding:.25rem .7rem;background:rgba(62,107,89,.12);border:1px solid rgba(62,107,89,.3);border-radius:14px;color:var(--gold);font-size:.75rem;margin-bottom:.8rem}
+.encd-cat{display:inline-block;padding:.25rem .7rem;background:rgba(184,116,26,.12);border:1px solid rgba(184,116,26,.3);border-radius:14px;color:var(--gold);font-size:.75rem;margin-bottom:.8rem}
 .encd-wrap h1{font-size:clamp(1.6rem,4vw,2.2rem);color:var(--ivory);margin-bottom:.8rem;line-height:1.3}
 .enc-summary{font-size:1.02rem;color:var(--stone-l);line-height:1.7;padding:1rem 1.2rem;background:var(--ink);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;margin-bottom:2rem}
 .encd-body{color:var(--stone-l);line-height:1.8;font-size:.95rem}
-.encd-body h2{font-size:1.25rem;color:var(--ivory);margin:2rem 0 .8rem;padding-bottom:.4rem;border-bottom:1px solid rgba(62,107,89,.15)}
+.encd-body h2{font-size:1.25rem;color:var(--ivory);margin:2rem 0 .8rem;padding-bottom:.4rem;border-bottom:1px solid rgba(184,116,26,.15)}
 .encd-body h3{font-size:1.05rem;color:var(--gold);margin:1.4rem 0 .6rem}
 .encd-body p{margin:.7rem 0}
 .encd-body ul{margin:.7rem 0;padding-left:1.3rem}
@@ -4405,7 +4407,7 @@ ${entry.seo_keywords ? `<meta name="keywords" content="${escHtml(entry.seo_keywo
 .encd-body strong{color:var(--ivory)}
 .encd-faq{margin-top:2.5rem}
 .encd-faq h2{font-size:1.25rem;color:var(--ivory);margin-bottom:1rem}
-.encd-faq-item{background:var(--ink);border:1px solid rgba(62,107,89,.15);border-radius:8px;margin-bottom:.6rem;overflow:hidden}
+.encd-faq-item{background:var(--ink);border:1px solid rgba(184,116,26,.15);border-radius:8px;margin-bottom:.6rem;overflow:hidden}
 .encd-faq-item summary{padding:.9rem 1.1rem;cursor:pointer;color:var(--ivory);font-size:.92rem;font-weight:600;list-style:none;position:relative}
 .encd-faq-item summary::after{content:'+';position:absolute;right:1.1rem;color:var(--gold);font-size:1.1rem}
 .encd-faq-item[open] summary::after{content:'−'}
@@ -4413,27 +4415,27 @@ ${entry.seo_keywords ? `<meta name="keywords" content="${escHtml(entry.seo_keywo
 .encd-related{margin-top:2.5rem}
 .encd-related h2{font-size:1.25rem;color:var(--ivory);margin-bottom:1rem}
 .encd-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.7rem}
-.encd-related-card{display:flex;flex-direction:column;gap:.25rem;padding:.85rem 1rem;background:var(--ink);border:1px solid rgba(62,107,89,.12);border-radius:8px;text-decoration:none;transition:border-color .2s}
+.encd-related-card{display:flex;flex-direction:column;gap:.25rem;padding:.85rem 1rem;background:var(--ink);border:1px solid rgba(184,116,26,.12);border-radius:8px;text-decoration:none;transition:border-color .2s}
 .encd-related-card:hover{border-color:var(--gold)}
 .encd-related-card strong{color:var(--gold);font-size:.88rem}
 .encd-related-card span{color:var(--stone-l);font-size:.75rem;line-height:1.4}
-.encd-treat{margin-top:2rem;padding:1.1rem 1.3rem;background:rgba(62,107,89,.06);border:1px solid rgba(62,107,89,.2);border-radius:10px}
+.encd-treat{margin-top:2rem;padding:1.1rem 1.3rem;background:rgba(184,116,26,.06);border:1px solid rgba(184,116,26,.2);border-radius:10px}
 .encd-treat h3{font-size:.95rem;color:var(--ivory);margin-bottom:.7rem}
 .encd-treat-tags{display:flex;flex-wrap:wrap;gap:.5rem}
-.encd-treat-tags a{padding:.35rem .8rem;background:var(--ink);border:1px solid rgba(62,107,89,.3);border-radius:16px;color:var(--gold);font-size:.8rem;text-decoration:none}
-.encd-treat-tags a:hover{background:rgba(62,107,89,.15)}
+.encd-treat-tags a{padding:.35rem .8rem;background:var(--ink);border:1px solid rgba(184,116,26,.3);border-radius:16px;color:var(--gold);font-size:.8rem;text-decoration:none}
+.encd-treat-tags a:hover{background:rgba(184,116,26,.15)}
 .encd-local{margin-top:2rem;font-size:.72rem;color:var(--stone);line-height:1.8}
-.encd-cta{margin-top:2.5rem;text-align:center;padding:1.8rem;background:var(--ink);border:1px solid rgba(62,107,89,.2);border-radius:12px}
+.encd-cta{margin-top:2.5rem;text-align:center;padding:1.8rem;background:var(--ink);border:1px solid rgba(184,116,26,.2);border-radius:12px}
 .encd-cta p{color:var(--stone-l);margin-bottom:1rem;font-size:.92rem}
-.encd-cta a{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.6rem;background:var(--gold);color:#F5F0E8;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem}
+.encd-cta a{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.6rem;background:var(--gold);color:#F3EFE7;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem}
 .encd-meta{margin-top:1.5rem;font-size:.72rem;color:var(--stone)}
-.encd-more{margin-top:1.6rem;padding-top:.4rem;border-top:1px solid rgba(62,107,89,.12)}
+.encd-more{margin-top:1.6rem;padding-top:.4rem;border-top:1px solid rgba(184,116,26,.12)}
 .encd-seealso{margin-top:1.4rem;font-size:.88rem}
-.encd-seealso a{color:var(--gold);text-decoration:none;border-bottom:1px dotted rgba(62,107,89,.5)}
+.encd-seealso a{color:var(--gold);text-decoration:none;border-bottom:1px dotted rgba(184,116,26,.5)}
 .encd-blogs{margin-top:2.5rem}
 .encd-blogs h2{font-size:1.25rem;color:var(--ivory);margin-bottom:1rem}
 .encd-blogs-list{list-style:none;padding:0;margin:0}
-.encd-blogs-list li{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.7rem 1rem;background:var(--ink);border:1px solid rgba(62,107,89,.12);border-radius:8px;margin-bottom:.5rem}
+.encd-blogs-list li{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.7rem 1rem;background:var(--ink);border:1px solid rgba(184,116,26,.12);border-radius:8px;margin-bottom:.5rem}
 .encd-blogs-list a{color:var(--stone-l);text-decoration:none;font-size:.9rem;flex:1}
 .encd-blogs-list a:hover{color:var(--gold)}
 .encd-blogs-list time{color:var(--stone);font-size:.72rem;white-space:nowrap}
@@ -4531,12 +4533,12 @@ const LANDING_PAGES: LandingPageData[] = [
       {
         heading: '진료시간 — 목요일은 밤 8시 30분까지 진료합니다',
         content: `<table class="hub-hours" style="width:100%;border-collapse:collapse;margin:.5rem 0 1rem;font-size:.92rem">
-<thead><tr><th style="text-align:left;padding:.55rem;border-bottom:1px solid rgba(62,107,89,.35)">요일</th><th style="text-align:left;padding:.55rem;border-bottom:1px solid rgba(62,107,89,.35)">진료시간</th></tr></thead>
+<thead><tr><th style="text-align:left;padding:.55rem;border-bottom:1px solid rgba(184,116,26,.35)">요일</th><th style="text-align:left;padding:.55rem;border-bottom:1px solid rgba(184,116,26,.35)">진료시간</th></tr></thead>
 <tbody>
-<tr><td style="padding:.55rem;border-bottom:1px solid rgba(62,107,89,.15)">월 · 화 · 수 · 금</td><td style="padding:.55rem;border-bottom:1px solid rgba(62,107,89,.15)">09:30 ~ 18:30</td></tr>
-<tr><td style="padding:.55rem;border-bottom:1px solid rgba(62,107,89,.15)"><strong>목요일 (야간진료)</strong></td><td style="padding:.55rem;border-bottom:1px solid rgba(62,107,89,.15)"><strong>09:30 ~ 20:30</strong></td></tr>
-<tr><td style="padding:.55rem;border-bottom:1px solid rgba(62,107,89,.15)">토요일</td><td style="padding:.55rem;border-bottom:1px solid rgba(62,107,89,.15)">09:30 ~ 14:00</td></tr>
-<tr><td style="padding:.55rem;border-bottom:1px solid rgba(62,107,89,.15)">점심시간</td><td style="padding:.55rem;border-bottom:1px solid rgba(62,107,89,.15)">12:30 ~ 14:00</td></tr>
+<tr><td style="padding:.55rem;border-bottom:1px solid rgba(184,116,26,.15)">월 · 화 · 수 · 금</td><td style="padding:.55rem;border-bottom:1px solid rgba(184,116,26,.15)">09:30 ~ 18:30</td></tr>
+<tr><td style="padding:.55rem;border-bottom:1px solid rgba(184,116,26,.15)"><strong>목요일 (야간진료)</strong></td><td style="padding:.55rem;border-bottom:1px solid rgba(184,116,26,.15)"><strong>09:30 ~ 20:30</strong></td></tr>
+<tr><td style="padding:.55rem;border-bottom:1px solid rgba(184,116,26,.15)">토요일</td><td style="padding:.55rem;border-bottom:1px solid rgba(184,116,26,.15)">09:30 ~ 14:00</td></tr>
+<tr><td style="padding:.55rem;border-bottom:1px solid rgba(184,116,26,.15)">점심시간</td><td style="padding:.55rem;border-bottom:1px solid rgba(184,116,26,.15)">12:30 ~ 14:00</td></tr>
 <tr><td style="padding:.55rem">일요일 · 공휴일</td><td style="padding:.55rem">휴진</td></tr>
 </tbody></table>
 <p>평일 낮에 시간을 내기 어려운 직장인·학생은 목요일 저녁 시간을 많이 이용하십니다. 야간이라고 진료 범위가 줄지 않으며 자세한 안내는 <a href="/night-dental">의정부 야간진료 치과</a> 페이지에 있습니다. 휴진·진료시간 변경은 <a href="/notice">공지사항</a>에 먼저 올립니다.</p>`
@@ -5158,7 +5160,7 @@ const LANDING_PAGES: LandingPageData[] = [
         content: `<table style="width:100%;border-collapse:collapse;margin:1em 0">
 <tr style="background:var(--gold);color:#fff"><th style="padding:10px;border:1px solid #ddd">요일</th><th style="padding:10px;border:1px solid #ddd">진료시간</th><th style="padding:10px;border:1px solid #ddd">비고</th></tr>
 <tr><td style="padding:10px;border:1px solid #ddd"><strong>월·화·수·금</strong></td><td style="padding:10px;border:1px solid #ddd">09:30 ~ <strong>18:30</strong></td><td style="padding:10px;border:1px solid #ddd">점심시간 12:30~14:00</td></tr>
-<tr style="background:#fff8e8"><td style="padding:10px;border:1px solid #ddd"><strong>🌙 목요일</strong></td><td style="padding:10px;border:1px solid #ddd">09:30 ~ <strong style="color:#3E6B59;font-size:1.1em">20:30</strong></td><td style="padding:10px;border:1px solid #ddd"><strong>야간진료</strong> · 점심 12:30~14:00</td></tr>
+<tr style="background:#fff8e8"><td style="padding:10px;border:1px solid #ddd"><strong>🌙 목요일</strong></td><td style="padding:10px;border:1px solid #ddd">09:30 ~ <strong style="color:#B8741A;font-size:1.1em">20:30</strong></td><td style="padding:10px;border:1px solid #ddd"><strong>야간진료</strong> · 점심 12:30~14:00</td></tr>
 <tr><td style="padding:10px;border:1px solid #ddd"><strong>토요일</strong></td><td style="padding:10px;border:1px solid #ddd">09:30 ~ <strong>14:00</strong></td><td style="padding:10px;border:1px solid #ddd">점심시간 없이 연속 진료</td></tr>
 <tr><td style="padding:10px;border:1px solid #ddd"><strong>일요일·공휴일</strong></td><td style="padding:10px;border:1px solid #ddd" colspan="2">휴진</td></tr>
 </table>
@@ -5948,7 +5950,7 @@ ${UIJEONGBU_CARD_CSS}
 .landing-cta-secondary:hover{background:var(--gold);color:var(--ink)}
 .landing-body{max-width:800px;margin:0 auto;padding:0 clamp(1.5rem,4vw,3rem) clamp(4rem,8vh,6rem)}
 .landing-section{margin-bottom:3rem}
-.landing-section h2{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.2rem,2.5vw,1.6rem);color:var(--ivory);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid rgba(62,107,89,.12)}
+.landing-section h2{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.2rem,2.5vw,1.6rem);color:var(--ivory);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid rgba(184,116,26,.12)}
 .landing-content{font-size:clamp(.88rem,1vw,.96rem);line-height:2;color:var(--stone-l);word-break:keep-all}
 .landing-content p{margin-bottom:1rem}
 .landing-content strong{color:var(--ivory);font-weight:600}
@@ -5957,9 +5959,9 @@ ${UIJEONGBU_CARD_CSS}
 .landing-content li::marker{color:var(--gold)}
 .landing-content a{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
 .landing-faq{margin-bottom:3rem}
-.landing-faq h2{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.2rem,2.5vw,1.6rem);color:var(--ivory);margin-bottom:1.5rem;padding-bottom:.5rem;border-bottom:1px solid rgba(62,107,89,.12)}
+.landing-faq h2{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.2rem,2.5vw,1.6rem);color:var(--ivory);margin-bottom:1.5rem;padding-bottom:.5rem;border-bottom:1px solid rgba(184,116,26,.12)}
 .faq-item{border:1px solid var(--line);border-radius:12px;margin-bottom:.75rem;overflow:hidden;transition:border-color .3s}
-.faq-item.open{border-color:rgba(62,107,89,.3)}
+.faq-item.open{border-color:rgba(184,116,26,.3)}
 .faq-q{width:100%;text-align:left;padding:1rem 1.25rem;font-size:.92rem;color:var(--ivory);font-weight:500;display:flex;justify-content:space-between;align-items:center;gap:1rem;cursor:pointer;background:none;border:none;font-family:inherit}
 .faq-q i{color:var(--gold);font-size:.7rem;transition:transform .3s}
 .faq-item.open .faq-q i{transform:rotate(180deg)}
@@ -5984,7 +5986,7 @@ ${UIJEONGBU_CARD_CSS}
 </style>
 </head>
 <body>
-<noscript><div style="background:#3E6B59;color:#F5F0E8;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
+<noscript><div style="background:#B8741A;color:#F3EFE7;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
 ${NAV_HTML}
 <main id="main-content" role="main">
   <div class="landing-hero">
@@ -6263,7 +6265,7 @@ app.post('/api/admin/fees', auth, async (c) => {
 const GONE_PATHS = ['/invisalign', '/orthodontics']
 for (const gp of GONE_PATHS) {
   for (const p of [gp, gp + '/', gp + '.html']) {
-    app.get(p, (c) => c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, follow"><title>제공하지 않는 진료 안내 | 서울가온치과</title><style>body{margin:0;background:#0a0a09;color:#e9e4d8;font-family:-apple-system,BlinkMacSystemFont,'Pretendard',sans-serif;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px;box-sizing:border-box}main{max-width:520px;text-align:center;line-height:1.7;word-break:keep-all}h1{font-size:1.35rem;margin:0 0 1rem}a{color:#3E6B59}</style></head><body><main><h1>이 페이지는 더 이상 제공되지 않습니다</h1><p>서울가온치과는 치아교정(인비절라인·투명교정 포함)을 하지 않습니다.</p><p><a href="/treatments">진료 안내 보기</a> · <a href="/">홈으로</a></p></main></body></html>`, 410, {
+    app.get(p, (c) => c.html(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, follow"><title>제공하지 않는 진료 안내 | 서울가온치과</title><style>body{margin:0;background:#0a0a09;color:#e9e4d8;font-family:-apple-system,BlinkMacSystemFont,'Pretendard',sans-serif;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px;box-sizing:border-box}main{max-width:520px;text-align:center;line-height:1.7;word-break:keep-all}h1{font-size:1.35rem;margin:0 0 1rem}a{color:#B8741A}</style></head><body><main><h1>이 페이지는 더 이상 제공되지 않습니다</h1><p>서울가온치과는 치아교정(인비절라인·투명교정 포함)을 하지 않습니다.</p><p><a href="/treatments">진료 안내 보기</a> · <a href="/">홈으로</a></p></main></body></html>`, 410, {
       'X-Robots-Tag': 'noindex, follow',
       'Cache-Control': 'public, max-age=3600',
     }))
@@ -6284,7 +6286,7 @@ for (const page of LANDING_PAGES) {
           const sec = `<section class="sg-related" aria-label="관련 칼럼" style="max-width:1100px;margin:0 auto;padding:2rem clamp(1.25rem,4vw,3rem) 3rem"><style>${SEO_BOX_CSS}</style>
   <h2>${escHtml(LANDING_PROCEDURES[page.slug] || page.h1)} 관련 칼럼</h2>
   <ul class="sg-list">${hits.map((r) => `<li><a href="/blog/${r.id}">${escHtml(r.title)}</a></li>`).join('')}</ul>
-  <p style="margin-top:1rem"><a href="/blog" style="color:var(--gold,#3E6B59)">칼럼 전체 보기 →</a></p>
+  <p style="margin-top:1rem"><a href="/blog" style="color:var(--gold,#B8741A)">칼럼 전체 보기 →</a></p>
 </section>`
           html = html.replace('</main>', `${sec}\n</main>`)
         }

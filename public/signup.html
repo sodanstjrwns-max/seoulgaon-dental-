@@ -37,7 +37,7 @@
 <style>
 /* ===== AUTH PAGE ===== */
 .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:6rem 1.5rem 3rem}
-.auth-card{background:var(--ink-3);border:1px solid var(--line);border-radius:16px;padding:2.5rem;width:100%;max-width:420px;box-shadow:0 24px 80px rgba(43,38,34,.12)}
+.auth-card{background:var(--ink-3);border:1px solid var(--line);border-radius:16px;padding:2.5rem;width:100%;max-width:420px;box-shadow:0 24px 80px rgba(21,23,26,.12)}
 .auth-logo{text-align:center;margin-bottom:2rem}
 .auth-logo a{font-family:var(--ff-title);font-weight:500;font-size:1.5rem;color:var(--ivory)}
 .auth-logo a span{color:var(--gold)}
@@ -75,7 +75,7 @@
 .auth-footer a:hover{color:var(--gold-b)}
 /* Consent checkboxes */
 .consent-group{display:flex;flex-direction:column;gap:.65rem;margin-top:.3rem}
-.consent-all{padding:.7rem 1rem;background:rgba(62,107,89,.06);border:1px solid rgba(62,107,89,.2);border-radius:10px}
+.consent-all{padding:.7rem 1rem;background:rgba(184,116,26,.06);border:1px solid rgba(184,116,26,.2);border-radius:10px}
 .consent-item{display:flex;align-items:flex-start;gap:.6rem;cursor:pointer;position:relative}
 .consent-item input[type=checkbox]{display:none}
 .consent-item .cbox{width:20px;height:20px;min-width:20px;border:1.5px solid var(--line);border-radius:5px;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px;background:var(--ink-4)}
@@ -88,9 +88,9 @@
 .consent-item .view-terms{color:var(--gold);font-size:.7rem;text-decoration:underline;cursor:pointer;margin-left:auto;white-space:nowrap;padding-top:2px;min-width:40px;text-align:right}
 .consent-divider{height:1px;background:var(--line);margin:.2rem 0}
 /* Terms modal */
-.terms-overlay{position:fixed;inset:0;background:rgba(43,38,34,.24);z-index:10000;display:none;align-items:center;justify-content:center;padding:1.5rem}
+.terms-overlay{position:fixed;inset:0;background:rgba(21,23,26,.24);z-index:10000;display:none;align-items:center;justify-content:center;padding:1.5rem}
 .terms-overlay.show{display:flex}
-.terms-box{background:var(--ink-3);border:1px solid rgba(62,107,89,.2);border-radius:14px;max-width:560px;width:100%;max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+.terms-box{background:var(--ink-3);border:1px solid rgba(184,116,26,.2);border-radius:14px;max-width:560px;width:100%;max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
 .terms-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid var(--line)}
 .terms-header h3{font-size:.95rem;font-weight:700;color:var(--ivory)}
 .terms-close{background:none;border:none;color:var(--stone);font-size:1.2rem;cursor:pointer;transition:color .2s;padding:4px}
@@ -113,12 +113,12 @@
 }
 /* Already logged in */
 .auth-logged-in{text-align:center;padding:2rem 0}
-.auth-logged-in .user-icon{width:64px;height:64px;background:rgba(62,107,89,.15);border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem;color:var(--gold)}
+.auth-logged-in .user-icon{width:64px;height:64px;background:rgba(184,116,26,.15);border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem;color:var(--gold)}
 .auth-logged-in h3{font-family:var(--ff-title);font-weight:500;font-size:1.2rem;margin-bottom:.3rem}
 .auth-logged-in p{font-size:.82rem;color:var(--stone-l);margin-bottom:1.5rem}
 .auth-logged-in .btn-row{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
 .btn-outline{padding:.6rem 1.5rem;border:1px solid var(--gold);border-radius:100px;font-size:.82rem;color:var(--gold);transition:all .3s;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem}
-.btn-outline:hover{background:rgba(62,107,89,.1)}
+.btn-outline:hover{background:rgba(184,116,26,.1)}
 .btn-gold{padding:.6rem 1.5rem;background:var(--gold);border-radius:100px;font-size:.82rem;color:var(--ink);font-weight:600;transition:all .3s;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;border:none}
 .btn-gold:hover{background:var(--gold-b)}
 /* Phone input formatting hint */
@@ -199,12 +199,14 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Y0XLCZCP4',{anonymize_ip:true});</script>
 <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yc83x23k72");</script>
 <script defer src="https://pf-dashboard-2nt.pages.dev/beacon.js"></script>
-<link rel="preconnect" href="https://hangeul.pstatic.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500..800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <noscript><style>[data-reveal],.page-hero-label,.page-hero h1,.page-hero-sub,.page-tabs{opacity:1!important;transform:none!important}</style></noscript>
 <script src="/static/site.js?v=dev" defer></script>
 </head>
 <body>
-<noscript><div style="background:#3E6B59;color:#F5F0E8;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
+<noscript><div style="background:#B8741A;color:#F3EFE7;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
 <!-- custom cursor removed -->
 
 <nav id="nav" role="navigation" aria-label="메인 네비게이션">

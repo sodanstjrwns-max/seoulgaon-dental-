@@ -50,7 +50,7 @@
 /* ===== VISIT INFO ===== */
 .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
 .visit-card{background:var(--ink-4);border:1px solid var(--line);border-radius:16px;padding:2rem;transition:border-color .4s}
-.visit-card:hover{border-color:rgba(62,107,89,.25)}
+.visit-card:hover{border-color:rgba(184,116,26,.25)}
 .visit-card-label{font-family:var(--ff-en);font-size:.7rem;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:.75rem}
 .visit-card-val{font-size:.88rem;color:var(--ivory);line-height:1.7}
 .visit-card-val strong{color:var(--gold)}
@@ -59,7 +59,7 @@
 /* Map area */
 .map-wrap{grid-column:1/3;border-radius:16px;overflow:hidden;border:1px solid var(--line);height:320px;position:relative;background:var(--ink-3)}
 .map-wrap iframe{width:100%;height:100%;border:0;filter:grayscale(.5) brightness(.85) contrast(1.1)}
-.map-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(245,240,232,.94) 0%,transparent 100%);padding:1.5rem 2rem .75rem;display:flex;justify-content:space-between;align-items:flex-end}
+.map-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(243,239,231,.94) 0%,transparent 100%);padding:1.5rem 2rem .75rem;display:flex;justify-content:space-between;align-items:flex-end}
 .map-addr{font-size:.85rem;color:var(--ivory)}
 .map-addr .small{font-size:.72rem;color:var(--stone);display:block;margin-top:.2rem}
 .map-btn{background:var(--gold);color:var(--ink);padding:.5rem 1.25rem;border-radius:100px;font-size:.78rem;font-weight:600;transition:background .3s;flex-shrink:0}
@@ -68,13 +68,13 @@
 /* Transport card */
 .transport-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2rem}
 .transport-item{background:var(--ink-4);border:1px solid var(--line);border-radius:12px;padding:1.25rem;transition:border-color .3s}
-.transport-item:hover{border-color:rgba(62,107,89,.2)}
+.transport-item:hover{border-color:rgba(184,116,26,.2)}
 .transport-icon{font-size:1.5rem;margin-bottom:.5rem}
 .transport-name{font-family:var(--ff-title);font-weight:500;font-size:.95rem;margin-bottom:.3rem}
 .transport-desc{font-size:.78rem;color:var(--stone-l);line-height:1.5}
 
 /* ===== FEE TABLE ===== */
-.fee-notice{background:rgba(62,107,89,.06);border:1px solid rgba(62,107,89,.15);border-radius:12px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;gap:1rem;align-items:flex-start}
+.fee-notice{background:rgba(184,116,26,.06);border:1px solid rgba(184,116,26,.15);border-radius:12px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;gap:1rem;align-items:flex-start}
 .fee-notice-icon{font-size:1.5rem;flex-shrink:0;margin-top:.1rem}
 .fee-notice-text{font-size:.85rem;color:var(--stone-l);line-height:1.65}
 .fee-notice-text strong{color:var(--gold)}
@@ -83,12 +83,12 @@
 .fee-table{width:100%;border-collapse:collapse}
 .fee-table thead th{font-family:var(--ff-en);font-size:.72rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;text-align:left;padding:.85rem 1rem;border-bottom:1px solid var(--gold);white-space:nowrap}
 .fee-table tbody td{padding:.85rem 1rem;font-size:.85rem;color:var(--stone-l);border-bottom:1px solid var(--line);line-height:1.5}
-.fee-table tbody tr:hover{background:rgba(62,107,89,.03)}
+.fee-table tbody tr:hover{background:rgba(184,116,26,.03)}
 .fee-table tbody td:first-child{color:var(--ivory);font-weight:500}
 .fee-table tbody td.price{color:var(--gold);font-weight:600;white-space:nowrap}
 .fee-cat{font-family:var(--ff-title);font-weight:500;font-size:1rem;color:var(--ivory);padding:1.25rem 1rem .5rem;border-bottom:none!important}
 .fee-table tbody tr.fee-cat-row:hover{background:transparent}
-.fee-badge{display:inline-block;background:rgba(62,107,89,.12);color:var(--gold);padding:.15rem .6rem;border-radius:4px;font-size:.68rem;font-weight:600;margin-left:.5rem}
+.fee-badge{display:inline-block;background:rgba(184,116,26,.12);color:var(--gold);padding:.15rem .6rem;border-radius:4px;font-size:.68rem;font-weight:600;margin-left:.5rem}
 .fee-badge.nhi{background:rgba(3,199,90,.12);color:#03c75a}
 
 /* ===== GUIDE FAQ ===== */
@@ -110,7 +110,7 @@
 .guide-btn.gold{background:var(--gold);color:var(--ink)}
 .guide-btn.green{background:#03c75a;color:#fff}
 .guide-btn.outline{border:1.5px solid var(--gold);color:var(--gold)}
-.guide-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(62,107,89,.2)}
+.guide-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(184,116,26,.2)}
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px){
@@ -221,13 +221,15 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Y0XLCZCP4',{anonymize_ip:true});</script>
 <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yc83x23k72");</script>
 <script defer src="https://pf-dashboard-2nt.pages.dev/beacon.js"></script>
-<link rel="preconnect" href="https://hangeul.pstatic.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500..800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <noscript><style>[data-reveal],.page-hero-label,.page-hero h1,.page-hero-sub,.page-tabs{opacity:1!important;transform:none!important}</style></noscript>
 <script src="/static/site.js?v=dev" defer></script>
 </head>
 <body>
-<noscript><div style="background:#3E6B59;color:#F5F0E8;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다. 브라우저 설정에서 JavaScript를 활성화해주세요.</div></noscript>
-<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--gold);color:var(--ink);font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--gold,#3E6B59);color:var(--ink,#F5F0E8);font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
+<noscript><div style="background:#B8741A;color:#F3EFE7;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다. 브라우저 설정에서 JavaScript를 활성화해주세요.</div></noscript>
+<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--gold);color:var(--ink);font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--gold,#B8741A);color:var(--ink,#F3EFE7);font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
 
 <!-- custom cursor removed -->
 
@@ -636,11 +638,11 @@ window.addEventListener('DOMContentLoaded', () => {
   <span class="kakao-float-label">상담하기</span>
 </div>
 <style>
-#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(43,38,34,.09);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s}
-#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(43,38,34,.12)}
+#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(21,23,26,.09);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s}
+#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(21,23,26,.12)}
 #kakao-float:active{transform:scale(.95)}
-.kakao-float-label{position:absolute;right:72px;background:rgba(43,38,34,.9);color:#F5F0E8;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;letter-spacing:.02em;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(62,107,89,.15)}
-.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(43,38,34,.9)}
+.kakao-float-label{position:absolute;right:72px;background:rgba(21,23,26,.9);color:#F3EFE7;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;letter-spacing:.02em;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(184,116,26,.15)}
+.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(21,23,26,.9)}
 #kakao-float:hover .kakao-float-label{opacity:1;transform:translateX(0)}
 @media(max-width:768px){
 #kakao-float{width:52px;height:52px;bottom:1.2rem;right:1.2rem}

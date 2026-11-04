@@ -42,7 +42,7 @@
 .hub-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem) clamp(3rem,5vh,4rem)}
 .hub-card{position:relative;background:var(--ink-4);border:1px solid var(--line);border-radius:20px;padding:clamp(2rem,3vw,2.8rem);overflow:hidden;transition:all .5s cubic-bezier(.4,0,.2,1);cursor:pointer;text-decoration:none;color:inherit;display:flex;flex-direction:column;min-height:280px}
 .hub-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .4s}
-.hub-card:hover{border-color:rgba(62,107,89,.35);transform:translateY(-6px);box-shadow:0 20px 40px rgba(43,38,34,.09)}
+.hub-card:hover{border-color:rgba(184,116,26,.35);transform:translateY(-6px);box-shadow:0 20px 40px rgba(21,23,26,.09)}
 .hub-card:hover::before{opacity:1}
 .hub-card-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.2rem;transition:transform .4s}
 .hub-card:hover .hub-card-icon{transform:scale(1.1) rotate(-3deg)}
@@ -55,7 +55,7 @@
 .hub-card-desc{font-size:.85rem;color:var(--stone-l);line-height:1.7;flex:1}
 .hub-card-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
 .hub-tag{font-size:.68rem;padding:.25rem .7rem;border-radius:100px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03);color:var(--stone-l);transition:all .3s}
-.hub-card:hover .hub-tag{border-color:rgba(62,107,89,.2);color:var(--ivory)}
+.hub-card:hover .hub-tag{border-color:rgba(184,116,26,.2);color:var(--ivory)}
 .hub-card-arrow{display:inline-flex;align-items:center;gap:.4rem;color:var(--gold);font-size:.82rem;font-weight:500;margin-top:1.2rem;transition:gap .3s}
 .hub-card:hover .hub-card-arrow{gap:.7rem}
 .hub-card-count{position:absolute;top:1.5rem;right:1.5rem;font-family:var(--ff-en);font-size:.72rem;color:var(--stone);padding:.3rem .8rem;background:rgba(255,255,255,.03);border-radius:100px;border:1px solid rgba(255,255,255,.04)}
@@ -67,7 +67,7 @@
 .comm-sec-label{font-family:var(--ff-en);font-size:.7rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:.3rem}
 .comm-sec-title{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.4rem,2.5vw,1.9rem)}
 .comm-sec-desc{font-size:.85rem;color:var(--stone-l);margin-top:.3rem}
-.comm-more{display:inline-flex;align-items:center;gap:.4rem;color:var(--gold);font-size:.82rem;font-weight:500;padding:.5rem 1.2rem;border:1px solid rgba(62,107,89,.2);border-radius:100px;transition:all .3s;white-space:nowrap}
+.comm-more{display:inline-flex;align-items:center;gap:.4rem;color:var(--gold);font-size:.82rem;font-weight:500;padding:.5rem 1.2rem;border:1px solid rgba(184,116,26,.2);border-radius:100px;transition:all .3s;white-space:nowrap}
 .comm-more:hover{background:var(--gold);color:var(--ink)}
 .comm-more i{font-size:.7rem;transition:transform .3s}
 .comm-more:hover i{transform:translateX(3px)}
@@ -75,7 +75,7 @@
 /* === Blog Preview Cards === */
 .blog-preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
 .blog-preview{background:var(--ink-4);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:border-color .4s,transform .4s;cursor:pointer;text-decoration:none;color:inherit;display:block}
-.blog-preview:hover{border-color:rgba(62,107,89,.3);transform:translateY(-4px)}
+.blog-preview:hover{border-color:rgba(184,116,26,.3);transform:translateY(-4px)}
 .blog-preview-thumb{width:100%;height:160px;background:var(--ink-3);overflow:hidden;display:flex;align-items:center;justify-content:center}
 .blog-preview-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
 .blog-preview:hover .blog-preview-thumb img{transform:scale(1.08)}
@@ -89,12 +89,12 @@
 /* === BA Preview === */
 .ba-preview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
 .ba-preview{background:var(--ink-4);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:all .4s;cursor:pointer;text-decoration:none;color:inherit;display:block}
-.ba-preview:hover{border-color:rgba(62,107,89,.3);transform:translateY(-4px)}
+.ba-preview:hover{border-color:rgba(184,116,26,.3);transform:translateY(-4px)}
 .ba-preview-imgs{display:grid;grid-template-columns:1fr 1fr;gap:2px}
 .ba-preview-imgs div{height:100px;overflow:hidden;position:relative}
 .ba-preview-imgs img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
 .ba-preview:hover img{transform:scale(1.05)}
-.ba-preview-imgs .ba-label{position:absolute;bottom:3px;left:3px;font-size:.55rem;background:rgba(43,38,34,.21);color:#fff;padding:1px 6px;border-radius:3px;font-weight:600;letter-spacing:.5px}
+.ba-preview-imgs .ba-label{position:absolute;bottom:3px;left:3px;font-size:.55rem;background:rgba(21,23,26,.21);color:#fff;padding:1px 6px;border-radius:3px;font-weight:600;letter-spacing:.5px}
 .ba-preview-body{padding:.8rem 1rem}
 .ba-preview-title{font-size:.82rem;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
 .ba-preview-cat{font-size:.65rem;color:var(--gold);margin-top:.2rem}
@@ -102,10 +102,10 @@
 /* === Notice List === */
 .notice-list{display:flex;flex-direction:column;gap:.6rem}
 .notice-item{display:flex;align-items:center;gap:1rem;padding:1rem 1.5rem;background:var(--ink-4);border:1px solid var(--line);border-radius:12px;transition:all .3s;cursor:pointer;text-decoration:none;color:inherit}
-.notice-item:hover{border-color:rgba(62,107,89,.25);transform:translateX(4px)}
+.notice-item:hover{border-color:rgba(184,116,26,.25);transform:translateX(4px)}
 .notice-badge{font-size:.65rem;font-weight:700;padding:.2rem .6rem;border-radius:6px;white-space:nowrap;flex-shrink:0}
-.notice-badge.important{background:rgba(62,107,89,.15);color:var(--gold)}
-.notice-badge.normal{background:rgba(156,149,141,.1);color:var(--stone-l)}
+.notice-badge.important{background:rgba(184,116,26,.15);color:var(--gold)}
+.notice-badge.normal{background:rgba(154,158,164,.1);color:var(--stone-l)}
 .notice-title{font-size:.88rem;font-weight:500;flex:1;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
 .notice-date{font-size:.72rem;color:var(--stone);white-space:nowrap;flex-shrink:0}
 
@@ -113,7 +113,7 @@
 .knowledge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
 .knowledge-card{background:var(--ink-4);border:1px solid var(--line);border-radius:16px;padding:1.5rem;transition:all .4s;cursor:pointer;text-decoration:none;color:inherit;display:block;position:relative;overflow:hidden}
 .knowledge-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .4s}
-.knowledge-card:hover{border-color:rgba(62,107,89,.3);transform:translateY(-3px)}
+.knowledge-card:hover{border-color:rgba(184,116,26,.3);transform:translateY(-3px)}
 .knowledge-card:hover::after{transform:scaleX(1)}
 .knowledge-card-icon{font-size:1.6rem;margin-bottom:.8rem;display:block}
 .knowledge-card-title{font-size:.95rem;font-weight:600;margin-bottom:.4rem;line-height:1.4}
@@ -135,15 +135,15 @@
 
 /* === Quick Tips === */
 .tips-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
-.tip-card{background:linear-gradient(135deg,rgba(62,107,89,.06),rgba(62,107,89,.01));border:1px solid rgba(62,107,89,.1);border-radius:16px;padding:1.5rem;transition:all .3s}
-.tip-card:hover{border-color:rgba(62,107,89,.25);transform:translateY(-2px)}
+.tip-card{background:linear-gradient(135deg,rgba(184,116,26,.06),rgba(184,116,26,.01));border:1px solid rgba(184,116,26,.1);border-radius:16px;padding:1.5rem;transition:all .3s}
+.tip-card:hover{border-color:rgba(184,116,26,.25);transform:translateY(-2px)}
 .tip-card-num{font-family:var(--ff-en);font-size:.65rem;letter-spacing:2px;color:var(--gold);opacity:.6;margin-bottom:.5rem}
 .tip-card-title{font-size:.92rem;font-weight:600;margin-bottom:.5rem;line-height:1.4}
 .tip-card-desc{font-size:.8rem;color:var(--stone-l);line-height:1.7}
 
 /* === CTA Section === */
 .comm-cta{max-width:1100px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem) clamp(4rem,8vh,6rem)}
-.comm-cta-box{background:linear-gradient(135deg,rgba(62,107,89,.08),rgba(62,107,89,.02));border:1px solid rgba(62,107,89,.15);border-radius:24px;padding:clamp(2.5rem,4vw,4rem);text-align:center}
+.comm-cta-box{background:linear-gradient(135deg,rgba(184,116,26,.08),rgba(184,116,26,.02));border:1px solid rgba(184,116,26,.15);border-radius:24px;padding:clamp(2.5rem,4vw,4rem);text-align:center}
 .comm-cta-title{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1rem}
 .comm-cta-desc{font-size:.9rem;color:var(--stone-l);line-height:1.8;max-width:540px;margin:0 auto 2rem}
 .comm-cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
@@ -231,13 +231,15 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Y0XLCZCP4',{anonymize_ip:true});</script>
 <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yc83x23k72");</script>
 <script defer src="https://pf-dashboard-2nt.pages.dev/beacon.js"></script>
-<link rel="preconnect" href="https://hangeul.pstatic.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500..800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <noscript><style>[data-reveal],.page-hero-label,.page-hero h1,.page-hero-sub,.page-tabs{opacity:1!important;transform:none!important}</style></noscript>
 <script src="/static/site.js?v=dev" defer></script>
 </head>
 <body>
-<noscript><div style="background:#3E6B59;color:#F5F0E8;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다. 브라우저 설정에서 JavaScript를 활성화해주세요.</div></noscript>
-<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--gold);color:var(--ink);font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--gold,#3E6B59);color:var(--ink,#F5F0E8);font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
+<noscript><div style="background:#B8741A;color:#F3EFE7;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다. 브라우저 설정에서 JavaScript를 활성화해주세요.</div></noscript>
+<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--gold);color:var(--ink);font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--gold,#B8741A);color:var(--ink,#F3EFE7);font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
 
 <!-- custom cursor removed -->
 
@@ -396,7 +398,7 @@
     <a href="/before-after" class="ba-preview">
       <div class="ba-preview-imgs">
         <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.65rem">BEFORE</div><span class="ba-label">BEFORE</span></div>
-        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(62,107,89,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
+        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(184,116,26,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
       </div>
       <div class="ba-preview-body">
         <div class="ba-preview-title">전체 임플란트 — 무치악 환자 풀 마우스</div>
@@ -406,7 +408,7 @@
     <a href="/before-after" class="ba-preview">
       <div class="ba-preview-imgs">
         <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.65rem">BEFORE</div><span class="ba-label">BEFORE</span></div>
-        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(62,107,89,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
+        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(184,116,26,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
       </div>
       <div class="ba-preview-body">
         <div class="ba-preview-title">앞니 라미네이트 6본 — 자연스러운 미소 회복</div>
@@ -416,7 +418,7 @@
     <a href="/before-after" class="ba-preview">
       <div class="ba-preview-imgs">
         <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.65rem">BEFORE</div><span class="ba-label">BEFORE</span></div>
-        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(62,107,89,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
+        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(184,116,26,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
       </div>
       <div class="ba-preview-body">
         <div class="ba-preview-title">충치 레진 치료 — 심미적인 자연치아 보존</div>
@@ -426,7 +428,7 @@
     <a href="/before-after" class="ba-preview">
       <div class="ba-preview-imgs">
         <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--ink-3);color:var(--stone);font-size:.65rem">BEFORE</div><span class="ba-label">BEFORE</span></div>
-        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(62,107,89,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
+        <div><div style="display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,var(--ink-3),rgba(184,116,26,.08));color:var(--gold);font-size:.65rem">AFTER</div><span class="ba-label">AFTER</span></div>
       </div>
       <div class="ba-preview-body">
         <div class="ba-preview-title">사랑니 발치 후 임플란트 — 어금니 기능 회복</div>
@@ -661,11 +663,11 @@ document.getElementById('enc-input').addEventListener('keydown', e => {
   <span class="kakao-float-label">상담하기</span>
 </div>
 <style>
-#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(43,38,34,.09);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s}
-#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(43,38,34,.12)}
+#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(21,23,26,.09);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s}
+#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(21,23,26,.12)}
 #kakao-float:active{transform:scale(.95)}
-.kakao-float-label{position:absolute;right:72px;background:rgba(43,38,34,.9);color:#F5F0E8;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;letter-spacing:.02em;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(62,107,89,.15)}
-.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(43,38,34,.9)}
+.kakao-float-label{position:absolute;right:72px;background:rgba(21,23,26,.9);color:#F3EFE7;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;letter-spacing:.02em;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(184,116,26,.15)}
+.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(21,23,26,.9)}
 #kakao-float:hover .kakao-float-label{opacity:1;transform:translateX(0)}
 @media(max-width:768px){
 #kakao-float{width:52px;height:52px;bottom:1.2rem;right:1.2rem}
