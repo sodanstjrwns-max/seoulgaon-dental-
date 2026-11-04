@@ -5,6 +5,7 @@
 <meta name="google-site-verification" content="onzIFMlYzxtJ4ZPiBmecKBQX0OSxqaFZ3GYj8aGsk0w" />
 <meta name="naver-site-verification" content="3acfa2ab85baedd02a79be084c5e8d869112230d" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>(function(){var d=document.documentElement;if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver' in window)d.classList.add('mx')})()</script>
 <link rel="icon" href="/favicon.ico?v=fav20261014" sizes="any">
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png?v=fav20261014">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png?v=fav20261014">
@@ -32,20 +33,17 @@
 <meta name="twitter:title" content="의정부 임플란트·심미·신경치료 진료 과목 | 서울가온치과">
 <meta name="twitter:description" content="가이드 임플란트, 심미치료(라미네이트·크라운), 레진빌드업, 서울대 보존과 전문의 신경치료. 의정부 서울가온치과.">
 <meta name="twitter:image" content="https://seoulgaondc.kr/images/og-treatments.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-<link href="style.css" rel="stylesheet">
-<link href="pages.css" rel="stylesheet">
+<link href="/style.css?v=dev" rel="stylesheet">
+<link href="/pages.css?v=dev" rel="stylesheet">
 <style>
 /* ===== TREATMENTS PAGE EXTENDED ===== */
 
 /* General Treatments Grid */
 .general-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;max-width:1200px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem)}
 .gen-card{background:var(--ink-4);border:1px solid var(--line);border-radius:16px;padding:2rem;transition:border-color .4s,transform .3s,box-shadow .4s;position:relative;overflow:hidden}
-.gen-card:hover{border-color:rgba(191,164,106,.3);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.3),0 0 30px rgba(191,164,106,.04)}
+.gen-card:hover{border-color:rgba(62,107,89,.3);transform:translateY(-4px);box-shadow:0 16px 48px rgba(43,38,34,.09),0 0 30px rgba(62,107,89,.04)}
 .gen-card-icon{font-size:2rem;margin-bottom:1rem;display:inline-block;filter:grayscale(.3)}
 .gen-card-num{position:absolute;top:1.25rem;right:1.5rem;font-family:var(--ff-en);font-size:2.5rem;color:var(--gold);opacity:.08;line-height:1;font-weight:700}
 .gen-card h3{font-family:var(--ff-title);font-weight:500;font-size:1.25rem;margin-bottom:.3rem}
@@ -53,20 +51,20 @@
 .gen-card p{font-size:.85rem;color:var(--stone-l);line-height:1.65;margin-bottom:1rem}
 .gen-card-tags{display:flex;flex-wrap:wrap;gap:.35rem}
 .gen-card-tag{padding:.2rem .6rem;border:1px solid var(--line);border-radius:100px;font-size:.68rem;color:var(--stone-l);transition:border-color .3s,color .3s}
-.gen-card:hover .gen-card-tag{border-color:rgba(191,164,106,.2);color:var(--stone)}
+.gen-card:hover .gen-card-tag{border-color:rgba(62,107,89,.2);color:var(--stone)}
 .gen-card{cursor:pointer}
 .gen-card-more{display:flex;align-items:center;gap:.3rem;font-size:.72rem;color:var(--gold);margin-top:.75rem;opacity:.5;transition:opacity .3s,transform .3s;font-family:var(--ff-en);letter-spacing:1px;text-transform:uppercase}
 .gen-card:hover .gen-card-more{opacity:1;transform:translateX(4px)}
 
 /* ===== General Detail Modal ===== */
-.gen-modal-overlay{position:fixed;inset:0;z-index:9999;background:rgba(5,5,4,.85);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .4s ease;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.gen-modal-overlay{position:fixed;inset:0;z-index:9999;background:rgba(43,38,34,.85);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .4s ease;display:flex;align-items:center;justify-content:center;padding:1.5rem}
 .gen-modal-overlay.active{opacity:1;pointer-events:auto}
 .gen-modal{background:var(--ink-4);border:1px solid var(--line);border-radius:20px;max-width:720px;width:100%;max-height:85vh;overflow-y:auto;transform:translateY(30px) scale(.97);transition:transform .4s cubic-bezier(.4,0,.2,1);position:relative}
 .gen-modal-overlay.active .gen-modal{transform:translateY(0) scale(1)}
 .gen-modal::-webkit-scrollbar{width:4px}
 .gen-modal::-webkit-scrollbar-track{background:transparent}
-.gen-modal::-webkit-scrollbar-thumb{background:rgba(191,164,106,.2);border-radius:4px}
-.gen-modal-close{position:sticky;top:0;right:0;float:right;z-index:2;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--stone);cursor:pointer;transition:color .3s;margin:1rem 1rem 0 0;background:rgba(5,5,4,.6);border-radius:50%;backdrop-filter:blur(4px)}
+.gen-modal::-webkit-scrollbar-thumb{background:rgba(62,107,89,.2);border-radius:4px}
+.gen-modal-close{position:sticky;top:0;right:0;float:right;z-index:2;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--stone);cursor:pointer;transition:color .3s;margin:1rem 1rem 0 0;background:rgba(43,38,34,.6);border-radius:50%;backdrop-filter:blur(4px)}
 .gen-modal-close:hover{color:var(--gold)}
 .gen-modal-header{padding:2.5rem 2.5rem 1.5rem;border-bottom:1px solid var(--line)}
 .gen-modal-icon{font-size:2.5rem;margin-bottom:.75rem;display:inline-block}
@@ -78,27 +76,27 @@
 .gen-modal-section-title{font-family:var(--ff-title);font-weight:500;font-size:1.05rem;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
 .gen-modal-section-title::before{content:'';width:3px;height:1em;background:var(--gold);border-radius:2px;flex-shrink:0}
 .gen-modal-features{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-.gen-modal-feature{background:rgba(191,164,106,.04);border:1px solid rgba(191,164,106,.1);border-radius:10px;padding:.85rem 1rem;font-size:.82rem;line-height:1.5}
+.gen-modal-feature{background:rgba(62,107,89,.04);border:1px solid rgba(62,107,89,.1);border-radius:10px;padding:.85rem 1rem;font-size:.82rem;line-height:1.5}
 .gen-modal-feature strong{color:var(--gold);display:block;margin-bottom:.2rem;font-size:.78rem}
 .gen-modal-process{display:flex;gap:1rem;overflow-x:auto;padding-bottom:.5rem}
 .gen-modal-step{flex-shrink:0;text-align:center;min-width:100px}
 .gen-modal-step-num{font-family:var(--ff-en);font-size:.65rem;color:var(--gold);letter-spacing:2px;display:block;margin-bottom:.25rem}
 .gen-modal-step-text{font-size:.78rem;color:var(--stone-l);line-height:1.4}
-.gen-modal-note{background:rgba(191,164,106,.06);border-left:3px solid var(--gold);padding:1rem 1.25rem;border-radius:0 8px 8px 0;font-size:.82rem;color:var(--stone-l);line-height:1.65}
+.gen-modal-note{background:rgba(62,107,89,.06);border-left:3px solid var(--gold);padding:1rem 1.25rem;border-radius:0 8px 8px 0;font-size:.82rem;color:var(--stone-l);line-height:1.65}
 .gen-modal-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1.5rem}
-.gen-modal-tag{padding:.25rem .7rem;border:1px solid rgba(191,164,106,.2);border-radius:100px;font-size:.72rem;color:var(--gold)}
+.gen-modal-tag{padding:.25rem .7rem;border:1px solid rgba(62,107,89,.2);border-radius:100px;font-size:.72rem;color:var(--gold)}
 .gen-modal-cta{display:flex;gap:.75rem;margin-top:2rem;flex-wrap:wrap}
 .gen-modal-cta a{display:inline-flex;align-items:center;gap:.4rem;padding:.7rem 1.5rem;border-radius:100px;font-size:.82rem;font-weight:600;transition:transform .2s,box-shadow .2s}
 .gen-modal-cta .cta-gold{background:var(--gold);color:var(--ink)}
 .gen-modal-cta .cta-outline{border:1px solid var(--gold);color:var(--gold)}
-.gen-modal-cta a:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(191,164,106,.2)}
+.gen-modal-cta a:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(62,107,89,.2)}
 
 /* ===== Modal FAQ Accordion ===== */
 .gen-modal-faq{margin-top:1.5rem}
 .gen-modal-faq-title{font-family:var(--ff-title);font-weight:500;font-size:1.05rem;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
 .gen-modal-faq-title::before{content:'';width:3px;height:1em;background:var(--gold);border-radius:2px;flex-shrink:0}
-.gen-modal-faq-count{font-family:var(--ff-en);font-size:.7rem;background:rgba(191,164,106,.12);color:var(--gold);padding:.15rem .5rem;border-radius:10px;margin-left:.4rem}
-.gm-faq-item{border-bottom:1px solid rgba(191,164,106,.08)}
+.gen-modal-faq-count{font-family:var(--ff-en);font-size:.7rem;background:rgba(62,107,89,.12);color:var(--gold);padding:.15rem .5rem;border-radius:10px;margin-left:.4rem}
+.gm-faq-item{border-bottom:1px solid rgba(62,107,89,.08)}
 .gm-faq-item:last-child{border-bottom:none}
 .gm-faq-q{width:100%;display:flex;align-items:flex-start;gap:.6rem;padding:.85rem .2rem;background:none;border:none;color:var(--stone);cursor:pointer;text-align:left;font-size:.82rem;line-height:1.55;transition:color .3s}
 .gm-faq-q:hover{color:var(--gold)}
@@ -362,10 +360,13 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Y0XLCZCP4',{anonymize_ip:true});</script>
 <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yc83x23k72");</script>
 <script defer src="https://pf-dashboard-2nt.pages.dev/beacon.js"></script>
+<link rel="preconnect" href="https://hangeul.pstatic.net" crossorigin>
+<noscript><style>[data-reveal],.page-hero-label,.page-hero h1,.page-hero-sub,.page-tabs{opacity:1!important;transform:none!important}</style></noscript>
+<script src="/static/site.js?v=dev" defer></script>
 </head>
 <body>
-<noscript><div style="background:#BFA46A;color:#050504;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다. 브라우저 설정에서 JavaScript를 활성화해주세요.</div></noscript>
-<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--gold);color:var(--ink);font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--gold,#BFA46A);color:var(--ink,#050504);font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
+<noscript><div style="background:#3E6B59;color:#F5F0E8;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다. 브라우저 설정에서 JavaScript를 활성화해주세요.</div></noscript>
+<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--gold);color:var(--ink);font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--gold,#3E6B59);color:var(--ink,#F5F0E8);font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
 
 <!-- CURSOR -->
 <!-- custom cursor removed -->
@@ -523,13 +524,13 @@
   <a href="tel:0507-1325-3377" class="tx-cta" data-magnet>임플란트 상담 예약 →</a>
 
   <!-- 저서 미니 배너 -->
-  <div data-reveal style="margin-top:2rem;padding:1.2rem 1.5rem;border:1px solid rgba(191,164,106,.15);border-radius:12px;display:flex;align-items:center;gap:1rem;background:rgba(26,24,20,.5);flex-wrap:wrap">
-    <img src="/images/book-implant-guide.jpg" alt="임플란트 사용설명서" loading="lazy" style="width:60px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.3)">
+  <div data-reveal style="margin-top:2rem;padding:1.2rem 1.5rem;border:1px solid rgba(62,107,89,.15);border-radius:12px;display:flex;align-items:center;gap:1rem;background:rgba(251,248,243,.5);flex-wrap:wrap">
+    <img src="/images/book-implant-guide.jpg" alt="임플란트 사용설명서" loading="lazy" style="width:60px;border-radius:6px;box-shadow:0 4px 12px rgba(43,38,34,.09)">
     <div style="flex:1;min-width:180px">
-      <p style="font-size:.78rem;color:var(--ivory,#F2EDE4);font-weight:600;margin-bottom:.2rem">📖 더 자세히 알고 싶다면?</p>
-      <p style="font-size:.72rem;color:var(--stone-l,#AFA79D);line-height:1.6">현진호 대표원장이 쓴 <em style="color:var(--gold,#BFA46A)">『임플란트 사용설명서』</em>에서 임플란트의 모든 것을 확인하세요.</p>
+      <p style="font-size:.78rem;color:var(--ivory,#2B2622);font-weight:600;margin-bottom:.2rem">📖 더 자세히 알고 싶다면?</p>
+      <p style="font-size:.72rem;color:var(--stone-l,#6F6861);line-height:1.6">현진호 대표원장이 쓴 <em style="color:var(--gold,#3E6B59)">『임플란트 사용설명서』</em>에서 임플란트의 모든 것을 확인하세요.</p>
     </div>
-    <a href="https://product.kyobobook.co.kr/detail/S000217229789" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.3rem;padding:.4rem 1rem;background:var(--gold,#BFA46A);color:var(--ink,#050504);border-radius:100px;font-size:.72rem;font-weight:600;white-space:nowrap;text-decoration:none">교보문고 →</a>
+    <a href="https://product.kyobobook.co.kr/detail/S000217229789" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.3rem;padding:.4rem 1rem;background:var(--gold,#3E6B59);color:var(--ink,#F5F0E8);border-radius:100px;font-size:.72rem;font-weight:600;white-space:nowrap;text-decoration:none">교보문고 →</a>
   </div>
 </div>
 
@@ -1189,7 +1190,7 @@ overlay.addEventListener('click', e => { if (e.target === overlay) closeGenModal
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGenModal(); });
 </script>
 
-<script src="pages.js"></script>
+<script src="/pages.js?v=dev"></script>
 
 <!-- ===== KAKAO FLOATING CTA ===== -->
 <div id="kakao-float" onclick="window.open('https://pf.kakao.com/_LLxhwG/chat','_blank')" title="카카오톡 상담">
@@ -1199,11 +1200,11 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGenModa
   <span class="kakao-float-label">상담하기</span>
 </div>
 <style>
-#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s}
-#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(0,0,0,.4)}
+#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(43,38,34,.09);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s}
+#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(43,38,34,.12)}
 #kakao-float:active{transform:scale(.95)}
-.kakao-float-label{position:absolute;right:72px;background:rgba(5,5,4,.9);color:#F2EDE4;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;letter-spacing:.02em;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(191,164,106,.15)}
-.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(5,5,4,.9)}
+.kakao-float-label{position:absolute;right:72px;background:rgba(43,38,34,.9);color:#F5F0E8;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;letter-spacing:.02em;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(62,107,89,.15)}
+.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(43,38,34,.9)}
 #kakao-float:hover .kakao-float-label{opacity:1;transform:translateX(0)}
 @media(max-width:768px){
 #kakao-float{width:52px;height:52px;bottom:1.2rem;right:1.2rem}

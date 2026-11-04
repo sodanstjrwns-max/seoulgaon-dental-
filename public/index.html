@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="google-site-verification" content="onzIFMlYzxtJ4ZPiBmecKBQX0OSxqaFZ3GYj8aGsk0w" />
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>(function(){var d=document.documentElement;if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver' in window)d.classList.add('mx')})()</script>
 <link rel="icon" href="/favicon.ico?v=fav20261014" sizes="any">
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png?v=fav20261014">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png?v=fav20261014">
@@ -35,455 +36,14 @@
 <meta name="twitter:image" content="https://seoulgaondc.kr/images/og-main.jpg">
 <!-- Naver -->
 <meta name="naver-site-verification" content="3acfa2ab85baedd02a79be084c5e8d869112230d" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-<style>
-/* ===== RESET & BASE ===== */
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --ink:#050504;--ink-2:#0A0907;--ink-3:#111009;--ink-4:#1A1814;
-  --gold:#BFA46A;--gold-b:#D4BA82;
-  --ivory:#F2EDE4;--stone:#8C8578;--stone-l:#AFA79D;
-  --line:rgba(191,164,106,.1);
-  --ff-title:'Pretendard',sans-serif;
-  --fw-title:500;
-  --ff-en:'Bebas Neue',sans-serif;
-  --ff-body:'Pretendard',sans-serif;
-}
-html{scroll-behavior:auto;overflow-x:hidden;cursor:url("/static/cursor-default.svg") 5 1, auto}
-body{font-family:var(--ff-body);background:var(--ink);color:var(--ivory);line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none;cursor:url("/static/cursor-pointer.svg") 7 1, pointer}
-img{max-width:100%;display:block}
-button{font-family:inherit;border:none;background:none;color:inherit;cursor:url("/static/cursor-pointer.svg") 7 1, pointer}
-ul{list-style:none}
-
-/* ===== CUSTOM CURSOR — PREMIUM ===== */
-/* custom cursor removed — using default system cursor */
-
-/* ===== NOISE CANVAS ===== */
-#noise{position:fixed;top:0;left:0;width:100%;height:100%;z-index:9998;pointer-events:none;opacity:.028}
-
-/* ===== SCROLL PROGRESS ===== */
-#progressBar{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:9997;width:0%;transition:none}
-
-/* ===== LOADER — CINEMATIC ===== */
-#loader{position:fixed;inset:0;background:var(--ink);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;clip-path:polygon(0 0,100% 0,100% 100%,0 100%);overflow:hidden}
-.loader-video-wrap{position:absolute;inset:0;z-index:1}
-.loader-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;filter:brightness(1.15);transition:opacity 1.2s ease}
-.loader-video.playing{opacity:.5}
-.loader-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;opacity:.3;filter:grayscale(.2)}
-#loader::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(5,5,4,.3) 0%,rgba(5,5,4,.85) 80%);z-index:2}
-.loader-txt{font-family:var(--ff-title);font-weight:500;font-size:clamp(3rem,8vw,6rem);color:var(--ivory);overflow:hidden;position:relative;z-index:3}
-.loader-txt span{display:inline-block;transform:translateY(110%)}
-.loader-line{width:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.5rem 0;position:relative;z-index:3}
-.loader-sub{font-family:var(--ff-en);font-size:14px;letter-spacing:8px;color:var(--stone);opacity:0;text-transform:uppercase;position:relative;z-index:3}
-.loader-counter{position:fixed;bottom:3rem;right:3rem;font-family:var(--ff-en);font-size:clamp(2rem,5vw,4rem);color:var(--stone);opacity:.3;font-variant-numeric:tabular-nums;z-index:10001}
-
-/* ===== NAVIGATION ===== */
-#nav{position:fixed;top:0;left:0;width:100%;z-index:9000;padding:0 clamp(1.5rem,4vw,4rem);height:72px;display:flex;align-items:center;justify-content:space-between;transition:background .4s,backdrop-filter .4s}
-#nav.stuck{background:rgba(5,5,4,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-.nav-logo{font-family:var(--ff-title);font-weight:500;font-size:1.3rem;letter-spacing:-0.02em}
-.nav-logo span{color:var(--gold)}
-.nav-links{display:flex;gap:2rem;align-items:center}
-.nav-links a{font-size:.85rem;letter-spacing:.04em;color:var(--stone-l);transition:color .3s;position:relative}
-.nav-links a:hover{color:var(--ivory)}
-.nav-link-drop{position:relative}
-.nav-link-drop > a{position:relative;z-index:2;cursor:pointer}
-.nav-link-drop .drop{position:absolute;top:100%;left:50%;transform:translateX(-50%);background:var(--ink-4);border:1px solid var(--line);border-radius:8px;padding:.75rem 0;min-width:160px;opacity:0;visibility:hidden;transition:opacity .3s,transform .3s;transform:translateX(-50%) translateY(8px);margin-top:0;z-index:1}
-.nav-link-drop .drop::before{content:'';position:absolute;top:-16px;left:0;right:0;height:16px;pointer-events:none}
-.nav-link-drop:hover .drop,.nav-link-drop.touch-open .drop{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
-.drop a{display:block;padding:.45rem 1.25rem;font-size:.82rem;white-space:nowrap}
-.drop a:hover{color:var(--gold)}
-.nav-cta{background:var(--gold);color:var(--ink);padding:.55rem 1.5rem;border-radius:100px;font-size:.82rem;font-weight:600;letter-spacing:.03em;transition:background .3s}
-.nav-cta:hover{background:var(--gold-b)}
-/* Nav Member Button */
-.nav-member{display:flex;align-items:center;gap:.6rem;margin-right:.8rem}
-.nav-member-btn{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--gold);color:var(--gold);padding:.45rem 1.2rem;border-radius:100px;font-size:.78rem;font-weight:500;letter-spacing:.02em;transition:all .3s;white-space:nowrap}
-.nav-member-btn:hover{background:var(--gold);color:var(--ink)}
-.nav-member-btn i{font-size:.72rem}
-.nav-member-name{display:inline-flex;align-items:center;gap:.4rem;color:var(--gold);font-size:.82rem;font-weight:500;white-space:nowrap}
-.nav-member-name i{font-size:.9rem}
-.nav-member-logout{font-size:.75rem;color:var(--stone-l);transition:color .3s;white-space:nowrap}
-.nav-member-logout:hover{color:var(--ivory)}
-.mob-member-divider{width:40px;height:1px;background:var(--line);margin:0 auto}
-.mob-member{display:flex;flex-direction:column;align-items:center;gap:.8rem}
-.mob-member-signup{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--gold);color:var(--gold);padding:.6rem 1.8rem;border-radius:100px;font-family:var(--ff-body);font-size:.9rem;font-weight:500;transition:all .3s}
-.mob-member-signup:hover{background:var(--gold);color:var(--ink)}
-.mob-member-name{color:var(--gold);font-size:.95rem;font-weight:500}
-.mob-member-name i{margin-right:.3rem}
-.mob-member-logout{font-size:.82rem;color:var(--stone-l);transition:color .3s}
-.mob-member-logout:hover{color:var(--ivory)}
-/* Hamburger */
-.hamburger{display:none;flex-direction:column;gap:6px;width:28px;z-index:9002}
-.hamburger span{display:block;height:2px;background:var(--ivory);transition:transform .4s,opacity .3s}
-.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(6px,6px)}
-.hamburger.open span:nth-child(2){opacity:0}
-.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px)}
-/* Mobile menu */
-.mob-menu{position:fixed;inset:0;background:var(--ink);z-index:9001;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;clip-path:circle(0% at calc(100% - 3rem) 2.25rem);transition:clip-path .6s cubic-bezier(.77,0,.175,1)}
-.mob-menu.open{clip-path:circle(150% at calc(100% - 3rem) 2.25rem)}
-.mob-menu a{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.5rem,5vw,2.5rem);color:var(--ivory);transition:color .3s}
-.mob-menu a:hover{color:var(--gold)}
-
-/* ===== HERO — PREMIUM ===== */
-#top{position:relative;height:100vh;min-height:600px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:0 1.5rem}
-#gold-dust{position:absolute;inset:0;pointer-events:none;z-index:0}
-#top::after{content:'';position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,var(--ink),transparent);z-index:1;pointer-events:none}
-.hero-bg-chars{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;gap:clamp(.5rem,2vw,2rem);z-index:0;pointer-events:none}
-.hero-bg-char{font-family:var(--ff-title);font-weight:500;font-size:clamp(6rem,20vw,18rem);color:transparent;-webkit-text-stroke:1px var(--gold);opacity:.04;line-height:1;will-change:transform}
-.hero-content{position:relative;z-index:2}
-.hero-content h1{font-family:var(--ff-title);font-weight:500;font-size:clamp(3.2rem,10vw,7rem);line-height:1.1;margin-bottom:1.5rem;will-change:transform;perspective:800px;visibility:hidden}
-.hero-content h1 .char{will-change:transform,opacity;backface-visibility:hidden}
-.hero-content h1 .line{display:block;overflow:hidden}
-.hero-content h1 .line span{display:inline-block}
-.hero-sub{font-size:clamp(.9rem,1.5vw,1.1rem);color:var(--stone-l);margin-bottom:2rem;letter-spacing:.02em;visibility:hidden}
-.hero-cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--gold);color:var(--ink);padding:.85rem 2.5rem;border-radius:100px;font-weight:600;font-size:.95rem;transition:background .3s,transform .2s}
-.hero-cta:hover{background:var(--gold-b)}
-.hero-stats{display:flex;gap:clamp(2rem,5vw,4rem);margin-top:clamp(3rem,6vh,5rem);flex-wrap:wrap;justify-content:center;position:relative;z-index:2}
-.stat{text-align:center}
-.stat-num{font-family:var(--ff-en);font-size:clamp(2.5rem,5vw,3.5rem);color:var(--gold);line-height:1;font-variant-numeric:tabular-nums}
-.stat-num sup{font-size:.5em;vertical-align:super}
-.stat-label{font-size:.75rem;color:var(--stone);margin-top:.3rem;letter-spacing:.04em}
-.scroll-guide{position:absolute;bottom:2rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;z-index:2}
-.scroll-bar{width:1px;height:40px;background:var(--gold);animation:scrollPulse 2s ease infinite}
-.scroll-txt{font-family:var(--ff-en);font-size:10px;letter-spacing:3px;color:var(--stone)}
-@keyframes scrollPulse{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}50.1%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-
-/* ===== TICKER — ENHANCED ===== */
-.ticker{background:var(--ink-2);padding:1.25rem 0;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);position:relative}
-.ticker::before,.ticker::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none}
-.ticker::before{left:0;background:linear-gradient(to right,var(--ink-2),transparent)}
-.ticker::after{right:0;background:linear-gradient(to left,var(--ink-2),transparent)}
-.ticker-track{display:flex;width:max-content;animation:tickerScroll 28s linear infinite}
-.ticker:hover .ticker-track{animation-play-state:paused}
-.ticker-item{font-family:var(--ff-title);font-weight:500;font-size:clamp(1rem,2vw,1.4rem);color:var(--stone);white-space:nowrap;padding:0 2rem}
-.ticker-item .sep{color:var(--gold);margin:0 .5rem}
-@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
-/* ===== SECTION COMMON — PREMIUM ===== */
-section{padding:clamp(4rem,10vh,8rem) clamp(1.5rem,4vw,6rem);position:relative;overflow:hidden}
-.sec-label{font-family:var(--ff-en);font-size:clamp(.75rem,1vw,.85rem);letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:inline-block}
-.sec-title{font-family:var(--ff-title);font-weight:500;font-size:clamp(2.8rem,8vw,6rem);line-height:1.15;margin-bottom:2.5rem}
-.sec-title .line{display:block;overflow:hidden}
-.sec-title .line span{display:inline-block}
-.sec-title .char{backface-visibility:hidden}
-.gold{color:var(--gold)}
-
-/* ===== PHILOSOPHY (#s-intro) ===== */
-#s-intro{background:var(--ink);max-width:1200px;margin:0 auto}
-[data-glow]{position:relative;overflow:hidden}
-.intro-quote{font-size:clamp(.9rem,1.2vw,1rem);color:var(--stone-l);font-style:italic;border-left:2px solid var(--gold);padding-left:1.25rem;margin-bottom:3rem;max-width:500px}
-.values{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem}
-.value-card{background:var(--ink-4);border:1px solid var(--line);border-radius:12px;padding:2rem;transition:border-color .4s cubic-bezier(.4,0,.2,1),box-shadow .4s;will-change:transform}
-.value-num{font-family:var(--ff-en);font-size:2rem;color:var(--gold);opacity:.4;line-height:1}
-.value-h{font-family:var(--ff-title);font-weight:500;font-size:1.15rem;margin:.75rem 0 .5rem}
-.value-p{font-size:.85rem;color:var(--stone-l);line-height:1.6}
-
-/* ===== TREATMENTS (#s-tx) ===== */
-#s-tx{background:var(--ink);overflow:visible}
-.tx-panels{display:flex;flex-direction:column;gap:6rem;max-width:1200px;margin:0 auto}
-.tx-panel{position:relative;padding:3rem clamp(1.5rem,3vw,3rem);border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--ink-4);transition:border-color .4s,box-shadow .4s;will-change:transform}
-.tx-panel-bg{position:absolute;top:50%;right:-2rem;transform:translateY(-50%);font-family:var(--ff-en);font-size:clamp(8rem,18vw,14rem);color:var(--gold);opacity:.04;line-height:1;pointer-events:none;font-weight:700}
-.tx-panel-content{position:relative;z-index:1}
-.tx-panel h3{font-family:var(--ff-title);font-weight:500;font-size:clamp(1.6rem,3vw,2.5rem);margin-bottom:.5rem}
-.tx-panel h3 span{display:inline-block;transition:transform .2s,color .2s}
-.tx-panel-sub{font-size:clamp(.85rem,1.1vw,.95rem);color:var(--stone-l);margin-bottom:2rem}
-.tx-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
-.tx-feat{display:flex;align-items:flex-start;gap:.5rem;font-size:.85rem;color:var(--ivory)}
-.tx-feat::before{content:'✦';color:var(--gold);font-size:.7rem;margin-top:.3rem;flex-shrink:0}
-.tx-quote{font-size:.85rem;color:var(--stone-l);font-style:italic;border-left:2px solid var(--gold);padding-left:1rem;margin-bottom:1.5rem}
-.tx-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--gold);font-size:.85rem;font-weight:600;transition:gap .3s}
-.tx-link:hover{gap:.8rem}
-
-/* ===== STORY (#s-story) ===== */
-#s-story{background:var(--ink);position:relative;overflow:hidden;padding:clamp(4rem,10vw,8rem) clamp(1.5rem,5vw,4rem)}
-.story-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:center}
-.story-photo-side{position:relative}
-.story-photo-frame{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:3/4;box-shadow:0 30px 80px rgba(0,0,0,.4),0 0 60px rgba(191,164,106,.08)}
-.story-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:center top;transition:transform 8s cubic-bezier(.25,0,.15,1)}
-.story-photo-frame:hover img{transform:scale(1.06)}
-.story-photo-glow{position:absolute;bottom:-20%;left:-20%;width:140%;height:60%;background:radial-gradient(ellipse,rgba(191,164,106,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
-.story-photo-label{position:absolute;bottom:1.5rem;left:1.5rem;z-index:2;font-family:var(--ff-en);font-size:.7rem;letter-spacing:3px;color:var(--gold);opacity:.7;text-transform:uppercase}
-.story-text-side{position:relative;z-index:1}
-.story-text-side .sec-label{display:inline-block;margin-bottom:1rem}
-.story-headline{font-family:var(--ff-title);font-weight:500;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.3;margin-bottom:2.5rem;position:relative}
-.story-headline .line{display:block;overflow:hidden}
-.story-headline .line span{display:inline-block}
-.story-divider{width:60px;height:2px;background:var(--gold);margin-bottom:2rem;opacity:.6}
-.story-body{position:relative;z-index:1;text-align:left}
-.story-body p{font-size:clamp(.9rem,1.1vw,1.05rem);color:var(--stone-l);line-height:2;margin-bottom:1.5rem}
-.story-body p:last-child{margin-bottom:0}
-.story-signature{margin-top:2.5rem;display:flex;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid rgba(191,164,106,.15)}
-.story-signature-name{font-family:var(--ff-title);font-weight:500;font-size:1.1rem;color:var(--ivory)}
-.story-signature-role{font-size:.75rem;color:var(--stone);letter-spacing:.05em}
-.story-bg-text{position:absolute;top:50%;right:-5%;font-family:var(--ff-title);font-weight:500;font-size:clamp(8rem,20vw,16rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;white-space:nowrap;will-change:transform}
-@media(max-width:900px){
-.story-inner{grid-template-columns:1fr;gap:3rem}
-.story-photo-frame{max-width:420px;margin:0 auto;aspect-ratio:3/4}
-.story-text-side{text-align:center}
-.story-body{text-align:center}
-.story-divider{margin-left:auto;margin-right:auto}
-.story-signature{justify-content:center}
-}
-
-/* ===== CONSULT PHILOSOPHY (#s-consult) ===== */
-#s-consult{background:var(--ink-3);position:relative;overflow:hidden}
-.consult-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:80vh}
-.consult-img{position:relative;overflow:hidden}
-.consult-img img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 8s cubic-bezier(.25,0,.15,1)}
-.consult-img:hover img{transform:scale(1.04)}
-.consult-img-overlay{position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,var(--ink-3) 100%)}
-.consult-text{display:flex;flex-direction:column;justify-content:center;padding:clamp(3rem,6vw,6rem);position:relative;z-index:1}
-.consult-quote{font-family:var(--ff-title);font-weight:500;font-size:clamp(2rem,4vw,3.2rem);line-height:1.4;margin-bottom:2rem;position:relative;padding-left:1.5rem}
-.consult-quote::before{content:'';position:absolute;left:0;top:.3rem;bottom:.3rem;width:3px;background:var(--gold)}
-.consult-quote em{color:var(--gold);font-style:normal}
-.consult-desc{font-size:clamp(.88rem,1.1vw,1rem);color:var(--stone-l);line-height:2;margin-bottom:1.5rem}
-.consult-features{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.5rem}
-.consult-feat{display:flex;align-items:center;gap:.5rem;padding:.5rem 1.2rem;border:1px solid var(--line);border-radius:100px;font-size:.8rem;color:var(--stone-l);transition:border-color .3s,color .3s}
-.consult-feat i{color:var(--gold);font-size:.7rem}
-.consult-feat:hover{border-color:var(--gold);color:var(--gold)}
-@media(max-width:900px){
-.consult-wrap{grid-template-columns:1fr;min-height:auto}
-.consult-img{aspect-ratio:16/9;max-height:50vh}
-.consult-img-overlay{background:linear-gradient(to bottom,transparent 60%,var(--ink-3) 100%)}
-.consult-text{padding:2.5rem 1.5rem;text-align:center}
-.consult-quote{padding-left:0;text-align:center}
-.consult-quote::before{display:none}
-.consult-features{justify-content:center}
-}
-
-/* ===== DOCTORS (#s-dr) ===== */
-#s-dr{background:var(--ink-3)}
-.dr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:2.5rem;max-width:1100px;margin:0 auto}
-.dr-card{background:var(--ink-4);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:border-color .4s,box-shadow .4s;will-change:transform;transform-style:preserve-3d}
-.dr-card:hover{box-shadow:0 20px 60px rgba(0,0,0,.3),0 0 40px rgba(191,164,106,.05)}
-.dr-card:hover{border-color:var(--gold)}
-.dr-img-wrap{position:relative;height:672px;overflow:hidden}
-.dr-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center 30%;transition:transform .6s}
-.dr-card:hover .dr-img-wrap img{transform:scale(1.05)}
-.dr-tag{position:absolute;top:1rem;left:1rem;background:var(--gold);color:var(--ink);padding:.3rem .8rem;border-radius:100px;font-size:.7rem;font-weight:700;letter-spacing:.05em}
-.dr-tag.head{font-size:.85rem;padding:.45rem 1.2rem;background:linear-gradient(135deg,var(--gold),var(--gold-b));box-shadow:0 4px 20px rgba(191,164,106,.4);letter-spacing:.1em}
-.dr-info{padding:1.5rem 2rem 2rem}
-.dr-name{font-family:var(--ff-title);font-weight:500;font-size:1.5rem;margin-bottom:.15rem}
-.dr-name .head-label{color:var(--gold);font-size:.85rem;font-weight:700;margin-left:.5rem;letter-spacing:.05em}
-.dr-role{font-family:var(--ff-en);font-size:.8rem;letter-spacing:2px;color:var(--stone);margin-bottom:1rem}
-.dr-desc{font-size:.85rem;color:var(--stone-l);line-height:1.6;margin-bottom:1rem}
-.dr-chips{display:flex;flex-wrap:wrap;gap:.4rem}
-.dr-chip{padding:.25rem .75rem;border:1px solid var(--line);border-radius:100px;font-size:.72rem;color:var(--stone-l);transition:border-color .3s,color .3s}
-.dr-chip:hover{border-color:var(--gold);color:var(--gold)}
-.dr-chip.gold{border-color:var(--gold);color:var(--gold)}
-.dr-badge{margin-top:1rem;font-size:.78rem;color:var(--gold);display:flex;align-items:center;gap:.3rem}
-
-/* ===== FACILITY (#s-facility) ===== */
-#s-facility{background:var(--ink)}
-.fac-grid{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:auto;gap:1rem;max-width:1200px;margin:0 auto}
-.fac-item{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:4/3;will-change:transform}
-.fac-item img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.4,0,.2,1),filter .6s}
-.fac-item:hover img{transform:scale(1.08);filter:brightness(1.05)}
-.fac-item .fac-label{position:absolute;bottom:0;left:0;right:0;padding:.75rem 1rem;background:linear-gradient(to top,rgba(5,5,4,.8),transparent);font-size:.75rem;color:var(--stone-l);letter-spacing:.03em}
-.fac-main{grid-column:1/4;grid-row:1/3;aspect-ratio:auto}
-.fac-item:nth-child(2){grid-column:4/6}
-.fac-item:nth-child(3){grid-column:6/7}
-.fac-item:nth-child(4){grid-column:4/5;grid-row:2}
-.fac-item:nth-child(5){grid-column:5/6;grid-row:2}
-.fac-item:nth-child(6){grid-column:6/7;grid-row:2}
-.fac-wide{grid-column:1/7;aspect-ratio:21/9;position:relative}
-.fac-wide .fac-caption{position:absolute;bottom:2rem;left:2rem;font-family:var(--ff-title);font-weight:500;font-size:clamp(1rem,2vw,1.4rem);max-width:400px}
-.fac-item:nth-child(8){grid-column:1/3}
-.fac-item:nth-child(9){grid-column:3/5}
-.fac-item:nth-child(10){grid-column:5/7}
-
-/* ===== FAQ (#s-faq) ===== */
-#s-faq{background:var(--ink);max-width:900px;margin:0 auto}
-.faq-item{border-bottom:1px solid var(--line)}
-.faq-q{display:flex;align-items:center;justify-content:space-between;padding:1.5rem 0;width:100%;font-size:clamp(.9rem,1.2vw,1.05rem);text-align:left;font-weight:500;gap:1rem}
-.faq-q .plus{font-family:var(--ff-en);font-size:1.5rem;color:var(--gold);transition:transform .4s;flex-shrink:0}
-.faq-q.active .plus{transform:rotate(45deg)}
-.faq-a{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.4,0,.2,1),padding .5s}
-.faq-a-inner{padding:0 0 1.5rem;font-size:.88rem;color:var(--stone-l);line-height:1.7}
-
-/* ===== REVIEWS (#s-rev) ===== */
-#s-rev{background:var(--ink-2);overflow:hidden}
-.rev-track-wrap{overflow:hidden;margin-top:2rem}
-.rev-track{display:flex;gap:1.5rem;width:max-content;animation:revScroll 40s linear infinite}
-.rev-track:hover{animation-play-state:paused}
-.rev-card{width:320px;flex-shrink:0;background:var(--ink-4);border:1px solid var(--line);border-radius:12px;padding:1.75rem;will-change:transform;transform-style:preserve-3d;transition:border-color .3s}
-.rev-card:hover{border-color:rgba(191,164,106,.25)}
-.rev-stars{color:var(--gold);font-size:.85rem;margin-bottom:.75rem;letter-spacing:2px}
-.rev-text{font-size:.88rem;color:var(--ivory);line-height:1.65;margin-bottom:1rem}
-.rev-who{font-size:.75rem;color:var(--stone)}
-@keyframes revScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
-/* ===== CONTACT (#s-contact) ===== */
-#s-contact{background:var(--ink-2);position:relative;overflow:hidden;text-align:center}
-.contact-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--ff-en);font-size:clamp(8rem,22vw,18rem);color:var(--gold);opacity:.03;line-height:1;pointer-events:none;white-space:nowrap;will-change:transform;font-weight:700}
-.contact-content{position:relative;z-index:1;max-width:700px;margin:0 auto}
-.contact-btns{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin:2.5rem 0 3rem}
-.contact-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:100px;font-weight:600;font-size:.9rem;transition:transform .2s,box-shadow .2s}
-.contact-btn.gold{background:var(--gold);color:var(--ink)}
-.contact-btn.green{background:#03c75a;color:#fff}
-.contact-btn.outline{border:1.5px solid var(--gold);color:var(--gold)}
-.contact-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(191,164,106,.2)}
-.contact-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;text-align:left;background:var(--ink-4);border-radius:16px;padding:2.5rem;border:1px solid var(--line)}
-.ci-label{font-family:var(--ff-en);font-size:.7rem;letter-spacing:3px;color:var(--gold);margin-bottom:.3rem;text-transform:uppercase}
-.ci-val{font-size:.85rem;color:var(--stone-l);line-height:1.6}
-
-/* ===== FOOTER ===== */
-footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp(1.5rem,4vw,4rem);text-align:center}
-.ft-logo{font-family:var(--ff-title);font-weight:500;font-size:1.1rem;margin-bottom:.5rem}
-.ft-slogan{font-size:.8rem;color:var(--stone);margin-bottom:1.5rem}
-.ft-biz{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:.4rem .8rem;font-size:.7rem;color:var(--stone);margin-bottom:1rem;padding-top:1rem;border-top:1px solid var(--line);max-width:700px;margin-left:auto;margin-right:auto}
-.ft-biz span{white-space:nowrap}
-.ft-biz .sep{color:var(--line)}
-.ft-copy{font-size:.7rem;color:var(--stone)}
-
-/* ===== DATA-REVEAL ===== */
-/* GSAP handles all reveal animations — no CSS opacity/transform needed */
-[data-tilt]{transform-style:preserve-3d}
-
-/* ===== RIPPLE ANIMATION ===== */
-@keyframes ripple{from{transform:scale(0);opacity:.3}to{transform:scale(1);opacity:0}}
-
-/* ===== NAV TRANSITIONS ===== */
-#nav{will-change:transform}
-
-/* ===== PROGRESS BAR GLOW ===== */
-#progressBar{will-change:width}
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:1100px){
-  .fac-grid{grid-template-columns:repeat(3,1fr)}
-  .fac-main{grid-column:1/3;grid-row:1/2;aspect-ratio:4/3}
-  .fac-item:nth-child(2){grid-column:3/4}
-  .fac-item:nth-child(3){grid-column:1/2;grid-row:2}
-  .fac-item:nth-child(4){grid-column:2/3;grid-row:2}
-  .fac-item:nth-child(5){grid-column:3/4;grid-row:2}
-  .fac-item:nth-child(6){grid-column:1/2;grid-row:3}
-  .fac-wide{grid-column:1/4;aspect-ratio:16/9}
-  .fac-item:nth-child(8){grid-column:1/2}
-  .fac-item:nth-child(9){grid-column:2/3}
-  .fac-item:nth-child(10){grid-column:3/4}
-}
-@media(max-width:768px){
-  html{cursor:auto;-webkit-text-size-adjust:100%}
-  body{cursor:auto;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
-  a,button{cursor:pointer}
-  #cur{display:none!important}
-  .nav-links{display:none}
-  .nav-cta{display:none}
-  .nav-member{display:none}
-  .hamburger{display:flex}
-  #nav{height:60px;padding:0 1rem}
-  .nav-logo{font-size:1.15rem}
-  /* Hero mobile */
-  #top{min-height:100svh;min-height:100vh;padding:0 1rem}
-  .hero-bg-chars{gap:.3rem}
-  .hero-bg-char{font-size:clamp(4rem,16vw,10rem)}
-  .hero-content h1{font-size:clamp(2.4rem,9vw,4rem)}
-  .hero-sub{font-size:clamp(.82rem,3.5vw,.95rem)}
-  .hero-stats{gap:1.5rem}
-  .hero-cta{padding:.75rem 2rem;font-size:.88rem;min-height:48px}
-  .hero-btns{gap:.75rem!important}
-  .scroll-guide{bottom:1.5rem}
-  .loader-counter{bottom:1.5rem;right:1.5rem}
-  .mouse-glow-orb{display:none!important}
-  /* Loader mobile */
-  .loader-txt{font-size:clamp(2.2rem,7vw,4rem)}
-  .loader-sub{font-size:11px;letter-spacing:5px}
-  /* Philosophy values — 2-col on tablet, 1-col on phone */
-  .values{grid-template-columns:repeat(2,1fr);gap:1rem}
-  .value-card{padding:1.5rem}
-  .value-h{font-size:1.05rem}
-  .value-p{font-size:.82rem}
-  .intro-quote{font-size:.88rem}
-  /* Treatments */
-  .tx-panel{padding:2rem 1.25rem}
-  .tx-features{gap:.8rem}
-  .tx-panel h3{font-size:clamp(1.4rem,5vw,2rem)}
-  .tx-panel-sub{font-size:.85rem}
-  .tx-feat{font-size:.82rem}
-  .tx-quote{font-size:.82rem}
-  .tx-link{font-size:.82rem}
-  .tx-panels{gap:3rem}
-  /* Doctors */
-  .dr-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto}
-  .dr-img-wrap{height:420px}
-  .dr-info{padding:1.25rem 1.5rem 1.5rem}
-  .dr-name{font-size:1.3rem}
-  .dr-desc{font-size:.82rem}
-  .dr-badge{font-size:.72rem}
-  .dr-chip{font-size:.68rem;padding:.2rem .6rem}
-  /* Facility */
-  .fac-grid{grid-template-columns:1fr 1fr;gap:.75rem}
-  .fac-main{grid-column:1/3}
-  .fac-item:nth-child(2){grid-column:1/2;grid-row:2}
-  .fac-item:nth-child(3){grid-column:2/3;grid-row:2}
-  .fac-item:nth-child(4){grid-column:1/2;grid-row:3}
-  .fac-item:nth-child(5){grid-column:2/3;grid-row:3}
-  .fac-item:nth-child(6){grid-column:1/3;grid-row:4}
-  .fac-wide{grid-column:1/3}
-  .fac-item:nth-child(8){grid-column:1/3}
-  .fac-item:nth-child(9){grid-column:1/3}
-  .fac-item:nth-child(10){grid-column:1/3}
-  .fac-label{font-size:.7rem;padding:.5rem .75rem}
-  .fac-wide .fac-caption{font-size:clamp(.85rem,3vw,1.1rem);bottom:1.25rem;left:1.25rem;max-width:85%}
-  /* Reviews */
-  .rev-card{width:280px;padding:1.5rem}
-  .rev-text{font-size:.82rem}
-  .rev-who{font-size:.7rem}
-  /* Contact */
-  .contact-info{grid-template-columns:1fr;padding:1.5rem 1.25rem}
-  .contact-btns{gap:.75rem}
-  .contact-btn{padding:.75rem 1.5rem;font-size:.85rem;min-height:48px}
-  .ci-val{font-size:.82rem}
-  /* FAQ */
-  .faq-q{cursor:pointer;min-height:48px;font-size:.9rem}
-  .faq-a-inner{font-size:.85rem}
-  /* Section titles */
-  .sec-title{font-size:clamp(2rem,7vw,4rem);margin-bottom:2rem}
-  section{padding:clamp(3rem,8vh,6rem) 1.25rem}
-  /* Footer */
-  footer{padding:2rem 1.25rem;padding-bottom:max(2rem,env(safe-area-inset-bottom))}
-  /* Consult section extras */
-  .consult-desc{font-size:.85rem}
-  .consult-feat{font-size:.78rem;padding:.45rem 1rem;min-height:40px}
-}
-@media(max-width:480px){
-  .values{grid-template-columns:1fr;gap:.8rem}
-  .value-card{padding:1.25rem}
-  .value-num{font-size:1.6rem}
-  .tx-features{grid-template-columns:1fr}
-  .tx-feat{font-size:.8rem}
-  .contact-btns{flex-direction:column;align-items:stretch}
-  .contact-btn{width:100%;justify-content:center;text-align:center}
-  section{padding:2.5rem 1rem}
-  .hero-content h1{font-size:clamp(2rem,8vw,3rem)}
-  .hero-stats{gap:1rem}
-  .stat-num{font-size:clamp(2rem,6vw,2.5rem)}
-  .stat-label{font-size:.68rem}
-  .dr-img-wrap{height:360px}
-  .dr-info{padding:1rem 1.25rem 1.25rem}
-  .fac-grid{gap:.5rem}
-  .rev-card{width:260px;padding:1.25rem}
-  .rev-text{font-size:.8rem}
-  .sec-title{font-size:clamp(1.8rem,6vw,3rem)}
-  .sec-label{font-size:.7rem;letter-spacing:3px}
-  .consult-quote{font-size:clamp(1.4rem,5vw,2rem)}
-  .consult-feat{font-size:.72rem;padding:.4rem .8rem}
-  .story-headline{font-size:clamp(1.6rem,5vw,2.5rem)}
-  .story-body p{font-size:clamp(.85rem,3.5vw,.95rem);line-height:1.8}
-  .story-signature-name{font-size:1rem}
-  .story-photo-frame{max-width:320px;margin:0 auto}
-  /* Book section mobile */
-  .book-float img{width:clamp(140px,35vw,200px)!important}
-  .ft-biz{font-size:.62rem}
-  .ft-biz span{font-size:.62rem}
-}
-</style>
-<!-- JSON-LD: LocalBusiness 구조화 데이터 -->
+<link rel="preconnect" href="https://hangeul.pstatic.net" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff2" crossorigin>
+<link rel="preload" as="image" href="/images/real-lobby-1.jpg" fetchpriority="high">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/style.css?v=dev">
+<link rel="stylesheet" href="/static/home.css?v=dev">
+<noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -588,7 +148,6 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
   "hasMap": "https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC"
 }
 </script>
-<!-- JSON-LD: FAQ 구조화 데이터 -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -726,7 +285,6 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
   ]
 }
 </script>
-<!-- AEO: Speakable + WebPage mainEntityOfPage — AI 검색엔진 발췌 최적화 -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -789,62 +347,22 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
 <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yc83x23k72");</script>
 <script defer src="https://pf-dashboard-2nt.pages.dev/beacon.js"></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ItemList", "@id": "https://seoulgaondc.kr/#uijeongbu-cards", "name": "의정부 진료 안내", "numberOfItems": 6, "itemListElement": [{"@type": "ListItem", "position": 1, "name": "의정부 임플란트", "url": "https://seoulgaondc.kr/implant", "image": "https://seoulgaondc.kr/images/cards/uijeongbu-implant-600.webp"}, {"@type": "ListItem", "position": 2, "name": "의정부 신경치료", "url": "https://seoulgaondc.kr/endodontics", "image": "https://seoulgaondc.kr/images/cards/uijeongbu-endodontics-v2-600.webp"}, {"@type": "ListItem", "position": 3, "name": "의정부 라미네이트", "url": "https://seoulgaondc.kr/laminate", "image": "https://seoulgaondc.kr/images/cards/uijeongbu-laminate-600.webp"}, {"@type": "ListItem", "position": 4, "name": "의정부 충치치료", "url": "https://seoulgaondc.kr/cavity-treatment", "image": "https://seoulgaondc.kr/images/cards/uijeongbu-cavity-treatment-v2-600.webp"}, {"@type": "ListItem", "position": 5, "name": "의정부 뼈이식 임플란트", "url": "https://seoulgaondc.kr/bone-graft-implant", "image": "https://seoulgaondc.kr/images/cards/uijeongbu-bone-graft-implant-600.webp"}, {"@type": "ListItem", "position": 6, "name": "의정부 전체임플란트", "url": "https://seoulgaondc.kr/full-mouth-implant", "image": "https://seoulgaondc.kr/images/cards/uijeongbu-full-mouth-implant-600.webp"}]}</script>
-<style>
-.ub-cards{list-style:none;margin:0 0 3rem;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
-.ub-card{display:flex;flex-direction:column;height:100%;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;background:rgba(255,255,255,.02);transition:border-color .3s,transform .3s}
-.ub-card:hover{border-color:rgba(191,164,106,.5);transform:translateY(-3px)}
-.ub-card:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-.ub-card-img{display:block;aspect-ratio:1/1;overflow:hidden}
-.ub-card-img img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.ub-card:hover .ub-card-img img{transform:scale(1.04)}
-.ub-card-body{display:flex;flex-direction:column;gap:.35rem;padding:.9rem 1rem 1.1rem}
-.ub-card-tag{font-size:.66rem;letter-spacing:.14em;color:var(--gold)}
-.ub-card-title{font-size:1rem;font-weight:600;color:var(--ivory);line-height:1.35}
-.ub-card-line{font-size:.8rem;color:var(--stone-l);line-height:1.6;word-break:keep-all}
-@media(max-width:900px){.ub-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:520px){.ub-cards{gap:.6rem}.ub-card-body{padding:.7rem .75rem .85rem}.ub-card-title{font-size:.92rem}.ub-card-line{display:none}}
-@media(prefers-reduced-motion:reduce){.ub-card,.ub-card-img img{transition:none}}
-</style>
 <link rel="alternate" type="application/rss+xml" title="서울가온치과 블로그" href="https://seoulgaondc.kr/rss.xml">
-<link rel="stylesheet" href="/static/immersive.css?v=29d9139133">
+<script src="/static/site.js?v=dev" defer></script>
 </head>
 <body>
-<noscript><div style="background:#BFA46A;color:#050504;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다. 브라우저 설정에서 JavaScript를 활성화해주세요.</div></noscript>
-<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--gold);color:var(--ink);font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--gold,#BFA46A);color:var(--ink,#050504);font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
-
-<!-- NOISE CANVAS -->
-<canvas id="noise"></canvas>
-
-<!-- CUSTOM CURSOR -->
-<!-- custom cursor removed -->
-
-<!-- SCROLL PROGRESS BAR -->
-<div id="progressBar"></div>
-
-<!-- LOADER -->
-<div id="loader">
-  <div class="loader-video-wrap">
-    <img class="loader-fallback" src="/images/story-daughter.jpg" alt="">
-    <video class="loader-video" autoplay muted loop playsinline preload="auto">
-      <source src="/videos/loader-bg.webm" type="video/webm">
-      <source src="/videos/loader-bg.mp4" type="video/mp4">
-    </video>
-  </div>
-  <div class="loader-txt"><span>서</span><span>울</span><span>가</span><span>온</span><span>치</span><span>과</span></div>
-  <div class="loader-line"></div>
-  <div class="loader-sub">Seoul Gaon Dental Clinic</div>
-  <div class="loader-counter">0</div>
-</div>
+<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--sage-d);color:#fff;font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--sage-d,#3E6B59);color:#fff;font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
+<div id="progressBar" aria-hidden="true"></div>
 
 <!-- NAVIGATION -->
 <nav id="nav" role="navigation" aria-label="메인 네비게이션">
-  <a href="/" class="nav-logo" data-scramble>서울가온치과<span>.</span></a>
+  <a href="/" class="nav-logo" aria-label="서울가온치과 홈">서울가온치과<span>.</span></a>
   <div class="nav-links">
     <a href="/philosophy">진료 철학</a>
     <div class="nav-link-drop">
       <a href="/treatments">진료 안내 ▾</a>
       <div class="drop">
-        <a href="/implant" style="color:var(--gold)">임플란트</a>
+        <a href="/implant">임플란트</a>
         <a href="/aesthetic">앞니 심미치료</a>
         <a href="/resin-buildup">레진빌드업</a>
         <a href="/treatments#endodontics">신경치료</a>
@@ -870,24 +388,26 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
       </div>
     </div>
   </div>
+  <span class="live-pill" data-status role="status" aria-live="polite"><i></i><span class="txt">진료 시간 확인 중</span></span>
   <div class="nav-member" id="nav-member-desktop"></div>
-  <a href="/reservation" class="nav-cta" data-magnet><i class="fas fa-calendar-check" style="margin-right:.4rem;font-size:.78rem"></i>예약 안내</a>
-  <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+  <a href="/reservation" class="nav-cta">예약 안내</a>
+  <button class="hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mob-menu"><span></span><span></span><span></span></button>
 </nav>
 
 <!-- MOBILE MENU -->
-<div class="mob-menu">
+<div class="mob-menu" id="mob-menu">
   <a href="/philosophy">진료 철학</a>
   <a href="/treatments">진료 안내</a>
-  <a href="/community">커뮤니티</a>
+  <a href="/implant">임플란트</a>
+  <a href="/aesthetic">앞니 심미치료</a>
   <a href="/doctors">의료진</a>
-  <a href="/guide">안내</a>
-  <a href="/reservation">예약 안내</a>
   <a href="/blog">블로그</a>
   <a href="/before-after">비포 애프터</a>
   <a href="/notice">공지사항</a>
   <a href="/encyclopedia">치과 백과사전</a>
   <a href="/faq">자주 묻는 질문</a>
+  <a href="/guide">오시는 길 · 안내</a>
+  <a href="/reservation">예약 안내</a>
   <div class="mob-member-divider"></div>
   <div class="mob-member" id="nav-member-mobile"></div>
 </div>
@@ -907,75 +427,56 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
 </article>
 
 <!-- ===== HERO ===== -->
-<section id="top">
-  <canvas id="gold-dust"></canvas>
-  <div class="hero-bg-chars">
-    <span class="hero-bg-char">치</span>
-    <span class="hero-bg-char">과</span>
-    <span class="hero-bg-char">치</span>
-    <span class="hero-bg-char">료</span>
-    <span class="hero-bg-char">가</span>
-  </div>
-  <div class="hero-content">
-    <p class="hero-kicker" style="margin:0 0 1rem;font-size:.85rem;letter-spacing:.08em;color:var(--stone-l)"><a href="/uijeongbu-dental" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(191,164,106,.5)">의정부 치과</a> 서울가온치과 · 탑석역 1번 출구 도보 5분</p>
-    <h1 data-tilt>
-      <span class="line"><span>좋은 <em class="gold">기억</em>이</span></span>
-      <span class="line"><span>될 수 있도록.</span></span>
-    </h1>
-    <p class="hero-sub"><em class="gold">아프지</em> 않게. <em class="gold">무섭지</em> 않게. <em class="gold">이해</em>되게.</p>
-    <div class="hero-btns" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;opacity:0">
-      <a href="#s-contact" class="hero-cta" data-magnet>상담 예약 →</a>
-      <a href="https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&ackey=2cykehjt" target="_blank" rel="noopener" class="hero-cta" style="background:#03c75a" data-magnet>네이버 예약</a>
+<section id="top" class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="hero-kicker"><a href="/uijeongbu-dental">의정부 치과</a> 서울가온치과 · 탑석역 1번 출구 도보 5분</p>
+      <h1><span class="ph">좋은 <em class="gold">기억</em>이</span> <span class="ph">될 수 있도록.</span></h1>
+      <p class="hero-sub hero-desc"><span class="ph"><em class="gold">아프지</em> 않게.</span> <span class="ph"><em class="gold">무섭지</em> 않게.</span> <span class="ph"><em class="gold">이해</em>되게.</span></p>
+      <div class="hero-btns">
+        <a href="#s-contact" class="btn btn-primary">상담 예약 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="https://booking.naver.com/booking/13/bizes/781025" target="_blank" rel="noopener" class="btn btn-naver">네이버 예약</a>
+      </div>
+      <ul class="hero-facts" aria-label="진료 요약">
+        <li class="live-pill" data-status><i></i><span class="txt">진료 시간 확인 중</span></li>
+        <li>목요일 야간 20:30</li>
+        <li>토요일 진료</li>
+        <li>주차 지원</li>
+      </ul>
     </div>
-  </div>
-  <div class="hero-stats">
-    <div class="stat" data-reveal>
-      <div class="stat-num"><span data-count="0">0</span></div>
-      <div class="stat-label">컴플레인 목표</div>
+    <div class="hero-visual">
+      <div class="hero-ring" aria-hidden="true"></div>
+      <figure class="hero-arch">
+        <img src="/images/real-lobby-1.jpg" width="1024" height="682" alt="서울가온치과 리셉션 — 아치형 입구와 세이지 그린 소파가 있는 밝은 로비" fetchpriority="high" decoding="async">
+        <figcaption>의정부 용현동 · 골드자이프라자 4층</figcaption>
+      </figure>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num"><span data-count="0">0</span></div><div class="stat-label">컴플레인 목표</div></div>
+        <div class="stat"><div class="stat-num"><span data-count="100">100</span><sup>세</sup></div><div class="stat-label">까지의 약속</div></div>
+      </div>
     </div>
-    <div class="stat" data-reveal>
-      <div class="stat-num"><span data-count="100">100</span><sup>세</sup></div>
-      <div class="stat-label">까지의 약속</div>
-    </div>
-  </div>
-  <div class="scroll-guide">
-    <div class="scroll-bar"></div>
-    <span class="scroll-txt">SCROLL</span>
   </div>
 </section>
 
-<!-- ===== TICKER ===== -->
-<div class="ticker">
-  <div class="ticker-track">
-    <span class="ticker-item">임플란트 <span class="sep">—</span></span>
-    <span class="ticker-item">앞니심미치료 <span class="sep">—</span></span>
-    <span class="ticker-item">신경치료 <span class="sep">—</span></span>
-    <span class="ticker-item">가이드임플란트 <span class="sep">—</span></span>
-    <span class="ticker-item">서울대보존과전문의 <span class="sep">—</span></span>
-    <span class="ticker-item">무통진료 <span class="sep">—</span></span>
-    <span class="ticker-item">의정부 <span class="sep">—</span></span>
-    <span class="ticker-item">임플란트 <span class="sep">—</span></span>
-    <span class="ticker-item">앞니심미치료 <span class="sep">—</span></span>
-    <span class="ticker-item">신경치료 <span class="sep">—</span></span>
-    <span class="ticker-item">가이드임플란트 <span class="sep">—</span></span>
-    <span class="ticker-item">서울대보존과전문의 <span class="sep">—</span></span>
-    <span class="ticker-item">무통진료 <span class="sep">—</span></span>
-    <span class="ticker-item">의정부 <span class="sep">—</span></span>
-  </div>
-</div>
+<!-- ===== 진료 안내 띠 ===== -->
+<section id="s-info" class="info-strip" aria-label="진료 시간·위치 요약">
+  <ul>
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><strong>평일 09:30–18:30</strong><span>점심 12:30–14:00</span></div></li>
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5z"/></svg><div><strong>목요일 야간 20:30</strong><span>토요일 09:30–14:00 · 일·공휴일 휴진</span></div></li>
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg><div><strong>탑석역 1번 출구 도보 5분</strong><span>용민로 22, 골드자이프라자 4층</span></div></li>
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13l2-5a2 2 0 0 1 2-1h10a2 2 0 0 1 2 1l2 5v5h-2a2 2 0 0 1-4 0H9a2 2 0 0 1-4 0H3z"/><path d="M3 13h18"/></svg><div><strong>주차 지원</strong><span>맞은편 제일식자재마트 지하 · 무료 쿠폰</span></div></li>
+  </ul>
+</section>
 
 <!-- ===== PHILOSOPHY ===== -->
-<section id="s-intro" data-glow>
-  <span class="sec-label" data-scramble-label>Philosophy</span>
-  <h2 class="sec-title">
-    <span class="line"><span>좋은 치과는</span></span>
-    <span class="line"><span><em class="gold">설명부터</em></span></span>
-    <span class="line"><span>다릅니다.</span></span>
-  </h2>
-  <blockquote class="intro-quote" data-reveal>
-    "환자분이 이해하실 때까지, 처음부터 끝까지 설명드립니다."
-  </blockquote>
-  <div class="values">
+<section id="s-intro" class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-label">Philosophy · 진료 철학</span>
+      <h2 class="sec-title"><span class="ph">좋은 치과는</span> <span class="ph"><em class="gold">설명부터</em> 다릅니다.</span></h2>
+      <blockquote class="intro-quote">"환자분이 이해하실 때까지, 처음부터 끝까지 설명드립니다."</blockquote>
+    </div>
+    <div class="values">
     <div class="value-card" data-reveal>
       <div class="value-num">01</div>
       <h3 class="value-h"><em class="gold">편안한</em> 진료</h3>
@@ -1007,385 +508,335 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
       <p class="value-p">내 <em class="gold">가족</em>이라면 어떻게 할까. 그 기준으로 모든 치료를 결정합니다.</p>
     </div>
   </div>
+  </div>
 </section>
 
 <!-- ===== TREATMENTS ===== -->
-<section id="s-tx" data-glow>
-  <div style="text-align:center;margin-bottom:4rem">
-    <span class="sec-label" data-scramble-label>Treatments</span>
-    <h2 class="sec-title" style="display:inline-block">
-      <span class="line"><span>세 가지</span></span>
-      <span class="line"><span><em class="gold">핵심</em> 진료.</span></span>
-    </h2>
-  </div>
-  <div class="tx-panels">
-    <!-- Panel 01 -->
-    <div class="tx-panel" data-reveal>
-      <div class="tx-panel-bg">01</div>
-      <div class="tx-panel-content">
-        <h3 class="tx-dance"><a href="/implant" style="color:inherit;text-decoration:none"><em class="gold">임플란트</em></a></h3>
-        <p class="tx-panel-sub"><em class="gold">올바른 위치</em>가, 오래가는 결과를 만듭니다.</p>
-        <div class="tx-features">
-          <div class="tx-feat">가이드 수술 — 정확한 위치, 최소 절개</div>
-          <div class="tx-feat">뼈이식 대응 — 뼈가 부족해도 가능합니다</div>
-          <div class="tx-feat">지혈제 복용 중에도 가능</div>
-          <div class="tx-feat">고령·전신질환 무절개 수술</div>
-        </div>
-        <blockquote class="tx-quote">"뼈가 부족한 경우에도, 뼈이식을 통해 진료가 가능합니다."</blockquote>
-        <a href="/implant" class="tx-link" data-magnet>임플란트 자세히 보기 →</a>
-      </div>
+<section id="s-tx" class="sec sec-paper2">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-label">Treatments · 핵심 진료</span>
+      <h2 class="sec-title"><span class="ph">세 가지</span> <span class="ph"><em class="gold">핵심</em> 진료.</span></h2>
+      <p class="sec-lead">임플란트, 앞니 심미치료, 신경치료. 서울가온치과가 가장 많이, 가장 깊게 보는 세 가지입니다.</p>
     </div>
-    <!-- Panel 02 -->
-    <div class="tx-panel" data-reveal>
-      <div class="tx-panel-bg">02</div>
-      <div class="tx-panel-content">
-        <h3 class="tx-dance">앞니 <em class="gold">심미</em>치료</h3>
-        <p class="tx-panel-sub"><em class="gold">자연스럽고</em>, 오래 만족스러운 앞니.</p>
-        <div class="tx-features">
-          <div class="tx-feat">전문 기공소 1:1 협업 — 맞춤 제작</div>
-          <div class="tx-feat">잇몸라인·폰틱 디테일까지 섬세하게</div>
-          <div class="tx-feat">라미네이트·크라운 맞춤 설계</div>
-          <div class="tx-feat">자연치아와 구분 불가한 심미성</div>
-        </div>
-        <a href="/aesthetic" class="tx-link" data-magnet>심미치료 자세히 보기 →</a>
-      </div>
-    </div>
-    <!-- Panel 03 -->
-    <div class="tx-panel" data-reveal>
-      <div class="tx-panel-bg">03</div>
-      <div class="tx-panel-content">
-        <h3 class="tx-dance"><em class="gold">신경</em>치료</h3>
-        <p class="tx-panel-sub"><em class="gold">정확한 진단</em>, 섬세한 치료가 기본.</p>
-        <div class="tx-features">
-          <div class="tx-feat">의정부 유일 서울대 보존과 전문의</div>
-          <div class="tx-feat">통증 최소화 — 편안한 신경치료</div>
-          <div class="tx-feat">재치료까지 고려한 치료 설계</div>
-          <div class="tx-feat">가능한 한 치아를 보존합니다</div>
-        </div>
-        <a href="/treatments#endodontics" class="tx-link" data-magnet>자세히 보기 →</a>
+    <div class="tx-layout">
+      <aside class="tx-index" aria-hidden="true">
+        <ol>
+          <li data-tx="1"><span>01</span>임플란트</li>
+          <li data-tx="2"><span>02</span>앞니 심미치료</li>
+          <li data-tx="3"><span>03</span>신경치료</li>
+        </ol>
+        <p class="tx-index-note">현진호 대표원장(임플란트·앞니 심미)과 조은비 원장(서울대 치과보존과 전문의)이 각자 가장 잘하는 진료를 맡습니다.</p>
+      </aside>
+      <div class="tx-panels">
+        <article class="tx-panel" id="tx-1" data-reveal>
+          <div class="tx-num" aria-hidden="true">01</div>
+          <div class="tx-body">
+            <h3><a href="/implant"><em class="gold">임플란트</em></a></h3>
+            <p class="tx-panel-sub"><em class="gold">올바른 위치</em>가, 오래가는 결과를 만듭니다.</p>
+            <ul class="tx-features">
+              <li>가이드 수술 — 정확한 위치, 최소 절개</li>
+              <li>뼈이식 대응 — 뼈가 부족해도 가능합니다</li>
+              <li>지혈제 복용 중에도 가능</li>
+              <li>고령·전신질환 무절개 수술</li>
+            </ul>
+            <blockquote class="tx-quote">"뼈가 부족한 경우에도, 뼈이식을 통해 진료가 가능합니다."</blockquote>
+            <a href="/implant" class="tx-link">임플란트 자세히 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </article>
+        <article class="tx-panel" id="tx-2" data-reveal>
+          <div class="tx-num" aria-hidden="true">02</div>
+          <div class="tx-body">
+            <h3><a href="/aesthetic">앞니 <em class="gold">심미</em>치료</a></h3>
+            <p class="tx-panel-sub"><em class="gold">자연스럽고</em>, 오래 만족스러운 앞니.</p>
+            <ul class="tx-features">
+              <li>전문 기공소 1:1 협업 — 맞춤 제작</li>
+              <li>잇몸라인·폰틱 디테일까지 섬세하게</li>
+              <li>라미네이트·크라운 맞춤 설계</li>
+              <li>자연치아와 구분 불가한 심미성</li>
+            </ul>
+            <a href="/aesthetic" class="tx-link">심미치료 자세히 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </article>
+        <article class="tx-panel" id="tx-3" data-reveal>
+          <div class="tx-num" aria-hidden="true">03</div>
+          <div class="tx-body">
+            <h3><a href="/treatments#endodontics"><em class="gold">신경</em>치료</a></h3>
+            <p class="tx-panel-sub"><em class="gold">정확한 진단</em>, 섬세한 치료가 기본.</p>
+            <ul class="tx-features">
+              <li>의정부 유일 서울대 보존과 전문의</li>
+              <li>통증 최소화 — 편안한 신경치료</li>
+              <li>재치료까지 고려한 치료 설계</li>
+              <li>가능한 한 치아를 보존합니다</li>
+            </ul>
+            <a href="/treatments#endodontics" class="tx-link">자세히 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </article>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== 의정부 진료 안내 사진 카드 (2026-10-14) — 핵심 6페이지, 아래 ItemList와 1:1 ===== -->
-<section id="s-uijeongbu" aria-labelledby="ub-home-h" style="padding:clamp(4rem,8vh,6rem) clamp(1.5rem,4vw,6rem);max-width:1200px;margin:0 auto">
-  <div style="text-align:center;margin-bottom:2.5rem">
-    <span class="sec-label">Uijeongbu Guide</span>
-    <h2 id="ub-home-h" style="font-family:var(--ff-title);font-weight:500;font-size:clamp(1.6rem,3.5vw,2.4rem);color:var(--ivory);line-height:1.3;margin:0 0 .75rem">의정부 진료 안내</h2>
-    <p style="color:var(--stone-l);font-size:.92rem;line-height:1.8;margin:0">탑석역 1번 출구 도보 약 5분. 많이 찾으시는 진료 여섯 가지를 사진과 함께 정리했습니다. <a href="/uijeongbu-dental" style="color:var(--gold);text-decoration:underline;text-underline-offset:3px">의정부 치과 종합 안내 →</a></p>
+<!-- ===== 의정부 진료 안내 사진 카드 (2026-10-14) — 핵심 6페이지, head 의 ItemList와 1:1 ===== -->
+<section id="s-uijeongbu" class="sec" aria-labelledby="ub-home-h">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="sec-label">Uijeongbu Guide · 의정부 진료 안내</span>
+      <h2 id="ub-home-h" class="sec-title">의정부 진료 안내</h2>
+      <p class="sec-lead">탑석역 1번 출구 도보 약 5분. 많이 찾으시는 진료 여섯 가지를 사진과 함께 정리했습니다. <a href="/uijeongbu-dental">의정부 치과 종합 안내 →</a></p>
+    </div>
+    <ul class="ub-cards" role="list"><li><a class="ub-card" href="/implant" aria-labelledby="home-implant"><span class="ub-card-img"><img src="/images/cards/uijeongbu-implant-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 임플란트"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">01 / IMPLANT</span><strong class="ub-card-title" id="home-implant">의정부 임플란트</strong><span class="ub-card-line">CT로 뼈 두께와 신경 위치를 보고 계획하는 가이드 임플란트, 현진호 대표원장 수술</span></span></a></li><li><a class="ub-card" href="/endodontics" aria-labelledby="home-endodontics"><span class="ub-card-img"><img src="/images/cards/uijeongbu-endodontics-v2-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 신경치료"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">02 / ROOT CANAL</span><strong class="ub-card-title" id="home-endodontics">의정부 신경치료</strong><span class="ub-card-line">서울대 치과보존과 전문의 조은비 원장이 신경관 구조를 확인하며 직접 치료합니다</span></span></a></li><li><a class="ub-card" href="/laminate" aria-labelledby="home-laminate"><span class="ub-card-img"><img src="/images/cards/uijeongbu-laminate-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 라미네이트"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">03 / LAMINATE</span><strong class="ub-card-title" id="home-laminate">의정부 라미네이트</strong><span class="ub-card-line">변색·벌어짐·왜소치 앞니를 최소 삭제 라미네이트로 다듬습니다</span></span></a></li><li><a class="ub-card" href="/cavity-treatment" aria-labelledby="home-cavity-treatment"><span class="ub-card-img"><img src="/images/cards/uijeongbu-cavity-treatment-v2-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 충치치료"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">04 / CAVITY</span><strong class="ub-card-title" id="home-cavity-treatment">의정부 충치치료</strong><span class="ub-card-line">충치 부위만 덜어내고 건강한 치아는 최대한 남기는 레진 치료</span></span></a></li><li><a class="ub-card" href="/bone-graft-implant" aria-labelledby="home-bone-graft-implant"><span class="ub-card-img"><img src="/images/cards/uijeongbu-bone-graft-implant-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 뼈이식 임플란트"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">05 / BONE GRAFT</span><strong class="ub-card-title" id="home-bone-graft-implant">의정부 뼈이식 임플란트</strong><span class="ub-card-line">뼈가 부족한 자리는 뼈이식·상악동거상술로 식립 조건부터 만듭니다</span></span></a></li><li><a class="ub-card" href="/full-mouth-implant" aria-labelledby="home-full-mouth-implant"><span class="ub-card-img"><img src="/images/cards/uijeongbu-full-mouth-implant-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 전체임플란트"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">06 / FULL ARCH</span><strong class="ub-card-title" id="home-full-mouth-implant">의정부 전체임플란트</strong><span class="ub-card-line">이가 거의 남지 않았을 때, 틀니 대신 위아래 전악 임플란트 계획</span></span></a></li></ul>
   </div>
-  <ul class="ub-cards" role="list"><li><a class="ub-card" href="/implant" aria-labelledby="home-implant"><span class="ub-card-img"><img src="/images/cards/uijeongbu-implant-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 임플란트"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">01 / IMPLANT</span><strong class="ub-card-title" id="home-implant">의정부 임플란트</strong><span class="ub-card-line">CT로 뼈 두께와 신경 위치를 보고 계획하는 가이드 임플란트, 현진호 대표원장 수술</span></span></a></li><li><a class="ub-card" href="/endodontics" aria-labelledby="home-endodontics"><span class="ub-card-img"><img src="/images/cards/uijeongbu-endodontics-v2-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 신경치료"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">02 / ROOT CANAL</span><strong class="ub-card-title" id="home-endodontics">의정부 신경치료</strong><span class="ub-card-line">서울대 치과보존과 전문의 조은비 원장이 신경관 구조를 확인하며 직접 치료합니다</span></span></a></li><li><a class="ub-card" href="/laminate" aria-labelledby="home-laminate"><span class="ub-card-img"><img src="/images/cards/uijeongbu-laminate-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 라미네이트"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">03 / LAMINATE</span><strong class="ub-card-title" id="home-laminate">의정부 라미네이트</strong><span class="ub-card-line">변색·벌어짐·왜소치 앞니를 최소 삭제 라미네이트로 다듬습니다</span></span></a></li><li><a class="ub-card" href="/cavity-treatment" aria-labelledby="home-cavity-treatment"><span class="ub-card-img"><img src="/images/cards/uijeongbu-cavity-treatment-v2-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 충치치료"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">04 / CAVITY</span><strong class="ub-card-title" id="home-cavity-treatment">의정부 충치치료</strong><span class="ub-card-line">충치 부위만 덜어내고 건강한 치아는 최대한 남기는 레진 치료</span></span></a></li><li><a class="ub-card" href="/bone-graft-implant" aria-labelledby="home-bone-graft-implant"><span class="ub-card-img"><img src="/images/cards/uijeongbu-bone-graft-implant-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 뼈이식 임플란트"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">05 / BONE GRAFT</span><strong class="ub-card-title" id="home-bone-graft-implant">의정부 뼈이식 임플란트</strong><span class="ub-card-line">뼈가 부족한 자리는 뼈이식·상악동거상술로 식립 조건부터 만듭니다</span></span></a></li><li><a class="ub-card" href="/full-mouth-implant" aria-labelledby="home-full-mouth-implant"><span class="ub-card-img"><img src="/images/cards/uijeongbu-full-mouth-implant-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 전체임플란트"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">06 / FULL ARCH</span><strong class="ub-card-title" id="home-full-mouth-implant">의정부 전체임플란트</strong><span class="ub-card-line">이가 거의 남지 않았을 때, 틀니 대신 위아래 전악 임플란트 계획</span></span></a></li></ul>
 </section>
 
 <!-- ===== STORY ===== -->
-<section id="s-story">
-  <div class="story-bg-text">가온</div>
-  <div class="story-inner">
-    <!-- 사진 영역 -->
-    <div class="story-photo-side">
-      <div class="story-photo-glow"></div>
-      <div class="story-photo-frame" data-reveal>
-        <img src="/images/story-daughter.jpg" alt="아버지와 딸 가온" loading="lazy">
-        <span class="story-photo-label">with 가온</span>
-      </div>
-    </div>
-    <!-- 텍스트 영역 -->
-    <div class="story-text-side">
-      <span class="sec-label" data-scramble-label>Our Story</span>
-      <h2 class="story-headline">
-        <span class="line"><span><em class="gold">딸 아이</em>의 이름이</span></span>
-        <span class="line"><span>부끄럽지 않게.</span></span>
-      </h2>
-      <div class="story-divider"></div>
+<section id="s-story" class="sec story">
+  <div class="story-bg-text" aria-hidden="true">가온</div>
+  <div class="wrap story-grid">
+    <figure class="story-photo">
+      <img src="/images/story-daughter.jpg" width="768" height="1024" loading="lazy" decoding="async" alt="아버지와 딸 가온">
+      <figcaption>with 가온</figcaption>
+    </figure>
+    <div class="story-text">
+      <span class="sec-label">Our Story · 이름의 약속</span>
+      <h2 class="story-headline"><span class="ph"><em class="gold">딸 아이</em>의 이름이</span> <span class="ph">부끄럽지 않게.</span></h2>
       <div class="story-body">
         <p data-reveal>'<em class="gold">가온</em>'은 제 딸 아이의 이름입니다. 순우리말로 '<em class="gold">세상의 중심</em>'이라는 뜻을 가지고 있습니다.</p>
         <p data-reveal>아이의 이름을 치과에 붙인 이유는 단 하나 — 내 가족에게 <em class="gold">부끄럽지 않은 치료</em>를 하겠다는 약속입니다.</p>
         <p data-reveal><em class="gold">100세까지</em>, 가족처럼 곁에서 함께하는 치과. 그것이 <em class="gold">서울가온치과</em>가 존재하는 이유입니다.</p>
       </div>
-      <div class="story-signature">
-        <div>
-          <p class="story-signature-name">현진호 <em class="gold">대표원장</em></p>
-          <p class="story-signature-role">서울가온치과</p>
-        </div>
+      <div class="story-signature" data-reveal>
+        <p class="story-signature-name">현진호 <em class="gold">대표원장</em></p>
+        <p class="story-signature-role">서울가온치과</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ===== CONSULT PHILOSOPHY ===== -->
-<section id="s-consult">
+<section id="s-consult" class="consult">
   <div class="consult-wrap">
-    <div class="consult-img">
-      <img src="/images/real-consult-scene.jpg" alt="현진호 원장 상담 장면" loading="lazy">
-      <div class="consult-img-overlay"></div>
-    </div>
+    <figure class="consult-img">
+      <img src="/images/real-consult-scene.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="현진호 원장 상담 장면">
+    </figure>
     <div class="consult-text">
-      <span class="sec-label" data-scramble-label>Our Promise</span>
-      <h2 class="consult-quote">
-        <em>설명</em>이 먼저입니다.<br>치료는 그 다음입니다.
-      </h2>
-      <p class="consult-desc" data-reveal>
-        서울가온치과는 환자분이 본인의 상태를 정확히 이해하실 때까지 충분히 설명드립니다. 파노라마, 구강 사진, 3D CT를 함께 보며 현재 상태와 치료 계획을 투명하게 공유합니다.
-      </p>
-      <p class="consult-desc" data-reveal>
-        이해 없는 동의는 받지 않습니다. 납득이 되셔야 치료를 시작합니다.
-      </p>
-      <div class="consult-features" data-reveal>
-        <span class="consult-feat"><i class="fas fa-x-ray"></i> 파노라마·CT 직접 확인</span>
-        <span class="consult-feat"><i class="fas fa-comments"></i> 충분한 상담 시간</span>
-        <span class="consult-feat"><i class="fas fa-file-medical"></i> 서면 치료계획서</span>
-        <span class="consult-feat"><i class="fas fa-won-sign"></i> 투명한 비용 안내</span>
-      </div>
+      <span class="sec-label">Our Promise · 설명이 먼저</span>
+      <h2 class="consult-quote"><span class="ph"><em>설명</em>이 먼저입니다.</span> <span class="ph">치료는 그 다음입니다.</span></h2>
+      <p class="consult-desc">서울가온치과는 환자분이 본인의 상태를 정확히 이해하실 때까지 충분히 설명드립니다. 파노라마, 구강 사진, 3D CT를 함께 보며 현재 상태와 치료 계획을 투명하게 공유합니다.</p>
+      <p class="consult-desc">이해 없는 동의는 받지 않습니다. 납득이 되셔야 치료를 시작합니다.</p>
+      <ul class="consult-features">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M4 12h16"/></svg> 파노라마·CT 직접 확인</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H8l-5 3 1.2-4.4A8 8 0 1 1 21 12z"/></svg> 충분한 상담 시간</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg> 서면 치료계획서</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7l3 10 3-8 3 8 3-10M3 11h18M3 14h18"/></svg> 투명한 비용 안내</li>
+      </ul>
     </div>
   </div>
 </section>
 
 <!-- ===== DOCTORS ===== -->
-<section id="s-dr" data-glow>
-  <div style="text-align:center;margin-bottom:3rem">
-    <span class="sec-label" data-scramble-label>Doctors</span>
-    <h2 class="sec-title" style="display:inline-block">
-      <span class="line"><span><em class="gold">의료진</em> 소개</span></span>
-    </h2>
-  </div>
-  <div class="dr-grid">
-    <!-- 현진호 원장 -->
-    <div class="dr-card" data-tilt onclick="location.href='/doctors?id=1'" style="cursor:pointer">
-      <div class="dr-img-wrap">
-        <img src="/images/real-dr-hyun.jpg" alt="현진호 원장" loading="lazy">
-        <span class="dr-tag head">대표원장</span>
-      </div>
-      <div class="dr-info">
-        <h3 class="dr-name">현진호 <span class="head-label">대표원장</span></h3>
-        <p class="dr-role">Representative Director</p>
-        <p class="dr-desc">의정부 임플란트·앞니 심미치료 <em class="gold">중점 진료</em>. 가이드 임플란트. 꼼꼼한 설명과 정확한 진료로 신뢰받는 진료를 약속합니다.</p>
-        <div class="dr-chips">
-          <span class="dr-chip gold">임플란트</span>
-          <span class="dr-chip">앞니심미</span>
-          <span class="dr-chip">가이드수술</span>
-          <span class="dr-chip">뼈이식</span>
-        </div>
-        <div class="dr-badge">✦ 서울가온치과 대표원장 · 임플란트 &amp; 앞니 심미치료 중점 진료</div>
-      </div>
+<section id="s-dr" class="sec">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="sec-label">Doctors · 의료진</span>
+      <h2 class="sec-title"><em class="gold">의료진</em> 소개</h2>
     </div>
-    <!-- 조은비 원장 -->
-    <div class="dr-card" data-tilt onclick="location.href='/doctors'" style="cursor:pointer">
-      <div class="dr-img-wrap">
-        <img src="/images/real-dr-cho.jpg" alt="조은비 원장" loading="lazy">
-        <span class="dr-tag">보존과 전문의</span>
-      </div>
-      <div class="dr-info">
-        <h3 class="dr-name">조은비</h3>
-        <p class="dr-role">Conservative Dentistry · Endodontics Specialist</p>
-        <p class="dr-desc">서울대 치과병원 4년 전공의 수련. 치과보존과 전문의(전국 2.5%). 자연치아를 <em class="gold">단 하나라도 더 살리는 것</em>이 진료의 시작입니다.</p>
-        <div class="dr-chips">
-          <span class="dr-chip gold">자연치아보존</span>
-          <span class="dr-chip">신경치료</span>
-          <span class="dr-chip">보존과전문의</span>
-          <span class="dr-chip">서울대 SNUDH</span>
+    <div class="dr-grid">
+      <a class="dr-card" href="/doctors?id=1" data-reveal>
+        <figure class="dr-photo">
+          <img src="/images/real-dr-hyun.jpg" width="683" height="1024" loading="lazy" decoding="async" alt="현진호 원장">
+          <span class="dr-tag head">대표원장</span>
+        </figure>
+        <div class="dr-info">
+          <h3 class="dr-name">현진호 <span class="head-label">대표원장</span></h3>
+          <p class="dr-role">Representative Director</p>
+          <p class="dr-desc">의정부 임플란트·앞니 심미치료 <em class="gold">중점 진료</em>. 가이드 임플란트. 꼼꼼한 설명과 정확한 진료로 신뢰받는 진료를 약속합니다.</p>
+          <div class="dr-chips">
+            <span class="dr-chip gold">임플란트</span>
+            <span class="dr-chip">앞니심미</span>
+            <span class="dr-chip">가이드수술</span>
+            <span class="dr-chip">뼈이식</span>
+          </div>
+          <div class="dr-badge">✦ 서울가온치과 대표원장 · 임플란트 &amp; 앞니 심미치료 중점 진료</div>
         </div>
-        <div class="dr-badge">✦ 서울대 치과병원 보존과 전공의 · 치과보존과 전문의 · 박사 수료</div>
-      </div>
+      </a>
+      <a class="dr-card" href="/doctors" data-reveal>
+        <figure class="dr-photo">
+          <img src="/images/real-dr-cho.jpg" width="683" height="1024" loading="lazy" decoding="async" alt="조은비 원장">
+          <span class="dr-tag">보존과 전문의</span>
+        </figure>
+        <div class="dr-info">
+          <h3 class="dr-name">조은비</h3>
+          <p class="dr-role">Conservative Dentistry · Endodontics Specialist</p>
+          <p class="dr-desc">서울대 치과병원 4년 전공의 수련. 치과보존과 전문의(전국 2.5%). 자연치아를 <em class="gold">단 하나라도 더 살리는 것</em>이 진료의 시작입니다.</p>
+          <div class="dr-chips">
+            <span class="dr-chip gold">자연치아보존</span>
+            <span class="dr-chip">신경치료</span>
+            <span class="dr-chip">보존과전문의</span>
+            <span class="dr-chip">서울대 SNUDH</span>
+          </div>
+          <div class="dr-badge">✦ 서울대 치과병원 보존과 전공의 · 치과보존과 전문의 · 박사 수료</div>
+        </div>
+      </a>
     </div>
   </div>
 </section>
 
 <!-- ===== BOOK — 대표원장 저서 ===== -->
-<section id="s-book" data-glow style="padding:clamp(5rem,10vh,8rem) clamp(1.5rem,4vw,6rem)">
-  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:clamp(2.5rem,5vw,5rem);flex-wrap:wrap">
-    <div style="flex:0 0 auto;position:relative" data-reveal>
-      <div class="book-float">
-        <img src="/images/book-implant-guide.jpg" alt="임플란트 사용설명서 — 현진호 저" loading="lazy" style="width:clamp(180px,22vw,280px);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(191,164,106,.1)">
-      </div>
-      <div style="position:absolute;top:-10px;right:-10px;background:var(--gold);color:var(--ink);font-family:var(--ff-en);font-size:.65rem;letter-spacing:2px;padding:.35rem .8rem;border-radius:100px;font-weight:700;text-transform:uppercase">2025 출간</div>
+<section id="s-book" class="sec book">
+  <div class="wrap book-grid">
+    <div class="book-cover" data-reveal>
+      <img src="/images/book-implant-guide.jpg" width="448" height="600" loading="lazy" decoding="async" alt="임플란트 사용설명서 — 현진호 저">
+      <span class="book-badge">2025 출간</span>
     </div>
-    <div style="flex:1;min-width:280px" data-reveal>
-      <span class="sec-label" data-scramble-label style="margin-bottom:1rem;display:inline-block">Published Book</span>
-      <h2 style="font-family:var(--ff-title);font-weight:500;font-size:clamp(1.6rem,3.5vw,2.4rem);line-height:1.35;margin-bottom:1rem">
-        <em class="gold">임플란트 사용설명서</em>
-      </h2>
-      <p style="font-size:clamp(.78rem,.95vw,.88rem);color:var(--stone-l);line-height:2;margin-bottom:1.5rem;word-break:keep-all;max-width:540px">
-        치과 의사가 직접 알려주는 임플란트의 모든 것.<br>
-        막막했던 임플란트, 이제는 <strong style="color:var(--ivory)">제대로 알고 선택하세요.</strong><br>
-        읽는 순간, 치과가 덜 무서워집니다.
-      </p>
-      <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.8rem">
-        <span style="display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .85rem;border:1px solid var(--line);border-radius:100px;font-size:.72rem;color:var(--stone-l)">
-          <i class="fas fa-user-md" style="font-size:.6rem;color:var(--gold)"></i> 현진호 저
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .85rem;border:1px solid var(--line);border-radius:100px;font-size:.72rem;color:var(--stone-l)">
-          <i class="fas fa-graduation-cap" style="font-size:.6rem;color:var(--gold)"></i> 서울대 치의학대학원
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .85rem;border:1px solid var(--line);border-radius:100px;font-size:.72rem;color:var(--stone-l)">
-          <i class="fas fa-book" style="font-size:.6rem;color:var(--gold)"></i> 124쪽 · ISBN 9791138845489
-        </span>
+    <div class="book-text" data-reveal>
+      <span class="sec-label">Published Book · 대표원장 저서</span>
+      <h2><em class="gold">임플란트 사용설명서</em></h2>
+      <p>치과 의사가 직접 알려주는 임플란트의 모든 것. 막막했던 임플란트, 이제는 <strong>제대로 알고 선택하세요.</strong> 읽는 순간, 치과가 덜 무서워집니다.</p>
+      <div class="book-meta">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg> 현진호 저</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg> 서울대 치의학대학원</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4zM20 4h-6a1 1 0 0 0-1 1v15a2 2 0 0 1 2-2h5z"/></svg> 124쪽 · ISBN 9791138845489</span>
       </div>
-      <div style="display:flex;gap:.8rem;flex-wrap:wrap">
-        <a href="https://product.kyobobook.co.kr/detail/S000217229789" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.5rem;background:var(--gold);color:var(--ink);padding:.65rem 1.8rem;border-radius:100px;font-size:.82rem;font-weight:600;letter-spacing:.02em;transition:background .3s;text-decoration:none" data-magnet>
-          <i class="fas fa-shopping-cart"></i> 교보문고에서 보기
-        </a>
-        <a href="/implant" style="display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--gold);color:var(--gold);padding:.65rem 1.8rem;border-radius:100px;font-size:.82rem;font-weight:500;letter-spacing:.02em;transition:all .3s;text-decoration:none" data-magnet>
-          <i class="fas fa-tooth"></i> 임플란트 자세히 보기
-        </a>
+      <div class="book-btns">
+        <a href="https://product.kyobobook.co.kr/detail/S000217229789" target="_blank" rel="noopener" class="btn btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-7H7"/><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg> 교보문고에서 보기</a>
+        <a href="/implant" class="btn btn-outline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3c-3 0-4.5 2.5-4.5 5 0 4 2 6 2.5 12 .2 1.5 2 1.5 2.3 0C9 16 9.5 14 12 14s3 2 3.7 6c.3 1.5 2.1 1.5 2.3 0 .5-6 2.5-8 2.5-12 0-2.5-1.5-5-4.5-5-2 0-3 1-4 1s-2-1-4-1z"/></svg> 임플란트 자세히 보기</a>
       </div>
     </div>
   </div>
 </section>
-<style>
-.book-float{animation:bookFloat 4s ease-in-out infinite}
-@keyframes bookFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-#s-book .sec-label{color:var(--gold);font-family:var(--ff-en);font-size:.72rem;letter-spacing:6px;text-transform:uppercase}
-</style>
 
 <!-- ===== FACILITY ===== -->
-<section id="s-facility" data-glow>
-  <div style="text-align:center;margin-bottom:3rem">
-    <span class="sec-label" data-scramble-label>Our Clinic</span>
-    <h2 class="sec-title" style="display:inline-block">
-      <span class="line"><span><em class="gold">공간</em>이</span></span>
-      <span class="line"><span>달라야</span></span>
-      <span class="line"><span><em class="gold">치료</em>도 다릅니다.</span></span>
-    </h2>
+<section id="s-facility" class="sec sec-paper2">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-label">Our Clinic · 공간</span>
+      <h2 class="sec-title"><span class="ph"><em class="gold">공간</em>이 달라야</span> <span class="ph"><em class="gold">치료</em>도 다릅니다.</span></h2>
+      <p class="sec-lead">아치형 문과 세이지 그린 소파, 따뜻한 조명. 치과 냄새 대신 편안함이 먼저 느껴지도록 공간부터 다르게 만들었습니다.</p>
+    </div>
   </div>
-  <div class="fac-grid">
-    <div class="fac-item fac-main"><img src="/images/real-lobby-1.jpg" alt="리셉션 & 데스크" loading="lazy"><span class="fac-label">Reception &amp; Desk</span></div>
-    <div class="fac-item"><img src="/images/real-lobby-2.jpg" alt="로비 & 대기공간" loading="lazy"><span class="fac-label">Lobby &amp; Waiting</span></div>
-    <div class="fac-item"><img src="/images/real-waiting.jpg" alt="대기실" loading="lazy"><span class="fac-label">Patient Lounge</span></div>
-    <div class="fac-item"><img src="/images/real-makeup-close.jpg" alt="메이크업룸" loading="lazy"><span class="fac-label">Make-Up Room</span></div>
-    <div class="fac-item"><img src="/images/real-consult-room.jpg" alt="1:1 상담실" loading="lazy"><span class="fac-label">Consultation Room</span></div>
-    <div class="fac-item"><img src="/images/real-implant-center.jpg" alt="임플란트 센터" loading="lazy"><span class="fac-label">Implant Center</span></div>
-    <div class="fac-item fac-wide"><img src="/images/real-unit-multi.jpg" alt="진료실 전경" loading="lazy"><span class="fac-label">Treatment Rooms</span></div>
-    <div class="fac-item"><img src="/images/real-makeup-hallway.jpg" alt="메이크업룸 & 회복실" loading="lazy"><span class="fac-label">Make-Up &amp; Recovery</span></div>
-    <div class="fac-item"><img src="/images/real-hallway-sterilization.jpg" alt="복도 & 소독실" loading="lazy"><span class="fac-label">Hallway &amp; Sterilization</span></div>
-    <div class="fac-item"><img src="/images/real-treatment-unit.jpg" alt="개인 진료 유닛" loading="lazy"><span class="fac-label">Private Unit</span></div>
+  <div class="fac-scroller" tabindex="0" aria-label="병원 공간 사진 — 좌우로 넘겨 보세요">
+    <div class="fac-track">
+      <figure class="fac-item fac-main"><img src="/images/real-lobby-1.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="리셉션 & 데스크"><figcaption>Reception &amp; Desk</figcaption></figure>
+      <figure class="fac-item"><img src="/images/real-lobby-2.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="로비 & 대기공간"><figcaption>Lobby &amp; Waiting</figcaption></figure>
+      <figure class="fac-item"><img src="/images/real-waiting.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="대기실"><figcaption>Patient Lounge</figcaption></figure>
+      <figure class="fac-item"><img src="/images/real-makeup-close.jpg" width="682" height="1024" loading="lazy" decoding="async" alt="메이크업룸"><figcaption>Make-Up Room</figcaption></figure>
+      <figure class="fac-item"><img src="/images/real-consult-room.jpg" width="682" height="1024" loading="lazy" decoding="async" alt="1:1 상담실"><figcaption>Consultation Room</figcaption></figure>
+      <figure class="fac-item"><img src="/images/real-implant-center.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="임플란트 센터"><figcaption>Implant Center</figcaption></figure>
+      <figure class="fac-item"><img src="/images/real-unit-multi.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="진료실 전경"><figcaption>Treatment Rooms</figcaption></figure>
+      <figure class="fac-item"><img src="/images/real-makeup-hallway.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="메이크업룸 & 회복실"><figcaption>Make-Up &amp; Recovery</figcaption></figure>
+      <figure class="fac-item"><img src="/images/real-hallway-sterilization.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="복도 & 소독실"><figcaption>Hallway &amp; Sterilization</figcaption></figure>
+      <figure class="fac-item"><img src="/images/real-treatment-unit.jpg" width="1024" height="682" loading="lazy" decoding="async" alt="개인 진료 유닛"><figcaption>Private Unit</figcaption></figure>
+    </div>
+  </div>
+  <div class="wrap fac-nav">
+    <button class="fac-btn" type="button" data-dir="-1" aria-label="이전 사진"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <button class="fac-btn" type="button" data-dir="1" aria-label="다음 사진"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
   </div>
 </section>
 
 <!-- ===== FAQ ===== -->
-<section id="s-faq">
-  <div style="text-align:center;margin-bottom:3rem">
-    <span class="sec-label" data-scramble-label>FAQ</span>
-    <h2 class="sec-title" style="display:inline-block">
-      <span class="line"><span><em class="gold">자주 묻는</em> <em class="gold">질문</em></span></span>
-    </h2>
-  </div>
-  <div class="faq-list">
-    <!-- 통증/공포 관련 -->
-    <div class="faq-item">
-      <button class="faq-q">치과 치료가 너무 무서워요.<span class="plus">+</span></button>
-      <div class="faq-a"><div class="faq-a-inner">무서운 마음부터 이해합니다. 서울가온치과는 통증 최소화가 기본입니다. 충분한 마취와 세심한 진행으로, "생각보다 괜찮았어요"라는 말을 가장 많이 듣습니다. 무서우시면 언제든 손을 들어주세요. 치료 전 충분한 설명과 동의 과정을 거치며, 환자분의 속도에 맞춰 진행합니다.</div></div>
+<section id="s-faq" class="sec">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="sec-label">FAQ · 자주 묻는 질문</span>
+      <h2 class="sec-title"><em class="gold">자주 묻는</em> <em class="gold">질문</em></h2>
     </div>
-    <div class="faq-item">
-      <button class="faq-q">이전 치과에서 너무 아팠어요.<span class="plus">+</span></button>
-      <div class="faq-a"><div class="faq-a-inner">충분한 마취와 세심한 진료로, 치과가 좋은 기억이 되도록 합니다. 이전의 아픈 경험을 말씀해주시면, 더 신경 쓰겠습니다. 마취가 완전히 되었는지 반드시 확인한 후 진료를 시작하고, 진행 중에도 불편하시면 즉시 멈춥니다.</div></div>
-    </div>
-
-    <!-- 임플란트 관련 -->
-    <div class="faq-item">
-      <button class="faq-q">임플란트 수술이 너무 겁나요.<span class="plus">+</span></button>
-      <div class="faq-a"><div class="faq-a-inner">가이드 수술은 CT 촬영을 기반으로 미리 계획된 안전한 경로로 진행됩니다. 절개를 최소화하고, 정확한 위치에 식립합니다. 수술 후 "생각보다 편했다"는 말씀이 가장 많습니다. 수술 시간도 일반적으로 30분~1시간 내외로 짧습니다.</div></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q">고령이라 임플란트가 안 될까봐요.<span class="plus">+</span></button>
-      <div class="faq-a"><div class="faq-a-inner">나이 자체가 임플란트를 막지 않습니다. 전신 건강 상태와 잇몸뼈를 정밀하게 평가한 후, 대부분의 경우 안전하게 수술이 가능합니다. 70~80대 환자분도 많이 치료받고 계십니다. 당뇨, 고혈압 등 만성질환이 있어도 조절이 잘 되면 가능합니다.</div></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q">다른 치과에서 안 된다고 했어요.<span class="plus">+</span></button>
-      <div class="faq-a"><div class="faq-a-inner">정밀 뼈이식과 가이드 수술로 좋은 결과를 만들어냅니다. 뼈가 부족하거나 위치가 어려운 경우에도, 사전 계획을 통해 해결 방법을 찾습니다. 포기하기 전에 한 번 더 상담받아보세요. 다른 곳에서 안 된다고 한 분들이 많이 찾아오십니다.</div></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q">임플란트 수명은 얼마나 되나요?<span class="plus">+</span></button>
-      <div class="faq-a"><div class="faq-a-inner">잘 관리하면 20년 이상 사용하는 분들이 많습니다. 임플란트 자체는 반영구적이지만, 관리가 핵심입니다. 정기 검진(6개월~1년)과 올바른 칫솔질, 치간 칫솔 사용이 수명을 좌우합니다. 서울가온치과는 수술 후에도 체계적인 유지관리 프로그램을 운영합니다.</div></div>
-    </div>
-
-    <!-- 진료 상담/비용 관련 -->
-    <div class="faq-item">
-      <button class="faq-q">설명을 들어도 잘 이해가 안 돼요.<span class="plus">+</span></button>
-      <div class="faq-a"><div class="faq-a-inner">"여기 와서 처음 이해했어요" — 저희가 가장 자주 듣는 말입니다. 구강 카메라 영상, 모형, CT 사진을 활용해 쉽게 설명드리고, 이해될 때까지 여러 번 말씀드립니다. 궁금한 점은 상담 중 언제든 질문해주세요.</div></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q">치료 비용이 얼마나 드나요?<span class="plus">+</span></button>
-      <div class="faq-a"><div class="faq-a-inner">치료 비용은 환자분의 구강 상태와 치료 범위에 따라 달라집니다. 상담 시 정확한 치료 계획과 함께 비용을 투명하게 안내드립니다. 불필요한 치료를 권하지 않으며, 건강보험 적용 항목은 최대한 활용합니다. 무이자 할부 등 부담을 줄이는 방법도 함께 안내드립니다.</div></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q">첫 방문 시 어떤 준비가 필요한가요?<span class="plus">+</span></button>
-      <div class="faq-a"><div class="faq-a-inner">신분증과 건강보험증만 가져오시면 됩니다. 현재 복용 중인 약이 있다면 약 이름이나 처방전을 가져오시면 진료에 도움이 됩니다. 첫 방문 시 파노라마 촬영과 구강 검진 후 상담을 진행하며, 약 30~40분 소요됩니다.</div></div>
-    </div>
-
-    <!-- 앞니 심미/신경치료 관련 -->
-    <div class="faq-item">
-      <button class="faq-q">앞니가 벌어졌는데 교정 없이 치료 가능한가요?<span class="plus">+</span></button>
-      <div class="faq-a"><div class="faq-a-inner">벌어진 정도와 원인에 따라 라미네이트나 크라운으로 교정 없이 개선할 수 있습니다. 최소 삭제로 자연스러운 형태와 색상을 구현하며, 보통 2~3회 내원으로 완성됩니다. 정밀 상담을 통해 최적의 방법을 안내드립니다.</div></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q">신경치료 하면 이가 약해지나요?<span class="plus">+</span></button>
-      <div class="faq-a"><div class="faq-a-inner">신경치료 자체가 이를 약하게 만드는 것은 아닙니다. 다만 신경을 제거한 치아는 영양 공급이 줄어 장기적으로 취약해질 수 있어, 치료 후 크라운으로 보호하는 것을 권장합니다. 서울가온치과는 첨단 장비로 정밀한 신경치료를 진행합니다.</div></div>
-    </div>
-
-    <!-- 방문/접근성 관련 -->
-    <div class="faq-item">
-      <button class="faq-q">주차가 가능한가요?<span class="plus">+</span></button>
-      <div class="faq-a"><div class="faq-a-inner">네, 맞은편 제일식자재마트 건물 지하주차장을 이용하실 수 있으며 진료 후 무료 주차 쿠폰을 드립니다. 자세한 사항은 방문 전 전화(0507-1325-3377)로 문의해주세요. 탑석역 1번 출구에서 도보 약 5분 거리로 대중교통도 편리합니다.</div></div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary class="faq-q">치과 치료가 너무 무서워요.<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><div class="faq-a-inner">무서운 마음부터 이해합니다. 서울가온치과는 통증 최소화가 기본입니다. 충분한 마취와 세심한 진행으로, "생각보다 괜찮았어요"라는 말을 가장 많이 듣습니다. 무서우시면 언제든 손을 들어주세요. 치료 전 충분한 설명과 동의 과정을 거치며, 환자분의 속도에 맞춰 진행합니다.</div></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">이전 치과에서 너무 아팠어요.<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><div class="faq-a-inner">충분한 마취와 세심한 진료로, 치과가 좋은 기억이 되도록 합니다. 이전의 아픈 경험을 말씀해주시면, 더 신경 쓰겠습니다. 마취가 완전히 되었는지 반드시 확인한 후 진료를 시작하고, 진행 중에도 불편하시면 즉시 멈춥니다.</div></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">임플란트 수술이 너무 겁나요.<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><div class="faq-a-inner">가이드 수술은 CT 촬영을 기반으로 미리 계획된 안전한 경로로 진행됩니다. 절개를 최소화하고, 정확한 위치에 식립합니다. 수술 후 "생각보다 편했다"는 말씀이 가장 많습니다. 수술 시간도 일반적으로 30분~1시간 내외로 짧습니다.</div></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">고령이라 임플란트가 안 될까봐요.<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><div class="faq-a-inner">나이 자체가 임플란트를 막지 않습니다. 전신 건강 상태와 잇몸뼈를 정밀하게 평가한 후, 대부분의 경우 안전하게 수술이 가능합니다. 70~80대 환자분도 많이 치료받고 계십니다. 당뇨, 고혈압 등 만성질환이 있어도 조절이 잘 되면 가능합니다.</div></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">다른 치과에서 안 된다고 했어요.<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><div class="faq-a-inner">정밀 뼈이식과 가이드 수술로 좋은 결과를 만들어냅니다. 뼈가 부족하거나 위치가 어려운 경우에도, 사전 계획을 통해 해결 방법을 찾습니다. 포기하기 전에 한 번 더 상담받아보세요. 다른 곳에서 안 된다고 한 분들이 많이 찾아오십니다.</div></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">임플란트 수명은 얼마나 되나요?<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><div class="faq-a-inner">잘 관리하면 20년 이상 사용하는 분들이 많습니다. 임플란트 자체는 반영구적이지만, 관리가 핵심입니다. 정기 검진(6개월~1년)과 올바른 칫솔질, 치간 칫솔 사용이 수명을 좌우합니다. 서울가온치과는 수술 후에도 체계적인 유지관리 프로그램을 운영합니다.</div></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">설명을 들어도 잘 이해가 안 돼요.<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><div class="faq-a-inner">"여기 와서 처음 이해했어요" — 저희가 가장 자주 듣는 말입니다. 구강 카메라 영상, 모형, CT 사진을 활용해 쉽게 설명드리고, 이해될 때까지 여러 번 말씀드립니다. 궁금한 점은 상담 중 언제든 질문해주세요.</div></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">치료 비용이 얼마나 드나요?<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><div class="faq-a-inner">치료 비용은 환자분의 구강 상태와 치료 범위에 따라 달라집니다. 상담 시 정확한 치료 계획과 함께 비용을 투명하게 안내드립니다. 불필요한 치료를 권하지 않으며, 건강보험 적용 항목은 최대한 활용합니다. 무이자 할부 등 부담을 줄이는 방법도 함께 안내드립니다.</div></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">첫 방문 시 어떤 준비가 필요한가요?<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><div class="faq-a-inner">신분증과 건강보험증만 가져오시면 됩니다. 현재 복용 중인 약이 있다면 약 이름이나 처방전을 가져오시면 진료에 도움이 됩니다. 첫 방문 시 파노라마 촬영과 구강 검진 후 상담을 진행하며, 약 30~40분 소요됩니다.</div></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">앞니가 벌어졌는데 교정 없이 치료 가능한가요?<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><div class="faq-a-inner">벌어진 정도와 원인에 따라 라미네이트나 크라운으로 교정 없이 개선할 수 있습니다. 최소 삭제로 자연스러운 형태와 색상을 구현하며, 보통 2~3회 내원으로 완성됩니다. 정밀 상담을 통해 최적의 방법을 안내드립니다.</div></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">신경치료 하면 이가 약해지나요?<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><div class="faq-a-inner">신경치료 자체가 이를 약하게 만드는 것은 아닙니다. 다만 신경을 제거한 치아는 영양 공급이 줄어 장기적으로 취약해질 수 있어, 치료 후 크라운으로 보호하는 것을 권장합니다. 서울가온치과는 첨단 장비로 정밀한 신경치료를 진행합니다.</div></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">주차가 가능한가요?<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><div class="faq-a-inner">네, 맞은편 제일식자재마트 건물 지하주차장을 이용하실 수 있으며 진료 후 무료 주차 쿠폰을 드립니다. 자세한 사항은 방문 전 전화(0507-1325-3377)로 문의해주세요. 탑석역 1번 출구에서 도보 약 5분 거리로 대중교통도 편리합니다.</div></div>
+      </details>
     </div>
   </div>
 </section>
 
 <!-- ===== TREATMENT GUIDE (환자 경험담 → 진료 안내로 대체, 의료법 §56②2 준수) ===== -->
-<section id="s-rev">
-  <div style="text-align:center;margin-bottom:2rem">
-    <span class="sec-label" data-scramble-label>Guide</span>
-    <h2 class="sec-title" style="display:inline-block">
-      <span class="line"><span>치료 전,</span></span>
-      <span class="line"><span><em class="gold">충분히</em> 설명드립니다</span></span>
-    </h2>
-  </div>
-  <div class="rev-track-wrap">
-    <div class="rev-track">
-      <div class="rev-card" data-tilt><div class="rev-stars">01</div><div class="rev-text">진단 결과와 치료 계획을 환자분이 이해하실 수 있도록 충분히 설명드립니다.</div><div class="rev-who">정확한 진단 · 설명</div></div>
-      <div class="rev-card" data-tilt><div class="rev-stars">02</div><div class="rev-text">CT 기반 가이드 임플란트로 정확한 위치에 최소 절개를 지향합니다.</div><div class="rev-who">가이드 임플란트</div></div>
-      <div class="rev-card" data-tilt><div class="rev-stars">03</div><div class="rev-text">앞니 심미치료는 전문 기공소와 1:1 협업으로 맞춤 제작합니다.</div><div class="rev-who">앞니 심미치료</div></div>
-      <div class="rev-card" data-tilt><div class="rev-stars">04</div><div class="rev-text">치과보존과 전문의가 자연치아를 최대한 보존하는 신경치료를 시행합니다.</div><div class="rev-who">신경치료 · 보존</div></div>
-      <div class="rev-card" data-tilt><div class="rev-stars">05</div><div class="rev-text">치료에 필요한 비용은 사전에 투명하게 안내해 드립니다.</div><div class="rev-who">투명한 비용 안내</div></div>
-      <div class="rev-card" data-tilt><div class="rev-stars">06</div><div class="rev-text">치료 이후에도 정기적인 사후관리로 함께하겠습니다.</div><div class="rev-who">사후관리</div></div>
-      <!-- duplicate for infinite scroll -->
-      <div class="rev-card" data-tilt><div class="rev-stars">01</div><div class="rev-text">진단 결과와 치료 계획을 환자분이 이해하실 수 있도록 충분히 설명드립니다.</div><div class="rev-who">정확한 진단 · 설명</div></div>
-      <div class="rev-card" data-tilt><div class="rev-stars">02</div><div cltars">02</div><div class="rev-text">CT 기반 가이드 임플란트로 정확한 위치에 최소 절개를 지향합니다.</div><div class="rev-who">가이드 임플란트</div></div>
-      <div class="rev-card" data-tilt><div class="rev-stars">03</div><div class="rev-text">앞니 심미치료는 전문 기공소와 1:1 협업으로 맞춤 제작합니다.</div><div class="rev-who">앞니 심미치료</div></div>
-      <div class="rev-card" data-tilt><div class="rev-stars">04</div><div class="rev-text">치과보존과 전문의가 자연치아를 최대한 보존하는 신경치료를 시행합니다.</div><div class="rev-who">신경치료 · 보존</div></div>
-      <div class="rev-card" data-tilt><div class="rev-stars">05</div><div class="rev-text">치료에 필요한 비용은 사전에 투명하게 안내해 드립니다.</div><div class="rev-who">투명한 비용 안내</div></div>
-      <div class="rev-card" data-tilt><div class="rev-stars">06</div><div class="rev-text">치료 이후에도 정기적인 사후관리로 함께하겠습니다.</div><div class="rev-who">사후관리</div></div>
+<section id="s-rev" class="sec sec-paper2">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="sec-label">Guide · 치료 전 안내</span>
+      <h2 class="sec-title"><span class="ph">치료 전,</span> <span class="ph"><em class="gold">충분히</em> 설명드립니다</span></h2>
+    </div>
+    <div class="rev-grid">
+      <div class="rev-card" data-reveal><div class="rev-stars">01</div><div class="rev-text">진단 결과와 치료 계획을 환자분이 이해하실 수 있도록 충분히 설명드립니다.</div><div class="rev-who">정확한 진단 · 설명</div></div>
+      <div class="rev-card" data-reveal><div class="rev-stars">02</div><div class="rev-text">CT 기반 가이드 임플란트로 정확한 위치에 최소 절개를 지향합니다.</div><div class="rev-who">가이드 임플란트</div></div>
+      <div class="rev-card" data-reveal><div class="rev-stars">03</div><div class="rev-text">앞니 심미치료는 전문 기공소와 1:1 협업으로 맞춤 제작합니다.</div><div class="rev-who">앞니 심미치료</div></div>
+      <div class="rev-card" data-reveal><div class="rev-stars">04</div><div class="rev-text">치과보존과 전문의가 자연치아를 최대한 보존하는 신경치료를 시행합니다.</div><div class="rev-who">신경치료 · 보존</div></div>
+      <div class="rev-card" data-reveal><div class="rev-stars">05</div><div class="rev-text">치료에 필요한 비용은 사전에 투명하게 안내해 드립니다.</div><div class="rev-who">투명한 비용 안내</div></div>
+      <div class="rev-card" data-reveal><div class="rev-stars">06</div><div class="rev-text">치료 이후에도 정기적인 사후관리로 함께하겠습니다.</div><div class="rev-who">사후관리</div></div>
     </div>
   </div>
 </section>
 
 <!-- ===== CONTACT ===== -->
-<section id="s-contact" data-glow>
-  <div class="contact-bg">GAON</div>
-  <div class="contact-content">
-    <span class="sec-label" data-scramble-label>Contact</span>
-    <h2 class="sec-title" style="display:inline-block">
-      <span class="line"><span><em class="gold">한 번 더,</em></span></span>
-      <span class="line"><span><em class="gold">제대로</em></span></span>
-      <span class="line"><span><em class="gold">설명</em>드리겠습니다.</span></span>
-    </h2>
-    <div class="contact-btns">
-      <a href="tel:0507-1325-3377" class="contact-btn gold" data-magnet>📞 0507-1325-3377</a>
-      <a href="https://pf.kakao.com/_LLxhwG/chat" target="_blank" rel="noopener" class="contact-btn" data-magnet style="background:#FEE500;color:#3C1E1E">카카오톡 상담</a>
-      <a href="https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC&ackey=2cykehjt" target="_blank" rel="noopener" class="contact-btn green" data-magnet>네이버 예약</a>
-      <a href="https://www.instagram.com/seoulgaondental" target="_blank" rel="noopener" class="contact-btn outline" data-magnet>Instagram</a>
+<section id="s-contact" class="sec contact">
+  <div class="wrap contact-grid">
+    <div class="contact-main">
+      <span class="sec-label">Contact · 상담 예약</span>
+      <h2 class="sec-title"><span class="ph"><em class="gold">한 번 더,</em></span> <span class="ph"><em class="gold">제대로</em> <em class="gold">설명</em>드리겠습니다.</span></h2>
+      <p class="contact-lead">전화, 카카오톡, 네이버 예약 — 편한 방법으로 연락 주세요. 첫 방문은 파노라마 촬영과 검진, 상담까지 약 30~40분이 걸립니다.</p>
+      <div class="contact-btns">
+        <a href="tel:0507-1325-3377" class="btn btn-paper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg> 0507-1325-3377</a>
+        <a href="https://pf.kakao.com/_LLxhwG/chat" target="_blank" rel="noopener" class="btn btn-kakao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H8l-5 3 1.2-4.4A8 8 0 1 1 21 12z"/></svg> 카카오톡 상담</a>
+        <a href="https://booking.naver.com/booking/13/bizes/781025" target="_blank" rel="noopener" class="btn btn-naver">네이버 예약</a>
+        <a href="https://www.instagram.com/seoulgaondental" target="_blank" rel="noopener" class="btn btn-ghost"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg> Instagram</a>
+      </div>
     </div>
     <div class="contact-info" data-reveal>
-      <div><div class="ci-label">Address</div><div class="ci-val">경기 의정부시 용민로 22<br>골드자이프라자 4층<br><span style="font-size:.75rem;color:var(--stone)">(탑석센트럴자이 정문 배스킨라빈스 건물)</span></div></div>
-      <div><div class="ci-label">Hours</div><div class="ci-val">월·화·수·금 09:30–18:30<br>목 09:30–<strong style="color:var(--gold)">20:30</strong> (야간)<br>토 09:30–14:00<br>점심 12:30–14:00<br><span style="font-size:.75rem;color:var(--stone)">일·공휴일 휴진</span></div></div>
+      <div><div class="ci-label">Address</div><div class="ci-val">경기 의정부시 용민로 22<br>골드자이프라자 4층<br><span class="ci-note">(탑석센트럴자이 정문 배스킨라빈스 건물)</span></div></div>
+      <div><div class="ci-label">Hours</div><div class="ci-val">월·화·수·금 09:30–18:30<br>목 09:30–<strong>20:30</strong> (야간)<br>토 09:30–14:00<br>점심 12:30–14:00<br><span class="ci-note">일·공휴일 휴진</span></div></div>
       <div><div class="ci-label">Phone</div><div class="ci-val">0507-1325-3377</div></div>
       <div><div class="ci-label">Parking</div><div class="ci-val">맞은편 제일식자재마트<br>지하주차, 무료쿠폰 제공</div></div>
+      <div class="ci-status"><span class="live-pill" data-status><i></i><span class="txt">진료 시간 확인 중</span></span><a class="ci-map" href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%EA%B0%80%EC%98%A8%EC%B9%98%EA%B3%BC" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg> 네이버 지도에서 길찾기</a></div>
     </div>
   </div>
 </section>
 
-
-<!-- ===== EXPLORE — 사이트 둘러보기 (내부 링크 허브) ===== -->
 <section id="s-explore" aria-label="서울가온치과 둘러보기">
   <span class="sec-label">Explore</span>
   <h2 class="explore-title">서울가온치과 둘러보기</h2>
@@ -1465,24 +916,10 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
     </div>
   </div>
 </section>
-<style>
-#s-explore{padding:clamp(3.5rem,7vh,5.5rem) clamp(1.5rem,4vw,6rem);border-top:1px solid var(--line);background:var(--ink-2)}
-#s-explore .explore-title{font-family:var(--ff-title);font-weight:var(--fw-title);font-size:clamp(1.05rem,1.6vw,1.3rem);color:var(--ivory);margin-bottom:2rem}
-#s-explore .explore-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:2rem 1.5rem;max-width:1200px}
-#s-explore .explore-col h3{font-family:var(--ff-en);font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;font-weight:400}
-#s-explore .explore-col li{margin-bottom:.45rem}
-#s-explore .explore-col a{font-size:.8rem;color:var(--stone-l);letter-spacing:.01em;transition:color .25s}
-#s-explore .explore-col a:hover{color:var(--gold-b)}
-@media(max-width:768px){
-#s-explore .explore-grid{grid-template-columns:repeat(2,1fr);gap:1.6rem 1rem}
-#s-explore .explore-col a{font-size:.78rem}
-}
-</style>
 
-<!-- ===== FOOTER ===== -->
 </main>
 <footer role="contentinfo">
-  <div class="ft-logo">서울가온치과<span style="color:var(--gold)">.</span></div>
+  <div class="ft-logo">서울가온치과<span>.</span></div>
   <p class="ft-slogan">치과 치료가 좋은 기억이 될 수 있도록.</p>
   <div class="ft-biz">
     <span>서울가온치과의원</span><span class="sep">|</span>
@@ -1494,36 +931,16 @@ footer{background:var(--ink);border-top:1px solid var(--line);padding:3rem clamp
   <p class="ft-copy">© 2022–2026 서울가온치과의원. All rights reserved.</p>
 </footer>
 
-<!-- SCRIPTS -->
-<script src="/js/gsap.min.js"></script>
-<script src="/js/ScrollTrigger.min.js"></script>
-<script src="/js/ScrollToPlugin.min.js"></script>
-<script src="/js/main.js"></script>
-<!-- 스크롤 몰입 보완 층 (2026-10-30 미리보기) — 위 GSAP 재사용, Lenis 만 추가 -->
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
-<script src="/static/immersive.js?v=91975eee5b" defer></script>
-
 <!-- ===== KAKAO FLOATING CTA ===== -->
-<div id="kakao-float" onclick="window.open('https://pf.kakao.com/_LLxhwG/chat','_blank')" title="카카오톡 상담">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="32" height="32">
-    <path fill="#3C1E1E" d="M128 36C70.6 36 24 72.8 24 118c0 29.2 19.4 54.8 48.8 69.6l-10 36.8c-.4 1.6.4 2.4 1.6 1.6L106 198c7 1.2 14.4 2 22 2 57.4 0 104-36.8 104-82S185.4 36 128 36z"/>
-  </svg>
+<div id="kakao-float" onclick="window.open('https://pf.kakao.com/_LLxhwG/chat','_blank')" title="카카오톡 상담" role="button" tabindex="0" aria-label="카카오톡 상담">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="30" height="30" aria-hidden="true"><path fill="#3C1E1E" d="M128 36C70.6 36 24 72.8 24 118c0 29.2 19.4 54.8 48.8 69.6l-10 36.8c-.4 1.6.4 2.4 1.6 1.6L106 198c7 1.2 14.4 2 22 2 57.4 0 104-36.8 104-82S185.4 36 128 36z"/></svg>
   <span class="kakao-float-label">상담하기</span>
 </div>
-<style>
-#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s}
-#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(0,0,0,.4)}
-#kakao-float:active{transform:scale(.95)}
-.kakao-float-label{position:absolute;right:72px;background:rgba(5,5,4,.9);color:#F2EDE4;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;letter-spacing:.02em;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(191,164,106,.15)}
-.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(5,5,4,.9)}
-#kakao-float:hover .kakao-float-label{opacity:1;transform:translateX(0)}
-@media(max-width:768px){
-#kakao-float{width:52px;height:52px;bottom:1.2rem;right:1.2rem}
-#kakao-float svg{width:26px;height:26px}
-.kakao-float-label{display:none}
-}
-</style>
 
+<!-- SCRIPTS -->
+<script src="/js/gsap.min.js" defer></script>
+<script src="/js/ScrollTrigger.min.js" defer></script>
+<script src="/static/home.js?v=dev" defer></script>
 <script>
 /* ===== Member Nav (index.html) ===== */
 (function(){

@@ -5,6 +5,7 @@
 <meta name="google-site-verification" content="onzIFMlYzxtJ4ZPiBmecKBQX0OSxqaFZ3GYj8aGsk0w" />
 <meta name="naver-site-verification" content="3acfa2ab85baedd02a79be084c5e8d869112230d" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>(function(){var d=document.documentElement;if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver' in window)d.classList.add('mx')})()</script>
 <link rel="icon" href="/favicon.ico?v=fav20261014" sizes="any">
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png?v=fav20261014">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png?v=fav20261014">
@@ -32,35 +33,32 @@
 <meta name="twitter:title" content="비포 애프터 | 서울가온치과">
 <meta name="twitter:description" content="임플란트, 심미치료(라미네이트·크라운), 레진빌드업 실제 치료 전후 사례. 의정부 서울가온치과.">
 <meta name="twitter:image" content="https://seoulgaondc.kr/images/og-before-after.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
-<link href="style.css" rel="stylesheet">
-<link href="pages.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link href="/style.css?v=dev" rel="stylesheet">
+<link href="/pages.css?v=dev" rel="stylesheet">
 <style>
 /* BA detail modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:none;align-items:center;justify-content:center;padding:2rem;opacity:0;transition:opacity .3s}
+.modal-overlay{position:fixed;inset:0;background:rgba(43,38,34,.26);z-index:9999;display:none;align-items:center;justify-content:center;padding:2rem;opacity:0;transition:opacity .3s}
 .modal-overlay.show{display:flex;opacity:1}
 .modal-box{background:var(--ink-2,#141413);border:1px solid #333;border-radius:16px;max-width:800px;width:100%;max-height:85vh;overflow-y:auto;position:relative}
 .modal-close{position:absolute;top:1rem;right:1rem;width:36px;height:36px;background:rgba(255,255,255,.1);border:none;border-radius:50%;color:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;transition:background .2s}
-.modal-close:hover{background:rgba(191,164,106,.3)}
+.modal-close:hover{background:rgba(62,107,89,.3)}
 .modal-header{padding:2rem 2rem 1rem}
-.modal-tag{font-family:var(--ff-en,'Bebas Neue');font-size:.7rem;letter-spacing:2px;color:var(--gold,#BFA46A);text-transform:uppercase}
+.modal-tag{font-family:var(--ff-en,'Bebas Neue');font-size:.7rem;letter-spacing:2px;color:var(--gold,#3E6B59);text-transform:uppercase}
 .modal-title{font-family:var(--ff-title);font-weight:500;font-size:1.4rem;margin-top:.5rem;line-height:1.35}
 .modal-desc{font-size:.85rem;color:#999;margin-top:.5rem;line-height:1.6}
 .modal-photos{padding:0 2rem 2rem}
 .photo-section{margin-bottom:1.5rem}
-.photo-section-title{font-size:.8rem;color:var(--gold,#BFA46A);font-weight:600;margin-bottom:.8rem;letter-spacing:1px;text-transform:uppercase}
+.photo-section-title{font-size:.8rem;color:var(--gold,#3E6B59);font-weight:600;margin-bottom:.8rem;letter-spacing:1px;text-transform:uppercase}
 .photo-compare{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;position:relative}
-.photo-compare::after{content:'→';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--gold,#BFA46A);color:#0a0a0a;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;z-index:1}
+.photo-compare::after{content:'→';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--gold,#3E6B59);color:#0a0a0a;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;z-index:1}
 .photo-item{position:relative;border-radius:10px;overflow:hidden;cursor:pointer}
 .photo-item img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;transition:transform .3s}
 .photo-item:hover img{transform:scale(1.03)}
-.photo-label{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.7);color:#fff;font-size:.68rem;padding:3px 10px;border-radius:4px;letter-spacing:1px;font-weight:600}
-.photo-label.after{background:var(--gold,#BFA46A);color:#0a0a0a}
+.photo-label{position:absolute;bottom:8px;left:8px;background:rgba(43,38,34,.21);color:#fff;font-size:.68rem;padding:3px 10px;border-radius:4px;letter-spacing:1px;font-weight:600}
+.photo-label.after{background:var(--gold,#3E6B59);color:#0a0a0a}
 /* Lightbox */
-.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10000;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox{position:fixed;inset:0;background:rgba(43,38,34,.28);z-index:10000;display:none;align-items:center;justify-content:center;cursor:zoom-out}
 .lightbox.show{display:flex}
 .lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:4px}
 /* BA card with images override */
@@ -74,7 +72,7 @@
 .ba-img-wrap img{width:100%;height:140px;object-fit:cover;opacity:0;transition:opacity .2s ease}
 .ba-img-wrap img.img-ok{opacity:1;transition:opacity .2s ease,transform .3s}
 .ba-card:hover .ba-img-wrap img.img-ok{transform:scale(1.05)}
-.ba-img-label{position:absolute;bottom:4px;left:4px;font-size:.6rem;background:rgba(0,0,0,.7);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;letter-spacing:.5px}
+.ba-img-label{position:absolute;bottom:4px;left:4px;font-size:.6rem;background:rgba(43,38,34,.21);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;letter-spacing:.5px}
 /* Empty state */
 .empty-state{text-align:center;padding:4rem 2rem;color:#666;font-size:.9rem}
 .empty-state i{font-size:3rem;margin-bottom:1rem;display:block;color:#444}
@@ -84,10 +82,10 @@
 .blur-gate{display:none!important}
 /* Member badge in nav area */
 .member-bar{display:flex;align-items:center;gap:.75rem;justify-content:flex-end;max-width:1100px;margin:0 auto;padding:.5rem clamp(1.5rem,4vw,4rem) 0}
-.member-badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--gold,#BFA46A);padding:.35rem 1rem;border:1px solid rgba(191,164,106,.2);border-radius:100px;background:rgba(191,164,106,.06)}
+.member-badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--gold,#3E6B59);padding:.35rem 1rem;border:1px solid rgba(62,107,89,.2);border-radius:100px;background:rgba(62,107,89,.06)}
 .member-badge i{font-size:.7rem}
-.member-logout{font-size:.75rem;color:#8C8578;cursor:pointer;transition:color .2s;background:none;border:none;padding:.35rem .5rem}
-.member-logout:hover{color:#F2EDE4}
+.member-logout{font-size:.75rem;color:#9C958D;cursor:pointer;transition:color .2s;background:none;border:none;padding:.35rem .5rem}
+.member-logout:hover{color:#2B2622}
 @media(max-width:768px){
   .blur-gate{margin:-4rem 1rem 1.5rem;padding:2rem 1.5rem;border-radius:12px}
   .blur-gate h3{font-size:1.1rem}
@@ -103,11 +101,11 @@
   .blur-gate-btns a{width:100%;justify-content:center}
 }
 /* Doctor badge on BA card */
-.ba-card-doctor{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;color:var(--stone-l,#AFA79D);margin-top:.6rem;padding:.3rem .8rem;background:rgba(191,164,106,.08);border:1px solid rgba(191,164,106,.15);border-radius:100px;transition:all .3s;cursor:pointer}
-.ba-card-doctor:hover{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.ba-card-doctor{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;color:var(--stone-l,#6F6861);margin-top:.6rem;padding:.3rem .8rem;background:rgba(62,107,89,.08);border:1px solid rgba(62,107,89,.15);border-radius:100px;transition:all .3s;cursor:pointer}
+.ba-card-doctor:hover{border-color:var(--gold,#3E6B59);color:var(--gold,#3E6B59)}
 .ba-card-doctor img{width:20px;height:20px;border-radius:50%;object-fit:cover}
-.modal-doctor{display:inline-flex;align-items:center;gap:.5rem;margin-top:.5rem;padding:.4rem 1rem;background:rgba(191,164,106,.08);border:1px solid rgba(191,164,106,.15);border-radius:100px;font-size:.82rem;color:var(--stone-l,#AFA79D);cursor:pointer;transition:all .3s;text-decoration:none}
-.modal-doctor:hover{border-color:var(--gold,#BFA46A);color:var(--gold,#BFA46A)}
+.modal-doctor{display:inline-flex;align-items:center;gap:.5rem;margin-top:.5rem;padding:.4rem 1rem;background:rgba(62,107,89,.08);border:1px solid rgba(62,107,89,.15);border-radius:100px;font-size:.82rem;color:var(--stone-l,#6F6861);cursor:pointer;transition:all .3s;text-decoration:none}
+.modal-doctor:hover{border-color:var(--gold,#3E6B59);color:var(--gold,#3E6B59)}
 .modal-doctor img{width:24px;height:24px;border-radius:50%;object-fit:cover}
 /* ===== MOBILE MODAL/LIGHTBOX ===== */
 @media(max-width:768px){
@@ -215,10 +213,13 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Y0XLCZCP4',{anonymize_ip:true});</script>
 <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yc83x23k72");</script>
 <script defer src="https://pf-dashboard-2nt.pages.dev/beacon.js"></script>
+<link rel="preconnect" href="https://hangeul.pstatic.net" crossorigin>
+<noscript><style>[data-reveal],.page-hero-label,.page-hero h1,.page-hero-sub,.page-tabs{opacity:1!important;transform:none!important}</style></noscript>
+<script src="/static/site.js?v=dev" defer></script>
 </head>
 <body>
-<noscript><div style="background:#BFA46A;color:#050504;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다. 브라우저 설정에서 JavaScript를 활성화해주세요.</div></noscript>
-<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--gold);color:var(--ink);font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--gold,#BFA46A);color:var(--ink,#050504);font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
+<noscript><div style="background:#3E6B59;color:#F5F0E8;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다. 브라우저 설정에서 JavaScript를 활성화해주세요.</div></noscript>
+<a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--gold);color:var(--ink);font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--gold,#3E6B59);color:var(--ink,#F5F0E8);font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문 바로가기</a>
 
 <!-- custom cursor removed -->
 
@@ -290,7 +291,7 @@
 </footer>
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-<script src="pages.js"></script>
+<script src="/pages.js?v=dev"></script>
 <script>
 // ===== MEMBER AUTH CHECK =====
 const MEMBER_TOKEN_KEY = 'gaon_member_token';
@@ -617,11 +618,11 @@ document.addEventListener('keydown', function(e){
   <span class="kakao-float-label">상담하기</span>
 </div>
 <style>
-#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s}
-#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(0,0,0,.4)}
+#kakao-float{position:fixed;bottom:2rem;right:2rem;z-index:9990;width:60px;height:60px;background:#FEE500;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(43,38,34,.09);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s}
+#kakao-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(43,38,34,.12)}
 #kakao-float:active{transform:scale(.95)}
-.kakao-float-label{position:absolute;right:72px;background:rgba(5,5,4,.9);color:#F2EDE4;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;letter-spacing:.02em;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(191,164,106,.15)}
-.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(5,5,4,.9)}
+.kakao-float-label{position:absolute;right:72px;background:rgba(43,38,34,.9);color:#F5F0E8;padding:.4rem .8rem;border-radius:6px;font-size:.75rem;letter-spacing:.02em;white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid rgba(62,107,89,.15)}
+.kakao-float-label::after{content:'';position:absolute;top:50%;right:-6px;transform:translateY(-50%);border:6px solid transparent;border-left-color:rgba(43,38,34,.9)}
 #kakao-float:hover .kakao-float-label{opacity:1;transform:translateX(0)}
 @media(max-width:768px){
 #kakao-float{width:52px;height:52px;bottom:1.2rem;right:1.2rem}

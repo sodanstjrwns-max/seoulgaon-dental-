@@ -31,6 +31,7 @@ function initCursor(){
 
 /* ---------- 3. MOBILE MENU ---------- */
 function initHamburger(){
+  if(document.body.dataset.navBound) return; // site.js 가 이미 묶음
   const btn = document.querySelector('.hamburger');
   const menu = document.querySelector('.mob-menu');
   if(!btn||!menu) return;
@@ -79,7 +80,7 @@ function initHeroEntrance(){
   });
   if(bg){
     bg.style.transition='opacity 1s ease';
-    bg.style.opacity='.04';
+    bg.style.opacity='.08';
   }
 }
 
@@ -233,6 +234,7 @@ function initTilt(){
 
 /* ---------- 13. FOOTER ENTRANCE ---------- */
 function initFooterEntrance(){
+  return; // 2026-11-05 리뉴얼: 푸터 글자를 숨겼다 드러내는 연출 제거(숨은 글자 방지)
   const footer = document.querySelector('footer');
   if(!footer) return;
   const children = footer.children;
@@ -378,6 +380,7 @@ function initFaqNav(){
 
 /* ---------- 16. NAV DROPDOWN — Parent Link Click Navigation ---------- */
 function initDropdownNav(){
+  if(document.body.dataset.dropBound) return; // site.js 가 이미 묶음
   document.querySelectorAll('.nav-link-drop').forEach(wrap=>{
     const parentLink = wrap.querySelector(':scope > a');
     if(!parentLink) return;
