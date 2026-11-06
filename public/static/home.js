@@ -45,6 +45,26 @@
     });
   });
 
+  // ── 히어로 영상(대표원장과 딸 가온, 2026-11-06) — 첫 화면을 늦추지 않게 페이지가 다 뜬 뒤 받는다.
+  //    동작 줄이기·데이터 절약·2G 면 정지 화면(poster)만. 화면 밖이면 멈춰 배터리를 아낀다.
+  (function () {
+    var v = $('.hero-video'); if (!v) return;
+    var conn = navigator.connection || {};
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || conn.saveData || /2g$/.test(conn.effectiveType || '')) return;
+    var started = false, visible = true;
+    function play() { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    function start() {
+      if (started) return; started = true;
+      v.src = v.getAttribute('data-src');
+      if (visible) play();
+    }
+    if (d.readyState === 'complete') setTimeout(start, 200); else w.addEventListener('load', function () { setTimeout(start, 200); });
+    setTimeout(start, 4000);
+    if ('IntersectionObserver' in w) new IntersectionObserver(function (es) {
+      es.forEach(function (e) { visible = e.isIntersecting; if (!started) return; if (visible) play(); else v.pause(); });
+    }).observe(v);
+  })();
+
   var mx = html.classList.contains('mx');
   function done() { html.classList.add('mx-done'); }
   function introDone() { html.classList.add('intro-done'); }
@@ -119,6 +139,12 @@
       paused: true, defaults: { ease: 'power4.out' },
       onComplete: function () { gsap.set(heroCopy.lines.concat(heroCopy.subs, [heroCopy.kicker, heroCopy.btns, heroCopy.foot, heroCopy.meta]).filter(Boolean), { clearProps: 'opacity,transform' }); }
     });
+    var film = $('.hero-film'), wide = matchMedia('(min-width: 901px)').matches;
+    if (film) {
+      if (wide) heroTl.fromTo(film, { opacity: 0, clipPath: 'inset(48% 30% 0% 30% round 999px 999px 18px 18px)' }, { opacity: 1, clipPath: 'inset(0% 0% 0% 0% round 999px 999px 18px 18px)', duration: 1.7, ease: 'power4.inOut' }, 0);
+      else heroTl.fromTo(film, { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: 1.8, ease: 'power3.out' }, 0);
+      heroTl.add(function () { gsap.set(film, { clearProps: 'clipPath,scale' }); film.style.opacity = '1'; }, 1.8);
+    }
     heroTl.to(heroCopy.lines, { yPercent: 0, duration: 1.4, stagger: 0.13 }, 0)
       .to(heroCopy.kicker, { opacity: 1, duration: 0.9 }, 0.25)
       .to(heroCopy.subs, { opacity: 1, y: 0, duration: 1, stagger: 0.11 }, 0.7)
@@ -134,24 +160,28 @@
     } else {
       try { sessionStorage.setItem('sg-intro', '1'); } catch (e) { /* ignore */ }
       var ctl = gsap.timeline({ onComplete: function () { introDone(); curtain.remove(); } });
-      ctl.to('.curtain-mark', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 0)
-        .to('.curtain-sub', { opacity: 1, duration: 0.7 }, 0.3)
-        .to('.curtain-line b', { scaleX: 1, duration: 1.0, ease: 'power2.inOut' }, 0.15)
-        .to('.curtain-in', { y: -28, opacity: 0, duration: 0.5, ease: 'power2.in' }, 1.15)
-        .to(curtain, { clipPath: 'inset(0 0 100% 0)', duration: 1.05, ease: 'power4.inOut' }, 1.3)
-        .add(function () { heroTl.play(); }, 1.5);
+      ctl.to('.curtain-kicker', { opacity: 1, duration: 0.6 }, 0)
+        .to('.curtain-mark', { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.1)
+        .to('.curtain-line b', { scaleX: 1, duration: 1.0, ease: 'power2.inOut' }, 0.3)
+        .to('.curtain-sub', { opacity: 1, duration: 0.7 }, 0.55)
+        .to('.curtain-in', { y: -28, opacity: 0, duration: 0.5, ease: 'power2.in' }, 1.55)
+        .to(curtain, { clipPath: 'inset(0 0 100% 0)', duration: 1.05, ease: 'power4.inOut' }, 1.7)
+        .add(function () { heroTl.play(); }, 1.9);
     }
     // 안전망: 4초 뒤에도 안 끝났으면(백그라운드 탭 등) 끝 상태로
     setTimeout(function () {
       var c = $('.curtain'); if (c) c.remove();
       introDone();
       if (heroTl.progress() < 1) heroTl.progress(1);
-    }, 4000);
+      var f = $('.hero-film'); if (f) { f.style.opacity = '1'; f.style.clipPath = ''; f.style.transform = ''; }
+    }, 4500);
 
     // 히어로가 밀려 올라가며 글이 가라앉고 사진은 느리게
     var heroIn = $('.hero-in'), heroBg = $('.hero-bg img');
     if (heroIn) gsap.to(heroIn, { yPercent: -16, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
     if (heroBg) gsap.to(heroBg, { yPercent: 10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    var heroVid = $('.hero-video');
+    if (heroVid) gsap.to(heroVid, { yPercent: 7, scale: 1.06, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 
     // ── 4) 문(GATE): 아치가 열리고, 주변이 밝아지고, 글이 바뀐다
     var gate = $('.gate'), arch = $('.gate-arch'), archImg = $('.gate-arch img'), paper = $('.gate-paper'), glow = $('.gate-glow'), shade = $('.gate-shade'),
@@ -223,15 +253,39 @@
       ScrollTrigger.create({ trigger: li, start: 'top 92%', once: true, onEnter: function () { li.classList.add('in'); } });
     });
 
-    // ── 8) 이야기: 사진이 아래에서 열리고, 천천히 흐른다
-    var sPhoto = $('.story-photo'), sImg = $('.story-photo img'), sBg = $('.story-bg-text'), sHead = $('.story-headline');
-    if (sPhoto) {
-      gsap.set(sPhoto, { clipPath: 'inset(0% 0% 100% 0% round 999px 999px 18px 18px)' });
-      gsap.to(sPhoto, { clipPath: 'inset(0% 0% 0% 0% round 999px 999px 18px 18px)', duration: 1.5, ease: 'power4.inOut', scrollTrigger: { trigger: sPhoto, start: 'top 80%', once: true } });
+    // ── 8) 이야기(이름의 약속): PC 는 고정 무대 스크럽 — 아치 사진이 열리고, 사전 풀이, 세 문장이 차례로 켜진다
+    var story = $('.story'), sPhoto = $('.story-photo'), sImg = $('.story-photo img'), sBg = $('.story-bg-text'), sHead = $('.story-headline'),
+      sDict = $('.story-dict'), sPs = $$('.story-body p'), sSig = $('.story-signature'), sLabel = $('.story-text .sec-label');
+    function lightUpTo(n) { sPs.forEach(function (p, i) { p.classList.toggle('lit', i < n); }); }
+    if (story && sPhoto) {
+      mm.add('(min-width: 901px)', function () {
+        var tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: story, start: 'top top', end: function () { return '+=' + Math.max(1, story.offsetHeight - w.innerHeight); },
+            scrub: 0.6, invalidateOnRefresh: true,
+            onUpdate: function (st) {
+              var p = st.progress, n = p < 0.42 ? 0 : p < 0.56 ? 1 : p < 0.7 ? 2 : 3;
+              lightUpTo(n);
+            }
+          }
+        });
+        tl.fromTo(sPhoto, { clipPath: 'inset(42% 34% 42% 34% round 999px 999px 999px 999px)' }, { clipPath: 'inset(0% 0% 0% 0% round 999px 999px 18px 18px)', duration: 0.34, ease: 'power2.inOut' }, 0)
+          .fromTo(sImg, { scale: 1.28, yPercent: -9 }, { scale: 1, yPercent: 0, duration: 0.5, ease: 'none' }, 0)
+          .fromTo([sLabel, sHead].filter(Boolean), { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.16, stagger: 0.04 }, 0.06)
+          .fromTo(sDict, { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.12 }, 0.26)
+          .fromTo(sSig, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.1 }, 0.74)
+          .fromTo(sBg, { xPercent: 10 }, { xPercent: -10, duration: 1, ease: 'none' }, 0);
+        return function () { lightUpTo(sPs.length); };
+      });
+      mm.add('(max-width: 900px)', function () {
+        gsap.fromTo(sPhoto, { clipPath: 'inset(0% 0% 100% 0% round 999px 999px 18px 18px)' }, { clipPath: 'inset(0% 0% 0% 0% round 999px 999px 18px 18px)', duration: 1.4, ease: 'power4.inOut', scrollTrigger: { trigger: sPhoto, start: 'top 82%', once: true } });
+        if (sImg) gsap.fromTo(sImg, { yPercent: -9 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: story, start: 'top bottom', end: 'bottom top', scrub: true } });
+        if (sHead) gsap.from($$('.ph', sHead), { opacity: 0, y: 30, duration: 1.1, stagger: 0.14, ease: 'power3.out', scrollTrigger: { trigger: sHead, start: 'top 86%', once: true } });
+        if (sDict) gsap.from(sDict, { opacity: 0, x: -20, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: sDict, start: 'top 88%', once: true } });
+        sPs.forEach(function (p) { ScrollTrigger.create({ trigger: p, start: 'top 78%', once: true, onEnter: function () { p.classList.add('lit'); } }); });
+        if (sBg) gsap.fromTo(sBg, { xPercent: 8 }, { xPercent: -8, ease: 'none', scrollTrigger: { trigger: story, start: 'top bottom', end: 'bottom top', scrub: true } });
+      });
     }
-    if (sImg) gsap.fromTo(sImg, { yPercent: -9 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '.story', start: 'top bottom', end: 'bottom top', scrub: true } });
-    if (sBg) gsap.fromTo(sBg, { xPercent: 8 }, { xPercent: -8, ease: 'none', scrollTrigger: { trigger: '.story', start: 'top bottom', end: 'bottom top', scrub: true } });
-    if (sHead) gsap.from($$('.ph', sHead), { opacity: 0, y: 30, duration: 1.1, stagger: 0.14, ease: 'power3.out', scrollTrigger: { trigger: sHead, start: 'top 85%', once: true } });
 
     // ── 9) 설명이 먼저: 사진은 제자리로, 문장은 지나가며 켜지고, 숫자는 센다
     var cImg = $('.consult-img img');

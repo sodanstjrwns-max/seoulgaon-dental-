@@ -71,6 +71,65 @@ async function submitIndexNow(urls: string[]) {
 //  MIDDLEWARE
 // ══════════════════════════════════════════════════
 
+// ══════════════════════════════════════════════════
+//  엣지 HTML 캐시 (2026-11-06)
+//  D1 이 미국 동부(ENAM)라 DB 를 읽는 페이지는 한국에서 쿼리 왕복마다 ~0.2s.
+//  같은 지역 엣지에 5분 신선(이후엔 낡은 사본을 바로 주고 뒤에서 새로 그림) → 재방문·다른 환자는 즉시.
+//  페이지 내용은 쿠키·로그인과 무관하고 주소(쿼리 포함)로만 달라진다. 관리자 쓰기 시 purgeEdgeHtml 로 비움.
+// ══════════════════════════════════════════════════
+const EDGE_HTML_RE = /^\/(blog|before-after|encyclopedia|notice|guide)(\/[^\/]+)?$|^\/(sitemap[a-z-]*\.xml|rss\.xml|llms-full\.txt)$/
+const EDGE_FRESH_MS = 5 * 60 * 1000
+const edgeRefreshing = new Set<string>()
+function edgeKey(u: string) { return new Request(u, { method: 'GET' }) }
+const EDGE_PURGE_PATHS = ['/blog', '/before-after', '/notice', '/guide', '/encyclopedia',
+  '/sitemap.xml', '/sitemap-pages.xml', '/sitemap-blog.xml', '/sitemap-before-after.xml', '/sitemap-encyclopedia.xml', '/rss.xml', '/llms-full.txt']
+async function purgeEdgeHtml(origin: string, apiPath: string) {
+  const urls = EDGE_PURGE_PATHS.map((p) => origin + p)
+  const m = apiPath.match(/^\/api\/admin\/(blog|before-after)\/(\d+)/)
+  if (m) urls.push(`${origin}/${m[1]}/${m[2]}`)
+  if (apiPath.startsWith('/api/admin/fees')) urls.push(origin + '/guide')
+  await Promise.allSettled(urls.map((u) => caches.default.delete(edgeKey(u))))
+}
+app.use('*', async (c, next) => {
+  const req = c.req.raw
+  if (req.method !== 'GET') return next()
+  const url = new URL(req.url)
+  if (!EDGE_HTML_RE.test(url.pathname) || req.headers.has('Authorization')) return next()
+  const key = edgeKey(url.toString())
+  const isRefresh = req.headers.get('x-edge-refresh') === '1'
+  if (!isRefresh) {
+    const hit = await caches.default.match(key)
+    if (hit) {
+      const stored = Number(hit.headers.get('X-Edge-Stored') || 0)
+      const stale = Date.now() - stored > EDGE_FRESH_MS
+      if (stale && !edgeRefreshing.has(url.toString())) {
+        edgeRefreshing.add(url.toString())
+        c.executionCtx.waitUntil(
+          app.fetch(new Request(url.toString(), { headers: { 'x-edge-refresh': '1' } }), c.env, c.executionCtx)
+            .catch(() => {}).finally(() => edgeRefreshing.delete(url.toString()))
+        )
+      }
+      // 백과사전 조회수는 캐시 적중이어도 뒤에서 올린다(응답은 기다리지 않음)
+      const enc = url.pathname.match(/^\/encyclopedia\/([^\/]+)$/)
+      if (enc) c.executionCtx.waitUntil(c.env.DB.prepare('UPDATE encyclopedia SET view_count = view_count + 1 WHERE slug = ?').bind(decodeURIComponent(enc[1])).run().catch(() => {}))
+      const res = new Response(hit.body, hit)
+      res.headers.set('X-Edge-Cache', stale ? 'STALE' : 'HIT')
+      res.headers.delete('X-Edge-Stored')
+      return res
+    }
+  }
+  await next()
+  const ct = c.res.headers.get('content-type') || ''
+  if (c.res.status === 200 && /text\/html|xml|text\/plain/.test(ct) && !c.res.headers.has('Set-Cookie')) {
+    const copy = new Response(c.res.clone().body, c.res)
+    copy.headers.set('X-Edge-Stored', String(Date.now()))
+    copy.headers.set('Cache-Control', c.res.headers.get('Cache-Control') || 'public, max-age=3600, s-maxage=86400')
+    if (!/s-maxage/.test(copy.headers.get('Cache-Control') || '')) copy.headers.set('Cache-Control', (copy.headers.get('Cache-Control') || 'public') + ', s-maxage=86400')
+    c.executionCtx.waitUntil(caches.default.put(key, copy).catch(() => {}))
+    c.res.headers.set('X-Edge-Cache', isRefresh ? 'REFRESH' : 'MISS')
+  }
+})
+
 // URL 정규화 301 리다이렉트 — 중복 콘텐츠 방지 (끝슬래시 제거, 경로 소문자화)
 // 구글봇이 /encyclopedia/implant/ 또는 /ENCYCLOPEDIA/implant 같은 변형으로
 // 들어오면 SPA fallback(홈)으로 떨어져 canonical이 깨지는 문제를 차단
@@ -233,9 +292,13 @@ async function auth(c: any, next: any) {
 // ══════════════════════════════════════════════════
 //  DATABASE INITIALIZATION
 // ══════════════════════════════════════════════════
+// 2026-11-06: 예전엔 격리 인스턴스가 새로 뜰 때마다 아래 CREATE/ALTER 약 60개를 순서대로 실행했다.
+// D1 이 미국 동부(ENAM)라 한국 방문자 기준 왕복 ~0.2s × 60 → 비포애프터·블로그·이미지 첫 응답이 5~12초.
+// 운영 DB 스키마는 이미 완성(2026-11-06 컬럼 전수 확인) → 요청 경로에서는 아무것도 하지 않고,
+// 새 DB 를 만들 때만 관리자 로그인 후 POST /api/admin/init-schema 로 한 번 실행한다.
 let dbReady = false
-async function initDB(db: D1Database) {
-  if (dbReady) return
+async function initDB(_db: D1Database) { /* no-op — initSchema 참조 */ }
+async function initSchema(db: D1Database) {
   const tables = [
     `CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -404,19 +467,31 @@ async function initDB(db: D1Database) {
     `ALTER TABLE encyclopedia ADD COLUMN faq_q10 TEXT DEFAULT ''`,
     `ALTER TABLE encyclopedia ADD COLUMN faq_a10 TEXT DEFAULT ''`,
   ]
+  const errors: string[] = []
   for (const sql of tables) {
     try { await db.prepare(sql).run() } catch (e: any) {
-      // Index already exists is OK
-      if (!e.message?.includes('already exists')) console.error('[DB INIT]', e.message)
+      // Index already exists / duplicate column is OK
+      if (!/already exists|duplicate column/i.test(e.message || '')) { console.error('[DB INIT]', e.message); errors.push(String(e.message || e)) }
     }
   }
   dbReady = true
+  return errors
 }
 
-// Ensure DB is ready for every API call
+// 새 DB 스키마 준비(관리자 전용, 필요할 때만 수동 실행)
+app.post('/api/admin/init-schema', auth, async (c) => {
+  const errors = await initSchema(c.env.DB)
+  return c.json({ ok: true, errors })
+})
+
+// 관리자 쓰기(POST/PUT/DELETE) 성공 시 이 지역 엣지의 목록·사이트맵 HTML 캐시를 비운다 (2026-11-06)
 app.use('/api/*', async (c, next) => {
-  await initDB(c.env.DB)
   await next()
+  const m = c.req.method
+  if (m === 'GET' || m === 'HEAD' || m === 'OPTIONS' || c.res.status >= 400) return
+  const path = new URL(c.req.url).pathname
+  if (!path.startsWith('/api/admin/')) return
+  c.executionCtx.waitUntil(purgeEdgeHtml(new URL(c.req.url).origin, path))
 })
 
 // ══════════════════════════════════════════════════
@@ -498,12 +573,24 @@ app.post('/api/upload/multiple', auth, async (c) => {
   }
 })
 
+// 화면용 이미지 사본 (2026-11-06) — 원본 PNG 가 장당 ~1.7MB 라 목록 18장이면 11MB.
+// R2 에 v/<폭>/<원본키> 로 WebP 사본을 두고 ?w=640|1600 으로 요청하면 사본을, 없으면 원본을 준다.
+// JSON-LD·OG 같은 검색용 주소는 원본 그대로 둔다.
+const IMG_WIDTHS = [640, 1600]
+function imgV(url: string | null | undefined, w: number): string {
+  if (!url) return ''
+  if (!url.startsWith('/api/images/') || url.includes('?')) return url
+  return `${url}?w=${w}`
+}
+
 // Serve image from R2 — with Cache API for edge caching
 app.get('/api/images/*', async (c) => {
   try {
     const r2 = c.env.R2
     const key = c.req.path.replace('/api/images/', '')
     if (!key) return c.json({ error: 'key 필요' }, 400)
+    const w = parseInt(c.req.query('w') || '0', 10)
+    const want = IMG_WIDTHS.includes(w) ? w : 0
 
     // 1) Check Cache API first (edge cache — no R2 roundtrip)
     const cacheKey = new Request(c.req.url, { method: 'GET' })
@@ -511,8 +598,9 @@ app.get('/api/images/*', async (c) => {
     let cachedResp = await cache.match(cacheKey)
     if (cachedResp) return cachedResp
 
-    // 2) Not in cache — fetch from R2
-    const obj = await r2.get(key)
+    // 2) Not in cache — fetch from R2 (사본 우선, 없으면 원본)
+    const variant = want ? await r2.get(`v/${want}/${key}`) : null
+    const obj = variant || await r2.get(key)
     if (!obj) return c.notFound()
 
     const headers = new Headers()
@@ -523,6 +611,11 @@ app.get('/api/images/*', async (c) => {
     if (obj.etag) headers.set('ETag', obj.etag)
     if (obj.size) headers.set('Content-Length', String(obj.size))
 
+    // 사본을 요청했는데 아직 없으면 원본을 주되 오래 캐시하지 않는다(사본이 생기면 바로 바뀌도록)
+    if (want && !variant) {
+      headers.set('Cache-Control', 'public, max-age=600')
+      headers.set('CDN-Cache-Control', 'public, max-age=600')
+    }
     const resp = new Response(obj.body, { headers })
 
     // 3) Store in Cache API for future requests (non-blocking)
@@ -531,6 +624,24 @@ app.get('/api/images/*', async (c) => {
     return resp
   } catch (e: any) {
     return c.json({ error: '이미지를 불러올 수 없습니다' }, 404)
+  }
+})
+
+// 관리자 화면이 업로드 직후 만든 화면용 사본 저장 (key=원본 R2 키, w=640|1600)
+app.post('/api/upload/variant', auth, async (c) => {
+  try {
+    const fd = await c.req.formData()
+    const file = fd.get('file') as File | null
+    const key = String(fd.get('key') || '')
+    const w = parseInt(String(fd.get('w') || '0'), 10)
+    if (!file || !/^images\/[\w.-]+$/.test(key) || !IMG_WIDTHS.includes(w)) return c.json({ error: '잘못된 요청' }, 400)
+    if (!file.type.startsWith('image/') || file.size > 3 * 1024 * 1024) return c.json({ error: '이미지 3MB 이하' }, 400)
+    await c.env.R2.put(`v/${w}/${key}`, await file.arrayBuffer(), { httpMetadata: { contentType: file.type } })
+    const origin = new URL(c.req.url).origin
+    c.executionCtx.waitUntil(caches.default.delete(new Request(`${origin}/api/images/${key}?w=${w}`, { method: 'GET' })).catch(() => false))
+    return c.json({ ok: true, key: `v/${w}/${key}` })
+  } catch (e: any) {
+    return c.json({ error: '사본 저장 실패: ' + e.message }, 500)
   }
 })
 
@@ -3047,7 +3158,7 @@ app.get('/blog', async (c) => {
 
     const postCards = posts.map((p: any) => {
       const desc = stripHtml(p.content || '').substring(0, 120)
-      const thumb = p.thumbnail_url ? `<img src="${p.thumbnail_url}" alt="${escHtml(p.title)}" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:8px 8px 0 0">` : `<div style="width:100%;height:200px;background:var(--ink);border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center"><i class="fas fa-tooth" style="font-size:3rem;color:var(--gold)"></i></div>`
+      const thumb = p.thumbnail_url ? `<img src="${imgV(p.thumbnail_url, 640)}" alt="${escHtml(p.title)}" loading="lazy" decoding="async" style="width:100%;height:200px;object-fit:cover;border-radius:8px 8px 0 0">` : `<div style="width:100%;height:200px;background:var(--ink);border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center"><i class="fas fa-tooth" style="font-size:3rem;color:var(--gold)"></i></div>`
       return `<a href="/blog/${p.id}" style="text-decoration:none;color:inherit">
         <article style="background:var(--ink);border:1px solid rgba(184,116,26,.15);border-radius:8px;overflow:hidden;transition:transform .2s">
           ${thumb}
@@ -3160,31 +3271,21 @@ app.get('/before-after', async (c) => {
     const whereClause = cat ? `WHERE ba.category = ?` : ''
     const bindParams = cat ? [cat, size, offset] : [size, offset]
 
-    const countSql = cat ? `SELECT COUNT(*) as cnt FROM before_after ba WHERE ba.category = ?` : `SELECT COUNT(*) as cnt FROM before_after ba`
-    const countRow: any = cat
-      ? await db.prepare(countSql).bind(cat).first()
-      : await db.prepare(countSql).first()
-    const total = countRow?.cnt || 0
-    const totalPages = Math.ceil(total / size)
-
-    const result = cat
-      ? await db.prepare(
-          `SELECT ba.id, ba.title, ba.description, ba.category, ba.intraoral_before_url, ba.intraoral_after_url, ba.created_at,
+    // 2026-11-06: 개수·목록·분류 3쿼리를 한 번의 왕복(batch)으로 — D1 이 ENAM 이라 왕복 수가 곧 대기 시간
+    const listSql = `SELECT ba.id, ba.title, ba.description, ba.category, ba.intraoral_before_url, ba.intraoral_after_url, ba.created_at,
                   d.name as doctor_name
            FROM before_after ba LEFT JOIN doctors d ON ba.doctor_id = d.id
            ${whereClause} ORDER BY ba.created_at DESC LIMIT ? OFFSET ?`
-        ).bind(cat, size, offset).all()
-      : await db.prepare(
-          `SELECT ba.id, ba.title, ba.description, ba.category, ba.intraoral_before_url, ba.intraoral_after_url, ba.created_at,
-                  d.name as doctor_name
-           FROM before_after ba LEFT JOIN doctors d ON ba.doctor_id = d.id
-           ORDER BY ba.created_at DESC LIMIT ? OFFSET ?`
-        ).bind(size, offset).all()
-
+    const [countRs, result, catResult] = await db.batch([
+      cat ? db.prepare(`SELECT COUNT(*) as cnt FROM before_after ba WHERE ba.category = ?`).bind(cat) : db.prepare(`SELECT COUNT(*) as cnt FROM before_after ba`),
+      db.prepare(listSql).bind(...bindParams),
+      db.prepare(`SELECT DISTINCT category FROM before_after ORDER BY category`),
+    ])
+    const countRow: any = (countRs.results || [])[0]
+    const total = countRow?.cnt || 0
+    const totalPages = Math.ceil(total / size)
     const cases = result.results || []
 
-    // 카테고리 목록 가져오기
-    const catResult = await db.prepare(`SELECT DISTINCT category FROM before_after ORDER BY category`).all()
     const categories = (catResult.results || []).map((r: any) => r.category)
 
     const catButtons = [`<a href="/before-after" style="padding:.4rem .8rem;border-radius:4px;font-size:.85rem;text-decoration:none;${!cat ? 'background:var(--gold);color:#fff' : 'background:rgba(184,116,26,.15);color:var(--gold)'}">전체</a>`]
@@ -3199,8 +3300,8 @@ app.get('/before-after', async (c) => {
       const imgAttrs = eager
         ? 'loading="eager" fetchpriority="high" decoding="async"'
         : 'loading="lazy" fetchpriority="low" decoding="async"'
-      const beforeImg = ba.intraoral_before_url ? `<img src="${ba.intraoral_before_url}" alt="치료 전 - ${escHtml(ba.title)}" ${imgAttrs} width="300" height="160" style="width:50%;height:160px;object-fit:cover">` : `<div style="width:50%;height:160px;background:#333;display:flex;align-items:center;justify-content:center"><span style="color:#666">Before</span></div>`
-      const afterImg = ba.intraoral_after_url ? `<img src="${ba.intraoral_after_url}" alt="치료 후 - ${escHtml(ba.title)}" ${imgAttrs} width="300" height="160" style="width:50%;height:160px;object-fit:cover">` : `<div style="width:50%;height:160px;background:#333;display:flex;align-items:center;justify-content:center"><span style="color:#666">After</span></div>`
+      const beforeImg = ba.intraoral_before_url ? `<img src="${imgV(ba.intraoral_before_url, 640)}" alt="치료 전 - ${escHtml(ba.title)}" ${imgAttrs} width="300" height="160" style="width:50%;height:160px;object-fit:cover">` : `<div style="width:50%;height:160px;background:#333;display:flex;align-items:center;justify-content:center"><span style="color:#666">Before</span></div>`
+      const afterImg = ba.intraoral_after_url ? `<img src="${imgV(ba.intraoral_after_url, 640)}" alt="치료 후 - ${escHtml(ba.title)}" ${imgAttrs} width="300" height="160" style="width:50%;height:160px;object-fit:cover">` : `<div style="width:50%;height:160px;background:#333;display:flex;align-items:center;justify-content:center"><span style="color:#666">After</span></div>`
       return `<a href="/before-after/${ba.id}" style="text-decoration:none;color:inherit">
         <article style="background:var(--ink);border:1px solid rgba(184,116,26,.15);border-radius:8px;overflow:hidden">
           <div style="display:flex">${beforeImg}${afterImg}</div>
@@ -3710,14 +3811,14 @@ app.get('/before-after/:id', async (c) => {
     let imagesHtml = ''
     if (item.intraoral_before_url || item.intraoral_after_url) {
       imagesHtml += `<section class="ba-compare"><h2><i class="fas fa-teeth"></i> 구강 내 사진</h2><div class="ba-pair">`
-      if (item.intraoral_before_url) imagesHtml += `<figure><img src="${escHtml(item.intraoral_before_url)}" alt="${escHtml(item.category || '치과')} 치료 전 — 구강 내 사진" loading="lazy" width="600" height="400"><figcaption>Before</figcaption></figure>`
-      if (item.intraoral_after_url) imagesHtml += `<figure><img src="${escHtml(item.intraoral_after_url)}" alt="${escHtml(item.category || '치과')} 치료 후 — 구강 내 사진" loading="lazy" width="600" height="400"><figcaption>After</figcaption></figure>`
+      if (item.intraoral_before_url) imagesHtml += `<figure><img src="${escHtml(imgV(item.intraoral_before_url, 1600))}" alt="${escHtml(item.category || '치과')} 치료 전 — 구강 내 사진" loading="lazy" width="600" height="400"><figcaption>Before</figcaption></figure>`
+      if (item.intraoral_after_url) imagesHtml += `<figure><img src="${escHtml(imgV(item.intraoral_after_url, 1600))}" alt="${escHtml(item.category || '치과')} 치료 후 — 구강 내 사진" loading="lazy" width="600" height="400"><figcaption>After</figcaption></figure>`
       imagesHtml += `</div></section>`
     }
     if (item.panorama_before_url || item.panorama_after_url) {
       imagesHtml += `<section class="ba-compare"><h2><i class="fas fa-x-ray"></i> 파노라마 사진</h2><div class="ba-pair">`
-      if (item.panorama_before_url) imagesHtml += `<figure><img src="${escHtml(item.panorama_before_url)}" alt="${escHtml(item.category || '치과')} 치료 전 — 파노라마" loading="lazy" width="600" height="300"><figcaption>Before</figcaption></figure>`
-      if (item.panorama_after_url) imagesHtml += `<figure><img src="${escHtml(item.panorama_after_url)}" alt="${escHtml(item.category || '치과')} 치료 후 — 파노라마" loading="lazy" width="600" height="300"><figcaption>After</figcaption></figure>`
+      if (item.panorama_before_url) imagesHtml += `<figure><img src="${escHtml(imgV(item.panorama_before_url, 1600))}" alt="${escHtml(item.category || '치과')} 치료 전 — 파노라마" loading="lazy" width="600" height="300"><figcaption>Before</figcaption></figure>`
+      if (item.panorama_after_url) imagesHtml += `<figure><img src="${escHtml(imgV(item.panorama_after_url, 1600))}" alt="${escHtml(item.category || '치과')} 치료 후 — 파노라마" loading="lazy" width="600" height="300"><figcaption>After</figcaption></figure>`
       imagesHtml += `</div></section>`
     }
 
@@ -6097,6 +6198,7 @@ const FEE_SEED: FeeSeedItem[] = [
 
 let feesReady = false
 async function ensureFees(db: D1Database) {
+  if (feesReady) return
   await db.prepare(`CREATE TABLE IF NOT EXISTS fee_items (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     category TEXT NOT NULL DEFAULT '기타',

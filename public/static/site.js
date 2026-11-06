@@ -159,4 +159,42 @@
     t.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
     if (history.replaceState) history.replaceState(null, '', a.getAttribute('href'));
   });
+
+  // ── 페이지 미리 받기 (2026-11-06) — 메뉴·카드를 누르기 직전에 다음 페이지 HTML 을 받아 둬 이동이 바로 열린다.
+  //    크롬·엣지·삼성 인터넷: Speculation Rules(마우스를 올리거나 누르기 시작할 때).
+  //    사파리 등: 손가락이 닿거나 마우스가 올라가면 한 번만 받아 둔다(HTML 은 브라우저 캐시 1시간).
+  //    데이터 절약 모드면 하지 않는다. 관리자·API·새 창·다운로드 링크는 제외.
+  (function () {
+    var conn = navigator.connection || {};
+    if (conn.saveData || /2g$/.test(conn.effectiveType || '')) return;
+    try {
+      if (w.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules')) {
+        var sr = d.createElement('script');
+        sr.type = 'speculationrules';
+        sr.textContent = JSON.stringify({ prefetch: [{ source: 'document', eagerness: 'moderate', where: { and: [
+          { href_matches: '/*' },
+          { not: { href_matches: ['/admin*', '/api/*', '/*.xml', '/*.txt'] } },
+          { not: { selector_matches: '[target=_blank],[download],[rel~=nofollow]' } }
+        ] } }] });
+        d.head.appendChild(sr);
+        return;
+      }
+    } catch (e) { /* 지원 안 함 → 아래 방식 */ }
+    var warmed = {};
+    function warm(e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+      if (!a || a.target === '_blank' || a.hasAttribute('download')) return;
+      var u; try { u = new URL(a.href, location.href); } catch (er) { return; }
+      if (u.origin !== location.origin || /^\/(admin|api)(\/|$)/.test(u.pathname) || /\.(xml|txt|pdf|jpe?g|png|webp|mp4)$/i.test(u.pathname)) return;
+      if (u.pathname === location.pathname && u.search === location.search) return;
+      var k = u.pathname + u.search;
+      if (warmed[k]) return;
+      warmed[k] = 1;
+      var l = d.createElement('link');
+      if (l.relList && l.relList.supports && l.relList.supports('prefetch')) { l.rel = 'prefetch'; l.href = k; d.head.appendChild(l); }
+      else if (w.fetch) fetch(k, { credentials: 'same-origin' }).catch(function () {});
+    }
+    d.addEventListener('touchstart', warm, { passive: true, capture: true });
+    d.addEventListener('mouseover', warm, { passive: true, capture: true });
+  })();
 })();

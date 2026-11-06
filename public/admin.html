@@ -894,6 +894,28 @@ function resizeImage(file, maxWidth=1600, quality=0.85){
   });
 }
 
+function loadImageEl(file){
+  return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=URL.createObjectURL(file);});
+}
+function canvasBlob(canvas,type,q){return new Promise(r=>canvas.toBlob(r,type,q));}
+async function uploadImageVariants(file,key){
+  if(!file||!file.type||!file.type.startsWith('image/')||/gif|svg/.test(file.type))return;
+  const img=await loadImageEl(file);
+  for(const w of [640,1600]){
+    const cw=Math.min(w,img.naturalWidth||img.width), ch=Math.round((img.naturalHeight||img.height)*cw/(img.naturalWidth||img.width));
+    if(!cw||!ch)continue;
+    const canvas=document.createElement('canvas');canvas.width=cw;canvas.height=ch;
+    canvas.getContext('2d').drawImage(img,0,0,cw,ch);
+    let blob=await canvasBlob(canvas,'image/webp',0.8);
+    if(!blob||blob.type!=='image/webp')blob=await canvasBlob(canvas,'image/jpeg',0.82); // WebP 인코딩이 없는 브라우저
+    if(!blob)continue;
+    const fd=new FormData();
+    fd.append('file',new File([blob],'v'+w+(blob.type==='image/webp'?'.webp':'.jpg'),{type:blob.type}));
+    fd.append('key',key);fd.append('w',String(w));
+    await fetch('/api/upload/variant',{method:'POST',headers:uploadHeaders(),body:fd}).catch(()=>{});
+  }
+}
+
 async function uploadFileToR2(file){
   try{
     const resized=await resizeImage(file);
@@ -903,7 +925,10 @@ async function uploadFileToR2(file){
     const r=await fetch('/api/upload',{method:'POST',headers:uploadHeaders(),body:fd,signal:controller.signal});
     clearTimeout(timeout);
     if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.error||'Upload failed ('+r.status+')')}
-    return r.json();
+    const out=await r.json();
+    // 2026-11-06: 홈페이지 화면용 가벼운 사본(640·1600px WebP)도 함께 저장 — 목록·상세가 원본 대신 사본을 씀
+    if(out&&out.key) await uploadImageVariants(file,out.key).catch(()=>{});
+    return out;
   }catch(e){
     if(e.name==='AbortError') throw new Error('업로드 시간 초과. 파일 크기를 확인해주세요.');
     throw e;

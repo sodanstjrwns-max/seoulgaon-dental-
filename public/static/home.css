@@ -26,11 +26,12 @@
 .curtain{position:fixed;inset:0;z-index:99995;background:var(--night);display:none;align-items:center;justify-content:center;color:var(--on-night);will-change:clip-path}
 html.mx:not(.intro-done) .curtain{display:flex}
 .curtain-in{display:flex;flex-direction:column;align-items:center;gap:1.2rem;transform:translateY(0)}
-.curtain-mark{font-family:var(--ff-display);font-weight:800;font-size:clamp(1.7rem,3.2vw,2.6rem);letter-spacing:-.02em;opacity:0;transform:translateY(14px)}
+.curtain-kicker{font-family:var(--ff-mono);font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--on-night-3);opacity:0}
+.curtain-mark{font-family:var(--ff-display);font-weight:800;font-size:clamp(4.6rem,13vw,10rem);line-height:.95;letter-spacing:-.05em;opacity:0;transform:translateY(24px)}
 .curtain-mark i{color:var(--amber);font-style:normal}
 .curtain-line{width:min(58vw,340px);height:1px;background:var(--line-n2);position:relative;overflow:hidden}
 .curtain-line::after{content:'';position:absolute;inset:0;background:var(--amber);transform:scaleX(0);transform-origin:left}
-.curtain-sub{font-family:var(--ff-mono);font-size:.66rem;letter-spacing:.24em;color:var(--on-night-3);text-transform:uppercase;opacity:0}
+.curtain-sub{font-family:var(--ff-display);font-weight:500;font-size:clamp(1.05rem,1.9vw,1.4rem);letter-spacing:-.01em;color:var(--on-night-2);opacity:0}
 /* ===== 그레인 ===== */
 .grain{display:none;position:fixed;left:-50%;top:-50%;width:200%;height:200%;pointer-events:none;z-index:9950;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:240px 240px;animation:grain 1.4s steps(7) infinite}
 html.mx .grain{display:block}
@@ -40,7 +41,7 @@ html.mx .grain{display:block}
 /* ===== HERO — 밤 ===== */
 .hero{position:relative;min-height:100svh;background:var(--night);color:var(--on-night);overflow:clip;display:flex;flex-direction:column;justify-content:flex-end;padding-top:var(--nav-h)}
 .hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
-.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:60% 55%;opacity:.26;filter:saturate(.7) contrast(1.05);transform:scale(1.06);animation:heroDrift 14s var(--ease) both}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;opacity:.55;transform:scale(1.1);animation:heroDrift 14s var(--ease) both}
 html:not(.mx) .hero-bg img{animation:none;transform:none}
 @keyframes heroDrift{from{transform:scale(1.14)}to{transform:scale(1.03)}}
 .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,16,.55) 0%,rgba(11,13,16,.2) 40%,rgba(11,13,16,.78) 78%,var(--night) 100%),radial-gradient(60% 50% at 70% 42%,rgba(233,162,59,.14),transparent 70%)}
@@ -68,6 +69,18 @@ html:not(.mx) .hero-bg img{animation:none;transform:none}
 .hero-scroll i::after{content:'';position:absolute;left:0;top:0;width:100%;height:50%;background:var(--amber);animation:scrollHint 1.8s var(--ease-io) infinite}
 @keyframes scrollHint{0%{transform:translateY(-100%)}60%,100%{transform:translateY(220%)}}
 .hero-meta{position:absolute;z-index:2;right:clamp(1.25rem,4vw,3.5rem);top:calc(var(--nav-h) + 1.4rem);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--on-night-3);writing-mode:vertical-rl;transform:rotate(180deg)}
+/* 히어로 영상 — 대표원장과 딸 가온(옛 첫 화면 영상). PC 는 오른쪽 아치, 900px 이하는 화면 가득 */
+.hero{--film-h:min(calc(100svh - var(--nav-h) - 200px),760px);--film-w:calc(var(--film-h) * 9 / 16);--film-r:clamp(3.5rem,7vw,7.5rem)}
+.hero-film{position:absolute;z-index:1;right:var(--film-r);top:calc(var(--nav-h) + 2.4vh);width:var(--film-w);height:var(--film-h);margin:0;border-radius:var(--arch);overflow:hidden;background:#15181d url(/images/gaon-dance-poster.webp) center/cover no-repeat;box-shadow:0 60px 120px -50px rgba(0,0,0,.9),0 0 0 1px rgba(243,239,231,.08)}
+.hero-video{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 50%}
+.hero-film::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,16,0) 55%,rgba(11,13,16,.55) 100%);pointer-events:none}
+.hero-film figcaption{position:absolute;z-index:2;left:50%;bottom:1.1rem;transform:translateX(-50%);white-space:nowrap}
+.hero-film figcaption a{display:inline-flex;align-items:center;gap:.6rem;font-size:.8rem;font-weight:600;color:var(--on-night);background:rgba(11,13,16,.55);padding:.5rem .95rem;border-radius:100px;border:1px solid rgba(243,239,231,.14);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:border-color .3s,color .3s}
+.hero-film figcaption a:hover{border-color:var(--amber);color:var(--amber)}
+.hero-film figcaption .mono{font-family:var(--ff-mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);font-weight:500}
+@media(min-width:901px){.hero-in{padding-right:calc(var(--film-w) + var(--film-r) + 2rem)}.hero-meta{right:calc(var(--film-r) * .32)}}
+html.mx:not(.intro-done) .hero-film{opacity:0}
+
 /* 연출 시작 상태 */
 html.mx:not(.intro-done) .hero-kicker,html.mx:not(.intro-done) .hero-btns,html.mx:not(.intro-done) .hero-foot,html.mx:not(.intro-done) .hero-meta{opacity:0}
 html.mx:not(.intro-done) .ln > .ph{transform:translateY(112%)}
@@ -163,24 +176,37 @@ html.mx .ub-cards li.in{opacity:1;transform:none;transition:opacity .9s var(--ea
 html.mx .ub-cards li:nth-child(2).in{transition-delay:.08s}html.mx .ub-cards li:nth-child(3).in{transition-delay:.16s}html.mx .ub-cards li:nth-child(4).in{transition-delay:.06s}html.mx .ub-cards li:nth-child(5).in{transition-delay:.14s}html.mx .ub-cards li:nth-child(6).in{transition-delay:.22s}
 html.mx.mx-done .ub-cards li{opacity:1;transform:none}
 
-/* ===== STORY — 밤 ===== */
-.story{position:relative;overflow:clip;padding:clamp(6rem,12vw,10rem) 0}
-.story::before{content:'';position:absolute;inset:0;background:radial-gradient(50% 60% at 80% 30%,rgba(233,162,59,.12),transparent 70%);pointer-events:none}
+/* ===== STORY — 밤 · 이름의 약속 (히어로 바로 다음) =====
+   PC+연출: 섹션 230vh 안의 100svh 무대가 고정 → 아치 사진이 열리고, 사전 풀이가 뜨고, 세 문장이 차례로 켜진다 */
+.story{position:relative;overflow:clip;background:var(--night);color:var(--on-night)}
+.story::before{content:'';position:absolute;inset:0;background:radial-gradient(50% 60% at 22% 40%,rgba(233,162,59,.13),transparent 70%);pointer-events:none}
+.story-stage{position:relative;padding:clamp(5.5rem,11vw,9rem) 0}
 .story-bg-text{position:absolute;right:-2vw;top:8%;font-family:var(--ff-display);font-weight:800;font-size:clamp(12rem,34vw,32rem);line-height:1;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1px rgba(243,239,231,.1);pointer-events:none;user-select:none;white-space:nowrap}
-.story-grid{position:relative;display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(2.5rem,6vw,6rem);align-items:center}
+.story-grid{position:relative;display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(2.5rem,6vw,6rem);align-items:center}
 .story-photo{position:relative;margin:0;border-radius:var(--arch);overflow:hidden;aspect-ratio:3/4;background:var(--night-3);box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}
 .story-photo img{width:100%;height:118%;object-fit:cover;object-position:50% 30%;will-change:transform}
-html.mx .story-photo{clip-path:inset(0 0 100% 0 round 999px 999px 18px 18px)}
 .story-photo figcaption{position:absolute;left:1.1rem;bottom:1.1rem;font-family:var(--ff-mono);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--on-night);background:rgba(11,13,16,.55);padding:.42rem .8rem;border-radius:100px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .story-text .sec-label{margin-bottom:1.2rem}
-.story-headline{font-size:clamp(2.2rem,5vw,4.6rem);line-height:1.08;letter-spacing:-.04em;color:var(--on-night);margin-bottom:1.8rem}
+.story-headline{font-size:clamp(2.2rem,5vw,4.6rem);line-height:1.08;letter-spacing:-.04em;color:var(--on-night);margin-bottom:1.6rem}
 .story-headline em.gold{color:var(--amber)}
-.story-body p{font-size:clamp(1rem,1.25vw,1.15rem);color:var(--on-night-2);line-height:1.9;margin-bottom:1.1rem;max-width:52ch}
+.story-dict{display:grid;grid-template-columns:auto 1fr;align-items:baseline;gap:.2rem 1rem;padding:1rem 1.2rem;margin-bottom:1.6rem;border:1px solid var(--line-n);border-left:2px solid var(--amber);border-radius:0 12px 12px 0;background:rgba(243,239,231,.03);max-width:30rem}
+.story-dict b{font-family:var(--ff-display);font-weight:800;font-size:1.9rem;letter-spacing:-.03em;color:var(--on-night);grid-row:span 2;line-height:1}
+.story-dict .mono{font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber)}
+.story-dict i{font-style:normal;font-family:var(--ff-display);font-weight:500;font-size:1.05rem;color:var(--on-night-2)}
+.story-body p{font-size:clamp(1rem,1.25vw,1.15rem);color:var(--on-night-2);line-height:1.85;margin-bottom:1rem;max-width:52ch;transition:opacity .5s var(--ease),color .5s var(--ease)}
 .story-body em{font-style:normal;color:var(--on-night);font-weight:600}
-.story-signature{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--line-n);display:flex;align-items:baseline;gap:1rem}
+html.mx .story-body p{opacity:.24}
+html.mx .story-body p.lit{opacity:1;color:var(--on-night)}
+.story-signature{margin-top:1.8rem;padding-top:1.3rem;border-top:1px solid var(--line-n);display:flex;align-items:baseline;gap:1rem}
 .story-signature-name{font-family:var(--ff-display);font-weight:700;font-size:1.3rem;color:var(--on-night)}
 .story-signature-name em{color:var(--amber);font-size:.8em;font-style:normal}
 .story-signature-role{font-family:var(--ff-mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--on-night-3)}
+@media(min-width:901px){
+  html.mx .story{height:230vh}
+  html.mx .story-stage{position:sticky;top:0;height:100svh;padding:calc(var(--nav-h) + 1rem) 0 1.5rem;display:flex;align-items:center}
+  html.mx .story-stage > .wrap{width:100%}
+  .story-photo{height:min(74svh,700px);width:auto;aspect-ratio:3/4;max-width:100%;justify-self:center}
+}
 
 /* ===== CONSULT — 설명이 먼저 (낮, 사진 고정) ===== */
 .consult{background:var(--bone);position:relative}
@@ -305,6 +331,10 @@ html.mx .faq-item[open] .faq-a-inner{animation:faqIn .5s var(--ease-out)}
 
 /* ===== CONTACT — 밤 ===== */
 .contact{background:var(--night);color:var(--on-night);position:relative;overflow:clip;padding-top:0}
+.contact-bg{position:absolute;inset:0;pointer-events:none}
+.contact-bg img{width:100%;height:100%;object-fit:cover;opacity:.5}
+.contact-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,var(--night) 0%,rgba(11,13,16,.6) 40%,rgba(11,13,16,.85) 100%)}
+.contact .marquee,.contact .wrap{position:relative}
 .contact::before{content:'';position:absolute;right:-10%;bottom:-30%;width:70vmax;height:70vmax;border-radius:50%;background:radial-gradient(closest-side,rgba(233,162,59,.12),transparent 70%);pointer-events:none}
 .marquee{overflow:hidden;border-bottom:1px solid var(--line-n);padding:1rem 0;margin-bottom:clamp(4rem,8vw,7rem);white-space:nowrap}
 .marquee-in{display:inline-flex;gap:3rem;font-family:var(--ff-mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--on-night-3);padding-right:3rem;will-change:transform}
@@ -346,6 +376,13 @@ html.mx .marquee-in{animation:marquee 36s linear infinite}
 @media(max-width:900px){
   .hero{min-height:100svh}
   .hero-meta{display:none}
+  .hero-bg{display:none}
+  .hero-film{inset:0;top:0;right:0;width:100%;height:100%;border-radius:0;box-shadow:none}
+  .hero-film::after{background:linear-gradient(180deg,rgba(11,13,16,.62) 0%,rgba(11,13,16,.3) 18%,rgba(11,13,16,.62) 34%,rgba(11,13,16,.82) 52%,rgba(11,13,16,.9) 72%,var(--night) 100%)}
+  .hero-film figcaption{left:auto;right:1.1rem;bottom:auto;top:calc(var(--nav-h) + .8rem);transform:none}
+  .hero-film figcaption a{font-size:.72rem;padding:.42rem .8rem}
+  .hero-kicker,.hero-h,.hero-sub{text-shadow:0 1px 14px rgba(11,13,16,.75),0 0 2px rgba(11,13,16,.5)}
+  .story-stage{padding:clamp(4.5rem,14vw,6rem) 0}
   .tx-head{grid-template-columns:1fr}
   .tx-panel{grid-template-columns:1fr;min-height:0;padding-top:3rem;padding-bottom:3rem;gap:2rem}
   .tx-photo{justify-self:start;width:100%;max-height:none;aspect-ratio:4/3;order:-1}
@@ -354,6 +391,7 @@ html.mx .marquee-in{animation:marquee 36s linear infinite}
   .ub-cards{grid-template-columns:1fr 1fr}
   .story-grid{grid-template-columns:1fr}
   .story-photo{max-width:440px;aspect-ratio:4/5}
+  .story-dict{max-width:100%}
   .consult-wrap{grid-template-columns:1fr;min-height:0}
   html.mx .consult-img{position:relative;top:auto;height:56vh}
   .consult-img::after{background:linear-gradient(180deg,rgba(243,239,231,0) 70%,var(--bone) 100%)}

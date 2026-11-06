@@ -39,7 +39,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="preload" as="image" href="/images/real-lobby-2.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="/images/gaon-dance-poster.webp" type="image/webp" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500..800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/style.css?v=dev">
@@ -354,7 +354,7 @@
 <body>
 <a href="#main-content" class="skip-to-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:1rem;background:var(--amber);color:#0B0D10;font-weight:700;text-decoration:none;border-radius:0 0 8px 0" onfocus="this.style.cssText='position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;z-index:10000;padding:1rem;background:var(--amber);color:#0B0D10;font-weight:700;text-decoration:none;border-radius:0 0 8px 0'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden'">본문으로 바로가기</a>
 <div id="progressBar" aria-hidden="true"></div>
-<div class="curtain" aria-hidden="true"><div class="curtain-in"><span class="curtain-mark">서울가온치과<i>.</i></span><span class="curtain-line"><b style="position:absolute;inset:0;background:var(--amber);transform:scaleX(0);transform-origin:left"></b></span><span class="curtain-sub">Seoul Gaon Dental Clinic · Uijeongbu</span></div></div>
+<div class="curtain" aria-hidden="true"><div class="curtain-in"><span class="curtain-kicker">Seoul Gaon Dental Clinic</span><span class="curtain-mark">가온<i>.</i></span><span class="curtain-line"><b style="position:absolute;inset:0;background:var(--amber);transform:scaleX(0);transform-origin:left"></b></span><span class="curtain-sub">딸 아이의 이름입니다</span></div></div>
 <div class="grain" aria-hidden="true"></div>
 
 <!-- NAVIGATION -->
@@ -427,8 +427,12 @@
 
 <!-- ===== HERO — 밤 ===== -->
 <section id="top" class="hero" data-theme="night">
-  <div class="hero-bg" aria-hidden="true"><img src="/images/real-lobby-2.jpg" width="1024" height="682" alt="" fetchpriority="high" decoding="async"></div>
+  <div class="hero-bg" aria-hidden="true"><img src="/images/gaon-dance-blur.webp" width="1280" height="720" alt="" decoding="async"></div>
   <div class="hero-leak" aria-hidden="true"></div>
+  <figure class="hero-film" data-cursor="가온">
+    <video class="hero-video" muted playsinline loop preload="none" poster="/images/gaon-dance-poster.webp" data-src="/videos/gaon-dance.mp4" width="480" height="854" aria-hidden="true" tabindex="-1"></video>
+    <figcaption><a href="#s-story"><span class="mono">with 가온</span> 딸 아이의 이름</a></figcaption>
+  </figure>
   <div class="hero-meta mono" aria-hidden="true">Uijeongbu · Topseok Stn. Exit 1 · 5 min</div>
   <div class="wrap hero-in">
     <p class="hero-kicker"><a href="/uijeongbu-dental">의정부 치과</a> 서울가온치과 · 탑석역 1번 출구 도보 5분</p>
@@ -449,6 +453,31 @@
     </ul>
     <div class="hero-scroll" aria-hidden="true"><span>Scroll</span><i></i></div>
   </div>
+</section>
+
+<!-- ===== STORY — 밤 ===== -->
+<section id="s-story" class="sec-night story" data-theme="night">
+  <div class="story-bg-text" aria-hidden="true">가온</div>
+  <div class="story-stage"><div class="wrap story-grid">
+    <figure class="story-photo" data-cursor="가온">
+      <img src="/images/story-daughter.webp" width="768" height="1024" loading="lazy" decoding="async" alt="아버지와 딸 가온">
+      <figcaption>with 가온</figcaption>
+    </figure>
+    <div class="story-text">
+      <span class="sec-label">Our Story · 이름의 약속</span>
+      <h2 class="story-headline"><span class="ph"><em class="gold">딸 아이</em>의 이름이</span> <span class="ph">부끄럽지 않게.</span></h2>
+      <p class="story-dict" aria-hidden="true"><b>가온</b><span class="mono">순우리말 · 명사</span><i>가운데, 세상의 중심.</i></p>
+      <div class="story-body">
+        <p>'<em>가온</em>'은 제 딸 아이의 이름입니다. 순우리말로 '<em>세상의 중심</em>'이라는 뜻을 가지고 있습니다.</p>
+        <p>아이의 이름을 치과에 붙인 이유는 단 하나 — 내 가족에게 <em>부끄럽지 않은 치료</em>를 하겠다는 약속입니다.</p>
+        <p><em>100세까지</em>, 가족처럼 곁에서 함께하는 치과. 그것이 <em>서울가온치과</em>가 존재하는 이유입니다.</p>
+      </div>
+      <div class="story-signature">
+        <p class="story-signature-name">현진호 <em>대표원장</em></p>
+        <p class="story-signature-role">Seoul Gaon Dental Clinic</p>
+      </div>
+    </div>
+  </div></div>
 </section>
 
 <!-- ===== GATE — 문을 열면 (진료 철학) ===== -->
@@ -582,30 +611,6 @@
       <p class="sec-lead">탑석역 1번 출구 도보 약 5분. 많이 찾으시는 진료 여섯 가지를 사진과 함께 정리했습니다. <a href="/uijeongbu-dental">의정부 치과 종합 안내 →</a></p>
     </div>
     <ul class="ub-cards" role="list"><li><a class="ub-card" href="/implant" aria-labelledby="home-implant"><span class="ub-card-img"><img src="/images/cards/uijeongbu-implant-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 임플란트"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">01 / IMPLANT</span><strong class="ub-card-title" id="home-implant">의정부 임플란트</strong><span class="ub-card-line">CT로 뼈 두께와 신경 위치를 보고 계획하는 가이드 임플란트, 현진호 대표원장 수술</span></span></a></li><li><a class="ub-card" href="/endodontics" aria-labelledby="home-endodontics"><span class="ub-card-img"><img src="/images/cards/uijeongbu-endodontics-v2-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 신경치료"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">02 / ROOT CANAL</span><strong class="ub-card-title" id="home-endodontics">의정부 신경치료</strong><span class="ub-card-line">서울대 치과보존과 전문의 조은비 원장이 신경관 구조를 확인하며 직접 치료합니다</span></span></a></li><li><a class="ub-card" href="/laminate" aria-labelledby="home-laminate"><span class="ub-card-img"><img src="/images/cards/uijeongbu-laminate-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 라미네이트"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">03 / LAMINATE</span><strong class="ub-card-title" id="home-laminate">의정부 라미네이트</strong><span class="ub-card-line">변색·벌어짐·왜소치 앞니를 최소 삭제 라미네이트로 다듬습니다</span></span></a></li><li><a class="ub-card" href="/cavity-treatment" aria-labelledby="home-cavity-treatment"><span class="ub-card-img"><img src="/images/cards/uijeongbu-cavity-treatment-v2-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 충치치료"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">04 / CAVITY</span><strong class="ub-card-title" id="home-cavity-treatment">의정부 충치치료</strong><span class="ub-card-line">충치 부위만 덜어내고 건강한 치아는 최대한 남기는 레진 치료</span></span></a></li><li><a class="ub-card" href="/bone-graft-implant" aria-labelledby="home-bone-graft-implant"><span class="ub-card-img"><img src="/images/cards/uijeongbu-bone-graft-implant-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 뼈이식 임플란트"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">05 / BONE GRAFT</span><strong class="ub-card-title" id="home-bone-graft-implant">의정부 뼈이식 임플란트</strong><span class="ub-card-line">뼈가 부족한 자리는 뼈이식·상악동거상술로 식립 조건부터 만듭니다</span></span></a></li><li><a class="ub-card" href="/full-mouth-implant" aria-labelledby="home-full-mouth-implant"><span class="ub-card-img"><img src="/images/cards/uijeongbu-full-mouth-implant-600.webp" width="600" height="600" loading="lazy" decoding="async" alt="의정부 전체임플란트"></span><span class="ub-card-body"><span class="ub-card-tag" aria-hidden="true">06 / FULL ARCH</span><strong class="ub-card-title" id="home-full-mouth-implant">의정부 전체임플란트</strong><span class="ub-card-line">이가 거의 남지 않았을 때, 틀니 대신 위아래 전악 임플란트 계획</span></span></a></li></ul>
-  </div>
-</section>
-
-<!-- ===== STORY — 밤 ===== -->
-<section id="s-story" class="sec sec-night story" data-theme="night">
-  <div class="story-bg-text" aria-hidden="true">가온</div>
-  <div class="wrap story-grid">
-    <figure class="story-photo" data-cursor="가온">
-      <img src="/images/story-daughter.jpg" width="768" height="1024" loading="lazy" decoding="async" alt="아버지와 딸 가온">
-      <figcaption>with 가온</figcaption>
-    </figure>
-    <div class="story-text">
-      <span class="sec-label">Our Story · 이름의 약속</span>
-      <h2 class="story-headline"><span class="ph"><em class="gold">딸 아이</em>의 이름이</span> <span class="ph">부끄럽지 않게.</span></h2>
-      <div class="story-body">
-        <p data-reveal>'<em>가온</em>'은 제 딸 아이의 이름입니다. 순우리말로 '<em>세상의 중심</em>'이라는 뜻을 가지고 있습니다.</p>
-        <p data-reveal>아이의 이름을 치과에 붙인 이유는 단 하나 — 내 가족에게 <em>부끄럽지 않은 치료</em>를 하겠다는 약속입니다.</p>
-        <p data-reveal><em>100세까지</em>, 가족처럼 곁에서 함께하는 치과. 그것이 <em>서울가온치과</em>가 존재하는 이유입니다.</p>
-      </div>
-      <div class="story-signature" data-reveal>
-        <p class="story-signature-name">현진호 <em>대표원장</em></p>
-        <p class="story-signature-role">Seoul Gaon Dental Clinic</p>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -820,7 +825,8 @@
 
 <!-- ===== CONTACT — 밤 ===== -->
 <section id="s-contact" class="sec sec-night contact" data-theme="night">
-  <div class="marquee" aria-hidden="true"><div class="marquee-in"><span>Seoul Gaon Dental Clinic</span><span>의정부 치과</span><span>탑석역 1번 출구 도보 5분</span><span>목요일 야간 20:30</span><span>토요일 진료</span><span>가이드 임플란트 · 앞니 심미 · 신경치료</span><span>Seoul Gaon Dental Clinic</span><span>의정부 치과</span><span>탑석역 1번 출구 도보 5분</span><span>목요일 야간 20:30</span><span>토요일 진료</span><span>가이드 임플란트 · 앞니 심미 · 신경치료</span></div></div>
+  <div class="contact-bg" aria-hidden="true"><img src="/images/gaon-dance-blur.webp" width="1280" height="720" alt="" loading="lazy" decoding="async"></div>
+  <div class="marquee" aria-hidden="true"><div class="marquee-in"><span>Seoul Gaon Dental Clinic</span><span>의정부 치과</span><span>탑석역 1번 출구 도보 5분</span><span>목요일 야간 20:30</span><span>토요일 진료</span><span>가이드 임플란트 · 앞니 심미 · 신경치료</span><span>가온 — 딸 아이의 이름</span><span>100세까지, 가족처럼</span><span>Seoul Gaon Dental Clinic</span><span>의정부 치과</span><span>탑석역 1번 출구 도보 5분</span><span>목요일 야간 20:30</span><span>토요일 진료</span><span>가이드 임플란트 · 앞니 심미 · 신경치료</span><span>가온 — 딸 아이의 이름</span><span>100세까지, 가족처럼</span></div></div>
   <div class="wrap contact-grid">
     <div class="contact-main">
       <span class="sec-label">Contact · 상담 예약</span>
