@@ -80,7 +80,10 @@ async function submitIndexNow(urls: string[]) {
 const EDGE_HTML_RE = /^\/(blog|before-after|encyclopedia|notice|guide)(\/[^\/]+)?$|^\/(sitemap[a-z-]*\.xml|rss\.xml|llms-full\.txt)$/
 const EDGE_FRESH_MS = 5 * 60 * 1000
 const edgeRefreshing = new Set<string>()
-function edgeKey(u: string) { return new Request(u, { method: 'GET' }) }
+declare const __BUILD_ID__: string
+const EDGE_BUILD = typeof __BUILD_ID__ === 'string' ? __BUILD_ID__ : 'dev'
+// 배포가 바뀌면 키도 바뀐다 → 새 배포 직후 옛 HTML 이 남지 않음
+function edgeKey(u: string) { return new Request(u + (u.includes('?') ? '&' : '?') + '__edge=' + EDGE_BUILD, { method: 'GET' }) }
 const EDGE_PURGE_PATHS = ['/blog', '/before-after', '/notice', '/guide', '/encyclopedia',
   '/sitemap.xml', '/sitemap-pages.xml', '/sitemap-blog.xml', '/sitemap-before-after.xml', '/sitemap-encyclopedia.xml', '/rss.xml', '/llms-full.txt']
 async function purgeEdgeHtml(origin: string, apiPath: string) {
@@ -3227,7 +3230,7 @@ ${cat ? '<meta name="robots" content="noindex, follow">' : ''}
 </head>
 <body>
 ${NAV_HTML}
-<main style="max-width:1100px;margin:0 auto;padding:2rem 1rem">
+<main style="max-width:1100px;margin:0 auto;padding:calc(var(--nav-h, 76px) + 2rem) 1rem 2rem">
   <h1 style="font-family:var(--ff-title);font-size:2rem;color:var(--ivory);margin-bottom:.5rem"><i class="fas fa-blog" style="color:var(--gold)"></i> 서울가온치과 블로그</h1>
   <p style="color:var(--stone-l);margin-bottom:1.5rem">치과 건강 정보와 치료 이야기를 쉽고 정직하게 전합니다. <strong>${total}개</strong>의 글</p>
   <nav aria-label="블로그 카테고리" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem">${catLinks}</nav>
@@ -3366,7 +3369,7 @@ ${cat ? '<meta name="robots" content="noindex, follow">' : ''}
 </head>
 <body>
 ${NAV_HTML}
-<main style="max-width:1100px;margin:0 auto;padding:2rem 1rem">
+<main style="max-width:1100px;margin:0 auto;padding:calc(var(--nav-h, 76px) + 2rem) 1rem 2rem">
   <h1 style="font-family:var(--ff-title);font-size:2rem;color:var(--ivory);margin-bottom:.5rem"><i class="fas fa-images" style="color:var(--gold)"></i> 치료 전후 비포&amp;애프터</h1>
   <p style="color:var(--stone-l);margin-bottom:1.5rem">실제 치료 결과를 사진으로 확인하세요. <strong>${total}건</strong>의 사례</p>
   <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem">${catButtons}</div>
