@@ -142,7 +142,7 @@
     var film = $('.hero-film'), wide = matchMedia('(min-width: 901px)').matches;
     if (film) {
       if (wide) heroTl.fromTo(film, { opacity: 0, clipPath: 'inset(48% 30% 0% 30% round 999px 999px 18px 18px)' }, { opacity: 1, clipPath: 'inset(0% 0% 0% 0% round 999px 999px 18px 18px)', duration: 1.7, ease: 'power4.inOut' }, 0);
-      else heroTl.fromTo(film, { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: 1.8, ease: 'power3.out' }, 0);
+      else heroTl.fromTo(film, { scale: 1.08 }, { scale: 1, duration: 1.8, ease: 'power3.out' }, 0);
       heroTl.add(function () { gsap.set(film, { clearProps: 'clipPath,scale' }); film.style.opacity = '1'; }, 1.8);
     }
     heroTl.to(heroCopy.lines, { yPercent: 0, duration: 1.4, stagger: 0.13 }, 0)

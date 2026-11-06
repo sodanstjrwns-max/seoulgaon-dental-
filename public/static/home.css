@@ -79,7 +79,8 @@ html:not(.mx) .hero-bg img{animation:none;transform:none}
 .hero-film figcaption a:hover{border-color:var(--amber);color:var(--amber)}
 .hero-film figcaption .mono{font-family:var(--ff-mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);font-weight:500}
 @media(min-width:901px){.hero-in{padding-right:calc(var(--film-w) + var(--film-r) + 2rem)}.hero-meta{right:calc(var(--film-r) * .32)}}
-html.mx:not(.intro-done) .hero-film{opacity:0}
+/* PC 아치만 처음에 숨겨 틈에서 열리게. 모바일은 커튼 밑에서 이미 보이게(정지 화면이 곧 LCP → 첫 화면 측정 빨라짐) */
+@media(min-width:901px){html.mx:not(.intro-done) .hero-film{opacity:0}}
 
 /* 연출 시작 상태 */
 html.mx:not(.intro-done) .hero-kicker,html.mx:not(.intro-done) .hero-btns,html.mx:not(.intro-done) .hero-foot,html.mx:not(.intro-done) .hero-meta{opacity:0}
