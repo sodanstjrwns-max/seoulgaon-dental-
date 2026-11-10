@@ -108,12 +108,13 @@ app.use('*', async (c, next) => {
 // ══════════════════════════════════════════════════
 const GOOGLE_CRAWLER_RE = /googlebot|google-inspectiontool/i  // Google-Extended·GoogleOther·AdsBot·Mediapartners 는 대상 아님
 // 지역·진료 조합 랜딩(LANDING_PAGES) 중 구글에 남기는 것: 병원 소재 지역 대표 허브 + 가장 가까운 역
-const GOOGLE_KEEP_LANDINGS = new Set(['uijeongbu-dental', 'tapseok-dental'])
+// + 신경치료(/endodontics) — 이 병원 대표 진료인데 다른 진료 상세 페이지가 없어 진료 상세로 남긴다
+const GOOGLE_KEEP_LANDINGS = new Set(['uijeongbu-dental', 'tapseok-dental', 'endodontics'])
 /** 구글에만 검색 제외할 경로인가 (대상 구역 판정은 이 함수 한 곳) */
 function isGoogleHiddenPath(pathname: string): boolean {
   // 1) 백과사전 구역 전체(목록 포함)
   if (pathname === '/encyclopedia' || pathname.startsWith('/encyclopedia/')) return true
-  // 2) 코드 배열(LANDING_PAGES)로 찍어 낸 "의정부 + 진료" 랜딩 묶음 — 대표 허브 2개만 남김
+  // 2) 코드 배열(LANDING_PAGES)로 찍어 낸 "의정부 + 진료" 랜딩 묶음 — GOOGLE_KEEP_LANDINGS 3개만 남김
   const seg = pathname.match(/^\/([a-z0-9-]+)$/)
   if (seg && !GOOGLE_KEEP_LANDINGS.has(seg[1]) && LANDING_PAGES.some((p) => p.slug === seg[1])) return true
   // 3) 대행사가 초기 셋업 때 같은 초에 일괄 삽입한 예시 글(AGENCY_SEED_POST_IDS). 그 밖의 칼럼은 관리자 화면에서 발행된 글이라 남긴다.
