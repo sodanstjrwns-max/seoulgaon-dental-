@@ -2708,6 +2708,50 @@ ${sitemapLastmodLine(e.lastmod)}    <changefreq>monthly</changefreq>
   }
 })
 
+// ══ llms 표준 "병원 정보" 블록 (2026-11-10 SEO·AEO 1차 정비) ══
+// 블록 원본은 public/llms.txt 의 "## 병원 정보" 절 한 곳이다. /llms-full.txt 는 그 절을 읽어 맨 위에 싣는다.
+// 수가는 정적 파일에 적지 않는다 — 원장이 관리자 수가표에서 공개(is_published=1)해 둔 항목만 /llms.txt 요청 때 끼워 넣으므로
+// 비공개로 돌리면 여기서도 바로 빠진다. DB 오류 때는 수가 줄 없이 정적 파일 그대로 나간다.
+// (/llms-full.txt 는 최대 하루 캐시되므로 수가 줄을 싣지 않는다.)
+const LLMS_FEE_PICKS: Array<[string, string]> = [
+  ['임플란트', '오스템 SA'], ['임플란트', '덴티스'], ['임플란트', '오스템 SOI'],
+  ['보철', '지르코니아 크라운 (구치)'], ['보철', '라미네이트'], ['레진 빌드업', '1급'],
+]
+async function llmsFeeLines(db: D1Database): Promise<string> {
+  try {
+    await ensureFees(db)
+    const rs = await db.prepare('SELECT category, name, price, note FROM fee_items WHERE is_published = 1 AND is_nhi = 0 ORDER BY sort_order ASC, id ASC').all()
+    const items = ((rs.results as any[]) || []).filter((it) => String(it.price || '').trim() && it.category !== '제증명서류')
+    const picked: any[] = []
+    for (const [cat, name] of LLMS_FEE_PICKS) { const hit = items.find((it) => it.category === cat && it.name === name); if (hit) picked.push(hit) }
+    // 항목 이름이 바뀌어 3개가 안 되면 공개 항목 앞에서부터 채운다
+    for (const it of items) { if (picked.length >= 3) break; if (!picked.includes(it)) picked.push(it) }
+    if (!picked.length) return ''
+    const line = (it: any) => `  - ${it.category} · ${it.name}: ${it.price}${it.note ? ` (${it.note})` : ''}`
+    return `- 주요 비급여 진료비 (${SITE}/guide 수가표에 공개된 값 그대로, 검사 뒤 치료 계획에 따라 달라질 수 있음):\n${picked.map(line).join('\n')}\n`
+  } catch { return '' }
+}
+function llmsWithFees(txt: string, fees: string): string {
+  if (!fees) return txt
+  const i = txt.indexOf('\n- 최종 확인일:')
+  return i < 0 ? txt : txt.slice(0, i + 1) + fees + txt.slice(i + 1)
+}
+async function llmsStaticText(c: any): Promise<string> {
+  const r = await c.env.ASSETS.fetch(new Request(new URL('/llms.txt', c.req.url).toString()))
+  return r.status === 200 ? await r.text() : ''
+}
+app.get('/llms.txt', async (c) => {
+  try {
+    const txt = await llmsStaticText(c)
+    if (!txt) return c.env.ASSETS.fetch(c.req.raw)
+    return new Response(llmsWithFees(txt, await llmsFeeLines(c.env.DB)), {
+      headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'public, max-age=0, must-revalidate', 'Access-Control-Allow-Origin': '*' },
+    })
+  } catch {
+    return c.env.ASSETS.fetch(c.req.raw)
+  }
+})
+
 // ── llms-full.txt: 전체 백과사전 풀덤프 (AI 크롤러가 한 번에 전체 지식 수집) ──
 app.get('/llms-full.txt', async (c) => {
   try {
@@ -2735,6 +2779,11 @@ app.get('/llms-full.txt', async (c) => {
 # Last updated: ${lastUpdated}
 
 `
+    // 표준 "병원 정보" 블록 — public/llms.txt 의 같은 절을 그대로 싣는다 (2026-11-10)
+    try {
+      const m = (await llmsStaticText(c)).match(/## 병원 정보\n[\s\S]*?(?=\n## )/)
+      if (m) out += m[0].trim() + '\n\n'
+    } catch { /* 블록 없이도 백과 덤프는 정상 */ }
     let currentCat = ''
     for (const e of entries) {
       if (e.category !== currentCat) {

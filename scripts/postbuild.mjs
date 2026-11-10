@@ -36,13 +36,14 @@ for (const f of readdirSync(DIST)) {
 const wk = join(DIST, '_worker.js')
 if (existsSync(wk)) { writeFileSync(wk, bust(readFileSync(wk, 'utf8'))); worker = true }
 
-// _routes.json: SSR 로 넘길 html(블로그·BA·백과·sitemap) 은 exclude 에서 빼고, 정적으로 둘 랜딩 html·llms.txt 는 넣는다
+// _routes.json: SSR 로 넘길 html(블로그·BA·백과·sitemap) 은 exclude 에서 빼고, 정적으로 둘 랜딩 html 은 넣는다
 const rp = join(DIST, '_routes.json')
 if (existsSync(rp)) {
   const d = JSON.parse(readFileSync(rp, 'utf8'))
   d.exclude = d.exclude.filter((x) => x !== '/sitemap.xml' && x !== '/blog-post.html' && x !== '/blog.html' && x !== '/before-after.html' && x !== '/encyclopedia.html')
   for (const p of ['aesthetic', 'resin-buildup', 'implant']) if (!d.exclude.includes('/' + p + '.html')) d.exclude.push('/' + p + '.html')
-  if (!d.exclude.includes('/llms.txt')) d.exclude.push('/llms.txt')
+  // /llms.txt 는 워커가 맡는다 — 정적 파일에 공개 수가(관리자 수가표 is_published=1)를 끼워 넣음 (2026-11-10)
+  d.exclude = d.exclude.filter((x) => x !== '/llms.txt')
   writeFileSync(rp, JSON.stringify(d))
 }
 console.log(`postbuild: ${pages} html, worker=${worker}, versions=${JSON.stringify(versions)}`)

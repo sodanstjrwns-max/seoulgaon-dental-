@@ -232,19 +232,34 @@
 {
   "@context": "https://schema.org",
   "@type": "MedicalWebPage",
+  "@id": "https://seoulgaondc.kr/doctors#webpage",
   "name": "서울가온치과 의료진 소개",
   "description": "현진호 대표원장과 조은비 원장. 서울대 출신 전문의 두 분이 직접 진료합니다.",
   "url": "https://seoulgaondc.kr/doctors",
+  "inLanguage": "ko",
+  "isPartOf": {
+    "@type": "WebSite",
+    "@id": "https://seoulgaondc.kr/#website",
+    "name": "서울가온치과",
+    "url": "https://seoulgaondc.kr"
+  },
+  "about": {
+    "@id": "https://seoulgaondc.kr/#clinic"
+  },
+  "dateModified": "2026-04-09",
   "mainEntity": [
     {
       "@type": "Physician",
       "@id": "https://seoulgaondc.kr/doctors#hyun-jinho",
       "name": "현진호",
-      "jobTitle": "대표원장",
+      "jobTitle": "대표원장 (통합치의학과 전문의)",
       "description": "서울대학교 치의학과 졸업. 통합치의학과 전문의. 임플란트·앞니 심미치료 중점 진료. 오스템 임플란트 증례 금상.",
+      "url": "https://seoulgaondc.kr/doctors",
+      "image": "https://seoulgaondc.kr/images/real-dr-hyun.jpg",
       "medicalSpecialty": [
-        "Implantology",
-        "Cosmetic Dentistry"
+        "통합치의학과",
+        "임플란트",
+        "앞니 심미치료"
       ],
       "alumniOf": [
         {
@@ -264,52 +279,17 @@
         {
           "@type": "Organization",
           "name": "대한치과보존학회"
+        },
+        {
+          "@type": "Organization",
+          "name": "대한구강악안면임플란트학회"
         }
       ],
       "worksFor": {
         "@type": "Dentist",
         "@id": "https://seoulgaondc.kr/#clinic",
         "name": "서울가온치과의원",
-        "url": "https://seoulgaondc.kr",
-        "telephone": "0507-1325-3377",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "용민로 22, 골드자이프라자 4층",
-          "addressLocality": "의정부시",
-          "addressRegion": "경기도",
-          "postalCode": "11786",
-          "addressCountry": "KR"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": 37.7388,
-          "longitude": 127.056
-        },
-        "openingHoursSpecification": [
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": [
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Friday"
-            ],
-            "opens": "09:30",
-            "closes": "18:30"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "Thursday",
-            "opens": "09:30",
-            "closes": "20:30"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "Saturday",
-            "opens": "09:30",
-            "closes": "14:00"
-          }
-        ]
+        "url": "https://seoulgaondc.kr"
       }
     },
     {
@@ -318,9 +298,12 @@
       "name": "조은비",
       "jobTitle": "원장 · 치과보존과 전문의",
       "description": "서울대학교 치의학과 졸업. 서울대 치의학대학원 박사 수료. 치과보존과 전문의 · 통합치의학과 전문의. 자연치아 보존 전문.",
+      "url": "https://seoulgaondc.kr/doctors",
+      "image": "https://seoulgaondc.kr/images/real-dr-cho.jpg",
       "medicalSpecialty": [
-        "Endodontics",
-        "Conservative Dentistry"
+        "치과보존과",
+        "신경치료(근관치료)",
+        "보존치료"
       ],
       "alumniOf": [
         {
@@ -346,49 +329,19 @@
         "@type": "Dentist",
         "@id": "https://seoulgaondc.kr/#clinic",
         "name": "서울가온치과의원",
-        "url": "https://seoulgaondc.kr",
-        "telephone": "0507-1325-3377",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "용민로 22, 골드자이프라자 4층",
-          "addressLocality": "의정부시",
-          "addressRegion": "경기도",
-          "postalCode": "11786",
-          "addressCountry": "KR"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": 37.7388,
-          "longitude": 127.056
-        },
-        "openingHoursSpecification": [
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": [
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Friday"
-            ],
-            "opens": "09:30",
-            "closes": "18:30"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "Thursday",
-            "opens": "09:30",
-            "closes": "20:30"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "Saturday",
-            "opens": "09:30",
-            "closes": "14:00"
-          }
-        ]
+        "url": "https://seoulgaondc.kr"
       }
     }
-  ]
+  ],
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [
+      "h1",
+      ".dir-hero-name",
+      ".dir-origin-title",
+      "h4"
+    ]
+  }
 }
 </script>
 <script type="application/ld+json">
@@ -453,43 +406,6 @@
       "item": "https://seoulgaondc.kr/doctors"
     }
   ]
-}
-</script>
-<!-- AEO: Speakable + WebPage -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "MedicalWebPage",
-  "name": "서울가온치과 의료진 소개 — 현진호 대표원장, 조은비 원장",
-  "description": "서울대 치의학과 졸업 현진호 대표원장과 서울대 치과보존과 전문의 조은비 원장이 직접 진료합니다.",
-  "url": "https://seoulgaondc.kr/doctors",
-  "inLanguage": "ko",
-  "dateModified": "2026-04-09",
-  "mainEntity": [
-    {
-      "@type": "Physician",
-      "@id": "https://seoulgaondc.kr/doctors#hyun-jinho",
-      "name": "현진호",
-      "jobTitle": "대표원장",
-      "medicalSpecialty": "Implantology"
-    },
-    {
-      "@type": "Physician",
-      "@id": "https://seoulgaondc.kr/doctors#jo-eunbi",
-      "name": "조은비",
-      "jobTitle": "원장",
-      "medicalSpecialty": "Endodontics"
-    }
-  ],
-  "speakable": {
-    "@type": "SpeakableSpecification",
-    "cssSelector": [
-      "h1",
-      ".dir-hero-name",
-      ".dir-origin-title",
-      "h4"
-    ]
-  }
 }
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y0XLCZCP4"></script>

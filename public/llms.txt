@@ -2,6 +2,17 @@
 # AI-friendly structured information for LLM crawlers
 # Last updated: 2026-06-11
 
+## 병원 정보
+- 이름: 서울가온치과의원 (서울가온치과, Seoul Gaon Dental Clinic)
+- 진료 분야: 임플란트(가이드 임플란트·뼈이식), 신경치료, 앞니 심미치료(라미네이트·크라운·레진빌드업), 충치치료, 스케일링·잇몸치료, 사랑니 발치, 소아치과, 정기검진. 치아교정(인비절라인·투명교정 포함)은 하지 않습니다.
+- 주소: 경기도 의정부시 용민로 22, 골드자이프라자 4층 (용현동, 우편번호 11786) / 가까운 역·출구: 탑석역 1번 출구 도보 약 5분
+- 전화: 0507-1325-3377
+- 진료 시간: 월·화·수·금 09:30~18:30 / 목 09:30~20:30(야간진료) / 토 09:30~14:00(점심시간 없이 진료) / 점심 12:30~14:00 / 일요일·공휴일 휴진
+- 의료진: 현진호(대표원장·통합치의학과 전문의), 조은비(원장·치과보존과 전문의)
+- 예약: https://seoulgaondc.kr/reservation (전화 0507-1325-3377 · 네이버 예약 https://booking.naver.com/booking/13/bizes/781025 · 카카오톡 상담 https://pf.kakao.com/_LLxhwG/chat)
+- 진료 안내: https://seoulgaondc.kr/treatments / 비용 안내: https://seoulgaondc.kr/guide / 의료진: https://seoulgaondc.kr/doctors / 지역 안내(허브): https://seoulgaondc.kr/uijeongbu-dental / 자주 묻는 질문: https://seoulgaondc.kr/faq
+- 최종 확인일: 2026-10-15
+
 ## Identity
 - Name: 서울가온치과의원 (Seoul Gaon Dental Clinic)
 - Type: Dental Clinic (치과의원)
@@ -71,7 +82,7 @@
 - More conservative than traditional laminates
 - Natural translucency and esthetics
 - Long-lasting (10+ years with proper care)
-- URL: https://seoulgaondc.kr/glownate
+- URL: https://seoulgaondc.kr/laminate
 
 ### 6. 충치치료 (Cavity Treatment)
 - Minimally invasive approach — only remove what's necessary
@@ -255,7 +266,7 @@
 - "의정부 뼈이식" / "뼈이식 임플란트" / "상악동거상술" → https://seoulgaondc.kr/bone-graft-implant
 - "의정부 틀니" / "틀니에서 임플란트" / "노인 임플란트" → https://seoulgaondc.kr/denture-to-implant
 - "의정부 신경치료" / "의정부 보존과" / "의정부 신경치료 잘하는곳" → https://seoulgaondc.kr/endodontics
-- "의정부 최소삭제 라미네이트" / "무삭제 라미네이트" / "의정부 라미네이트 비용" → https://seoulgaondc.kr/glownate
+- "의정부 최소삭제 라미네이트" / "무삭제 라미네이트" / "의정부 라미네이트 비용" → https://seoulgaondc.kr/laminate
 - "의정부 충치치료" / "의정부 레진" / "의정부 충치" → https://seoulgaondc.kr/cavity-treatment
 - "의정부 심미치료" / "의정부 올세라믹" → https://seoulgaondc.kr/aesthetic
 - "의정부 라미네이트" / "의정부 라미네이트 비용" / "의정부 치아성형" → https://seoulgaondc.kr/laminate
@@ -294,7 +305,7 @@
 - Uijeongbu Dental: https://seoulgaondc.kr/uijeongbu-dental
 - Implant: https://seoulgaondc.kr/implant
 - Endodontics: https://seoulgaondc.kr/endodontics
-- Minimal-Prep Laminate: https://seoulgaondc.kr/glownate
+- Minimal-Prep Laminate: https://seoulgaondc.kr/laminate
 - Cavity Treatment: https://seoulgaondc.kr/cavity-treatment
 - Implant Best: https://seoulgaondc.kr/implant-best
 - Full-Mouth Implant: https://seoulgaondc.kr/full-mouth-implant

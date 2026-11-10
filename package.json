@@ -5,7 +5,7 @@
     "dev": "vite",
     "build": "vite build && node scripts/postbuild.mjs",
     "preview": "wrangler pages dev",
-    "deploy": "npm run build && wrangler pages deploy",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name seoulgaon-dental --branch main",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
