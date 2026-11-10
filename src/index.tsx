@@ -72,6 +72,28 @@ async function submitIndexNow(urls: string[]) {
 // ══════════════════════════════════════════════════
 
 // ══════════════════════════════════════════════════
+//  pages.dev 복제 주소 정리 (2026-11-10)
+//  운영 프로젝트 기본 주소(seoulgaon-dental.pages.dev)가 운영 사이트를 200·색인 허용으로 그대로 보여 줘 검색 신호가 갈렸다.
+//   · 기본 주소(정확히 이 호스트)의 GET/HEAD → https://seoulgaondc.kr 같은 경로·쿼리로 301
+//   · 배포 해시·브랜치 미리보기(<x>.seoulgaon-dental.pages.dev) → 검증용이라 301 없이 X-Robots-Tag: noindex, nofollow
+//  반드시 아래 엣지 HTML 캐시보다 먼저 등록한다 — noindex 는 캐시에서 꺼낸 뒤 바깥에서 붙이므로 캐시 사본에 저장되지 않고,
+//  캐시 키에도 호스트가 들어 있어(edgeKey = 전체 URL) 운영 도메인 응답으로 새지 않는다.
+//  워커를 거치지 않는 정적 파일(_routes.json exclude)은 public/_headers 가 같은 일을 한다.
+// ══════════════════════════════════════════════════
+const PAGES_DEV_HOST = 'seoulgaon-dental.pages.dev'
+const CANONICAL_ORIGIN = 'https://seoulgaondc.kr'
+app.use('*', async (c, next) => {
+  const url = new URL(c.req.url)
+  const host = url.hostname.toLowerCase()
+  if (host !== PAGES_DEV_HOST && !host.endsWith('.' + PAGES_DEV_HOST)) return next()
+  if (host === PAGES_DEV_HOST && (c.req.method === 'GET' || c.req.method === 'HEAD')) {
+    return c.redirect(CANONICAL_ORIGIN + url.pathname + url.search, 301)
+  }
+  await next()
+  c.header('X-Robots-Tag', 'noindex, nofollow')
+})
+
+// ══════════════════════════════════════════════════
 //  엣지 HTML 캐시 (2026-11-06)
 //  D1 이 미국 동부(ENAM)라 DB 를 읽는 페이지는 한국에서 쿼리 왕복마다 ~0.2s.
 //  같은 지역 엣지에 5분 신선(이후엔 낡은 사본을 바로 주고 뒤에서 새로 그림) → 재방문·다른 환자는 즉시.

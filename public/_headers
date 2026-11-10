@@ -1,0 +1,7 @@
+# pages.dev 주소로 나가는 정적 파일(워커를 거치지 않는 것)에 색인 금지 — 운영 도메인(seoulgaondc.kr)에는 적용되지 않는다. (2026-11-10)
+# HTML·API 등 워커 응답은 src/index.tsx 맨 위 미들웨어가 처리(기본 주소 301, 해시·미리보기 noindex).
+https://seoulgaon-dental.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+
+https://:version.seoulgaon-dental.pages.dev/*
+  X-Robots-Tag: noindex, nofollow

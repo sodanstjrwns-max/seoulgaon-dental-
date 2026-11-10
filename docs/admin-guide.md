@@ -2,7 +2,7 @@
 
 **작성일**: 2026년 4월 9일  
 **대상**: 현진호 대표원장  
-**사이트**: https://seoulgaon-dental.pages.dev
+**사이트**: https://seoulgaondc.kr
 
 ---
 
@@ -10,7 +10,7 @@
 
 ### 접속 주소
 ```
-https://seoulgaon-dental.pages.dev/admin
+https://seoulgaondc.kr/admin
 ```
 
 ### 로그인 방법
@@ -264,14 +264,14 @@ https://seoulgaon-dental.pages.dev/admin
 
 | 페이지 | URL |
 |---|---|
-| **메인** | https://seoulgaon-dental.pages.dev |
-| **관리자** | https://seoulgaon-dental.pages.dev/admin |
-| **블로그** | https://seoulgaon-dental.pages.dev/blog |
-| **비포&애프터** | https://seoulgaon-dental.pages.dev/before-after |
-| **공지사항** | https://seoulgaon-dental.pages.dev/notice |
-| **의료진** | https://seoulgaon-dental.pages.dev/doctors |
-| **백과사전** | https://seoulgaon-dental.pages.dev/encyclopedia |
-| **회원가입** | https://seoulgaon-dental.pages.dev/signup |
+| **메인** | https://seoulgaondc.kr |
+| **관리자** | https://seoulgaondc.kr/admin |
+| **블로그** | https://seoulgaondc.kr/blog |
+| **비포&애프터** | https://seoulgaondc.kr/before-after |
+| **공지사항** | https://seoulgaondc.kr/notice |
+| **의료진** | https://seoulgaondc.kr/doctors |
+| **백과사전** | https://seoulgaondc.kr/encyclopedia |
+| **회원가입** | https://seoulgaondc.kr/signup |
 
 ---
 
