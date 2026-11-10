@@ -19,7 +19,7 @@
 - Location: 경기도 의정부시 용민로 22, 골드자이프라자 4층 (Yongmin-ro 22, Gold Xi Plaza 4F, Uijeongbu-si, Gyeonggi-do, South Korea)
 - Phone: 0507-1325-3377
 - Website: https://seoulgaondc.kr
-- Coordinates: 37.7388, 127.0560
+- Coordinates: 37.7348906, 127.0814137
 - Nearest Station: 탑석역 (Tapseok Station, 5 min walk)
 
 ## Hours
