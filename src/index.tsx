@@ -94,6 +94,43 @@ app.use('*', async (c, next) => {
 })
 
 // ══════════════════════════════════════════════════
+//  구글 전용 검색 제외 (2026-11-10)
+//  구글이 이 사이트를 사이트 단위로 판정해 홈 한 장만 색인하고 있다(직접 조치·기술 오류 없음, 백과·지역 조합 대량 공개 뒤 전체 탈락).
+//  방문의 대부분은 네이버 → 백과로 들어오므로, 대량 생성 구역을 "구글 크롤러에게만" 검색 제외해 구글이 보는 사이트를
+//  병원 핵심 페이지로 줄인다. 구글 크롤러(UA 에 Googlebot / Google-InspectionTool) + 아래 대상 경로 + 200 HTML 일 때만
+//  X-Robots-Tag 값을 'googlebot: noindex' 로 "교체"한다(기존 'index, follow, …' 와 같이 나가지 않게 set).
+//  그 밖의 요청(네이버 Yeti·Bing·브라우저·AI 봇)은 헤더·본문이 한 글자도 달라지지 않는다. HTML·robots.txt·sitemap·canonical 은 건드리지 않는다.
+//  등록 위치가 중요하다:
+//   · pages.dev 미들웨어보다 안쪽 → 해시·미리보기 주소에서는 바깥에서 'noindex, nofollow' 로 다시 덮여 기존 동작 그대로.
+//   · 엣지 HTML 캐시보다 바깥쪽 → 캐시 사본은 안쪽에서 이미 복제·저장된 뒤라 이 헤더가 저장본에 들어가지 않고,
+//     캐시 적중 응답에도 요청마다 붙는다(구글용 응답이 다른 방문자에게 재사용되지 않음).
+//  되돌리기: isGoogleHiddenPath 가 항상 false 를 돌려주게 하면 끝.
+// ══════════════════════════════════════════════════
+const GOOGLE_CRAWLER_RE = /googlebot|google-inspectiontool/i  // Google-Extended·GoogleOther·AdsBot·Mediapartners 는 대상 아님
+// 지역·진료 조합 랜딩(LANDING_PAGES) 중 구글에 남기는 것: 병원 소재 지역 대표 허브 + 가장 가까운 역
+const GOOGLE_KEEP_LANDINGS = new Set(['uijeongbu-dental', 'tapseok-dental'])
+/** 구글에만 검색 제외할 경로인가 (대상 구역 판정은 이 함수 한 곳) */
+function isGoogleHiddenPath(pathname: string): boolean {
+  // 1) 백과사전 구역 전체(목록 포함)
+  if (pathname === '/encyclopedia' || pathname.startsWith('/encyclopedia/')) return true
+  // 2) 코드 배열(LANDING_PAGES)로 찍어 낸 "의정부 + 진료" 랜딩 묶음 — 대표 허브 2개만 남김
+  const seg = pathname.match(/^\/([a-z0-9-]+)$/)
+  if (seg && !GOOGLE_KEEP_LANDINGS.has(seg[1]) && LANDING_PAGES.some((p) => p.slug === seg[1])) return true
+  // 3) 대행사가 초기 셋업 때 같은 초에 일괄 삽입한 예시 글(AGENCY_SEED_POST_IDS). 그 밖의 칼럼은 관리자 화면에서 발행된 글이라 남긴다.
+  const post = pathname.match(/^\/blog\/(\d+)$/)
+  if (post && AGENCY_SEED_POST_IDS.has(Number(post[1]))) return true
+  return false
+}
+app.use('*', async (c, next) => {
+  await next()
+  if (c.res.status !== 200) return  // 301·404·410 에는 붙이지 않는다
+  if (!GOOGLE_CRAWLER_RE.test(c.req.header('User-Agent') || '')) return
+  if (!(c.res.headers.get('content-type') || '').includes('text/html')) return
+  if (!isGoogleHiddenPath(new URL(c.req.url).pathname)) return
+  c.header('X-Robots-Tag', 'googlebot: noindex')
+})
+
+// ══════════════════════════════════════════════════
 //  엣지 HTML 캐시 (2026-11-06)
 //  D1 이 미국 동부(ENAM)라 DB 를 읽는 페이지는 한국에서 쿼리 왕복마다 ~0.2s.
 //  같은 지역 엣지에 5분 신선(이후엔 낡은 사본을 바로 주고 뒤에서 새로 그림) → 재방문·다른 환자는 즉시.
