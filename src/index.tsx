@@ -3730,7 +3730,7 @@ ${NAV_HTML}
   ${relatedHtml}
   <div class="bp-bottom">
     <a href="/blog" class="bp-btn bp-btn-back"><i class="fas fa-arrow-left"></i> 목록으로</a>
-    <a href="tel:0507-1325-3377" class="bp-btn bp-btn-cta"><i class="fas fa-phone"></i> 상담 예약</a>
+    <a href="tel:0507-1325-3377" class="bp-btn bp-btn-cta" data-cta="article-end"><i class="fas fa-phone"></i> 상담 예약</a>
   </div>
 </div>
 </main>
@@ -4562,7 +4562,7 @@ ${NAV_HTML}
     <p class="encd-seealso">서울가온치과 위치·진료시간 안내: <a href="${HUB_PATH}">${HUB_ANCHOR}</a></p>
     <div class="encd-cta">
       <p><strong style="color:var(--ivory)">${escHtml(entry.term)}</strong>에 대해 더 궁금하신가요? 서울대 출신 의료진이 직접 상담해 드립니다.</p>
-      <a href="tel:0507-1325-3377"><i class="fas fa-phone"></i> 전화 상담: 0507-1325-3377</a>
+      <a href="tel:0507-1325-3377" data-cta="article-end"><i class="fas fa-phone"></i> 전화 상담: 0507-1325-3377</a>
     </div>
     <p class="encd-local">의정부 ${escHtml(entry.term)} · 탑석역 ${escHtml(entry.term)} · 민락동 ${escHtml(entry.term)} — 의정부시 용현동 서울가온치과 치과 백과사전</p>
     <p class="encd-meta">일반 건강정보입니다. 진료 판단은 내원 상담에서 원장이 직접 합니다. · 최종 수정일: ${modDate} · <a href="/encyclopedia" style="color:var(--gold)">전체 용어 보기 →</a></p>
