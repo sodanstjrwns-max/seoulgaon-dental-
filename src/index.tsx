@@ -3696,10 +3696,12 @@ ${SEO_BOX_CSS}
 .bp-btn-back:hover{border-color:var(--gold,#B8741A);color:var(--gold,#B8741A)}
 .bp-btn-cta{background:var(--gold,#B8741A);color:var(--ink,#F3EFE7);font-weight:600}
 .bp-btn-cta:hover{background:var(--gold-b,#E9A23B)}
+.bp-bottom-cta{display:flex;gap:.6rem;flex-wrap:wrap}
 .lb{position:fixed;inset:0;background:rgba(21,23,26,.28);z-index:10000;display:none;align-items:center;justify-content:center;cursor:zoom-out}
 .lb.show{display:flex}
 .lb img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:4px}
 @media(max-width:768px){
+  .bp-bottom-cta .bp-btn{flex:1 1 0;white-space:nowrap}
   .bp-wrap{padding:6.5rem 1.25rem 3rem}
   .bp-title{font-size:clamp(1.3rem,5.5vw,1.8rem)}
   .bp-content{font-size:.88rem;line-height:1.85}
@@ -3730,7 +3732,10 @@ ${NAV_HTML}
   ${relatedHtml}
   <div class="bp-bottom">
     <a href="/blog" class="bp-btn bp-btn-back"><i class="fas fa-arrow-left"></i> 목록으로</a>
-    <a href="tel:0507-1325-3377" class="bp-btn bp-btn-cta" data-cta="article-end"><i class="fas fa-phone"></i> 상담 예약</a>
+    <div class="bp-bottom-cta">
+      <a href="tel:0507-1325-3377" class="bp-btn bp-btn-cta" data-cta="article-end"><i class="fas fa-phone"></i> 상담 예약</a>
+      <a href="https://booking.naver.com/booking/13/bizes/781025" target="_blank" rel="noopener" class="bp-btn bp-btn-cta" data-cta="article-end"><i class="fas fa-calendar-check"></i> 네이버 예약</a>
+    </div>
   </div>
 </div>
 </main>
@@ -4532,6 +4537,9 @@ ${entry.seo_keywords ? `<meta name="keywords" content="${escHtml(entry.seo_keywo
 .encd-cta{margin-top:2.5rem;text-align:center;padding:1.8rem;background:var(--ink);border:1px solid rgba(184,116,26,.2);border-radius:12px}
 .encd-cta p{color:var(--stone-l);margin-bottom:1rem;font-size:.92rem}
 .encd-cta a{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.6rem;background:var(--gold);color:#F3EFE7;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem}
+.encd-cta-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem}
+.encd-cta-btns a{justify-content:center}
+@media(max-width:600px){.encd-cta-btns a{flex:1 1 100%}}
 .encd-meta{margin-top:1.5rem;font-size:.72rem;color:var(--stone)}
 .encd-more{margin-top:1.6rem;padding-top:.4rem;border-top:1px solid rgba(184,116,26,.12)}
 .encd-seealso{margin-top:1.4rem;font-size:.88rem}
@@ -4562,7 +4570,10 @@ ${NAV_HTML}
     <p class="encd-seealso">서울가온치과 위치·진료시간 안내: <a href="${HUB_PATH}">${HUB_ANCHOR}</a></p>
     <div class="encd-cta">
       <p><strong style="color:var(--ivory)">${escHtml(entry.term)}</strong>에 대해 더 궁금하신가요? 서울대 출신 의료진이 직접 상담해 드립니다.</p>
-      <a href="tel:0507-1325-3377" data-cta="article-end"><i class="fas fa-phone"></i> 전화 상담: 0507-1325-3377</a>
+      <div class="encd-cta-btns">
+        <a href="tel:0507-1325-3377" data-cta="article-end"><i class="fas fa-phone"></i> 전화 상담: 0507-1325-3377</a>
+        <a href="https://booking.naver.com/booking/13/bizes/781025" target="_blank" rel="noopener" data-cta="article-end"><i class="fas fa-calendar-check"></i> 네이버 예약</a>
+      </div>
     </div>
     <p class="encd-local">의정부 ${escHtml(entry.term)} · 탑석역 ${escHtml(entry.term)} · 민락동 ${escHtml(entry.term)} — 의정부시 용현동 서울가온치과 치과 백과사전</p>
     <p class="encd-meta">일반 건강정보입니다. 진료 판단은 내원 상담에서 원장이 직접 합니다. · 최종 수정일: ${modDate} · <a href="/encyclopedia" style="color:var(--gold)">전체 용어 보기 →</a></p>
