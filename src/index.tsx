@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { serveStatic } from 'hono/cloudflare-pages'
 import { ENC_ENRICH, ENC_ENRICH_DATE, ENC_ALIASES, ENC_TREAT_LABELS } from './data/enc-enrich'
+import { GG_PATH, GG_PUBLISHED, GG_MODIFIED, GG_TITLE, GG_DESC, GG_KEYWORDS, GG_CHECKS, GG_PURPOSES, GG_USES, GG_CAUSES, GG_DIAG, GG_COMPARE, GG_WITH_IMPLANT, GG_STEPS, GG_RECOVERY, GG_WARN, GG_LIMITS, GG_FIT_OK, GG_FIT_ASK, GG_DOCTOR, GG_DISCLAIMER, ggFaq, type GgFee } from './data/gum-graft'
 import { phraseBreaks } from './lib/phrase'
 
 // ══════════════════════════════════════════════════
@@ -137,14 +138,14 @@ app.use('*', async (c, next) => {
 //  같은 지역 엣지에 5분 신선(이후엔 낡은 사본을 바로 주고 뒤에서 새로 그림) → 재방문·다른 환자는 즉시.
 //  페이지 내용은 쿠키·로그인과 무관하고 주소(쿼리 포함)로만 달라진다. 관리자 쓰기 시 purgeEdgeHtml 로 비움.
 // ══════════════════════════════════════════════════
-const EDGE_HTML_RE = /^\/(blog|before-after|encyclopedia|notice|guide)(\/[^\/]+)?$|^\/(sitemap[a-z-]*\.xml|rss\.xml|llms-full\.txt)$/
+const EDGE_HTML_RE = /^\/(blog|before-after|encyclopedia|notice|guide)(\/[^\/]+)?$|^\/gum-graft$|^\/(sitemap[a-z-]*\.xml|rss\.xml|llms-full\.txt)$/
 const EDGE_FRESH_MS = 5 * 60 * 1000
 const edgeRefreshing = new Set<string>()
 declare const __BUILD_ID__: string
 const EDGE_BUILD = typeof __BUILD_ID__ === 'string' ? __BUILD_ID__ : 'dev'
 // 배포가 바뀌면 키도 바뀐다 → 새 배포 직후 옛 HTML 이 남지 않음
 function edgeKey(u: string) { return new Request(u + (u.includes('?') ? '&' : '?') + '__edge=' + EDGE_BUILD, { method: 'GET' }) }
-const EDGE_PURGE_PATHS = ['/blog', '/before-after', '/notice', '/guide', '/encyclopedia',
+const EDGE_PURGE_PATHS = ['/blog', '/before-after', '/notice', '/guide', '/encyclopedia', '/gum-graft',
   '/sitemap.xml', '/sitemap-pages.xml', '/sitemap-blog.xml', '/sitemap-before-after.xml', '/sitemap-encyclopedia.xml', '/rss.xml', '/llms-full.txt']
 async function purgeEdgeHtml(origin: string, apiPath: string) {
   const urls = EDGE_PURGE_PATHS.map((p) => origin + p)
@@ -245,7 +246,7 @@ app.use('*', async (c, next) => {
   c.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self)')
 
   // HTML 페이지 캐시: 짧게 (SEO 크롤러가 최신 콘텐츠 수집)
-  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|uijeongbu-dental|endodontics|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant|implant-cost|night-dental|senior-implant|emergency-dental|tapseok-dental|painless-dental|pediatric-dental|crown|teeth-whitening|dental-checkup|implant-process|minrak-dental)$/) || path.match(/^\/(blog|before-after)\/\d+$/) || path.match(/^\/encyclopedia\/[^\/]+$/)) {
+  if (path === '/' || path.match(/^\/(treatments|doctors|philosophy|guide|faq|blog|notice|encyclopedia|before-after|signup|community|reservation|aesthetic|resin-buildup|implant|gum-graft|uijeongbu-dental|endodontics|cavity-treatment|implant-best|full-mouth-implant|front-tooth-implant|bone-graft-implant|laminate|wisdom-tooth|scaling-gum-treatment|denture-to-implant|implant-cost|night-dental|senior-implant|emergency-dental|tapseok-dental|painless-dental|pediatric-dental|crown|teeth-whitening|dental-checkup|implant-process|minrak-dental)$/) || path.match(/^\/(blog|before-after)\/\d+$/) || path.match(/^\/encyclopedia\/[^\/]+$/)) {
     c.header('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200')
     // 라우트 핸들러가 noindex를 지정한 페이지(비포애프터 상세, 얇은 블로그 글)는 덮어쓰지 않음
     if (!(c.res.headers.get('X-Robots-Tag') || '').includes('noindex')) {
@@ -2465,6 +2466,7 @@ function sitemapStaticPages(): Array<{ loc: string; priority: string; changefreq
     { loc: '/treatments',     priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
     { loc: '/aesthetic',      priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
     { loc: '/resin-buildup',  priority: '0.90', changefreq: 'monthly', lastmod: V2_DATE },
+    { loc: '/gum-graft',      priority: '0.90', changefreq: 'monthly', lastmod: GG_MODIFIED },
 
     // ── 병원 정보 페이지 ──
     { loc: '/philosophy',     priority: '0.85', changefreq: 'monthly', lastmod: V1_DATE },
@@ -3002,6 +3004,7 @@ const SEO_TX_PAGES: { path: string; name: string; keys: string[] }[] = [
   { path: '/crown', name: '크라운', keys: ['크라운'] },
   { path: '/cavity-treatment', name: '충치치료', keys: ['충치'] },
   { path: '/wisdom-tooth', name: '사랑니 발치', keys: ['사랑니'] },
+  { path: '/gum-graft', name: '잇몸이식', keys: ['잇몸이식', '결합조직이식', '유리치은이식', '치근피개', 'CTG', 'FGG', '재퇴축', '잇몸 퇴축', '잇몸이 내려'] },
   { path: '/scaling-gum-treatment', name: '스케일링·잇몸치료', keys: ['스케일링', '잇몸'] },
   { path: '/teeth-whitening', name: '치아미백', keys: ['미백'] },
   { path: '/pediatric-dental', name: '소아 치과진료', keys: ['소아', '유치'] },
@@ -3157,7 +3160,7 @@ const NAV_HTML = `<nav id="nav" role="navigation" aria-label="메인 네비게�
   <a href="/" class="nav-logo">서울가온치과<span>.</span></a>
   <div class="nav-links">
     <a href="/philosophy">진료 철학</a>
-    <div class="nav-link-drop"><a href="/treatments">진료 안내 ▾</a><div class="drop"><a href="/treatments#implant">임플란트</a><a href="/treatments#aesthetics">앞니 심미치료</a><a href="/treatments#endodontics">신경치료</a><a href="/treatments#general">일반진료</a></div></div>
+    <div class="nav-link-drop"><a href="/treatments">진료 안내 ▾</a><div class="drop"><a href="/treatments#implant">임플란트</a><a href="/treatments#aesthetics">앞니 심미치료</a><a href="/gum-graft">잇몸이식</a><a href="/treatments#endodontics">신경치료</a><a href="/treatments#general">일반진료</a></div></div>
     <div class="nav-link-drop"><a href="/community">커뮤니티 ▾</a><div class="drop"><a href="/blog">블로그</a><a href="/before-after">비포 애프터</a><a href="/notice">공지사항</a></div></div>
     <a href="/doctors">의료진</a>
     <div class="nav-link-drop"><a href="/guide">안내 ▾</a><div class="drop"><a href="/guide#visit">오시는 길</a><a href="/guide#fee">수가 안내</a><a href="/faq">자주 묻는 질문</a></div></div>
@@ -3165,7 +3168,7 @@ const NAV_HTML = `<nav id="nav" role="navigation" aria-label="메인 네비게�
   <a href="/reservation" class="nav-cta" data-magnet><i class="fas fa-calendar-check" style="margin-right:.4rem;font-size:.78rem"></i>예약 안내</a>
   <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
 </nav>
-<div class="mob-menu"><a href="/">홈</a><a href="/philosophy">진료 철학</a><a href="/treatments">진료 안내</a><a href="/community">커뮤니티</a><a href="/doctors">의료진</a><a href="/guide">안내</a><a href="/reservation">예약 안내</a><a href="/blog">블로그</a><a href="/before-after">비포 애프터</a><a href="/notice">공지사항</a><a href="/encyclopedia">치과 백과사전</a><a href="/faq">자주 묻는 질문</a></div>`
+<div class="mob-menu"><a href="/">홈</a><a href="/philosophy">진료 철학</a><a href="/treatments">진료 안내</a><a href="/gum-graft" style="padding-left:2rem;font-size:.9rem">→ 잇몸이식</a><a href="/community">커뮤니티</a><a href="/doctors">의료진</a><a href="/guide">안내</a><a href="/reservation">예약 안내</a><a href="/blog">블로그</a><a href="/before-after">비포 애프터</a><a href="/notice">공지사항</a><a href="/encyclopedia">치과 백과사전</a><a href="/faq">자주 묻는 질문</a></div>`
 
 // 공통 푸터
 const FOOTER_HTML = `<footer role="contentinfo">
@@ -4557,7 +4560,7 @@ app.get('/encyclopedia/:key', async (c) => {
       '임플란트': '/implant', '가이드 임플란트': '/implant', '뼈이식': '/bone-graft-implant',
       '신경치료': '/endodontics', '보존치료': '/endodontics', '심미치료': '/aesthetic',
       '라미네이트': '/laminate', '충치치료': '/cavity-treatment', '레진': '/cavity-treatment',
-      '레진빌드업': '/resin-buildup', '잇몸치료': '/scaling-gum-treatment', '스케일링': '/scaling-gum-treatment',
+      '레진빌드업': '/resin-buildup', '잇몸이식': '/gum-graft', '치은이식': '/gum-graft', '잇몸치료': '/scaling-gum-treatment', '스케일링': '/scaling-gum-treatment',
       '크라운': '/crown', '보철': '/crown', '보철치료': '/crown', '미백': '/teeth-whitening', '치아미백': '/teeth-whitening',
       '사랑니': '/wisdom-tooth', '발치': '/wisdom-tooth', '소아치과': '/pediatric-dental', '정기검진': '/dental-checkup'
     }
@@ -5259,6 +5262,7 @@ const LANDING_PAGES: LandingPageData[] = [
     ],
     ctaText: '스케일링·잇몸치료 예약',
     relatedLinks: [
+      { href: '/gum-graft', label: '의정부 잇몸이식' },
       { href: '/implant', label: '의정부 임플란트' },
       { href: '/cavity-treatment', label: '의정부 충치치료' },
       { href: '/uijeongbu-dental', label: '의정부 치과 추천' },
@@ -6523,6 +6527,535 @@ for (const page of LANDING_PAGES) {
     })
   })
 }
+
+// ══════════════════════════════════════════════════
+//  /gum-graft 잇몸이식 진료 페이지 (2026-11-11, 현진호 원장 요청)
+//  원고: src/data/gum-graft.ts. 실제 사례(before_after)·잇몸이식 칼럼(blog_posts)·공개 수가(fee_items)는 D1 에서 채운다.
+//  D1 이 실패해도 원고만으로 페이지는 정상(사례·칼럼 구역만 빠지고 비용은 '검사 뒤 서면 안내').
+//  구글 전용 검색 제외(isGoogleHiddenPath) 대상이 아니다 — 이 병원 핵심 진료 페이지라 구글에도 공개.
+// ══════════════════════════════════════════════════
+const GG_CASES_SQL = `SELECT id, title, category, doctor_id, intraoral_before_url, intraoral_after_url FROM before_after
+  WHERE is_published = 1 AND (title LIKE '%잇몸이식%' OR description LIKE '%잇몸이식%' OR title LIKE '%결합조직%' OR description LIKE '%결합조직%')
+  ORDER BY created_at DESC LIMIT 9`
+const GG_COLS_SQL = `SELECT id, title, content FROM blog_posts
+  WHERE is_published = 1 AND id NOT IN (${BLOG_DUPLICATE_IDS_SQL}) AND (title LIKE '%잇몸이식%' OR title LIKE '%결합조직%' OR title LIKE '%유리치은%' OR title LIKE '%CTG%' OR title LIKE '%치근피개%' OR title LIKE '%잇몸 퇴축%' OR title LIKE '%잇몸이 내려%')
+  ORDER BY created_at DESC LIMIT 30`
+const GG_FEE_SQL = `SELECT name, price, note, is_nhi FROM fee_items WHERE is_published = 1 AND (name LIKE '%잇몸이식%' OR category LIKE '%잇몸이식%') ORDER BY sort_order ASC, id ASC LIMIT 1`
+const ggCleanTitle = (t: string) => String(t || '').replace(/\s*[|—–-]\s*의정부 서울가온치과\s*$/, '').trim()
+
+const GG_CSS = `
+.gg{--gg-pad:clamp(1.25rem,4vw,4rem)}
+.gg-wrap{max-width:1100px;margin:0 auto;padding:0 var(--gg-pad)}
+.gg-chips{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin:0 0 1.75rem}
+.gg-chips span{font-size:.78rem;padding:.38rem .9rem;border:1px solid rgba(184,116,26,.35);border-radius:100px;color:var(--amber-d);background:rgba(255,255,255,.5)}
+.gg-toc{position:sticky;top:var(--nav-h);z-index:60;background:rgba(243,239,231,.9);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);transition:top .5s var(--ease)}
+body.gg-navhide .gg-toc{top:0}
+body.gg-onnight .gg-toc{background:rgba(11,13,16,.86);border-color:var(--line-n)}
+body.gg-onnight .gg-toc a{color:rgba(243,239,231,.72);border-color:var(--line-n)}
+body.gg-onnight .gg-toc a.on,body.gg-onnight .gg-toc a:hover{color:var(--amber);border-color:var(--amber);background:rgba(233,162,59,.12)}
+.gg-toc ol{display:flex;gap:.4rem;overflow-x:auto;list-style:none;margin:0 auto;padding:.65rem var(--gg-pad);max-width:1100px;scrollbar-width:none}
+.gg-toc ol::-webkit-scrollbar{display:none}
+.gg-toc a{display:inline-block;white-space:nowrap;padding:.38rem .85rem;border:1px solid var(--line);border-radius:100px;font-size:.8rem;color:var(--text-soft);transition:all .25s}
+.gg-toc a:hover,.gg-toc a.on{border-color:var(--amber-d);color:var(--amber-d);background:var(--amber-xl)}
+.gg-sec{padding:clamp(4rem,9vh,6.5rem) 0;border-bottom:1px solid var(--line);scroll-margin-top:calc(var(--nav-h) + 56px)}
+.gg-night{background:var(--night);color:var(--on-night);border-bottom-color:transparent}
+.gg-kicker{font-family:var(--ff-mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--amber-d);display:flex;align-items:center;gap:.7rem;margin:0 0 1rem}
+.gg-kicker::before{content:'';width:28px;height:1px;background:currentColor}
+.gg-night .gg-kicker{color:var(--amber)}
+.gg-h2{font-family:var(--ff-display);font-weight:600;font-size:clamp(1.7rem,3.6vw,2.8rem);letter-spacing:-.035em;line-height:1.18;margin:0 0 1rem;color:var(--text);word-break:keep-all}
+.gg-night .gg-h2{color:var(--on-night)}
+.gg-lead{font-size:clamp(.95rem,1.12vw,1.06rem);line-height:1.9;color:var(--text-soft);max-width:700px;word-break:keep-all;margin:0 0 2.5rem}
+.gg-night .gg-lead{color:rgba(243,239,231,.72)}
+.gg-lead strong{color:var(--text)}
+.gg-answer{max-width:860px;margin:0 auto;border-left:3px solid var(--amber-d);background:var(--white);border-radius:0 16px 16px 0;padding:1.4rem 1.6rem;line-height:1.95;font-size:clamp(.95rem,1.1vw,1.04rem);color:var(--text);box-shadow:var(--sh-sm);word-break:keep-all}
+.gg-answer strong{color:var(--amber-d)}
+.gg-checks{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;list-style:none;padding:0;margin:0}
+.gg-checks li{display:flex;gap:.85rem;align-items:flex-start;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:1rem 1.15rem;font-size:.96rem;line-height:1.6;word-break:keep-all}
+.gg-checks li::before{content:'';flex:0 0 20px;height:20px;border-radius:50%;border:1.5px solid var(--amber-d);background:radial-gradient(circle,var(--amber-d) 0 3.5px,transparent 4.5px);margin-top:.15rem}
+.gg-note{margin:1.25rem 0 0;font-size:.92rem;color:var(--text-soft);line-height:1.8;word-break:keep-all}
+.gg-note a,.gg-lead a,.gg-card a,.gg-fit a,.gg-limits a{color:var(--amber-d);text-decoration:underline;text-underline-offset:3px}
+.gg-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.gg-card{position:relative;background:var(--white);border:1px solid var(--line);border-radius:20px;padding:1.9rem 1.6rem 1.7rem}
+.gg-card .n{font-family:var(--ff-mono);font-size:.72rem;color:var(--amber-d);letter-spacing:.16em}
+.gg-card h3{font-family:var(--ff-display);font-weight:600;font-size:1.32rem;letter-spacing:-.025em;margin:.7rem 0 .6rem;color:var(--text)}
+.gg-card p{font-size:.93rem;line-height:1.8;color:var(--text-soft);word-break:keep-all;margin:0}
+.gg-uses .gg-card{background:rgba(243,239,231,.04);border-color:var(--line-n);border-radius:var(--arch);padding:3.2rem 1.7rem 2rem;text-align:center}
+.gg-uses .gg-card .n{color:var(--amber)}
+.gg-uses .gg-card h3{color:var(--on-night);font-size:1.45rem}
+.gg-uses .gg-card p{color:rgba(243,239,231,.7)}
+.gg-uses .gg-card a{display:inline-block;margin-top:1rem;color:var(--amber);font-size:.86rem}
+.gg-six{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.gg-six>div{background:var(--bone);padding:1.6rem 1.5rem}
+.gg-six .n{font-family:var(--ff-mono);font-size:.72rem;color:var(--amber-d);letter-spacing:.16em}
+.gg-six h3{font-size:1.06rem;font-weight:700;margin:.55rem 0 .45rem;color:var(--text);word-break:keep-all}
+.gg-six p{font-size:.9rem;line-height:1.75;color:var(--text-soft);margin:0;word-break:keep-all}
+.gg-callout{margin:2rem 0 0;padding:1.3rem 1.5rem;border-radius:16px;background:var(--amber-xl);border:1px solid rgba(184,116,26,.25);font-size:.98rem;line-height:1.85;color:var(--text);word-break:keep-all}
+.gg-callout strong{color:var(--amber-d)}
+.gg-diag{display:grid;grid-template-columns:1fr minmax(260px,380px);gap:clamp(1.5rem,4vw,3.5rem);align-items:start}
+.gg-num{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.gg-num li{display:grid;grid-template-columns:72px 1fr;gap:1rem;padding:1.35rem 0;border-bottom:1px solid var(--line)}
+.gg-num .k{font-family:var(--ff-display);font-size:2.2rem;font-weight:700;color:var(--amber-d);line-height:1;letter-spacing:-.04em}
+.gg-num h3{font-size:1.08rem;font-weight:700;margin:0 0 .35rem;color:var(--text);word-break:keep-all}
+.gg-num p{color:var(--text-soft);line-height:1.8;font-size:.93rem;margin:0;word-break:keep-all}
+.gg-photo{margin:0;border-radius:var(--arch);overflow:hidden;position:sticky;top:calc(var(--nav-h) + 80px);background:var(--amber-xl)}
+.gg-photo img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover}
+.gg-photo figcaption{font-size:.78rem;color:var(--text-soft);padding:.7rem 1rem;background:var(--white)}
+.gg-table{width:100%;border-collapse:separate;border-spacing:0;background:var(--white);border:1px solid var(--line);border-radius:18px;overflow:hidden;font-size:.94rem}
+.gg-table th,.gg-table td{padding:1.05rem 1.25rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line);line-height:1.7;word-break:keep-all}
+.gg-table thead th{background:var(--night);color:var(--on-night);font-family:var(--ff-display);font-weight:600;font-size:1.04rem;letter-spacing:-.01em}
+.gg-table thead th small{display:block;font-family:var(--ff-mono);font-size:.68rem;letter-spacing:.14em;color:var(--amber);font-weight:400;margin-top:.2rem}
+.gg-table tbody th{width:20%;color:var(--amber-d);font-weight:700;font-size:.86rem;background:var(--amber-xl)}
+.gg-table tr:last-child>*{border-bottom:0}
+.gg-list{list-style:none;padding:0;margin:0 0 2rem;display:grid;gap:.7rem}
+.gg-list li{position:relative;padding:1rem 1.2rem 1rem 3rem;background:var(--white);border:1px solid var(--line);border-radius:14px;line-height:1.75;font-size:.95rem;word-break:keep-all}
+.gg-list li::before{content:'+';position:absolute;left:1.15rem;top:.95rem;font-family:var(--ff-mono);color:var(--amber-d);font-weight:500}
+.gg-links{display:flex;flex-wrap:wrap;gap:.6rem}
+.gg-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border:1px solid var(--line);border-radius:100px;font-size:.86rem;color:var(--text);background:var(--white);transition:all .25s}
+.gg-pill:hover{border-color:var(--amber-d);color:var(--amber-d)}
+.gg-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;list-style:none;padding:0;margin:0;counter-reset:f}
+.gg-flow li{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:1.4rem 1.15rem;position:relative}
+.gg-flow .k{font-family:var(--ff-mono);font-size:.72rem;color:var(--amber-d);letter-spacing:.16em}
+.gg-flow h3{font-family:var(--ff-display);font-size:1.15rem;font-weight:600;margin:.55rem 0 .5rem;color:var(--text);letter-spacing:-.02em}
+.gg-flow p{font-size:.87rem;line-height:1.75;color:var(--text-soft);margin:0;word-break:keep-all}
+.gg-rec{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(1.5rem,4vw,3rem);align-items:start}
+.gg-time{list-style:none;padding:0;margin:0 0 0 .45rem;border-left:2px solid var(--amber-l)}
+.gg-time li{position:relative;padding:0 0 1.9rem 1.8rem}
+.gg-time li:last-child{padding-bottom:0}
+.gg-time li::before{content:'';position:absolute;left:-9px;top:.3rem;width:16px;height:16px;border-radius:50%;background:var(--bone);border:3px solid var(--amber-d)}
+.gg-time h3{font-family:var(--ff-display);font-size:1.12rem;font-weight:600;margin:0 0 .4rem;color:var(--text)}
+.gg-time p{font-size:.93rem;line-height:1.8;color:var(--text-soft);margin:0;word-break:keep-all}
+.gg-warn{background:#FBEFEA;border:1px solid rgba(162,64,31,.22);border-radius:18px;padding:1.5rem 1.6rem;position:sticky;top:calc(var(--nav-h) + 80px)}
+.gg-warn h3{color:#A2401F;font-size:1.02rem;font-weight:700;margin:0 0 .8rem}
+.gg-warn ul{margin:0 0 1rem;padding-left:1.1rem;line-height:1.95;font-size:.93rem;color:var(--text)}
+.gg-warn a{display:inline-flex;align-items:center;gap:.45rem;font-weight:700;color:#A2401F;font-size:1rem}
+.gg-limits{list-style:none;padding:0;margin:0;display:grid;gap:1px;background:var(--line-n);border:1px solid var(--line-n);border-radius:20px;overflow:hidden}
+.gg-limits li{background:var(--night);padding:1.45rem 1.6rem;display:grid;grid-template-columns:44px 1fr;gap:1rem}
+.gg-limits .k{font-family:var(--ff-mono);color:var(--amber);font-size:.78rem;padding-top:.28rem;letter-spacing:.1em}
+.gg-limits h3{font-size:1.06rem;font-weight:700;margin:0 0 .35rem;color:var(--on-night);word-break:keep-all}
+.gg-limits p{font-size:.92rem;line-height:1.8;color:rgba(243,239,231,.7);margin:0;word-break:keep-all}
+.gg-limits a{color:var(--amber)}
+.gg-fit{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.gg-fit>div{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:1.7rem 1.6rem}
+.gg-fit h3{font-family:var(--ff-display);font-size:1.2rem;font-weight:600;margin:0 0 1rem;color:var(--text)}
+.gg-fit ul{list-style:none;padding:0;margin:0;display:grid;gap:.65rem}
+.gg-fit li{padding-left:1.7rem;position:relative;line-height:1.7;font-size:.94rem;word-break:keep-all}
+.gg-fit li::before{position:absolute;left:0;top:0;font-weight:700;font-family:var(--ff-mono)}
+.gg-fit .ok li::before{content:'✓';color:var(--amber-d)}
+.gg-fit .ask{background:var(--amber-xl);border-color:rgba(184,116,26,.25)}
+.gg-fit .ask li::before{content:'!';color:#A2401F}
+.gg-doc{display:grid;grid-template-columns:minmax(220px,340px) 1fr;gap:clamp(1.5rem,5vw,4rem);align-items:center}
+.gg-doc figure{margin:0;border-radius:var(--arch);overflow:hidden;background:var(--amber-xl)}
+.gg-doc img{display:block;width:100%;aspect-ratio:2/3;object-fit:cover}
+.gg-doc .role{font-family:var(--ff-mono);font-size:.74rem;letter-spacing:.16em;color:var(--amber-d)}
+.gg-doc h3{font-family:var(--ff-display);font-size:clamp(1.9rem,3.4vw,2.6rem);font-weight:600;letter-spacing:-.04em;margin:.4rem 0 1.1rem;color:var(--text)}
+.gg-doc ul{list-style:none;padding:0;margin:0 0 1.4rem;display:grid;gap:.45rem}
+.gg-doc li{padding-left:1.2rem;position:relative;font-size:.95rem;color:var(--text)}
+.gg-doc li::before{content:'';position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--amber-d)}
+.gg-doc p{font-size:.96rem;line-height:1.9;color:var(--text-soft);margin:0 0 1.4rem;word-break:keep-all}
+.gg-cases{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.gg-case{display:block;background:var(--white);border:1px solid var(--line);border-radius:16px;overflow:hidden;color:inherit;transition:transform .35s var(--ease-out),box-shadow .35s}
+.gg-case:hover{transform:translateY(-4px);box-shadow:var(--sh)}
+.gg-case .ph{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--line)}
+.gg-case figure{margin:0;position:relative;aspect-ratio:4/3;overflow:hidden;background:#E8E3DA}
+.gg-case img{display:block;width:100%;height:100%;object-fit:cover}
+.gg-case figcaption{position:absolute;left:.45rem;top:.45rem;font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.12em;background:rgba(11,13,16,.72);color:#fff;padding:.14rem .45rem;border-radius:4px}
+.gg-case .t{display:block;padding:1rem 1.1rem 1.1rem;font-size:.94rem;line-height:1.55;font-weight:600;word-break:keep-all}
+.gg-case .c{display:block;font-family:var(--ff-mono);font-size:.66rem;color:var(--amber-d);letter-spacing:.12em;margin-bottom:.35rem;font-weight:400}
+.gg-disc{font-size:.84rem;color:var(--text-soft);line-height:1.85;margin:1.4rem 0 0;word-break:keep-all}
+.gg-more{display:inline-block;margin-top:1.2rem;color:var(--amber-d);font-size:.9rem;text-decoration:underline;text-underline-offset:3px}
+.gg-fee{display:grid;grid-template-columns:auto 1fr;gap:clamp(1.25rem,4vw,3rem);align-items:center;background:var(--white);border:1px solid var(--line);border-radius:20px;padding:clamp(1.5rem,3vw,2.4rem)}
+.gg-fee .lbl{font-family:var(--ff-mono);font-size:.72rem;letter-spacing:.16em;color:var(--amber-d)}
+.gg-fee .p{font-family:var(--ff-display);font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:-.04em;color:var(--text);line-height:1.1;margin:.3rem 0 .2rem}
+.gg-fee .u{font-size:.88rem;color:var(--text-soft)}
+.gg-fee .b{display:inline-block;font-size:.72rem;padding:.12rem .55rem;border-radius:4px;background:var(--amber-xl);color:var(--amber-d);margin-left:.4rem;vertical-align:middle}
+.gg-fee p{margin:0 0 .9rem;font-size:.95rem;line-height:1.85;color:var(--text-soft);word-break:keep-all}
+.gg-faq{max-width:860px}
+.gg-faq .notice-q{font-size:clamp(.95rem,1.12vw,1.04rem);font-weight:600;color:var(--text)}
+.gg-faq .notice-a-inner{font-size:.94rem;line-height:1.9}
+.gg-review{text-align:center;font-size:.84rem;color:var(--text-soft);margin:0;padding:2.2rem var(--gg-pad) .4rem}
+.gg-review a{color:var(--amber-d)}
+.gg-review-d{max-width:760px;margin:0 auto;text-align:center;font-size:.8rem;color:var(--text-faint);line-height:1.8;padding:0 var(--gg-pad) 2.4rem;word-break:keep-all}
+.gg-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 2.5rem;list-style:none;padding:0;margin:0}
+.gg-cols a{display:flex;gap:.8rem;align-items:baseline;padding:1rem 0;border-bottom:1px solid var(--line);color:var(--text);font-size:.95rem;line-height:1.6;word-break:keep-all;transition:color .2s}
+.gg-cols a::before{content:'→';color:var(--amber-d);font-family:var(--ff-mono);font-size:.8rem}
+.gg-cols a:hover{color:var(--amber-d)}
+.gg-cta{text-align:center;padding:clamp(4.5rem,11vh,7.5rem) var(--gg-pad)}
+.gg-cta .gg-h2{font-size:clamp(1.9rem,4.4vw,3.2rem)}
+.gg-cta p{color:rgba(243,239,231,.72);margin:0 0 2rem;line-height:1.85;word-break:keep-all}
+.gg-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.gg-btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.9rem 1.7rem;border-radius:100px;font-weight:700;font-size:.93rem;min-height:50px;transition:transform .25s,filter .25s}
+.gg-btn:hover{transform:translateY(-2px);filter:brightness(1.05)}
+.gg-btn.tel{background:var(--amber);color:#1a1206}
+.gg-btn.kakao{background:#FEE500;color:#3C1E1E}
+.gg-btn.naver{background:#03C75A;color:#fff}
+.gg-cta small{display:block;margin-top:1.6rem;font-size:.84rem;color:rgba(243,239,231,.55)}
+.gg-cta small a{color:rgba(243,239,231,.8);text-decoration:underline;text-underline-offset:3px}
+@media(max-width:960px){.gg-flow{grid-template-columns:repeat(2,1fr)}.gg-six{grid-template-columns:repeat(2,1fr)}.gg-cases{grid-template-columns:repeat(2,1fr)}.gg-diag{grid-template-columns:1fr}.gg-photo{position:static;max-width:420px}.gg-rec{grid-template-columns:1fr}.gg-warn{position:static}}
+@media(max-width:760px){.gg-trio{grid-template-columns:1fr}.gg-fit{grid-template-columns:1fr}.gg-doc{grid-template-columns:1fr}.gg-doc figure{max-width:300px}.gg-cols{grid-template-columns:1fr}
+  .gg-table thead{display:none}.gg-table,.gg-table tbody,.gg-table tr,.gg-table th,.gg-table td{display:block;width:100%}
+  .gg-table tbody th{width:auto;border-bottom:0;padding:.9rem 1.1rem .3rem}
+  .gg-table td{padding:.35rem 1.1rem .75rem;border-bottom:0}
+  .gg-table tr{border-bottom:1px solid var(--line)}.gg-table tr:last-child{border-bottom:0}
+  .gg-table td::before{content:attr(data-m);display:block;font-family:var(--ff-mono);font-size:.66rem;letter-spacing:.12em;color:var(--amber-d);margin-bottom:.15rem}
+  .gg-uses .gg-card{padding:2.6rem 1.4rem 1.7rem}
+}
+@media(max-width:560px){.gg-checks{grid-template-columns:1fr}.gg-flow{grid-template-columns:1fr}.gg-six{grid-template-columns:1fr}.gg-cases{grid-template-columns:1fr}.gg-fee{grid-template-columns:1fr}.gg-num li{grid-template-columns:52px 1fr}.gg-num .k{font-size:1.8rem}.gg-limits li{grid-template-columns:34px 1fr;padding:1.25rem 1.2rem}.gg-btns{flex-direction:column}.gg-btn{width:100%}}
+`
+
+function renderGumGraftPage(cases: any[], columns: any[], fee: GgFee): string {
+  const url = `${SITE}${GG_PATH}`
+  const faq = ggFaq(fee)
+  const n2 = (i: number) => String(i + 1).padStart(2, '0')
+  const feeText = fee ? `${fee.note ? fee.note + ' ' : ''}${fee.price}` : ''
+  // 사례가 전부 현진호 대표원장(doctors.id=1) 진료일 때만 '모두 현진호 원장 진료'라고 쓴다
+  const allHyun = cases.length > 0 && cases.every((c: any) => Number(c.doctor_id) === 1)
+
+  const jsonLdPage = {
+    "@context": "https://schema.org",
+    "@type": "MedicalWebPage",
+    "@id": `${url}#webpage`,
+    "name": "의정부 잇몸이식 | 서울가온치과",
+    "headline": "의정부 잇몸이식 — 내려간 잇몸과 드러난 치아 뿌리, 결합조직이식(CTG)",
+    "description": GG_DESC,
+    "url": url,
+    "inLanguage": "ko",
+    "isPartOf": WEBSITE_REF,
+    "about": { "@id": `${url}#procedure` },
+    "publisher": CLINIC_REF,
+    "datePublished": GG_PUBLISHED,
+    "dateModified": GG_MODIFIED,
+    "lastReviewed": GG_MODIFIED,
+    "reviewedBy": DOCTOR_HYUN_REF,
+    "image": { "@type": "ImageObject", "url": `${SITE}/images/og-treatments.jpg`, "width": 1200, "height": 630 },
+    "speakable": { "@type": "SpeakableSpecification", "cssSelector": ["h1", ".gg-answer"] },
+  }
+  const jsonLdProcedure = {
+    "@context": "https://schema.org",
+    "@type": "SurgicalProcedure",
+    "@id": `${url}#procedure`,
+    "name": "잇몸이식",
+    "alternateName": ["치은이식술", "결합조직이식술", "결합조직이식(CTG)", "유리치은이식술(FGG)", "치근피개술", "Gingival graft", "Connective tissue graft"],
+    "description": "내려가거나 얇아진 잇몸에 환자 본인의 입천장 조직을 옮겨, 드러난 치아 뿌리를 덮고 잇몸을 두껍게 하거나 꺼진 부위를 채우는 잇몸 수술입니다.",
+    "bodyLocation": "잇몸(치은)",
+    "howPerformed": GG_STEPS.map((s) => s.title).join(' → '),
+    "preparation": "구강 사진·엑스레이로 뿌리 노출 정도, 잇몸 두께, 치아 사이 뼈 높이를 확인하고 잇몸 염증을 먼저 치료합니다.",
+    "followup": "보통 1~2주 뒤 실밥을 풀고, 몇 달에 걸쳐 잇몸이 자리 잡는 동안 정기 검진으로 경과를 확인합니다.",
+    "url": url,
+  }
+  const jsonLdFaq = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${url}#faq`,
+    "mainEntity": faq.map((f) => ({ "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": stripHtml(f.a) } })),
+  }
+  const jsonLdBreadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "홈", "item": `${SITE}/` },
+      { "@type": "ListItem", "position": 2, "name": "진료 안내", "item": `${SITE}/treatments` },
+      { "@type": "ListItem", "position": 3, "name": "잇몸이식", "item": url },
+    ],
+  }
+
+  const toc: [string, string][] = [['check', '자가 점검'], ['about', '잇몸이식이란'], ['cause', '원인'], ['diagnosis', '진단'], ['method', '방법'], ['process', '과정'], ['recovery', '회복'], ['limits', '한계'], ...(cases.length ? [['cases', '사례'] as [string, string]] : []), ['fee', '비용'], ['faq', '자주 묻는 질문']]
+
+  const casesHtml = cases.length ? `
+<section class="gg-sec" id="cases" aria-labelledby="gg-cases-h"><div class="gg-wrap">
+  <p class="gg-kicker">Cases</p>
+  <h2 class="gg-h2" id="gg-cases-h" data-reveal>서울가온치과 잇몸이식 사례</h2>
+  <p class="gg-lead" data-reveal>${allHyun ? '현진호 대표원장이 진료한 잇몸이식 사례입니다. ' : ''}사진을 누르면 치료 전후와 설명을 크게 보실 수 있습니다.</p>
+  <div class="gg-cases">${cases.map((c: any) => `
+    <a class="gg-case" href="/before-after/${Number(c.id)}" data-reveal>
+      <span class="ph">
+        <figure>${c.intraoral_before_url ? `<img src="${escHtml(imgV(c.intraoral_before_url, 640))}" alt="치료 전 - ${escHtml(c.title)}" width="320" height="240" loading="lazy" decoding="async">` : ''}<figcaption>BEFORE</figcaption></figure>
+        <figure>${c.intraoral_after_url ? `<img src="${escHtml(imgV(c.intraoral_after_url, 640))}" alt="치료 후 - ${escHtml(c.title)}" width="320" height="240" loading="lazy" decoding="async">` : ''}<figcaption>AFTER</figcaption></figure>
+      </span>
+      <span class="t"><span class="c">${escHtml(c.category || '잇몸이식')}</span>${escHtml(c.title)}</span>
+    </a>`).join('')}
+  </div>
+  <p class="gg-disc">치료 결과는 잇몸 두께, 뼈 상태, 수술 뒤 관리에 따라 사람마다 다릅니다. 수술 뒤 붓기·출혈·통증, 옮긴 조직 일부 탈락, 잇몸이 다시 내려가는 일이 생길 수 있습니다.</p>
+  <a class="gg-more" href="/before-after">비포 애프터 전체 보기 →</a>
+</div></section>` : ''
+
+  const colsHtml = columns.length ? `
+<section class="gg-sec" aria-labelledby="gg-cols-h"><div class="gg-wrap">
+  <p class="gg-kicker">Columns</p>
+  <h2 class="gg-h2" id="gg-cols-h">잇몸이식 칼럼</h2>
+  <p class="gg-lead">수술 전후에 많이 물어보시는 내용을 칼럼으로 더 자세히 정리했습니다.</p>
+  <ul class="gg-cols">${columns.map((r: any) => `<li><a href="/blog/${Number(r.id)}">${escHtml(ggCleanTitle(r.title))}</a></li>`).join('')}</ul>
+  <a class="gg-more" href="/blog">칼럼 전체 보기 →</a>
+</div></section>` : ''
+
+  const feeHtml = fee ? `
+  <div class="gg-fee" data-reveal>
+    <div>
+      <span class="lbl">GUM GRAFT · 공개 수가</span>
+      <div class="p">${escHtml(fee.price)}</div>
+      <span class="u">${escHtml(fee.name)}${fee.note ? ' · ' + escHtml(fee.note) : ''}<span class="b">${fee.is_nhi ? '건강보험' : '비급여'}</span></span>
+    </div>
+    <div>
+      <p>부위 수와 방법, 함께 하는 치료(임플란트·보철)에 따라 전체 비용이 달라집니다. 검사 뒤 서면 치료계획서로 정확한 금액을 먼저 안내드리고, 동의하신 뒤에 치료를 시작합니다.</p>
+      <a class="gg-pill" href="/guide#fee">전체 수가표 보기 →</a>
+    </div>
+  </div>` : `
+  <div class="gg-fee" data-reveal><div><span class="lbl">GUM GRAFT</span><div class="p" style="font-size:1.6rem">검사 뒤 서면 안내</div></div>
+    <div><p>부위 수와 방법, 함께 하는 치료(임플란트·보철)에 따라 달라집니다. 검사 뒤 서면 치료계획서로 정확한 금액을 안내드립니다.</p><a class="gg-pill" href="/guide#fee">수가 안내 보기 →</a></div></div>`
+
+  return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+${HEAD_COMMON}
+<title>${escHtml(GG_TITLE)}</title>
+<meta name="description" content="${escHtml(GG_DESC)}">
+<meta name="keywords" content="${escHtml(GG_KEYWORDS)}">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="author" content="서울가온치과의원">
+<meta name="geo.region" content="KR-41">
+<meta name="geo.placename" content="의정부시">
+<link rel="canonical" href="${url}">
+<link rel="alternate" hreflang="ko" href="${url}">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="서울가온치과">
+<meta property="og:title" content="의정부 잇몸이식 | 서울가온치과 — 내려간 잇몸·드러난 치아 뿌리">
+<meta property="og:description" content="${escHtml(GG_DESC)}">
+<meta property="og:url" content="${url}">
+<meta property="og:image" content="${SITE}/images/og-treatments.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:section" content="잇몸이식">
+<meta property="article:modified_time" content="${GG_MODIFIED}T00:00:00+09:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="의정부 잇몸이식 | 서울가온치과">
+<meta name="twitter:description" content="${escHtml(GG_DESC)}">
+<meta name="twitter:image" content="${SITE}/images/og-treatments.jpg">
+<script type="application/ld+json">${JSON.stringify(jsonLdPage)}</script>
+<script type="application/ld+json">${JSON.stringify(jsonLdProcedure)}</script>
+<script type="application/ld+json">${JSON.stringify(jsonLdFaq)}</script>
+<script type="application/ld+json">${JSON.stringify(jsonLdBreadcrumb)}</script>
+<style>${GG_CSS}</style>
+</head>
+<body>
+<noscript><div style="background:#B8741A;color:#F3EFE7;padding:1rem;text-align:center;font-weight:600">이 웹사이트는 JavaScript가 필요합니다.</div></noscript>
+${NAV_HTML}
+<main id="main-content" role="main" class="gg">
+
+<section class="page-hero">
+  <div class="page-hero-bg">GUM GRAFT</div>
+  <span class="page-hero-label">Gum Graft</span>
+  <h1>의정부 잇몸이식</h1>
+  <p class="page-hero-sub">내려간 잇몸, 원인부터 확인하고 덮습니다.</p>
+  <div class="gg-chips"><span>내 입천장 조직으로</span><span>임플란트·앞니 보철과 함께 계획</span><span>통합치의학과 전문의 진료</span></div>
+  <div class="page-tabs">
+    <a href="/treatments" class="page-tab">전체 진료</a>
+    <a href="/implant" class="page-tab">임플란트</a>
+    <a href="/aesthetic" class="page-tab">심미치료</a>
+    <a href="/gum-graft" class="page-tab active" aria-current="page">잇몸이식</a>
+    <a href="/endodontics" class="page-tab">신경치료</a>
+  </div>
+</section>
+
+<div class="gg-wrap" style="padding-bottom:clamp(3rem,7vh,5rem)">
+  <p class="gg-answer" data-reveal><strong>잇몸이식</strong>은 내려가거나 얇아진 잇몸에 환자 본인의 입천장 조직을 옮겨 붙여, 드러난 치아 뿌리를 덮고 잇몸을 두껍게 만드는 잇몸 수술입니다. 서울가온치과는 주로 <strong>결합조직이식(CTG)</strong>으로 시행하며, 내려간 잇몸을 덮을 때뿐 아니라 임플란트 주변과 앞니 브릿지 아래의 꺼진 잇몸을 채울 때도 씁니다.${fee ? ` 비용은 공개 수가표 기준 ${escHtml(feeText)}${fee.is_nhi ? '' : '(비급여)'}입니다.` : ''}</p>
+</div>
+
+<nav class="gg-toc" aria-label="이 페이지 목차"><ol>${toc.map(([id, label]) => `<li><a href="#${id}">${label}</a></li>`).join('')}</ol></nav>
+
+<section class="gg-sec" id="check" aria-labelledby="gg-check-h"><div class="gg-wrap">
+  <p class="gg-kicker">Self Check</p>
+  <h2 class="gg-h2" id="gg-check-h" data-reveal>이런 변화가 보이면 잇몸을 확인할 때입니다</h2>
+  <p class="gg-lead" data-reveal>잇몸은 아프지 않게, 아주 천천히 내려갑니다. 그래서 대부분 거울을 보다가, 또는 시린 이 때문에 알게 됩니다.</p>
+  <ul class="gg-checks" data-reveal>${GG_CHECKS.map((t) => `<li>${t}</li>`).join('')}</ul>
+  <p class="gg-note">하나라도 해당된다면 잇몸 두께와 뿌리가 드러난 정도를 한 번 확인해 보시는 게 좋습니다. 염증이 먼저라면 <a href="/scaling-gum-treatment">스케일링·잇몸치료</a>부터 시작합니다.</p>
+</div></section>
+
+<section class="gg-sec" id="about" aria-labelledby="gg-about-h"><div class="gg-wrap">
+  <p class="gg-kicker">What is Gum Graft</p>
+  <h2 class="gg-h2" id="gg-about-h" data-reveal>잇몸이식이란</h2>
+  <p class="gg-lead" data-reveal>잇몸이 내려가 치아 뿌리가 드러났거나, 잇몸이 너무 얇아 계속 내려갈 위험이 있는 곳에 잇몸 조직을 옮겨 붙이는 수술입니다. 옮기는 조직은 대개 환자 본인의 입천장에서 얻습니다. <strong>한 번 내려간 잇몸은 양치를 잘해도 저절로 다시 올라오지 않습니다.</strong> 잇몸 치료는 염증을 가라앉혀 진행을 늦추는 치료이고, 이미 드러난 뿌리를 덮는 일은 잇몸이식이 맡습니다.</p>
+  <div class="gg-trio">${GG_PURPOSES.map((p, i) => `
+    <div class="gg-card" data-reveal><span class="n">PURPOSE ${n2(i)}</span><h3>${p.title}</h3><p>${p.body}</p></div>`).join('')}
+  </div>
+</div></section>
+
+<section class="gg-sec gg-night gg-uses" data-theme="night" aria-labelledby="gg-uses-h"><div class="gg-wrap">
+  <p class="gg-kicker">At Seoul Gaon</p>
+  <h2 class="gg-h2" id="gg-uses-h" data-reveal>서울가온치과의 잇몸이식이 쓰이는 곳</h2>
+  <p class="gg-lead" data-reveal>잇몸이식은 내려간 잇몸을 덮는 수술이기도 하지만, 임플란트와 앞니 보철의 결과를 바꾸는 수술이기도 합니다. 아래는 실제 사례에서 잇몸이식을 쓴 세 가지 경우입니다.</p>
+  <div class="gg-trio">${GG_USES.map((u) => `
+    <div class="gg-card" data-reveal><span class="n">${u.tag}</span><h3>${u.title}</h3><p>${u.body}</p>${u.link ? `<a href="${u.link.href}">${u.link.label} →</a>` : (cases.length ? '<a href="#cases">사례 보기 →</a>' : '')}</div>`).join('')}
+  </div>
+</div></section>
+
+<section class="gg-sec" id="cause" aria-labelledby="gg-cause-h"><div class="gg-wrap">
+  <p class="gg-kicker">Causes</p>
+  <h2 class="gg-h2" id="gg-cause-h" data-reveal>잇몸은 왜 내려갈까요</h2>
+  <p class="gg-lead" data-reveal>원인은 대개 하나가 아니라 몇 가지가 겹쳐 있습니다. 어떤 원인이 큰지에 따라 수술 계획과 수술 뒤 관리가 달라집니다.</p>
+  <div class="gg-six" data-reveal>${GG_CAUSES.map((c, i) => `<div><span class="n">${n2(i)}</span><h3>${c.title}</h3><p>${c.body}</p></div>`).join('')}</div>
+  <p class="gg-callout" data-reveal><strong>원인이 그대로면 옮긴 잇몸도 다시 내려갈 수 있습니다.</strong> 그래서 수술 날짜를 잡기 전에 원인을 확인하고, 양치 습관부터 함께 바꿉니다.</p>
+</div></section>
+
+<section class="gg-sec" id="diagnosis" aria-labelledby="gg-diag-h"><div class="gg-wrap">
+  <p class="gg-kicker">Diagnosis</p>
+  <h2 class="gg-h2" id="gg-diag-h" data-reveal>수술 전에 확인하는 다섯 가지</h2>
+  <p class="gg-lead" data-reveal>같은 "잇몸이 내려갔다"도 사람마다 덮을 수 있는 정도가 다릅니다. 수술 전에 아래 다섯 가지를 보고, 어디까지 기대할 수 있는지부터 솔직하게 말씀드립니다.</p>
+  <div class="gg-diag">
+    <ol class="gg-num">${GG_DIAG.map((d, i) => `<li data-reveal><span class="k">${n2(i)}</span><div><h3>${d.title}</h3><p>${d.body}</p></div></li>`).join('')}</ol>
+    <figure class="gg-photo" data-reveal><img src="/images/real-consult-scene.jpg" alt="서울가온치과 상담실에서 엑스레이를 보며 설명하는 모습" width="1024" height="682" loading="lazy" decoding="async"><figcaption>엑스레이와 구강 사진을 함께 보며 설명드립니다.</figcaption></figure>
+  </div>
+</div></section>
+
+<section class="gg-sec" id="method" aria-labelledby="gg-method-h"><div class="gg-wrap">
+  <p class="gg-kicker">Methods</p>
+  <h2 class="gg-h2" id="gg-method-h" data-reveal>결합조직이식(CTG)과 유리치은이식(FGG)</h2>
+  <p class="gg-lead" data-reveal>대표적인 방법은 두 가지입니다. 입천장의 어느 층을 떼어 오느냐가 다르고, 그래서 잘 맞는 경우도 다릅니다.</p>
+  <table class="gg-table" data-reveal>
+    <thead><tr><th scope="col"><span class="sr-only">항목</span></th><th scope="col">결합조직이식<small>CTG · CONNECTIVE TISSUE GRAFT</small></th><th scope="col">유리치은이식<small>FGG · FREE GINGIVAL GRAFT</small></th></tr></thead>
+    <tbody>${GG_COMPARE.map(([k, a, b]) => `<tr><th scope="row">${k}</th><td data-m="결합조직이식 CTG">${a}</td><td data-m="유리치은이식 FGG">${b}</td></tr>`).join('')}</tbody>
+  </table>
+  <p class="gg-note">서울가온치과의 잇몸이식 사례는 대부분 결합조직이식입니다. 어떤 방법이 맞는지는 검사 뒤 이유와 함께 설명드립니다.</p>
+</div></section>
+
+<section class="gg-sec" aria-labelledby="gg-impl-h"><div class="gg-wrap">
+  <p class="gg-kicker">With Implant &amp; Prosthesis</p>
+  <h2 class="gg-h2" id="gg-impl-h" data-reveal>임플란트·앞니 보철과 함께하는 잇몸이식</h2>
+  <p class="gg-lead" data-reveal>이를 뽑으면 그 자리의 뼈와 잇몸은 시간이 지나며 줄어듭니다. 앞니처럼 잘 보이는 자리에서는 이 변화가 보철이 길어 보이거나 잇몸이 꺼져 보이는 문제로 이어집니다. 서울가온치과는 임플란트와 앞니 보철을 계획할 때 잇몸 두께와 높이도 함께 보고, 필요하면 잇몸이식을 더해 잇몸 모양을 먼저 만듭니다.</p>
+  <ul class="gg-list" data-reveal>${GG_WITH_IMPLANT.map((t) => `<li>${t}</li>`).join('')}</ul>
+  <div class="gg-links"><a class="gg-pill" href="/implant">임플란트 안내 →</a><a class="gg-pill" href="/aesthetic">앞니 심미치료 →</a><a class="gg-pill" href="/bone-graft-implant">뼈이식 임플란트 →</a></div>
+</div></section>
+
+<section class="gg-sec" id="process" aria-labelledby="gg-proc-h"><div class="gg-wrap">
+  <p class="gg-kicker">Process</p>
+  <h2 class="gg-h2" id="gg-proc-h" data-reveal>진행 과정</h2>
+  <p class="gg-lead" data-reveal>검사부터 경과 확인까지 다섯 단계로 진행합니다. 수술 시간과 내원 횟수는 부위 수와 방법에 따라 달라 상담 때 미리 알려 드립니다.</p>
+  <ol class="gg-flow">${GG_STEPS.map((s, i) => `<li data-reveal><span class="k">STEP ${n2(i)}</span><h3>${s.title}</h3><p>${s.body}</p></li>`).join('')}</ol>
+</div></section>
+
+<section class="gg-sec" id="recovery" aria-labelledby="gg-rec-h"><div class="gg-wrap">
+  <p class="gg-kicker">Recovery</p>
+  <h2 class="gg-h2" id="gg-rec-h" data-reveal>수술 뒤 회복과 생활 수칙</h2>
+  <p class="gg-lead" data-reveal>옮긴 조직이 자리를 잡는 첫 2주가 가장 중요합니다. 자세한 관리 방법은 수술 당일 다시 안내드립니다.</p>
+  <div class="gg-rec">
+    <ol class="gg-time">${GG_RECOVERY.map((r) => `<li data-reveal><h3>${r.when}</h3><p>${r.body}</p></li>`).join('')}</ol>
+    <aside class="gg-warn" data-reveal aria-label="바로 연락해야 하는 경우"><h3>이럴 땐 바로 연락 주세요</h3><ul>${GG_WARN.map((w) => `<li>${w}</li>`).join('')}</ul><a href="tel:0507-1325-3377"><i class="fas fa-phone"></i> 0507-1325-3377</a></aside>
+  </div>
+</div></section>
+
+<section class="gg-sec gg-night" id="limits" data-theme="night" aria-labelledby="gg-lim-h"><div class="gg-wrap">
+  <p class="gg-kicker">Before You Decide</p>
+  <h2 class="gg-h2" id="gg-lim-h" data-reveal>수술 전에 꼭 알려 드리는 것</h2>
+  <p class="gg-lead" data-reveal>잇몸이식은 잘 맞는 경우 결과가 분명한 수술이지만, 모든 경우에 같은 결과를 약속할 수는 없습니다. 기대할 수 있는 것과 어려운 것을 먼저 나눠 말씀드립니다.</p>
+  <ol class="gg-limits">${GG_LIMITS.map((l, i) => `<li data-reveal><span class="k">${n2(i)}</span><div><h3>${l.title}</h3><p>${l.body}</p></div></li>`).join('')}</ol>
+</div></section>
+
+<section class="gg-sec" aria-labelledby="gg-fit-h"><div class="gg-wrap">
+  <p class="gg-kicker">Is It For Me</p>
+  <h2 class="gg-h2" id="gg-fit-h" data-reveal>이런 경우에 잘 맞고, 이런 경우는 먼저 상의합니다</h2>
+  <div class="gg-fit" data-reveal>
+    <div class="ok"><h3>잘 맞는 경우</h3><ul>${GG_FIT_OK.map((t) => `<li>${t}</li>`).join('')}</ul></div>
+    <div class="ask"><h3>먼저 상의할 경우</h3><ul>${GG_FIT_ASK.map((t) => `<li>${t}</li>`).join('')}</ul></div>
+  </div>
+</div></section>
+
+<section class="gg-sec" aria-labelledby="gg-doc-h"><div class="gg-wrap">
+  <div class="gg-doc">
+    <figure data-reveal><img src="${GG_DOCTOR.photo}" alt="${GG_DOCTOR.name} ${GG_DOCTOR.role}" width="683" height="1024" loading="lazy" decoding="async"></figure>
+    <div data-reveal>
+      <p class="gg-kicker">Doctor</p>
+      <span class="role">${GG_DOCTOR.role}</span>
+      <h3 id="gg-doc-h">${GG_DOCTOR.name} 원장</h3>
+      <ul>${GG_DOCTOR.points.map((p) => `<li>${p}</li>`).join('')}</ul>
+      <p>${allHyun ? '이 페이지의 잇몸이식 사례는 모두 현진호 대표원장이 진료한 사례입니다. ' : ''}잇몸이식을 임플란트·앞니 보철 계획과 함께 보는 것은, 잇몸 모양이 보철의 결과를 좌우하기 때문입니다.</p>
+      <a class="gg-pill" href="/doctors">의료진 소개 →</a>
+    </div>
+  </div>
+</div></section>
+${casesHtml}
+<section class="gg-sec" id="fee" aria-labelledby="gg-fee-h"><div class="gg-wrap">
+  <p class="gg-kicker">Fee</p>
+  <h2 class="gg-h2" id="gg-fee-h" data-reveal>잇몸이식 비용</h2>
+  ${feeHtml}
+</div></section>
+
+<section class="gg-sec" id="faq" aria-labelledby="gg-faq-h"><div class="gg-wrap">
+  <p class="gg-kicker">FAQ</p>
+  <h2 class="gg-h2" id="gg-faq-h" data-reveal>잇몸이식 자주 묻는 질문</h2>
+  <div class="gg-faq">${faq.map((f) => `<div class="notice-item"><button class="notice-q" type="button">${escHtml(f.q)}<span class="plus">+</span></button><div class="notice-a"><div class="notice-a-inner">${escHtml(f.a)}</div></div></div>`).join('')}</div>
+</div></section>
+${colsHtml}
+<p class="gg-review">감수: <a href="/doctors">현진호 대표원장</a>(통합치의학과 전문의) · 최종 검토 <time datetime="${GG_MODIFIED}">${GG_MODIFIED}</time></p>
+<p class="gg-review-d">${GG_DISCLAIMER}</p>
+
+<section class="gg-night gg-cta" data-theme="night" aria-labelledby="gg-cta-h">
+  <h2 class="gg-h2" id="gg-cta-h">잇몸이 내려간 게 마음에 걸린다면</h2>
+  <p>사진 한 장 찍어 보고, 설명부터 듣고 가셔도 됩니다.</p>
+  <div class="gg-btns">
+    <a class="gg-btn tel" href="tel:0507-1325-3377"><i class="fas fa-phone"></i> 전화 상담</a>
+    <a class="gg-btn kakao" href="https://pf.kakao.com/_LLxhwG/chat" target="_blank" rel="noopener">카카오톡 상담</a>
+    <a class="gg-btn naver" href="https://booking.naver.com/booking/13/bizes/781025" target="_blank" rel="noopener">네이버 예약</a>
+  </div>
+  <small>위치·주차·진료시간은 <a href="/uijeongbu-dental">의정부 치과</a> 안내에서 확인하실 수 있습니다.</small>
+</section>
+
+</main>
+${FOOTER_WITH_HUB}
+${KAKAO_FLOAT}
+<script src="/pages.js?v=dev"></script>
+<script>
+(function(){
+var ham=document.querySelector('.hamburger'),mob=document.querySelector('.mob-menu');
+if(ham&&mob){ham.addEventListener('click',function(){ham.classList.toggle('open');mob.classList.toggle('open')});mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){ham.classList.remove('open');mob.classList.remove('open')})})}
+var nav=document.getElementById('nav'),toc=document.querySelector('.gg-toc');
+var links=toc?[].slice.call(toc.querySelectorAll('a')):[];
+var secs=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1))});
+var nights=[].slice.call(document.querySelectorAll('.gg [data-theme="night"]'));
+var tick=false;
+function upd(){tick=false;
+  if(nav){document.body.classList.toggle('gg-navhide',nav.classList.contains('hide'));
+    var nb=nav.getBoundingClientRect().bottom,on=false;
+    for(var i=0;i<nights.length;i++){var r=nights[i].getBoundingClientRect();if(r.top<=nb-20&&r.bottom>nb){on=true;break}}
+    nav.classList.toggle('on-night',on);document.body.classList.toggle('gg-onnight',on)}
+  var y=innerHeight*.32,cur=-1;
+  for(var j=0;j<secs.length;j++){if(secs[j]&&secs[j].getBoundingClientRect().top<=y)cur=j}
+  var ol=toc&&toc.querySelector('ol');
+  links.forEach(function(a,k){var was=a.classList.contains('on');a.classList.toggle('on',k===cur);if(k===cur&&!was&&ol&&ol.scrollTo)ol.scrollTo({left:a.offsetLeft-24,behavior:'smooth'})});
+  if(cur<0&&ol&&ol.scrollLeft>0&&ol.scrollTo)ol.scrollTo({left:0,behavior:'smooth'})
+}
+function req(){if(!tick){tick=true;requestAnimationFrame(upd)}}
+addEventListener('scroll',req,{passive:true});addEventListener('resize',req);
+// 사이트 공통 스크립트가 메뉴를 숨기고/보일 때(#nav.hide) 목차 위치를 바로 맞춘다 — on-night 토글은 무시(반복 방지)
+if(nav&&window.MutationObserver){var lastH=nav.classList.contains('hide');new MutationObserver(function(){var h=nav.classList.contains('hide');if(h!==lastH){lastH=h;req()}}).observe(nav,{attributes:true,attributeFilter:['class']})}
+upd();
+})();
+</script>
+</body>
+</html>`
+}
+
+app.get(GG_PATH, async (c) => {
+  let cases: any[] = [], columns: any[] = [], fee: GgFee = null
+  try {
+    const db = c.env.DB
+    const [cs, cl, fe] = await db.batch([db.prepare(GG_CASES_SQL), db.prepare(GG_COLS_SQL), db.prepare(GG_FEE_SQL)])
+    cases = (cs.results || []) as any[]
+    const seen = new Set<string>()
+    for (const r of ((cl.results || []) as any[])) {
+      if (isThinBlogPost(r)) continue
+      const k = ggCleanTitle(r.title).replace(/[\s,.?!·—–\-|:]/g, '').slice(0, 12)
+      if (seen.has(k)) continue
+      seen.add(k)
+      columns.push({ id: r.id, title: r.title })
+      if (columns.length >= 10) break
+    }
+    const f: any = (fe.results || [])[0]
+    if (f && f.price) fee = { name: String(f.name || '잇몸이식'), price: String(f.price), note: String(f.note || ''), is_nhi: Number(f.is_nhi || 0) }
+  } catch { /* D1 실패 — 원고만으로 렌더 */ }
+  return c.html(renderGumGraftPage(cases, columns, fee), 200, {
+    'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200',
+    'X-Robots-Tag': 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+  })
+})
 
 // ══════════════════════════════════════════════════
 //  LEGACY REDIRECT: /glownate → /laminate (301)

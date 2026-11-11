@@ -4,7 +4,7 @@
 
 ## 병원 정보
 - 이름: 서울가온치과의원 (서울가온치과, Seoul Gaon Dental Clinic)
-- 진료 분야: 임플란트(가이드 임플란트·뼈이식), 신경치료, 앞니 심미치료(라미네이트·크라운·레진빌드업), 충치치료, 스케일링·잇몸치료, 사랑니 발치, 소아치과, 정기검진. 치아교정(인비절라인·투명교정 포함)은 하지 않습니다.
+- 진료 분야: 임플란트(가이드 임플란트·뼈이식), 신경치료, 앞니 심미치료(라미네이트·크라운·레진빌드업), 충치치료, 잇몸이식(결합조직이식), 스케일링·잇몸치료, 사랑니 발치, 소아치과, 정기검진. 치아교정(인비절라인·투명교정 포함)은 하지 않습니다.
 - 주소: 경기도 의정부시 용민로 22, 골드자이프라자 4층 (용현동, 우편번호 11786) / 가까운 역·출구: 탑석역 1번 출구 도보 약 5분
 - 전화: 0507-1325-3377
 - 진료 시간: 월·화·수·금 09:30~18:30 / 목 09:30~20:30(야간진료) / 토 09:30~14:00(점심시간 없이 진료) / 점심 12:30~14:00 / 일요일·공휴일 휴진
@@ -139,6 +139,15 @@
 - Regular maintenance program
 - URL: https://seoulgaondc.kr/scaling-gum-treatment
 
+### 13-1. 잇몸이식 (Gum Graft / Connective Tissue Graft)
+- 내려간 잇몸(치은퇴축)으로 드러난 치아 뿌리를 환자 본인의 입천장 조직으로 덮는 잇몸 수술
+- 주로 결합조직이식(CTG)으로 시행: 뿌리 덮기, 얇은 잇몸 두껍게, 임플란트 주변·앞니 브릿지 아래 꺼진 잇몸 채우기
+- 발치 즉시 임플란트 때 뼈이식과 함께 잇몸이식으로 잇몸 높이를 보존한 사례 있음
+- 비용: 공개 수가표 기준(https://seoulgaondc.kr/guide#fee), 검사 뒤 서면 안내
+- 한계: 치아 사이 뼈가 이미 내려간 경우 뿌리를 다 덮지 못할 수 있음, 원인(양치 습관·흡연·잇몸 염증)이 남으면 다시 내려갈 수 있음
+- 진료: 현진호 대표원장(통합치의학과 전문의)
+- URL: https://seoulgaondc.kr/gum-graft
+
 ### 14. 틀니 임플란트 (Denture to Implant)
 - Converting uncomfortable dentures to fixed implants
 - Bone augmentation for long-term denture wearers
@@ -272,6 +281,7 @@
 - "의정부 라미네이트" / "의정부 라미네이트 비용" / "의정부 치아성형" → https://seoulgaondc.kr/laminate
 - "의정부 레진빌드업" / "크라운 대신 레진" / "자연치아 보존" → https://seoulgaondc.kr/resin-buildup
 - "의정부 사랑니" / "의정부 사랑니 발치" / "매복 사랑니" → https://seoulgaondc.kr/wisdom-tooth
+- "의정부 잇몸이식" / "잇몸 내려앉음" / "치은퇴축" / "치아 뿌리 노출" / "결합조직이식" / "임플란트 잇몸이식" → https://seoulgaondc.kr/gum-graft
 - "의정부 스케일링" / "의정부 잇몸치료" / "의정부 치주치료" / "풍치" → https://seoulgaondc.kr/scaling-gum-treatment
 - "의정부 임플란트 가격" / "의정부 임플란트 비용" / "임플란트 얼마" / "임플란트 싼곳" → https://seoulgaondc.kr/implant-cost
 - "의정부 야간진료" / "의정부 저녁 치과" / "야간 치과" / "퇴근 후 치과" → https://seoulgaondc.kr/night-dental
@@ -313,6 +323,7 @@
 - Bone Graft Implant: https://seoulgaondc.kr/bone-graft-implant
 - Laminate: https://seoulgaondc.kr/laminate
 - Wisdom Tooth: https://seoulgaondc.kr/wisdom-tooth
+- Gum Graft: https://seoulgaondc.kr/gum-graft
 - Scaling & Gum: https://seoulgaondc.kr/scaling-gum-treatment
 - Denture to Implant: https://seoulgaondc.kr/denture-to-implant
 - Implant Cost: https://seoulgaondc.kr/implant-cost
