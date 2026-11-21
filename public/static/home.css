@@ -436,3 +436,37 @@ html.mx .marquee-in{animation:marquee 36s linear infinite}
   .hero-btns .btn{flex:1 1 100%}
   .explore-grid{grid-template-columns:1fr}
 }
+
+/* ===== 치료사례 사이트 (2026-11-21) — 밤 띠 · 큰 제목 · 네 갈래 줄 ===== */
+.cs{position:relative;background:var(--night);color:var(--on-night);overflow:hidden;padding:clamp(5rem,13vh,9rem) 0}
+.cs .sec-lead{color:var(--on-night-2)}
+.cs .sec-title{color:var(--on-night)}
+.cs .gold{color:var(--amber)}
+.cs-marq{position:absolute;top:clamp(1.2rem,4vh,2.4rem);left:0;right:0;white-space:nowrap;pointer-events:none;opacity:.07}
+.cs-marq-in{display:inline-flex;gap:3rem;font-family:var(--ff-display);font-weight:800;font-size:clamp(4rem,11vw,10rem);letter-spacing:-.04em;line-height:1;animation:csMarq 38s linear infinite}
+@keyframes csMarq{to{transform:translateX(-50%)}}
+.cs-grid{position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(2.5rem,6vw,6rem);align-items:center}
+.cs-head .sec-title{margin:1rem 0 1.4rem;font-size:clamp(2.2rem,4.6vw,3.9rem)}
+.cs-btn{margin-top:2rem}
+.cs-note{margin-top:.9rem;font-family:var(--ff-mono);font-size:.72rem;letter-spacing:.06em;color:var(--on-night-3)}
+.cs-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-n)}
+.cs-row{position:relative;display:grid;grid-template-columns:3.2rem minmax(0,1fr) auto;grid-template-areas:"n en go" "n ko go" "n line go";column-gap:1.2rem;padding:1.5rem .4rem 1.5rem 0;border-bottom:1px solid var(--line-n);color:var(--on-night);overflow:hidden;isolation:isolate}
+.cs-row::before{content:'';position:absolute;inset:0;background:var(--amber);transform:scaleY(0);transform-origin:bottom;transition:transform .55s var(--ease-out);z-index:-1}
+.cs-n{grid-area:n;font-family:var(--ff-mono);font-size:.8rem;color:var(--amber);padding-top:.35rem;transition:color .4s}
+.cs-en{grid-area:en;font-family:var(--ff-mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--on-night-3);transition:color .4s}
+.cs-ko{grid-area:ko;font-family:var(--ff-display);font-weight:800;font-size:clamp(1.7rem,3.2vw,2.6rem);letter-spacing:-.04em;line-height:1.15;margin:.15rem 0 .3rem;transition:transform .55s var(--ease-out),color .4s}
+.cs-line{grid-area:line;font-size:.92rem;color:var(--on-night-2);transition:color .4s}
+.cs-go{grid-area:go;align-self:center;font-family:var(--ff-mono);font-size:1.6rem;color:var(--amber);transition:transform .45s var(--ease-out),color .4s}
+.cs-row:hover::before,.cs-row:focus-visible::before{transform:scaleY(1)}
+.cs-row:hover .cs-ko,.cs-row:focus-visible .cs-ko{transform:translateX(.6rem);color:var(--night)}
+.cs-row:hover .cs-n,.cs-row:hover .cs-en,.cs-row:hover .cs-line,.cs-row:hover .cs-go,.cs-row:focus-visible .cs-n,.cs-row:focus-visible .cs-en,.cs-row:focus-visible .cs-line,.cs-row:focus-visible .cs-go{color:var(--night)}
+.cs-row:hover .cs-go,.cs-row:focus-visible .cs-go{transform:translate(-.4rem,-.2rem) rotate(0deg) scale(1.15)}
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    .cs-list li{animation:csIn linear both;animation-timeline:view();animation-range:entry 0% entry 70%}
+    .cs-head .sec-title .ph{display:inline-block;animation:csIn linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+  }
+}
+@keyframes csIn{from{opacity:.15;transform:translateY(40px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.cs-marq-in{animation:none}}
+@media(max-width:900px){.cs-grid{grid-template-columns:1fr}.cs-row{grid-template-columns:2.4rem minmax(0,1fr) auto;padding:1.2rem 0}.cs-ko{font-size:1.65rem}}

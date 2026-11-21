@@ -3162,13 +3162,14 @@ const NAV_HTML = `<nav id="nav" role="navigation" aria-label="메인 네비게�
     <a href="/philosophy">진료 철학</a>
     <div class="nav-link-drop"><a href="/treatments">진료 안내 ▾</a><div class="drop"><a href="/treatments#implant">임플란트</a><a href="/treatments#aesthetics">앞니 심미치료</a><a href="/gum-graft">잇몸이식</a><a href="/treatments#endodontics">신경치료</a><a href="/treatments#general">일반진료</a></div></div>
     <div class="nav-link-drop"><a href="/community">커뮤니티 ▾</a><div class="drop"><a href="/blog">블로그</a><a href="/before-after">비포 애프터</a><a href="/notice">공지사항</a></div></div>
+    <a class="nav-case" href="https://seoulgaon-case.com/" target="_blank" rel="noopener" aria-label="치료사례 사이트 (새 창)"><i class="nc-dot" aria-hidden="true"></i>치료사례<span class="nc-arr" aria-hidden="true">↗</span></a>
     <a href="/doctors">의료진</a>
     <div class="nav-link-drop"><a href="/guide">안내 ▾</a><div class="drop"><a href="/guide#visit">오시는 길</a><a href="/guide#fee">수가 안내</a><a href="/faq">자주 묻는 질문</a></div></div>
   </div>
   <a href="/reservation" class="nav-cta" data-magnet><i class="fas fa-calendar-check" style="margin-right:.4rem;font-size:.78rem"></i>예약 안내</a>
   <button class="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
 </nav>
-<div class="mob-menu"><a href="/">홈</a><a href="/philosophy">진료 철학</a><a href="/treatments">진료 안내</a><a href="/gum-graft" style="padding-left:2rem;font-size:.9rem">→ 잇몸이식</a><a href="/community">커뮤니티</a><a href="/doctors">의료진</a><a href="/guide">안내</a><a href="/reservation">예약 안내</a><a href="/blog">블로그</a><a href="/before-after">비포 애프터</a><a href="/notice">공지사항</a><a href="/encyclopedia">치과 백과사전</a><a href="/faq">자주 묻는 질문</a></div>`
+<div class="mob-menu"><a href="/">홈</a><a href="/philosophy">진료 철학</a><a href="/treatments">진료 안내</a><a href="/gum-graft" style="padding-left:2rem;font-size:.9rem">→ 잇몸이식</a><a href="/community">커뮤니티</a><a class="mob-case" href="https://seoulgaon-case.com/" target="_blank" rel="noopener">치료사례 <small>원장 기록 · 새 창 ↗</small></a><a href="/doctors">의료진</a><a href="/guide">안내</a><a href="/reservation">예약 안내</a><a href="/blog">블로그</a><a href="/before-after">비포 애프터</a><a href="/notice">공지사항</a><a href="/encyclopedia">치과 백과사전</a><a href="/faq">자주 묻는 질문</a></div>`
 
 // 공통 푸터
 const FOOTER_HTML = `<footer role="contentinfo">
@@ -3484,6 +3485,7 @@ ${NAV_HTML}
 <main style="max-width:1100px;margin:0 auto;padding:calc(var(--nav-h, 76px) + 2rem) 1rem 2rem">
   <h1 style="font-family:var(--ff-title);font-size:2rem;color:var(--ivory);margin-bottom:.5rem"><i class="fas fa-images" style="color:var(--gold)"></i> 치료 전후 비포&amp;애프터</h1>
   <p style="color:var(--stone-l);margin-bottom:1.5rem">실제 치료 결과를 사진으로 확인하세요. <strong>${total}건</strong>의 사례</p>
+  <a class="ba-casebar" href="https://seoulgaon-case.com/" target="_blank" rel="noopener"><span class="ba-casebar-k">CASE ARCHIVE</span><span class="ba-casebar-t">치료 과정을 처음부터 끝까지 보고 싶다면 — <strong>원장이 기록한 치료사례 사이트</strong></span><span class="ba-casebar-go" aria-hidden="true">↗</span></a>
   <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem">${catButtons}</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem">
     ${caseCards}
@@ -6610,6 +6612,7 @@ body.gg-onnight .gg-toc a.on,body.gg-onnight .gg-toc a:hover{color:var(--amber);
 .gg-list li{position:relative;padding:1rem 1.2rem 1rem 3rem;background:var(--white);border:1px solid var(--line);border-radius:14px;line-height:1.75;font-size:.95rem;word-break:keep-all}
 .gg-list li::before{content:'+';position:absolute;left:1.15rem;top:.95rem;font-family:var(--ff-mono);color:var(--amber-d);font-weight:500}
 .gg-links{display:flex;flex-wrap:wrap;gap:.6rem}
+.gg-ext{margin-left:1.4rem;color:var(--amber-d)}@media(max-width:560px){.gg-ext{display:block;margin:.8rem 0 0}}
 .gg-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border:1px solid var(--line);border-radius:100px;font-size:.86rem;color:var(--text);background:var(--white);transition:all .25s}
 .gg-pill:hover{border-color:var(--amber-d);color:var(--amber-d)}
 .gg-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;list-style:none;padding:0;margin:0;counter-reset:f}
@@ -6776,6 +6779,7 @@ function renderGumGraftPage(cases: any[], columns: any[], fee: GgFee): string {
   </div>
   <p class="gg-disc">치료 결과는 잇몸 두께, 뼈 상태, 수술 뒤 관리에 따라 사람마다 다릅니다. 수술 뒤 붓기·출혈·통증, 옮긴 조직 일부 탈락, 잇몸이 다시 내려가는 일이 생길 수 있습니다.</p>
   <a class="gg-more" href="/before-after">비포 애프터 전체 보기 →</a>
+  <a class="gg-more gg-ext" href="https://seoulgaon-case.com/gum-graft" target="_blank" rel="noopener">원장이 기록한 잇몸이식 치료 과정 더 보기 ↗</a>
 </div></section>` : ''
 
   const colsHtml = columns.length ? `
@@ -6995,7 +6999,7 @@ ${colsHtml}
     <a class="gg-btn kakao" href="https://pf.kakao.com/_LLxhwG/chat" target="_blank" rel="noopener">카카오톡 상담</a>
     <a class="gg-btn naver" href="https://booking.naver.com/booking/13/bizes/781025" target="_blank" rel="noopener">네이버 예약</a>
   </div>
-  <small>위치·주차·진료시간은 <a href="/uijeongbu-dental">의정부 치과</a> 안내에서 확인하실 수 있습니다.</small>
+  <small>위치·주차·진료시간은 <a href="/uijeongbu-dental">의정부 치과</a> 안내에서 확인하실 수 있습니다.<br>원장이 직접 기록한 잇몸이식 치료 과정은 <a href="https://seoulgaon-case.com/gum-graft" target="_blank" rel="noopener">치료사례 사이트 ↗</a>에서 보실 수 있습니다.</small>
 </section>
 
 </main>
